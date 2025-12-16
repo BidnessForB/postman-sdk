@@ -3,11 +3,14 @@
  * Reads API key from environment and sets base URL
  */
 
-const apiKey = process.env.POSTMAN_API_KEY_POSTMAN;
+const { POSTMAN_API_KEY_ENV_VAR } = require('./constants');
+
+const apiKey = process.env[POSTMAN_API_KEY_ENV_VAR];
 const baseUrl = 'https://api.getpostman.com';
 
 module.exports = {
   apiKey,
-  baseUrl
+  baseUrl,
+  POSTMAN_API_KEY_ENV_VAR
 };
 

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getSpecs, createSpec } = require('../index');
+const { getSpecs, getSpec, createSpec } = require('../index');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
@@ -9,7 +9,7 @@ jest.mock('../../core/config', () => ({
 
 const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
 
-describe('specs', () => {
+describe('specs unit tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -51,18 +51,63 @@ describe('specs', () => {
       );
     });
 
-    test('should handle undefined optional parameters', async () => {
+    test('should handle null optional parameters', async () => {
       const mockResponse = {
         status: 200,
         data: { specs: [] }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecs(DEFAULT_WORKSPACE_ID, undefined, undefined);
+      await getSpecs(DEFAULT_WORKSPACE_ID, null, null);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_WORKSPACE_ID}`
+        })
+      );
+    });
+  });
+
+  describe('getSpec', () => {
+    test('should call GET /specs/{specId} with correct spec ID', async () => {
+      const specId = 'spec-123';
+      const mockResponse = {
+        status: 200,
+        data: {
+          id: specId,
+          name: 'My API Spec',
+          type: 'OPENAPI:3.0'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getSpec(specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/specs/${specId}`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.id).toBe(specId);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { id: 'spec-123' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getSpec('spec-123');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          }
         })
       );
     });

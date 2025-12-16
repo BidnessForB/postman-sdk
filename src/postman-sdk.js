@@ -58,15 +58,7 @@ async function executeRequest(config) {
   return response;
 }
 
-/**
- * Reads file content from the filesystem and returns it in the format expected by Postman API
- * @param {string} specFilePath - The path to the spec file
- * @returns {Object} Object with content property containing the file content
- */
-function getContentFS(specFilePath) {
-  const yamlContent = fs.readFileSync(path.resolve(specFilePath), 'utf8');
-  return { content: yamlContent };
-}
+
 
 /**
  * Gets information about a Postman spec

@@ -11,7 +11,8 @@ describe('config', () => {
   });
 
   test('should read API key from environment variable', () => {
-    process.env.POSTMAN_API_KEY_POSTMAN = 'test-api-key-123';
+    const { POSTMAN_API_KEY_ENV_VAR } = require('../constants');
+    process.env[POSTMAN_API_KEY_ENV_VAR] = 'test-api-key-123';
     const config = require('../config');
     expect(config.apiKey).toBe('test-api-key-123');
   });
@@ -22,9 +23,15 @@ describe('config', () => {
   });
 
   test('should handle missing API key', () => {
-    delete process.env.POSTMAN_API_KEY_POSTMAN;
+    const { POSTMAN_API_KEY_ENV_VAR } = require('../constants');
+    delete process.env[POSTMAN_API_KEY_ENV_VAR];
     const config = require('../config');
     expect(config.apiKey).toBeUndefined();
+  });
+
+  test('should export POSTMAN_API_KEY_ENV_VAR constant', () => {
+    const config = require('../config');
+    expect(config.POSTMAN_API_KEY_ENV_VAR).toBe('POSTMAN_API_KEY_POSTMAN');
   });
 });
 

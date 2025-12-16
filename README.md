@@ -69,6 +69,8 @@ Following the established patterns:
 
 ## Testing
 
+### Unit Tests
+
 Run tests with:
 
 ```bash
@@ -85,6 +87,29 @@ Generate coverage report:
 
 ```bash
 npm run test:coverage
+```
+
+### Manual API Tests
+
+Test the getSpecs endpoint (list all specs in a workspace):
+
+```bash
+npm run test:getSpecs [workspaceId] [cursor] [limit]
+# or
+node scripts/test-getSpecs.js list [workspaceId] [cursor] [limit]
+```
+
+Test the getSpec endpoint (get a specific spec):
+
+```bash
+node scripts/test-getSpecs.js get <specId>
+```
+
+Test the createSpec endpoint:
+
+```bash
+npm run test:createSpec [workspaceId] [specType]
+# Spec types: openapi-3.0, openapi-3.1, asyncapi-2.0, multi-file
 ```
 
 ## Development
