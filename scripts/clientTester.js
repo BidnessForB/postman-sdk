@@ -11,6 +11,7 @@ const { specs } = require('../src/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../src/core/config');
 
 const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
+const DEFAULT_SPEC_ID = '550f281f-ee6a-4860-aef3-6d9fdd7ca405';
 
 /**
  * Logs request parameters
@@ -93,6 +94,7 @@ async function testGetSpec() {
   if (!specId) {
     console.error('❌ Error: specId is required');
     console.error('Usage: node scripts/clientTester.js get <specId>');
+    console.error(`Example: node scripts/clientTester.js get ${DEFAULT_SPEC_ID}`);
     process.exit(1);
   }
 

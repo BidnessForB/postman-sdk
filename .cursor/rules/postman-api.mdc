@@ -56,3 +56,6 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 7. Handle exception response code by throwing an error
 8. Do not repeat yourself.  Abstract reused code into named functions.
 9. DO NOT perform additional work.  
+10. Create unit and functional JEST tests modules for each api module
+11. Functional tests should NOT use mocks, they should use the actual SDK and make actual API calls.  
+12. All API calls should throw an error on a non-success response from the API, and include the API response in the error

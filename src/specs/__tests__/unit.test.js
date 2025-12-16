@@ -8,6 +8,7 @@ jest.mock('../../core/config', () => ({
 }));
 
 const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
+const DEFAULT_SPEC_ID = '550f281f-ee6a-4860-aef3-6d9fdd7ca405';
 
 describe('specs unit tests', () => {
   beforeEach(() => {
@@ -70,37 +71,36 @@ describe('specs unit tests', () => {
 
   describe('getSpec', () => {
     test('should call GET /specs/{specId} with correct spec ID', async () => {
-      const specId = 'spec-123';
       const mockResponse = {
         status: 200,
         data: {
-          id: specId,
+          id: DEFAULT_SPEC_ID,
           name: 'My API Spec',
           type: 'OPENAPI:3.0'
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getSpec(specId);
+      const result = await getSpec(DEFAULT_SPEC_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs/${specId}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
-      expect(result.data.id).toBe(specId);
+      expect(result.data.id).toBe(DEFAULT_SPEC_ID);
     });
 
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: 'spec-123' }
+        data: { id: DEFAULT_SPEC_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpec('spec-123');
+      await getSpec(DEFAULT_SPEC_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -117,7 +117,7 @@ describe('specs unit tests', () => {
     test('should call POST /specs with workspaceId and body', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: 'spec-123', name: 'Test Spec' }
+        data: { id: DEFAULT_SPEC_ID, name: 'Test Spec' }
       };
       axios.request.mockResolvedValue(mockResponse);
 
@@ -143,7 +143,7 @@ describe('specs unit tests', () => {
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: 'spec-123' }
+        data: { id: DEFAULT_SPEC_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
@@ -162,7 +162,7 @@ describe('specs unit tests', () => {
     test('should handle multi-file specs', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: 'spec-123' }
+        data: { id: DEFAULT_SPEC_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
