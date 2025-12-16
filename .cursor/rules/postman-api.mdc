@@ -1,0 +1,58 @@
+---
+alwaysApply: true
+---
+When creating functions that interact with the Postman API in files like `sync-postman-spec.js`:
+
+## Function Structure
+- Use async/await pattern
+- Functions should NOT take `apiKey` as a parameter - use the `apiKey` variable from the outer scope (defined at the top of the file from `process.env.POSTMAN_API_KEY_POSTMAN`)
+- Use axios for HTTP requests
+- Return the axios response directly
+- Create axios configs using the buildAxiosConfig function
+- Execute requests using  the ExecuteRequest function
+- NEVER add more code than is the absolute necessity to fulfill your rules
+- DO NOT attempt to validate body content or other parameters
+- if a parameter is NOT marked as required in postmanAPIspec.yaml, default it to null and DO NOT include it in query strings or the request body
+
+## naming conventions
+- Function names should be prepended with the following based on the HTTP method
+    - GET  = get
+    - POST = create
+    - PUT = update
+    - PATCH = modify
+    - DELETE = delete
+  
+
+## Standard Pattern
+/**
+ * [Brief description of what the function does]
+ * Postman API endpoint and method (eg POST /specs/{specId}/files)
+ * @param {string} param1 - Description
+ * @param {string} param2 - Description
+ * @param {string} param3 - Description
+ * @returns {Promise} Axios response
+ */
+async function functionName(data = null, param1, param2) {
+  const endpoint = `/path/${param1}/path`;
+  const config = buildAxiosConfig('post', endpoint, { // or 'get', 'patch', 'put', 'delete' etc. 
+    path: @param3,
+    content: data // If the endpoint has a body and requires content.  Otherwise default to null and DO NOT include the content property here
+  });
+  return await executeRequest(config);
+}
+
+
+## Example Reference
+See `createSpecFile` function in `pmansdkexample.js` as the reference implementation.
+
+## Key Rules
+0. Always use vanilla NodeJS, no typescript
+1. Assume an APIKey exists in an environment variable POSTMAN_API_KEY
+2. Always include 'Content-Type': 'application/json' header
+3. Always include 'X-API-Key': apiKey header
+4. Use JSDoc comments for documentation
+5. Return the axios response promise directly
+6. Follow the same structure as `createSpecFile` function
+7. Handle exception response code by throwing an error
+8. Do not repeat yourself.  Abstract reused code into named functions.
+9. DO NOT perform additional work.  
