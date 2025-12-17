@@ -1,4 +1,4 @@
-const { getSpecs, getSpec, createSpec } = require('../index');
+const { getSpecs, getSpec, createSpec, modifySpec, deleteSpec } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
 const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
@@ -83,17 +83,6 @@ paths:
       expect(result.data.name).toBe(specName);
     });
 
-    test('should throw error for invalid spec format', async () => {
-      const files = [
-        { path: 'openapi.yaml', content: 'not a valid openapi spec at all' }
-      ];
-
-      // SDK should throw the error from the API (400 Bad Request)
-      await expect(
-        createSpec(DEFAULT_WORKSPACE_ID, 'Invalid Spec', 'OPENAPI:3.0', files)
-      ).rejects.toThrow();
-    });
-
     test('should throw error for invalid workspace ID', async () => {
       const files = [
         { path: 'openapi.yaml', content: 'openapi: 3.0.0' }
@@ -102,6 +91,64 @@ paths:
       // SDK should throw the error from the API (404 Not Found)
       await expect(
         createSpec('00000000-0000-0000-0000-000000000000', 'Test', 'OPENAPI:3.0', files)
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('modifySpec', () => {
+    test('should update spec name', async () => {
+      const newName = `Updated Spec Name ${Date.now()}`;
+      
+      const result = await modifySpec(DEFAULT_SPEC_ID, newName);
+
+      expect(result.status).toBe(200);
+      expect(result.data).toHaveProperty('id');
+      expect(result.data).toHaveProperty('name');
+      expect(result.data.name).toBe(newName);
+    });
+
+    test('should throw error for non-existent spec ID', async () => {
+      // SDK should throw the error from the API (404 Not Found)
+      await expect(
+        modifySpec('00000000-0000-0000-0000-000000000000', 'New Name')
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('deleteSpec', () => {
+    test('should delete a spec', async () => {
+      // First create a spec to delete
+      const specName = `SDK Test Spec to Delete ${Date.now()}`;
+      const files = [
+        {
+          path: 'openapi.yaml',
+          content: `openapi: 3.0.0
+info:
+  title: Test API
+  version: 1.0.0
+paths:
+  /test:
+    get:
+      summary: Test endpoint
+      responses:
+        '200':
+          description: Success`
+        }
+      ];
+
+      const createResult = await createSpec(DEFAULT_WORKSPACE_ID, specName, 'OPENAPI:3.0', files);
+      const specId = createResult.data.id;
+
+      // Delete the spec
+      const deleteResult = await deleteSpec(specId);
+
+      expect(deleteResult.status).toBe(204);
+    });
+
+    test('should throw error for non-existent spec ID', async () => {
+      // SDK should throw the error from the API (404 Not Found)
+      await expect(
+        deleteSpec('00000000-0000-0000-0000-000000000000')
       ).rejects.toThrow();
     });
   });

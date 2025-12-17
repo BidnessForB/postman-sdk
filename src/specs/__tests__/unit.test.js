@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getSpecs, getSpec, createSpec } = require('../index');
+const { getSpecs, getSpec, createSpec, modifySpec, deleteSpec } = require('../index');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
@@ -178,6 +178,85 @@ describe('specs unit tests', () => {
           data: expect.objectContaining({
             files
           })
+        })
+      );
+    });
+  });
+
+  describe('modifySpec', () => {
+    test('should call PATCH /specs/{specId} with name', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { id: DEFAULT_SPEC_ID, name: 'Updated Name' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await modifySpec(DEFAULT_SPEC_ID, 'Updated Name');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'patch',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`,
+          data: {
+            name: 'Updated Name'
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { id: DEFAULT_SPEC_ID }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await modifySpec(DEFAULT_SPEC_ID, 'New Name');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          }
+        })
+      );
+    });
+  });
+
+  describe('deleteSpec', () => {
+    test('should call DELETE /specs/{specId}', async () => {
+      const mockResponse = {
+        status: 204
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await deleteSpec(DEFAULT_SPEC_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'delete',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 204
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await deleteSpec(DEFAULT_SPEC_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          }
         })
       );
     });

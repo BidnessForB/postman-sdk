@@ -56,9 +56,38 @@ async function createSpec(workspaceId, name, type, files) {
   return await executeRequest(config);
 }
 
+/**
+ * Updates an API specification's properties
+ * Postman API endpoint and method: PATCH /specs/{specId}
+ * @param {string} specId - The spec ID
+ * @param {string} name - The specification's name
+ * @returns {Promise} Axios response
+ */
+async function modifySpec(specId, name) {
+  const endpoint = `/specs/${specId}`;
+  const config = buildAxiosConfig('patch', endpoint, {
+    name
+  });
+  return await executeRequest(config);
+}
+
+/**
+ * Deletes an API specification
+ * Postman API endpoint and method: DELETE /specs/{specId}
+ * @param {string} specId - The spec ID
+ * @returns {Promise} Axios response
+ */
+async function deleteSpec(specId) {
+  const endpoint = `/specs/${specId}`;
+  const config = buildAxiosConfig('delete', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getSpecs,
   getSpec,
-  createSpec
+  createSpec,
+  modifySpec,
+  deleteSpec
 };
 
