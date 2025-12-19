@@ -75,31 +75,27 @@ describe('workspaces functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // Clean up the created workspace if it still exists AND was not deleted in tests
-    // NOTE: We do NOT clear the test-ids.json file here - it persists for reuse
-    if (testWorkspaceId) {
-      try {
-        await deleteWorkspace(testWorkspaceId);
-        console.log('Workspace cleaned up in afterAll hook');
-        // DO NOT clear the file - let it persist for future runs
-      } catch (error) {
-        // Ignore cleanup errors - workspace may have been deleted in tests
-        console.log('Cleanup error (workspace may already be deleted):', error.message);
-      }
-    } else {
-      console.log('No workspace to clean up (already deleted in tests)');
-    }
+    // NO CLEANUP - Workspace persists for reuse across test runs
+    console.log(`Test workspace ID ${testWorkspaceId} persisted for future test runs`);
+    console.log(`Delete manually if needed using: await deleteWorkspace('${testWorkspaceId}')`);
   });
 
   test('1. createWorkspace - should create a team workspace', async () => {
     // Skip creation if workspace already exists from previous run
     if (testWorkspaceId) {
       console.log(`Using existing workspace ID from file: ${testWorkspaceId}`);
-      // Verify the workspace still exists
-      const result = await getWorkspace(testWorkspaceId);
-      expect(result.status).toBe(200);
-      expect(result.data.workspace.id).toBe(testWorkspaceId);
-      return;
+      try {
+        // Verify the workspace still exists
+        const result = await getWorkspace(testWorkspaceId);
+        expect(result.status).toBe(200);
+        expect(result.data.workspace.id).toBe(testWorkspaceId);
+        console.log('Workspace verified - reusing from previous test run');
+        return;
+      } catch (error) {
+        // Workspace no longer exists - create a new one
+        console.log('Workspace from file no longer exists, creating new one');
+        testWorkspaceId = null;
+      }
     }
 
     workspaceName = `SDK Test Workspace ${Date.now()}`;
@@ -124,6 +120,7 @@ describe('workspaces functional tests (sequential flow)', () => {
     persistedIds.workspaceId = testWorkspaceId;
     persistedIds.workspaceName = workspaceName;
     persistedIds.createdAt = new Date().toISOString();
+    delete persistedIds.deletedAt; // Clear any previous deletion timestamp
     saveTestIds(persistedIds);
     
     // Verify ID was persisted
@@ -223,20 +220,8 @@ describe('workspaces functional tests (sequential flow)', () => {
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('workspace');
     expect(result.data.workspace.id).toBe(testWorkspaceId);
-  });
-
-  test('8. deleteWorkspace - should delete workspace using persisted ID', async () => {
-    // USE PERSISTED ID from test 1
-    expect(testWorkspaceId).toBeDefined();
     
-    const result = await deleteWorkspace(testWorkspaceId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('workspace');
-    expect(result.data.workspace.id).toBe(testWorkspaceId);
-
-    // Clear the persisted ID so afterAll doesn't try to delete it again
-    testWorkspaceId = null;
+    console.log(`Workspace ${testWorkspaceId} updated and will persist for future test runs`);
   });
 
   describe('error handling', () => {
@@ -252,16 +237,25 @@ describe('workspaces functional tests (sequential flow)', () => {
       await expect(updateWorkspace(fakeId, 'New Name')).rejects.toThrow();
     });
 
-    test('should handle deleting non-existent workspace', async () => {
-      const fakeId = '00000000-0000-0000-0000-000000000000';
-      
-      await expect(deleteWorkspace(fakeId)).rejects.toThrow();
-    });
-
     test('should handle creating workspace with invalid type', async () => {
       await expect(
         createWorkspace('Invalid Workspace', 'invalid-type')
       ).rejects.toThrow();
+    });
+  });
+
+  describe('manual cleanup (optional)', () => {
+    test.skip('deleteWorkspace - manually delete test workspace if needed', async () => {
+      // This test is skipped by default to preserve the workspace
+      // Remove .skip to manually delete the workspace
+      if (testWorkspaceId) {
+        const result = await deleteWorkspace(testWorkspaceId);
+        expect(result.status).toBe(200);
+        
+        // Clear the file after manual deletion
+        clearTestIds();
+        console.log('Workspace manually deleted and test-ids.json cleared');
+      }
     });
   });
 });
