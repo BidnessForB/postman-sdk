@@ -72,13 +72,13 @@ Until manually cleaned up:
   - Same workspace ID used across ALL test runs indefinitely
 ```
 
-### Functions Available
+### Utility Functions
 
 The test file provides these utility functions:
 
 - `loadTestIds()` - Load persisted IDs from file (returns empty object if file doesn't exist)
-- `saveTestIds(ids)` - Save/update IDs in file (appends to existing data, never deletes)
-- `clearTestIds()` - Remove the test-ids.json file (available but not used in normal flow)
+- `saveTestIds(ids)` - Save/update IDs in file (merges with existing data)
+- `clearTestIds()` - Remove the test-ids.json file (used in optional manual cleanup test)
 
 **Note**: These functions can be adapted for other test modules that need ID persistence.
 
