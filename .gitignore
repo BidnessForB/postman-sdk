@@ -43,3 +43,6 @@ temp/
 # Jest cache
 .jest-cache/
 
+# Persisted test IDs (generated during functional tests)
+src/**/__tests__/test-ids.json
+
