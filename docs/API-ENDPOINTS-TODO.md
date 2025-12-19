@@ -1,0 +1,566 @@
+# Postman API SDK - Endpoint Implementation Status
+
+**Generated**: December 19, 2025
+
+## Overview
+
+This document tracks the implementation status of all Postman API endpoints in the SDK.
+
+### Statistics
+
+- **Total Endpoints**: 118 unique paths
+- **Total Operations**: 191 HTTP method operations
+- **Implemented**: 11 operations (5.76%)
+- **Not Implemented**: 180 operations (94.24%)
+
+### Legend
+
+- ✅ **Implemented** - Function exists with passing tests
+- ⚠️ **Partial** - Function exists but tests incomplete or failing
+- ❌ **Not Implemented** - No implementation exists
+
+---
+
+## Specs Module (11/14 completed - 78.6%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/specs` | Get all specs | `getSpecs()` | ✅ | ✅ Passing |
+| POST | `/specs` | Create a spec | `createSpec()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}` | Get a spec | `getSpec()` | ✅ | ✅ Passing |
+| PATCH | `/specs/{specId}` | Update a spec | `modifySpec()` | ✅ | ✅ Passing |
+| DELETE | `/specs/{specId}` | Delete a spec | `deleteSpec()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/definitions` | Get spec definition | `getSpecDefinition()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/files` | Get spec files | `getSpecFiles()` | ✅ | ✅ Passing |
+| POST | `/specs/{specId}/files` | Create spec file | `createSpecFile()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/files/{filePath}` | Get spec file content | `getSpecFile()` | ✅ | ✅ Passing |
+| PATCH | `/specs/{specId}/files/{filePath}` | Update spec file | `modifySpecFile()` | ✅ | ✅ Passing |
+| DELETE | `/specs/{specId}/files/{filePath}` | Delete spec file | `deleteSpecFile()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/generations/{elementType}` | Get generated collection | - | ❌ | ❌ None |
+| POST | `/specs/{specId}/generations/{elementType}` | Generate collection from spec | - | ❌ | ❌ None |
+| PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | - | ❌ | ❌ None |
+
+---
+
+## Collections Module (0/64 completed - 0%)
+
+### Core Collection Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections` | Get all collections | - | ❌ | ❌ None |
+| POST | `/collections` | Create a collection | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}` | Get a collection | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}` | Replace collection data | - | ❌ | ❌ None |
+| PATCH | `/collections/{collectionId}` | Update part of collection | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}` | Delete a collection | - | ❌ | ❌ None |
+
+### Collection Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/comments` | Get collection comments | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/comments` | Create collection comment | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+
+### Collection Folders
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/folders` | Create a folder | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/folders/{folderId}` | Get a folder | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/folders/{folderId}` | Update a folder | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/folders/{folderId}` | Delete a folder | - | ❌ | ❌ None |
+
+### Folder Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/folders/{folderId}/comments` | Get folder comments | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/folders/{folderId}/comments` | Create folder comment | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+
+### Collection Requests
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/requests` | Create a request | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/requests/{requestId}` | Get a request | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/requests/{requestId}` | Update a request | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/requests/{requestId}` | Delete a request | - | ❌ | ❌ None |
+
+### Request Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/requests/{requestId}/comments` | Get request comments | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/requests/{requestId}/comments` | Create request comment | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/requests/{requestId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/requests/{requestId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+
+### Collection Responses
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/responses` | Create a response | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/responses/{responseId}` | Get a response | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/responses/{responseId}` | Update a response | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/responses/{responseId}` | Delete a response | - | ❌ | ❌ None |
+
+### Response Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/responses/{responseId}/comments` | Get response comments | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/responses/{responseId}/comments` | Create response comment | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/responses/{responseId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/responses/{responseId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+
+### Collection Fork & Merge Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/collection-forks` | Get all forked collections | - | ❌ | ❌ None |
+| POST | `/collections/fork/{collectionId}` | Create a fork | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/forks` | Get collection's forks | - | ❌ | ❌ None |
+| POST | `/collections/merge` | Merge a fork | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/pulls` | Pull source changes | - | ❌ | ❌ None |
+
+### Collection Pull Requests
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/pull-requests` | Get pull requests | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/pull-requests` | Create pull request | - | ❌ | ❌ None |
+
+### Collection Roles & Tags
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionId}/roles` | Get collection roles | - | ❌ | ❌ None |
+| PATCH | `/collections/{collectionId}/roles` | Update collection roles | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/tags` | Get collection tags | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionId}/tags` | Update collection tags | - | ❌ | ❌ None |
+
+### Collection Documentation & Generation
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| PUT | `/collections/{collectionId}/public-documentations` | Publish documentation | - | ❌ | ❌ None |
+| DELETE | `/collections/{collectionId}/public-documentations` | Unpublish documentation | - | ❌ | ❌ None |
+| GET | `/collections/{collectionUid}/generations/{elementType}` | Get generated spec | - | ❌ | ❌ None |
+| POST | `/collections/{collectionUid}/generations/{elementType}` | Generate spec from collection | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/transformations` | Transform collection to OpenAPI | - | ❌ | ❌ None |
+
+### Collection Utilities
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/duplicates` | Duplicate a collection | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/source-status` | Get source collection status | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionUid}/synchronizations` | Sync collection with spec | - | ❌ | ❌ None |
+
+### Collection Transfer & Tasks
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collection-folders-transfers` | Transfer folders | - | ❌ | ❌ None |
+| POST | `/collection-requests-transfers` | Transfer requests | - | ❌ | ❌ None |
+| POST | `/collection-responses-transfers` | Transfer responses | - | ❌ | ❌ None |
+| GET | `/collection-duplicate-tasks/{taskId}` | Get duplication task status | - | ❌ | ❌ None |
+| GET | `/collection-updates-tasks/{taskId}` | Get async update status | - | ❌ | ❌ None |
+
+### Collection Access & Merges
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collection-access-keys` | Get collection access keys | - | ❌ | ❌ None |
+| DELETE | `/collection-access-keys/{keyId}` | Delete collection access key | - | ❌ | ❌ None |
+| PUT | `/collection-merges` | Merge or pull changes | - | ❌ | ❌ None |
+| GET | `/collection-merges-tasks/{taskId}` | Get merge/pull task status | - | ❌ | ❌ None |
+
+---
+
+## APIs Module (0/30 completed - 0%)
+
+### Core API Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/apis` | Get all APIs | - | ❌ | ❌ None |
+| POST | `/apis` | Create an API | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}` | Get an API | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}` | Update an API | - | ❌ | ❌ None |
+| DELETE | `/apis/{apiId}` | Delete an API | - | ❌ | ❌ None |
+
+### API Collections
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/apis/{apiId}/collections` | Add a collection to API | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/collections/{collectionId}` | Get API collection | - | ❌ | ❌ None |
+
+### API Collection Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/apis/{apiId}/collections/{collectionId}/comments` | Get collection comments | - | ❌ | ❌ None |
+| POST | `/apis/{apiId}/collections/{collectionId}/comments` | Create collection comment | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/collections/{collectionId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
+| DELETE | `/apis/{apiId}/collections/{collectionId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/collections/{collectionId}/sync-with-schema-tasks` | Sync collection with schema | - | ❌ | ❌ None |
+
+### API Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/apis/{apiId}/comments` | Get API comments | - | ❌ | ❌ None |
+| POST | `/apis/{apiId}/comments` | Create API comment | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/comments/{commentId}` | Update API comment | - | ❌ | ❌ None |
+| DELETE | `/apis/{apiId}/comments/{commentId}` | Delete API comment | - | ❌ | ❌ None |
+
+### API Schemas
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/apis/{apiId}/schemas` | Create a schema | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/schemas/{schemaId}` | Get a schema | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/schemas/{schemaId}/files` | Get schema files | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Get schema file contents | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Create/update schema file | - | ❌ | ❌ None |
+| DELETE | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Delete schema file | - | ❌ | ❌ None |
+
+### API Tags & Tasks
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/apis/{apiId}/tags` | Get API tags | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/tags` | Update API tags | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/tasks/{taskId}` | Get async task status | - | ❌ | ❌ None |
+
+### API Versions
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/apis/{apiId}/versions` | Get all versions | - | ❌ | ❌ None |
+| POST | `/apis/{apiId}/versions` | Create a version | - | ❌ | ❌ None |
+| GET | `/apis/{apiId}/versions/{versionId}` | Get a version | - | ❌ | ❌ None |
+| PUT | `/apis/{apiId}/versions/{versionId}` | Update a version | - | ❌ | ❌ None |
+| DELETE | `/apis/{apiId}/versions/{versionId}` | Delete a version | - | ❌ | ❌ None |
+
+---
+
+## Workspaces Module (0/14 completed - 0%)
+
+### Core Workspace Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/workspaces` | Get all workspaces | - | ❌ | ❌ None |
+| POST | `/workspaces` | Create a workspace | - | ❌ | ❌ None |
+| GET | `/workspaces/{workspaceId}` | Get a workspace | - | ❌ | ❌ None |
+| PUT | `/workspaces/{workspaceId}` | Update a workspace | - | ❌ | ❌ None |
+| DELETE | `/workspaces/{workspaceId}` | Delete a workspace | - | ❌ | ❌ None |
+
+### Workspace Activities & Roles
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/workspaces/{workspaceId}/activities` | Get workspace activities | - | ❌ | ❌ None |
+| GET | `/workspaces-roles` | Get workspace roles | - | ❌ | ❌ None |
+| GET | `/workspaces/{workspaceId}/roles` | Get workspace roles | - | ❌ | ❌ None |
+| PATCH | `/workspaces/{workspaceId}/roles` | Update workspace roles | - | ❌ | ❌ None |
+
+### Workspace Global Variables & Tags
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/workspaces/{workspaceId}/global-variables` | Get global variables | - | ❌ | ❌ None |
+| PUT | `/workspaces/{workspaceId}/global-variables` | Update global variables | - | ❌ | ❌ None |
+| GET | `/workspaces/{workspaceId}/tags` | Get workspace tags | - | ❌ | ❌ None |
+| PUT | `/workspaces/{workspaceId}/tags` | Update workspace tags | - | ❌ | ❌ None |
+
+### Workspace Transfers
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/workspaces/{workspaceId}/element-transfers` | Transfer elements | - | ❌ | ❌ None |
+
+---
+
+## Environments Module (0/10 completed - 0%)
+
+### Core Environment Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/environments` | Get all environments | - | ❌ | ❌ None |
+| POST | `/environments` | Create an environment | - | ❌ | ❌ None |
+| GET | `/environments/{environmentId}` | Get an environment | - | ❌ | ❌ None |
+| PATCH | `/environments/{environmentId}` | Update an environment | - | ❌ | ❌ None |
+| PUT | `/environments/{environmentId}` | Replace environment data | - | ❌ | ❌ None |
+| DELETE | `/environments/{environmentId}` | Delete an environment | - | ❌ | ❌ None |
+
+### Environment Fork & Merge Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/environments/{environmentId}/forks` | Create a fork | - | ❌ | ❌ None |
+| GET | `/environments/{environmentId}/forks` | Get environment forks | - | ❌ | ❌ None |
+| POST | `/environments/{environmentId}/merges` | Merge a fork | - | ❌ | ❌ None |
+| POST | `/environments/{environmentId}/pulls` | Pull source changes | - | ❌ | ❌ None |
+
+---
+
+## Mocks Module (0/13 completed - 0%)
+
+### Core Mock Operations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/mocks` | Get all mocks | - | ❌ | ❌ None |
+| POST | `/mocks` | Create a mock | - | ❌ | ❌ None |
+| GET | `/mocks/{mockId}` | Get a mock | - | ❌ | ❌ None |
+| PUT | `/mocks/{mockId}` | Update a mock | - | ❌ | ❌ None |
+| DELETE | `/mocks/{mockId}` | Delete a mock | - | ❌ | ❌ None |
+
+### Mock Publishing & Call Logs
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/mocks/{mockId}/publish` | Publish a mock | - | ❌ | ❌ None |
+| DELETE | `/mocks/{mockId}/unpublish` | Unpublish a mock | - | ❌ | ❌ None |
+| GET | `/mocks/{mockId}/call-logs` | Get mock call logs | - | ❌ | ❌ None |
+
+### Mock Server Responses
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/mocks/{mockId}/server-responses` | Get server responses | - | ❌ | ❌ None |
+| POST | `/mocks/{mockId}/server-responses` | Create server response | - | ❌ | ❌ None |
+| GET | `/mocks/{mockId}/server-responses/{serverResponseId}` | Get server response | - | ❌ | ❌ None |
+| PUT | `/mocks/{mockId}/server-responses/{serverResponseId}` | Update server response | - | ❌ | ❌ None |
+| DELETE | `/mocks/{mockId}/server-responses/{serverResponseId}` | Delete server response | - | ❌ | ❌ None |
+
+---
+
+## Monitors Module (0/6 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/monitors` | Get all monitors | - | ❌ | ❌ None |
+| POST | `/monitors` | Create a monitor | - | ❌ | ❌ None |
+| GET | `/monitors/{monitorId}` | Get a monitor | - | ❌ | ❌ None |
+| PUT | `/monitors/{monitorId}` | Update a monitor | - | ❌ | ❌ None |
+| DELETE | `/monitors/{monitorId}` | Delete a monitor | - | ❌ | ❌ None |
+| POST | `/monitors/{monitorId}/run` | Run a monitor | - | ❌ | ❌ None |
+
+---
+
+## SCIM Module (0/12 completed - 0%)
+
+### SCIM Groups
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/scim/v2/Groups` | Get all SCIM groups | - | ❌ | ❌ None |
+| POST | `/scim/v2/Groups` | Create a SCIM group | - | ❌ | ❌ None |
+| GET | `/scim/v2/Groups/{groupId}` | Get a SCIM group | - | ❌ | ❌ None |
+| PATCH | `/scim/v2/Groups/{groupId}` | Update a SCIM group | - | ❌ | ❌ None |
+| DELETE | `/scim/v2/Groups/{groupId}` | Delete a SCIM group | - | ❌ | ❌ None |
+
+### SCIM Users
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/scim/v2/Users` | Get all SCIM users | - | ❌ | ❌ None |
+| POST | `/scim/v2/Users` | Create a SCIM user | - | ❌ | ❌ None |
+| GET | `/scim/v2/Users/{userId}` | Get a SCIM user | - | ❌ | ❌ None |
+| PUT | `/scim/v2/Users/{userId}` | Replace a SCIM user | - | ❌ | ❌ None |
+| PATCH | `/scim/v2/Users/{userId}` | Update a SCIM user | - | ❌ | ❌ None |
+
+### SCIM Metadata
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/scim/v2/ResourceTypes` | Get resource types | - | ❌ | ❌ None |
+| GET | `/scim/v2/ServiceProviderConfig` | Get service provider config | - | ❌ | ❌ None |
+
+---
+
+## Network Module (0/6 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/network/private` | Get private network elements | - | ❌ | ❌ None |
+| POST | `/network/private` | Add element to private network | - | ❌ | ❌ None |
+| PUT | `/network/private/{elementType}/{elementId}` | Update private network element | - | ❌ | ❌ None |
+| DELETE | `/network/private/{elementType}/{elementId}` | Remove from private network | - | ❌ | ❌ None |
+| GET | `/network/private/network-entity/request/all` | Get all network entity requests | - | ❌ | ❌ None |
+| PUT | `/network/private/network-entity/request/{requestId}` | Update network entity request | - | ❌ | ❌ None |
+
+---
+
+## Pull Requests Module (0/3 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/pull-requests/{pullRequestId}` | Get a pull request | - | ❌ | ❌ None |
+| PUT | `/pull-requests/{pullRequestId}` | Update a pull request | - | ❌ | ❌ None |
+| POST | `/pull-requests/{pullRequestId}/tasks` | Create PR task | - | ❌ | ❌ None |
+
+---
+
+## Groups Module (0/2 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/groups` | Get all groups | - | ❌ | ❌ None |
+| GET | `/groups/{groupId}` | Get a group | - | ❌ | ❌ None |
+
+---
+
+## Users Module (0/2 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/users` | Get all users | - | ❌ | ❌ None |
+| GET | `/users/{userId}` | Get a user | - | ❌ | ❌ None |
+
+---
+
+## Billing Module (0/2 completed - 0%)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/accounts` | Get billing accounts | - | ❌ | ❌ None |
+| GET | `/accounts/{accountId}/invoices` | List account invoices | - | ❌ | ❌ None |
+
+---
+
+## Other Modules
+
+### Audit (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/audit/logs` | Get team audit logs | - | ❌ | ❌ None |
+
+### Runners (0/2)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/runners/{runnerId}/instances` | Get runner instances | - | ❌ | ❌ None |
+| GET | `/runners/{runnerId}/metrics` | Get runner metrics | - | ❌ | ❌ None |
+
+### Detected Secrets (0/3)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/detected-secrets-queries` | Search detected secrets | - | ❌ | ❌ None |
+| PUT | `/detected-secrets/{secretId}` | Update secret resolution status | - | ❌ | ❌ None |
+| GET | `/detected-secrets/{secretId}/locations` | Get secret locations | - | ❌ | ❌ None |
+
+### Import/Export (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/import/openapi` | Import OpenAPI definition | - | ❌ | ❌ None |
+
+### Webhooks (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/webhooks` | Create a webhook | - | ❌ | ❌ None |
+
+### Security (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/security/api-validation` | Validate API security | - | ❌ | ❌ None |
+
+### Tags (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/tags/{slug}/entities` | Get tag entities | - | ❌ | ❌ None |
+
+### Comments (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/comments-resolutions/{threadId}` | Resolve a comment thread | - | ❌ | ❌ None |
+
+### Postbot (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/postbot/generations/tool` | Generate using Postbot | - | ❌ | ❌ None |
+
+### Secret Types (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/secret-types` | Get secret types | - | ❌ | ❌ None |
+
+### User Info (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/me` | Get authenticated user | - | ❌ | ❌ None |
+
+### Tasks (0/1)
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/{elementType}/{elementId}/tasks/{taskId}` | Get async task status | - | ❌ | ❌ None |
+
+---
+
+## Implementation Priority Recommendations
+
+### Phase 1 - Foundation (Complete Specs Module)
+1. Complete remaining 8 specs endpoints (files, generations, synchronizations)
+2. Ensure all tests pass
+
+### Phase 2 - Core Resources
+1. **Workspaces** (14 endpoints) - Foundation for organizing resources
+2. **Collections** (64 endpoints) - Most complex but most used
+3. **Environments** (10 endpoints) - Required for testing
+
+### Phase 3 - Testing & Automation
+1. **Monitors** (6 endpoints) - Collection running and monitoring
+2. **Mocks** (13 endpoints) - Mock server functionality
+
+### Phase 4 - API Management
+1. **APIs** (30 endpoints) - API versioning and management
+
+### Phase 5 - Advanced Features
+1. **SCIM** (12 endpoints) - User provisioning
+2. **Network** (6 endpoints) - Private API Network
+3. **Pull Requests** (3 endpoints) - Collaboration
+4. **Security & Secrets** (5 endpoints) - Security features
+
+### Phase 6 - Administrative & Misc
+1. **Users & Groups** (4 endpoints)
+2. **Billing** (2 endpoints)
+3. **Audit** (1 endpoint)
+4. **Webhooks** (1 endpoint)
+5. **Import/Export** (1 endpoint)
+6. Other utilities
+
+---
+
+## Notes
+
+- All endpoints should follow the established pattern in `src/specs/index.js`
+- Each endpoint requires both unit tests (mocked) and functional tests (real API calls)
+- Test files should be created in `__tests__` subdirectories
+- Follow the workspace rules defined in `.cursor/rules/postman-api.mdc`
+- Reference `postmanAPISpec.yaml` for accurate endpoint definitions and parameters
+
+---
+
+**Last Updated**: December 19, 2025

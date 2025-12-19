@@ -83,11 +83,98 @@ async function deleteSpec(specId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets the complete contents of an API specification's definition
+ * Postman API endpoint and method: GET /specs/{specId}/definitions
+ * @param {string} specId - The spec ID
+ * @returns {Promise} Axios response
+ */
+async function getSpecDefinition(specId) {
+  const endpoint = `/specs/${specId}/definitions`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Gets all the files in an API specification
+ * Postman API endpoint and method: GET /specs/{specId}/files
+ * @param {string} specId - The spec ID
+ * @returns {Promise} Axios response
+ */
+async function getSpecFiles(specId) {
+  const endpoint = `/specs/${specId}/files`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates an API specification file
+ * Postman API endpoint and method: POST /specs/{specId}/files
+ * @param {string} specId - The spec ID
+ * @param {string} path - The file's path (accepts JSON or YAML files)
+ * @param {string} content - The file's stringified contents
+ * @returns {Promise} Axios response
+ */
+async function createSpecFile(specId, path, content) {
+  const endpoint = `/specs/${specId}/files`;
+  const config = buildAxiosConfig('post', endpoint, {
+    path,
+    content
+  });
+  return await executeRequest(config);
+}
+
+/**
+ * Gets the contents of an API specification's file
+ * Postman API endpoint and method: GET /specs/{specId}/files/{filePath}
+ * @param {string} specId - The spec ID
+ * @param {string} filePath - The path to the file
+ * @returns {Promise} Axios response
+ */
+async function getSpecFile(specId, filePath) {
+  const endpoint = `/specs/${specId}/files/${filePath}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates an API specification's file
+ * Postman API endpoint and method: PATCH /specs/{specId}/files/{filePath}
+ * @param {string} specId - The spec ID
+ * @param {string} filePath - The path to the file
+ * @param {Object} data - Update data (name, content, or type - only one property at a time)
+ * @returns {Promise} Axios response
+ */
+async function modifySpecFile(specId, filePath, data) {
+  const endpoint = `/specs/${specId}/files/${filePath}`;
+  const config = buildAxiosConfig('patch', endpoint, data);
+  return await executeRequest(config);
+}
+
+/**
+ * Deletes a file in an API specification
+ * Postman API endpoint and method: DELETE /specs/{specId}/files/{filePath}
+ * @param {string} specId - The spec ID
+ * @param {string} filePath - The path to the file
+ * @returns {Promise} Axios response
+ */
+async function deleteSpecFile(specId, filePath) {
+  const endpoint = `/specs/${specId}/files/${filePath}`;
+  const config = buildAxiosConfig('delete', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getSpecs,
   getSpec,
   createSpec,
   modifySpec,
-  deleteSpec
+  deleteSpec,
+  getSpecDefinition,
+  getSpecFiles,
+  createSpecFile,
+  getSpecFile,
+  modifySpecFile,
+  deleteSpecFile
 };
 

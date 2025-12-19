@@ -3,6 +3,13 @@ alwaysApply: true
 ---
 When creating functions that interact with the Postman API in files like `sync-postman-spec.js`:
 
+## Ground Rules
+
+ - DO NOT MAKE ASSUMPTIONS!  Follow the OAS definition in postmanAPISpec.yaml precisely.  Do not amake assumptions about API response structure.  If the spec is unclear, prompt me.  
+ - DO NOT go beyond your instructions.  Create only the code, tests specified in these rules unless specifically prompted otherwise.  
+
+ 
+
 ## Function Structure
 - Use async/await pattern
 - Functions should NOT take `apiKey` as a parameter - use the `apiKey` variable from the outer scope (defined at the top of the file from `process.env.POSTMAN_API_KEY_POSTMAN`)
@@ -41,6 +48,8 @@ async function functionName(data = null, param1, param2) {
   return await executeRequest(config);
 }
 
+## Responses
+1. Read and apply the documentation in the OAS to determine the shape of request and response payloads.  Do not assume payload properties which don't exist. 
 
 ## Example Reference
 See `createSpecFile` function in `pmansdkexample.js` as the reference implementation.
@@ -56,6 +65,16 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 7. Handle exception response code by throwing an error
 8. Do not repeat yourself.  Abstract reused code into named functions.
 9. DO NOT perform additional work.  
-10. Create unit and functional JEST tests modules for each api module
+10. Create unit, functional and end-to-end JEST tests modules for each api module
 11. Functional tests should NOT use mocks, they should use the actual SDK and make actual API calls.  
-12. All API calls should throw an error on a non-success response from the API, and include the API response in the error
+12. End-to-end tests should: 
+ - Run in the following order: 
+   - Create
+   - get
+   - modify
+   - delete
+12. All API calls should throw an error on a non-success response from the API, and include the API response in the error.
+13. Content for specs could be either JSON or YAML.  Ensure tests on these objects seamlessly handle either JSON or YAML.  
+ - Example: Asserting a property exists in content: 
+      const specDefinition = parseContent(result.data.definition);
+      expect(result.data).toHaveProperty('definition');
