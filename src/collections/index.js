@@ -2,9 +2,45 @@ const { buildAxiosConfig, executeRequest } = require('../core/request');
 const { buildQueryString } = require('../core/utils');
 
 /**
- * Collections module - endpoints for managing Postman Collections
- * Endpoints will be implemented here following the established pattern
+ * Gets all collections
+ * Postman API endpoint and method: GET /collections
+ * @param {string} [workspace] - The workspace's ID
+ * @param {string} [name] - Filter results by collections that match the given name
+ * @param {number} [limit] - Limit the number of results returned
+ * @param {number} [offset] - Offset for pagination
+ * @returns {Promise} Axios response
  */
+async function getCollections(workspace = null, name = null, limit = null, offset = null) {
+  const endpoint = '/collections';
+  const queryParams = {
+    workspace,
+    name,
+    limit,
+    offset
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('get', fullEndpoint);
+  return await executeRequest(config);
+}
 
-module.exports = {};
+/**
+ * Creates a collection
+ * Postman API endpoint and method: POST /collections
+ * @param {Object} collection - The collection object following Postman Collection v2.1.0 schema
+ * @param {string} [workspace] - The workspace's ID
+ * @returns {Promise} Axios response
+ */
+async function createCollection(collection, workspace = null) {
+  const endpoint = '/collections';
+  const queryParams = {
+    workspace
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('post', fullEndpoint, { collection });
+  return await executeRequest(config);
+}
 
+module.exports = {
+  getCollections,
+  createCollection
+};
