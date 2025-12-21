@@ -289,8 +289,20 @@ describe('workspaces unit tests', () => {
   });
 
   describe('updateWorkspace', () => {
-    test('should call PUT /workspaces/{workspaceId}', async () => {
-      const mockResponse = {
+    test('should call GET then PUT /workspaces/{workspaceId} and merge values', async () => {
+      const mockGetResponse = {
+        status: 200,
+        data: {
+          workspace: {
+            id: DEFAULT_WORKSPACE_ID,
+            name: 'Original Name',
+            type: 'team',
+            description: 'Original description',
+            about: 'Original about'
+          }
+        }
+      };
+      const mockPutResponse = {
         status: 200,
         data: {
           workspace: {
@@ -299,51 +311,97 @@ describe('workspaces unit tests', () => {
           }
         }
       };
-      axios.request.mockResolvedValue(mockResponse);
+      
+      // Mock GET request first, then PUT request
+      axios.request
+        .mockResolvedValueOnce(mockGetResponse)
+        .mockResolvedValueOnce(mockPutResponse);
 
       const result = await updateWorkspace(DEFAULT_WORKSPACE_ID, 'Updated Workspace');
 
-      expect(axios.request).toHaveBeenCalledWith(
+      // Should have called GET first
+      expect(axios.request).toHaveBeenNthCalledWith(1,
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
+        })
+      );
+      
+      // Should have called PUT with merged data
+      expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
           method: 'put',
           url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`,
           data: {
             workspace: {
-              name: 'Updated Workspace'
+              name: 'Updated Workspace',
+              type: 'team',
+              description: 'Original description',
+              about: 'Original about'
             }
           }
         })
       );
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual(mockPutResponse);
     });
 
-    test('should include type when provided', async () => {
-      const mockResponse = {
+    test('should update type when provided', async () => {
+      const mockGetResponse = {
         status: 200,
         data: {
           workspace: {
             id: DEFAULT_WORKSPACE_ID,
-            name: 'Updated Workspace'
+            name: 'Original Name',
+            type: 'team',
+            description: 'Original description',
+            about: 'Original about'
           }
         }
       };
-      axios.request.mockResolvedValue(mockResponse);
+      const mockPutResponse = {
+        status: 200,
+        data: {
+          workspace: {
+            id: DEFAULT_WORKSPACE_ID,
+            name: 'Original Name'
+          }
+        }
+      };
+      
+      axios.request
+        .mockResolvedValueOnce(mockGetResponse)
+        .mockResolvedValueOnce(mockPutResponse);
 
       await updateWorkspace(DEFAULT_WORKSPACE_ID, null, 'private');
 
-      expect(axios.request).toHaveBeenCalledWith(
+      expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
           data: {
             workspace: {
-              type: 'private'
+              name: 'Original Name',
+              type: 'private',
+              description: 'Original description',
+              about: 'Original about'
             }
           }
         })
       );
     });
 
-    test('should include all fields when provided', async () => {
-      const mockResponse = {
+    test('should update all fields when provided', async () => {
+      const mockGetResponse = {
+        status: 200,
+        data: {
+          workspace: {
+            id: DEFAULT_WORKSPACE_ID,
+            name: 'Original Name',
+            type: 'team',
+            description: 'Original description',
+            about: 'Original about'
+          }
+        }
+      };
+      const mockPutResponse = {
         status: 200,
         data: {
           workspace: {
@@ -352,22 +410,25 @@ describe('workspaces unit tests', () => {
           }
         }
       };
-      axios.request.mockResolvedValue(mockResponse);
+      
+      axios.request
+        .mockResolvedValueOnce(mockGetResponse)
+        .mockResolvedValueOnce(mockPutResponse);
 
       await updateWorkspace(
         DEFAULT_WORKSPACE_ID, 
         'Updated Workspace', 
-        'team', 
+        'private', 
         'Updated description', 
         'Updated about'
       );
 
-      expect(axios.request).toHaveBeenCalledWith(
+      expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
           data: {
             workspace: {
               name: 'Updated Workspace',
-              type: 'team',
+              type: 'private',
               description: 'Updated description',
               about: 'Updated about'
             }
@@ -376,24 +437,44 @@ describe('workspaces unit tests', () => {
       );
     });
 
-    test('should not include fields when all null', async () => {
-      const mockResponse = {
+    test('should keep existing values when all parameters are null', async () => {
+      const mockGetResponse = {
         status: 200,
         data: {
           workspace: {
             id: DEFAULT_WORKSPACE_ID,
-            name: 'Updated Workspace'
+            name: 'Original Name',
+            type: 'team',
+            description: 'Original description',
+            about: 'Original about'
           }
         }
       };
-      axios.request.mockResolvedValue(mockResponse);
+      const mockPutResponse = {
+        status: 200,
+        data: {
+          workspace: {
+            id: DEFAULT_WORKSPACE_ID,
+            name: 'Original Name'
+          }
+        }
+      };
+      
+      axios.request
+        .mockResolvedValueOnce(mockGetResponse)
+        .mockResolvedValueOnce(mockPutResponse);
 
       await updateWorkspace(DEFAULT_WORKSPACE_ID, null, null, null, null);
 
-      expect(axios.request).toHaveBeenCalledWith(
+      expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
           data: {
-            workspace: {}
+            workspace: {
+              name: 'Original Name',
+              type: 'team',
+              description: 'Original description',
+              about: 'Original about'
+            }
           }
         })
       );

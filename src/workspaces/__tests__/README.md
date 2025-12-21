@@ -20,20 +20,24 @@ The functional tests for workspaces implement **persistent ID storage** to allow
 - **Consistent test environment** - Always use the exact same workspace across all test runs
 - **Real-world testing** - Test against a persistent, evolving workspace state
 
-### The test-ids.json File
+### The Shared test-ids.json File
 
-The file is automatically created in this directory and **persists indefinitely**. Example contents:
+The file is automatically created at `src/__tests__/test-ids.json` (shared across all test modules) and **persists indefinitely**. Example contents:
 
 ```json
 {
   "workspaceId": "1f0df51a-8658-4ee8-a2a1-d2567dfa09a9",
   "workspaceName": "Updated Workspace Name 1734607890",
+  "specId": "abc123-spec-id",
+  "specName": "My API Spec",
+  "collectionId": "def456-collection-id",
+  "collectionName": "My Collection",
   "createdAt": "2025-12-19T10:30:00.000Z",
   "updatedAt": "2025-12-19T10:31:00.000Z"
 }
 ```
 
-**Note**: This file is ignored by git (via `.gitignore`) and should not be committed.
+**Note**: This file is ignored by git (via `.gitignore`) and should not be committed. It stores IDs for all test modules (workspaces, specs, collections, etc.).
 
 ### Manual Cleanup
 
@@ -55,8 +59,8 @@ npm test -- src/workspaces/__tests__/functional.test.js -t "deleteWorkspace"
 
 **Option 4: Start fresh**
 ```bash
-# Delete the file to force creation of a new workspace next run
-rm src/workspaces/__tests__/test-ids.json
+# Delete the shared file to force creation of new resources next run
+rm src/__tests__/test-ids.json
 ```
 
 ### Test Execution Flow
@@ -72,13 +76,14 @@ Until manually cleaned up:
   - Same workspace ID used across ALL test runs indefinitely
 ```
 
-### Utility Functions
+### Shared Utility Functions
 
-The test file provides these utility functions:
+All test modules use shared utility functions from `src/__tests__/test-helpers.js`:
 
-- `loadTestIds()` - Load persisted IDs from file (returns empty object if file doesn't exist)
-- `saveTestIds(ids)` - Save/update IDs in file (merges with existing data)
-- `clearTestIds()` - Remove the test-ids.json file (used in optional manual cleanup test)
+- `loadTestIds()` - Load persisted IDs from shared file (returns empty object if file doesn't exist)
+- `saveTestIds(ids)` - Save/update IDs in shared file (merges with existing data)
+- `clearTestIds(existingIds)` - Set all properties to null while preserving the file (used after resource deletion)
+- `deleteTestIdsFile()` - Completely remove the test-ids.json file (use to start fresh)
 
-**Note**: These functions can be adapted for other test modules that need ID persistence.
+**Note**: These functions are shared across all test modules (workspaces, specs, collections, etc.) to maintain a single source of truth for test IDs.
 

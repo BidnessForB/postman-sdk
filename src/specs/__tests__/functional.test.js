@@ -13,6 +13,7 @@ const {
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
+const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
 // Add custom JEST matcher for YAML validation
 expect.extend({
@@ -24,27 +25,47 @@ const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
 describe('specs functional tests', () => {
   let testSpecId;
   let testSpecName;
+  let testWorkspaceId; // Workspace to use for tests
   let rootFileName = 'openapi.yaml';
   let additionalFileName = 'components/schemas.json';
+  let persistedIds = {};
 
   beforeAll(() => {
     if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
       throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
     }
+
+    // Load persisted IDs and use workspaceId if available
+    persistedIds = loadTestIds();
+    testWorkspaceId = persistedIds.workspaceId || DEFAULT_WORKSPACE_ID;
+    testSpecId = persistedIds.specId || null;
+    
+    if (persistedIds.workspaceId) {
+      console.log(`Using persisted workspace ID: ${testWorkspaceId}`);
+    } else {
+      console.log(`Using default workspace ID: ${testWorkspaceId}`);
+    }
+    
+    if (testSpecId) {
+      console.log(`Found persisted spec ID: ${testSpecId}`);
+    }
   });
 
   afterAll(async () => {
-    // Clean up the test spec
+    // NO CLEANUP - Spec persists indefinitely for reuse across test runs
     if (testSpecId) {
-      try {
-        await deleteSpec(testSpecId);
-      } catch (error) {
-        // Ignore cleanup errors
-      }
+      console.log(`Spec ${testSpecId} will persist for future test runs`);
+      console.log(`Delete manually if needed using: await deleteSpec('${testSpecId}')`);
     }
   });
 
   test('1. createSpec - should create an OpenAPI 3.0 spec', async () => {
+    // Skip creation if we have a persisted spec ID
+    if (testSpecId) {
+      console.log('Reusing persisted spec ID, skipping creation');
+      return;
+    }
+
     testSpecName = `SDK Functional Test Spec ${Date.now()}`;
     const files = [
       {
@@ -67,7 +88,7 @@ paths:
       }
     ];
 
-    const result = await createSpec(DEFAULT_WORKSPACE_ID, testSpecName, 'OPENAPI:3.0', files);
+    const result = await createSpec(testWorkspaceId, testSpecName, 'OPENAPI:3.0', files);
 
     expect(result.status).toBe(201);
     expect(result.data).toHaveProperty('id');
@@ -75,8 +96,15 @@ paths:
     expect(result.data.name).toBe(testSpecName);
     expect(result.data.type).toBe('OPENAPI:3.0');
 
-    // Save the spec ID for subsequent tests
+    // Save the spec ID for subsequent tests and persist to file
     testSpecId = result.data.id;
+    persistedIds.specId = testSpecId;
+    persistedIds.specName = testSpecName;
+    if (!persistedIds.createdAt) {
+      persistedIds.createdAt = new Date().toISOString();
+    }
+    saveTestIds(persistedIds);
+    console.log(`Created and persisted spec ID: ${testSpecId}`);
   });
 
   test('2. getSpec - should retrieve the created spec by ID', async () => {
@@ -92,7 +120,7 @@ paths:
   });
 
   test('3. getSpecs - should retrieve specs from workspace', async () => {
-    const result = await getSpecs(DEFAULT_WORKSPACE_ID);
+    const result = await getSpecs(testWorkspaceId);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('specs');

@@ -66,6 +66,8 @@ async function getWorkspace(workspaceId, include = null) {
 /**
  * Updates a workspace
  * Postman API endpoint and method: PUT /workspaces/{workspaceId}
+ * Note: This function fetches the current workspace first to get existing values,
+ * then merges updates, because the Postman API requires 'type' to be present in PUT requests.
  * @param {string} workspaceId - The workspace's ID
  * @param {string} [name] - The workspace's new name
  * @param {string} [type] - The new workspace visibility type (private, personal, team, public)
@@ -74,21 +76,20 @@ async function getWorkspace(workspaceId, include = null) {
  * @returns {Promise} Axios response
  */
 async function updateWorkspace(workspaceId, name = null, type = null, description = null, about = null) {
+  // Fetch current workspace to get existing values
+  const currentWorkspace = await getWorkspace(workspaceId);
+  const current = currentWorkspace.data.workspace;
+  
   const endpoint = `/workspaces/${workspaceId}`;
-  const workspace = {};
-  if (name !== null) {
-    workspace.name = name;
-  }
-  if (type !== null) {
-    workspace.type = type;
-  }
-  if (description !== null) {
-    workspace.description = description;
-  }
-  if (about !== null) {
-    workspace.about = about;
-  }
-  const config = buildAxiosConfig('put', endpoint, { workspace });
+  const workspace = {
+    name: name !== null ? name : current.name,
+    type: type !== null ? type : current.type,
+    description: description !== null ? description : current.description,
+    about: about !== null ? about : current.about
+  };
+  
+  const data = { workspace };
+  const config = buildAxiosConfig('put', endpoint, data);
   return await executeRequest(config);
 }
 
