@@ -104,11 +104,77 @@ async function deleteCollection(collectionId) {
   return await executeRequest(config);
 }
 
+/**
+ * Creates a folder in a collection
+ * Postman API endpoint and method: POST /collections/{collectionId}/folders
+ * @param {string} collectionId - The collection's ID
+ * @param {Object} folderData - The folder data (name, description, etc.)
+ * @returns {Promise} Axios response
+ */
+async function createFolder(collectionId, folderData) {
+  const endpoint = `/collections/${collectionId}/folders`;
+  const config = buildAxiosConfig('post', endpoint, folderData);
+  return await executeRequest(config);
+}
+
+/**
+ * Gets information about a folder in a collection
+ * Postman API endpoint and method: GET /collections/{collectionId}/folders/{folderId}
+ * @param {string} collectionId - The collection's ID
+ * @param {string} folderId - The folder's ID
+ * @param {string} [ids] - Return folder item IDs only
+ * @param {string} [uid] - Return full UIDs for folder items
+ * @param {string} [populate] - Return full folder items
+ * @returns {Promise} Axios response
+ */
+async function getFolder(collectionId, folderId, ids = null, uid = null, populate = null) {
+  const endpoint = `/collections/${collectionId}/folders/${folderId}`;
+  const queryParams = {
+    ids,
+    uid,
+    populate
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('get', fullEndpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates a folder in a collection
+ * Postman API endpoint and method: PUT /collections/{collectionId}/folders/{folderId}
+ * @param {string} collectionId - The collection's ID
+ * @param {string} folderId - The folder's ID
+ * @param {Object} folderData - The folder data to update (name, description, etc.)
+ * @returns {Promise} Axios response
+ */
+async function updateFolder(collectionId, folderId, folderData) {
+  const endpoint = `/collections/${collectionId}/folders/${folderId}`;
+  const config = buildAxiosConfig('put', endpoint, folderData);
+  return await executeRequest(config);
+}
+
+/**
+ * Deletes a folder in a collection
+ * Postman API endpoint and method: DELETE /collections/{collectionId}/folders/{folderId}
+ * @param {string} collectionId - The collection's ID
+ * @param {string} folderId - The folder's ID
+ * @returns {Promise} Axios response
+ */
+async function deleteFolder(collectionId, folderId) {
+  const endpoint = `/collections/${collectionId}/folders/${folderId}`;
+  const config = buildAxiosConfig('delete', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
   getCollection,
   updateCollection,
   modifyCollection,
-  deleteCollection
+  deleteCollection,
+  createFolder,
+  getFolder,
+  updateFolder,
+  deleteFolder
 };

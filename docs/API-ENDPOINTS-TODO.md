@@ -10,8 +10,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 22 operations (11.52%)
-- **Not Implemented**: 169 operations (88.48%)
+- **Implemented**: 26 operations (13.61%)
+- **Not Implemented**: 165 operations (86.39%)
 
 ### Legend
 
@@ -42,7 +42,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Collections Module (6/64 completed - 9.4%)
+## Collections Module (10/64 completed - 15.6%)
 
 ### Core Collection Operations
 
@@ -68,10 +68,10 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| POST | `/collections/{collectionId}/folders` | Create a folder | - | ❌ | ❌ None |
-| GET | `/collections/{collectionId}/folders/{folderId}` | Get a folder | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/folders/{folderId}` | Update a folder | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/folders/{folderId}` | Delete a folder | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/folders` | Create a folder | `createFolder()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionId}/folders/{folderId}` | Get a folder | `getFolder()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/folders/{folderId}` | Update a folder | `updateFolder()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/folders/{folderId}` | Delete a folder | `deleteFolder()` | ✅ | ✅ Passing |
 
 ### Folder Comments
 

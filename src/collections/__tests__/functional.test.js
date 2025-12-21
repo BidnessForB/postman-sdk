@@ -4,7 +4,11 @@ const {
   getCollection,
   updateCollection,
   modifyCollection,
-  deleteCollection
+  deleteCollection,
+  createFolder,
+  getFolder,
+  updateFolder,
+  deleteFolder
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
@@ -15,6 +19,8 @@ describe('collections functional tests (sequential flow)', () => {
   let testWorkspaceId;
   let testCollectionId;
   let testCollectionName;
+  let testFolderId;
+  let testFolderName;
   let persistedIds = {};
 
   beforeAll(() => {
@@ -26,6 +32,8 @@ describe('collections functional tests (sequential flow)', () => {
     testWorkspaceId = persistedIds.workspaceId || DEFAULT_WORKSPACE_ID;
     testCollectionId = persistedIds.collectionId || null;
     testCollectionName = persistedIds.collectionName || null;
+    testFolderId = persistedIds.folderId || null;
+    testFolderName = persistedIds.folderName || null;
 
     if (persistedIds.workspaceId) {
       console.log('Using persisted workspace ID:', testWorkspaceId);
@@ -35,6 +43,10 @@ describe('collections functional tests (sequential flow)', () => {
 
     if (testCollectionId) {
       console.log('Found persisted collection ID:', testCollectionId);
+    }
+
+    if (testFolderId) {
+      console.log('Found persisted folder ID:', testFolderId);
     }
   });
 
@@ -217,7 +229,121 @@ describe('collections functional tests (sequential flow)', () => {
     // PUT response returns minimal data, just verify success
   });
 
-  test('10. deleteCollection - should delete the collection and update test-ids.json', async () => {
+  test('10. createFolder - should create a folder in the collection', async () => {
+    expect(testCollectionId).toBeDefined();
+
+    // Check if folder already exists and is valid for this collection
+    if (testFolderId) {
+      try {
+        const existingFolder = await getFolder(testCollectionId, testFolderId);
+        if (existingFolder.status === 200) {
+          console.log(`Using persisted folder ID: ${testFolderId}`);
+          testFolderName = existingFolder.data.data.name;
+          return;
+        }
+      } catch (error) {
+        // Folder doesn't exist or is invalid, create a new one
+        console.log('Persisted folder not found, creating new folder');
+      }
+    }
+
+    testFolderName = `Test Folder ${Date.now()}`;
+    const folderData = {
+      name: testFolderName,
+      description: 'Test folder created by SDK functional tests'
+    };
+
+    const result = await createFolder(testCollectionId, folderData);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data).toHaveProperty('id');
+    expect(result.data.data).toHaveProperty('name');
+    expect(result.data.data.name).toBe(testFolderName);
+
+    testFolderId = result.data.data.id;
+
+    // Persist folder IDs for future test runs
+    saveTestIds({
+      ...loadTestIds(),
+      folderId: testFolderId,
+      folderName: testFolderName
+    });
+
+    console.log(`Created and persisted folder ID: ${testFolderId}`);
+  });
+
+  test('11. getFolder - should retrieve the folder by ID', async () => {
+    expect(testCollectionId).toBeDefined();
+    expect(testFolderId).toBeDefined();
+
+    const result = await getFolder(testCollectionId, testFolderId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data).toHaveProperty('id');
+    expect(result.data.data.id).toBe(testFolderId);
+    expect(result.data.data).toHaveProperty('name');
+    
+    // Update testFolderName with current name from API if different
+    if (result.data.data.name !== testFolderName) {
+      testFolderName = result.data.data.name;
+    }
+  });
+
+  test('12. updateFolder - should update the folder name', async () => {
+    expect(testCollectionId).toBeDefined();
+    expect(testFolderId).toBeDefined();
+
+    const updatedName = `${testFolderName} - Updated`;
+    const folderData = {
+      name: updatedName,
+      description: 'Updated folder description'
+    };
+
+    const result = await updateFolder(testCollectionId, testFolderId, folderData);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    
+    testFolderName = updatedName;
+  });
+
+  test('13. getFolder - should verify folder update', async () => {
+    expect(testCollectionId).toBeDefined();
+    expect(testFolderId).toBeDefined();
+
+    const result = await getFolder(testCollectionId, testFolderId);
+
+    expect(result.status).toBe(200);
+    expect(result.data.data).toHaveProperty('name');
+    
+    // Verify the name matches what we expect (updated or original)
+    expect(result.data.data.name).toBe(testFolderName);
+  });
+
+  test('14. deleteFolder - should delete the folder and update test-ids.json', async () => {
+    expect(testCollectionId).toBeDefined();
+    expect(testFolderId).toBeDefined();
+
+    const result = await deleteFolder(testCollectionId, testFolderId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+
+    // Clear folder IDs from persisted file
+    const clearedIds = clearTestIds(['folderId', 'folderName']);
+    expect(clearedIds.folderId).toBeNull();
+    expect(clearedIds.folderName).toBeNull();
+    expect(clearedIds).toHaveProperty('clearedAt');
+
+    console.log('Folder deleted and folder properties cleared from test-ids.json');
+
+    // Verify folder is actually deleted
+    await expect(getFolder(testCollectionId, testFolderId)).rejects.toThrow();
+  });
+
+  test('15. deleteCollection - should delete the collection and update test-ids.json', async () => {
     expect(testCollectionId).toBeDefined();
     
     const result = await deleteCollection(testCollectionId);
@@ -284,6 +410,40 @@ describe('collections functional tests (sequential flow)', () => {
     test('should handle deleting non-existent collection', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
       await expect(deleteCollection(fakeId)).rejects.toThrow();
+    });
+
+    test('should handle creating folder in non-existent collection', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      const folderData = { name: 'Test Folder' };
+      await expect(createFolder(fakeId, folderData)).rejects.toThrow();
+    });
+
+    test('should handle getting non-existent folder', async () => {
+      if (!testCollectionId) {
+        console.log('Skipping test - no collection ID available');
+        return;
+      }
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      await expect(getFolder(testCollectionId, fakeId)).rejects.toThrow();
+    });
+
+    test('should handle updating non-existent folder', async () => {
+      if (!testCollectionId) {
+        console.log('Skipping test - no collection ID available');
+        return;
+      }
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      const folderData = { name: 'Updated Folder' };
+      await expect(updateFolder(testCollectionId, fakeId, folderData)).rejects.toThrow();
+    });
+
+    test('should handle deleting non-existent folder', async () => {
+      if (!testCollectionId) {
+        console.log('Skipping test - no collection ID available');
+        return;
+      }
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      await expect(deleteFolder(testCollectionId, fakeId)).rejects.toThrow();
     });
   });
 });

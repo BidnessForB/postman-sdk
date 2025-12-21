@@ -5,7 +5,11 @@ const {
   getCollection,
   updateCollection,
   modifyCollection,
-  deleteCollection
+  deleteCollection,
+  createFolder,
+  getFolder,
+  updateFolder,
+  deleteFolder
 } = require('../index');
 
 jest.mock('axios');
@@ -388,6 +392,140 @@ describe('collections unit tests', () => {
         expect.objectContaining({
           method: 'delete',
           url: 'https://api.getpostman.com/collections/col-123'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('createFolder', () => {
+    test('should call POST /collections/{collectionId}/folders', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          data: {
+            id: 'folder-123',
+            name: 'Test Folder'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const folderData = {
+        name: 'Test Folder',
+        description: 'Test folder description'
+      };
+
+      const result = await createFolder('col-123', folderData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: 'https://api.getpostman.com/collections/col-123/folders',
+          data: folderData
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('getFolder', () => {
+    test('should call GET /collections/{collectionId}/folders/{folderId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          data: {
+            id: 'folder-123',
+            name: 'Test Folder'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getFolder('col-123', 'folder-123');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include query params when provided', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          data: {
+            id: 'folder-123',
+            name: 'Test Folder'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getFolder('col-123', 'folder-123', 'true', 'true', 'true');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringContaining('ids=true'),
+          url: expect.stringContaining('uid=true'),
+          url: expect.stringContaining('populate=true')
+        })
+      );
+    });
+  });
+
+  describe('updateFolder', () => {
+    test('should call PUT /collections/{collectionId}/folders/{folderId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          data: {
+            id: 'folder-123',
+            name: 'Updated Folder'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const folderData = {
+        name: 'Updated Folder',
+        description: 'Updated description'
+      };
+
+      const result = await updateFolder('col-123', 'folder-123', folderData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123',
+          data: folderData
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('deleteFolder', () => {
+    test('should call DELETE /collections/{collectionId}/folders/{folderId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          data: {
+            id: 'folder-123'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await deleteFolder('col-123', 'folder-123');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'delete',
+          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123'
         })
       );
       expect(result).toEqual(mockResponse);

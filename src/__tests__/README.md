@@ -64,6 +64,10 @@ clearTestIds(['specId', 'specName']);
 // After deleting a collection - only clear collection properties
 clearTestIds(['collectionId', 'collectionName']);
 // Result: { workspaceId: 'xyz789', collectionId: null, collectionName: null, ..., clearedAt: '2025-12-21...' }
+
+// After deleting a folder - only clear folder properties
+clearTestIds(['folderId', 'folderName']);
+// Result: { workspaceId: 'xyz789', collectionId: 'abc123', folderId: null, folderName: null, ..., clearedAt: '2025-12-21...' }
 ```
 
 #### `deleteTestIdsFile()`
