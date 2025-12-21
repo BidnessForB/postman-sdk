@@ -10,8 +10,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 18 operations (9.42%)
-- **Not Implemented**: 173 operations (90.58%)
+- **Implemented**: 22 operations (11.52%)
+- **Not Implemented**: 169 operations (88.48%)
 
 ### Legend
 
@@ -42,7 +42,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Collections Module (2/64 completed - 3.1%)
+## Collections Module (6/64 completed - 9.4%)
 
 ### Core Collection Operations
 
@@ -50,10 +50,10 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/collections` | Get all collections | `getCollections()` | ✅ | ✅ Passing |
 | POST | `/collections` | Create a collection | `createCollection()` | ✅ | ✅ Passing |
-| GET | `/collections/{collectionId}` | Get a collection | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}` | Replace collection data | - | ❌ | ❌ None |
-| PATCH | `/collections/{collectionId}` | Update part of collection | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}` | Delete a collection | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}` | Get a collection | `getCollection()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}` | Replace collection data | `updateCollection()` | ✅ | ✅ Passing |
+| PATCH | `/collections/{collectionId}` | Update part of collection | `modifyCollection()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}` | Delete a collection | `deleteCollection()` | ✅ | ✅ Passing |
 
 ### Collection Comments
 

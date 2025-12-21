@@ -34,28 +34,39 @@ function saveTestIds(ids) {
 }
 
 /**
- * Clear test IDs by setting all properties to null while preserving the file
- * This is useful for cleanup after tests without losing the file structure
- * @param {Object} existingIds - Existing test IDs object to clear
- * @returns {Object} Cleared test IDs object with all values set to null
+ * Clear specific test ID properties by setting them to null while preserving all other properties
+ * This is useful for cleanup after tests without losing unrelated test data
+ * @param {string[]} keysToClear - Array of property keys to set to null (e.g., ['workspaceId', 'workspaceName'])
+ * @returns {Object} Updated test IDs object
  */
-function clearTestIds(existingIds = {}) {
-  const clearedIds = {};
-  
-  // Set all existing properties to null
-  for (const key in existingIds) {
-    if (existingIds.hasOwnProperty(key)) {
-      clearedIds[key] = null;
+function clearTestIds(keysToClear = []) {
+  try {
+    // Load existing IDs
+    const ids = loadTestIds();
+    
+    // If no keys specified, do nothing (don't clear everything)
+    if (keysToClear.length === 0) {
+      console.log('No keys specified to clear');
+      return ids;
     }
+    
+    // Set only the specified keys to null
+    keysToClear.forEach(key => {
+      ids[key] = null;
+    });
+    
+    // Add/update clearedAt timestamp
+    ids.clearedAt = new Date().toISOString();
+    
+    // Save the updated state
+    saveTestIds(ids);
+    console.log(`Cleared test ID properties: ${keysToClear.join(', ')}`);
+    
+    return ids;
+  } catch (error) {
+    console.error('Failed to clear test IDs:', error);
+    return {};
   }
-  
-  // Add a clearedAt timestamp
-  clearedIds.clearedAt = new Date().toISOString();
-  
-  // Save the cleared state
-  saveTestIds(clearedIds);
-  
-  return clearedIds;
 }
 
 /**

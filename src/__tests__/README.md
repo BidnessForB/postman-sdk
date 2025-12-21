@@ -41,22 +41,29 @@ saveTestIds({
 });
 ```
 
-#### `clearTestIds(existingIds)`
-Sets all properties in the test IDs object to `null` while preserving the file. Useful for cleanup after resource deletion.
+#### `clearTestIds(keysToClear)`
+Clears specific test ID properties by setting them to `null` while preserving all other properties. This is useful for scoped cleanup after tests - e.g., only clearing workspace properties when deleting a workspace, or only spec properties when deleting a spec.
 
 **Parameters:**
-- `existingIds` (Object) - Existing test IDs object to clear
+- `keysToClear` (`string[]`) - Array of property keys to set to `null` (e.g., `['workspaceId', 'workspaceName']`)
 
-**Returns:** `Object` - Cleared test IDs object with all values set to `null` and a `clearedAt` timestamp
+**Returns:** `Object` - Updated test IDs object with specified properties set to `null` and an updated `clearedAt` timestamp
 
 **Example:**
 ```javascript
-const { loadTestIds, clearTestIds } = require('../__tests__/test-helpers');
+const { clearTestIds } = require('../__tests__/test-helpers');
 
-const ids = loadTestIds();
-// After deleting a workspace
-const cleared = clearTestIds(ids);
-// Result: { workspaceId: null, workspaceName: null, ..., clearedAt: '2025-12-21...' }
+// After deleting a workspace - only clear workspace properties
+clearTestIds(['workspaceId', 'workspaceName']);
+// Result: { workspaceId: null, workspaceName: null, specId: 'abc123', ..., clearedAt: '2025-12-21...' }
+
+// After deleting a spec - only clear spec properties
+clearTestIds(['specId', 'specName']);
+// Result: { workspaceId: 'xyz789', specId: null, specName: null, ..., clearedAt: '2025-12-21...' }
+
+// After deleting a collection - only clear collection properties
+clearTestIds(['collectionId', 'collectionName']);
+// Result: { workspaceId: 'xyz789', collectionId: null, collectionName: null, ..., clearedAt: '2025-12-21...' }
 ```
 
 #### `deleteTestIdsFile()`

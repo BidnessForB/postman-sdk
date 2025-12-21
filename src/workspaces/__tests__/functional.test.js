@@ -189,13 +189,13 @@ describe('workspaces functional tests (sequential flow)', () => {
     expect(result.data).toHaveProperty('workspace');
     expect(result.data.workspace.id).toBe(testWorkspaceId);
     
-    // Clear test IDs: Set all properties to null using shared utility
-    const clearedIds = clearTestIds(persistedIds);
+    // Clear workspace-related properties only
+    const clearedIds = clearTestIds(['workspaceId', 'workspaceName']);
     expect(clearedIds.workspaceId).toBeNull();
     expect(clearedIds.workspaceName).toBeNull();
     expect(clearedIds).toHaveProperty('clearedAt');
     
-    console.log('Workspace deleted and test-ids.json cleared using shared utility');
+    console.log('Workspace deleted and workspace properties cleared from test-ids.json');
     
     // Verify workspace is actually deleted
     await expect(getWorkspace(testWorkspaceId)).rejects.toThrow();
@@ -235,9 +235,9 @@ describe('workspaces functional tests (sequential flow)', () => {
         const result = await deleteWorkspace(testWorkspaceId);
         expect(result.status).toBe(200);
         
-        // Clear the file after manual deletion
-        clearTestIds();
-        console.log('Workspace manually deleted and test-ids.json cleared');
+        // Clear workspace-related properties after manual deletion
+        clearTestIds(['workspaceId', 'workspaceName']);
+        console.log('Workspace manually deleted and workspace properties cleared from test-ids.json');
       }
     });
   });

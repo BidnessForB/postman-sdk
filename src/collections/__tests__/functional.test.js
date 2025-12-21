@@ -1,4 +1,11 @@
-const { getCollections, createCollection } = require('../index');
+const { 
+  getCollections, 
+  createCollection,
+  getCollection,
+  updateCollection,
+  modifyCollection,
+  deleteCollection
+} = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
@@ -134,6 +141,100 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.data.collections.length).toBeLessThanOrEqual(5);
   });
 
+  test('6. getCollection - should retrieve collection by ID', async () => {
+    expect(testCollectionId).toBeDefined();
+
+    const result = await getCollection(testCollectionId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('collection');
+    expect(result.data.collection).toHaveProperty('info');
+    expect(result.data.collection.info._postman_id).toBe(testCollectionId);
+    expect(result.data.collection.info.name).toBe(testCollectionName);
+  });
+
+  test('7. modifyCollection - should update collection name', async () => {
+    expect(testCollectionId).toBeDefined();
+
+    const updatedName = `${testCollectionName} - Updated`;
+    const partialData = {
+      info: {
+        name: updatedName
+      }
+    };
+
+    const result = await modifyCollection(testCollectionId, partialData);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('collection');
+    // PATCH response returns minimal data, just verify success
+    
+    // Update our local reference
+    testCollectionName = updatedName;
+    persistedIds.collectionName = updatedName;
+    saveTestIds(persistedIds);
+  });
+
+  test('8. getCollection - should verify name update', async () => {
+    expect(testCollectionId).toBeDefined();
+
+    const result = await getCollection(testCollectionId);
+
+    expect(result.status).toBe(200);
+    expect(result.data.collection.info.name).toBe(testCollectionName);
+  });
+
+  test('9. updateCollection - should replace collection data', async () => {
+    expect(testCollectionId).toBeDefined();
+
+    // First get the current collection to preserve its structure
+    const currentResult = await getCollection(testCollectionId);
+    const currentCollection = currentResult.data.collection;
+
+    // Update the collection with new data
+    const updatedCollection = {
+      info: {
+        name: currentCollection.info.name,
+        description: 'Updated description via PUT',
+        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      },
+      item: [
+        {
+          name: 'Updated Request',
+          request: {
+            method: 'POST',
+            url: 'https://postman-echo.com/post',
+            description: 'Updated POST request'
+          }
+        }
+      ]
+    };
+
+    const result = await updateCollection(testCollectionId, updatedCollection);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('collection');
+    // PUT response returns minimal data, just verify success
+  });
+
+  test('10. deleteCollection - should delete the collection and update test-ids.json', async () => {
+    expect(testCollectionId).toBeDefined();
+    
+    const result = await deleteCollection(testCollectionId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('collection');
+    expect(result.data.collection.id).toBe(testCollectionId);
+    
+    // Clear collection IDs from persisted file
+    clearTestIds(['collectionId', 'collectionName']);
+    
+    console.log('Collection deleted and test-ids.json cleared');
+    
+    // Verify collection is actually deleted
+    await expect(getCollection(testCollectionId)).rejects.toThrow();
+  });
+
   describe('error handling', () => {
     test('should handle invalid workspace ID gracefully', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';
@@ -152,6 +253,37 @@ describe('collections functional tests (sequential flow)', () => {
       };
 
       await expect(createCollection(invalidData, testWorkspaceId)).rejects.toThrow();
+    });
+
+    test('should handle getting non-existent collection', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      await expect(getCollection(fakeId)).rejects.toThrow();
+    });
+
+    test('should handle updating non-existent collection', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      const collectionData = {
+        info: {
+          name: 'Test',
+          schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+        }
+      };
+      await expect(updateCollection(fakeId, collectionData)).rejects.toThrow();
+    });
+
+    test('should handle modifying non-existent collection', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      const partialData = {
+        info: {
+          name: 'Test'
+        }
+      };
+      await expect(modifyCollection(fakeId, partialData)).rejects.toThrow();
+    });
+
+    test('should handle deleting non-existent collection', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      await expect(deleteCollection(fakeId)).rejects.toThrow();
     });
   });
 });

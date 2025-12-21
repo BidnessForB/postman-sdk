@@ -50,21 +50,27 @@ describe('test-helpers shared utilities', () => {
   });
 
   describe('clearTestIds', () => {
-    test('should set all properties to null', () => {
+    test('should set only specified properties to null', () => {
       const originalIds = {
         workspaceId: 'ws-123',
         workspaceName: 'Test Workspace',
         specId: 'spec-456',
-        specName: 'Test Spec'
+        specName: 'Test Spec',
+        collectionId: 'col-789',
+        collectionName: 'Test Collection'
       };
 
       saveTestIds(originalIds);
-      const cleared = clearTestIds(originalIds);
+      const cleared = clearTestIds(['workspaceId', 'workspaceName']);
 
+      // Only workspace properties should be null
       expect(cleared.workspaceId).toBeNull();
       expect(cleared.workspaceName).toBeNull();
-      expect(cleared.specId).toBeNull();
-      expect(cleared.specName).toBeNull();
+      // Other properties should remain unchanged
+      expect(cleared.specId).toBe('spec-456');
+      expect(cleared.specName).toBe('Test Spec');
+      expect(cleared.collectionId).toBe('col-789');
+      expect(cleared.collectionName).toBe('Test Collection');
       expect(cleared).toHaveProperty('clearedAt');
       expect(typeof cleared.clearedAt).toBe('string');
     });
@@ -72,21 +78,51 @@ describe('test-helpers shared utilities', () => {
     test('should save cleared state to file', () => {
       const originalIds = {
         workspaceId: 'ws-123',
-        specId: 'spec-456'
+        specId: 'spec-456',
+        collectionId: 'col-789'
       };
 
-      clearTestIds(originalIds);
+      saveTestIds(originalIds);
+      clearTestIds(['workspaceId']);
       const loaded = loadTestIds();
 
       expect(loaded.workspaceId).toBeNull();
-      expect(loaded.specId).toBeNull();
+      expect(loaded.specId).toBe('spec-456'); // Should be preserved
+      expect(loaded.collectionId).toBe('col-789'); // Should be preserved
       expect(loaded).toHaveProperty('clearedAt');
     });
 
-    test('should handle empty object', () => {
-      const cleared = clearTestIds({});
+    test('should handle empty array (no keys to clear)', () => {
+      const originalIds = {
+        workspaceId: 'ws-123',
+        specId: 'spec-456'
+      };
+
+      saveTestIds(originalIds);
+      const cleared = clearTestIds([]);
       
-      expect(cleared).toEqual({ clearedAt: expect.any(String) });
+      // Nothing should be cleared
+      expect(cleared.workspaceId).toBe('ws-123');
+      expect(cleared.specId).toBe('spec-456');
+    });
+
+    test('should only clear collection-related properties', () => {
+      const originalIds = {
+        workspaceId: 'ws-123',
+        workspaceName: 'Test Workspace',
+        collectionId: 'col-789',
+        collectionName: 'Test Collection'
+      };
+
+      saveTestIds(originalIds);
+      const cleared = clearTestIds(['collectionId', 'collectionName']);
+
+      // Collection properties should be null
+      expect(cleared.collectionId).toBeNull();
+      expect(cleared.collectionName).toBeNull();
+      // Workspace properties should remain
+      expect(cleared.workspaceId).toBe('ws-123');
+      expect(cleared.workspaceName).toBe('Test Workspace');
     });
   });
 

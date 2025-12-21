@@ -52,17 +52,15 @@ describe('specs functional tests', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Spec persists indefinitely for reuse across test runs
-    if (testSpecId) {
-      console.log(`Spec ${testSpecId} will persist for future test runs`);
-      console.log(`Delete manually if needed using: await deleteSpec('${testSpecId}')`);
-    }
+    // Spec is deleted in test 10 (deleteSpec)
+    // No additional cleanup needed
   });
 
   test('1. createSpec - should create an OpenAPI 3.0 spec', async () => {
     // Skip creation if we have a persisted spec ID
     if (testSpecId) {
       console.log('Reusing persisted spec ID, skipping creation');
+      testSpecName = persistedIds.specName || testSpecName;
       return;
     }
 
@@ -263,6 +261,25 @@ paths:
     await expect(
       getSpecFile(testSpecId, additionalFileName)
     ).rejects.toThrow();
+  });
+
+  test('11. deleteSpec - should delete the spec and update test-ids.json', async () => {
+    expect(testSpecId).toBeDefined();
+    
+    const result = await deleteSpec(testSpecId);
+
+    expect(result.status).toBe(204);
+    
+    // Clear spec-related properties only
+    const clearedIds = clearTestIds(['specId', 'specName']);
+    expect(clearedIds.specId).toBeNull();
+    expect(clearedIds.specName).toBeNull();
+    expect(clearedIds).toHaveProperty('clearedAt');
+    
+    console.log('Spec deleted and spec properties cleared from test-ids.json');
+    
+    // Verify spec is actually deleted
+    await expect(getSpec(testSpecId)).rejects.toThrow();
   });
 
   // Error handling tests
