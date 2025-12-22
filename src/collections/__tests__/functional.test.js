@@ -321,7 +321,12 @@ describe('collections functional tests (sequential flow)', () => {
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
-    
+    // Update test-ids.json with new folder name after update
+    const persisted = loadTestIds();
+    saveTestIds({
+      ...persisted,
+      folderName: updatedName
+    });
     testFolderName = updatedName;
   });
 
