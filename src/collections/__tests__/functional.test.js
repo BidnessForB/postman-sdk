@@ -70,7 +70,7 @@ describe('collections functional tests (sequential flow)', () => {
     // NO CLEANUP - Collection persists indefinitely for reuse across test runs
     if (testCollectionId) {
       console.log(`Collection ${testCollectionId} will persist for future test runs`);
-      console.log(`Delete manually if needed using: await deleteCollection('${testCollectionId}')`);
+      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
     }
   });
 
@@ -524,24 +524,6 @@ describe('collections functional tests (sequential flow)', () => {
 
     // Verify folder is actually deleted
     await expect(getFolder(testCollectionId, testFolderId)).rejects.toThrow();
-  });
-
-  test('22. deleteCollection - should delete the collection and update test-ids.json', async () => {
-    expect(testCollectionId).toBeDefined();
-    
-    const result = await deleteCollection(testCollectionId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('collection');
-    expect(result.data.collection.id).toBe(testCollectionId);
-    
-    // Clear collection IDs from persisted file
-    clearTestIds(['collectionId', 'collectionName']);
-    
-    console.log('Collection deleted and test-ids.json cleared');
-    
-    // Verify collection is actually deleted
-    await expect(getCollection(testCollectionId)).rejects.toThrow();
   });
 
   describe('error handling', () => {
