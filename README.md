@@ -6,7 +6,7 @@
 ![Endpoints](https://img.shields.io/badge/endpoints-31%2F191%20(16.2%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 
-A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.
+A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.  Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
 
 ## Installation
 
@@ -16,7 +16,7 @@ npm install
 
 ## Configuration
 
-Set your Postman API key as an environment variable:
+Set your Postman API key as an environment variable, then specify that variable name in config.js
 
 ```bash
 export POSTMAN_API_KEY_POSTMAN=your_api_key_here
@@ -50,7 +50,7 @@ postman-sdk/
 │       └── index.js             # Spec endpoints
 ├── package.json
 ├── README.md
-└── postmanAPISpec.yaml          # OpenAPI spec reference
+
 ```
 
 ## Module Organization
@@ -61,17 +61,6 @@ The SDK is organized by resource groups:
 - **workspaces**: Endpoints for managing Postman Workspaces
 - **specs**: Endpoints for managing Postman API Specifications
 
-## Implementation Rules
-
-Following the established patterns:
-
-1. Vanilla Node.js (no TypeScript)
-2. Functions use naming prefix based on HTTP method (get/create/update/modify/delete)
-3. Functions return axios response directly
-4. No validation of parameters
-5. Minimal code - only what's necessary
-6. JSDoc comments for all functions
-7. API key from environment variable (not passed as parameter)
 
 ## Testing
 
