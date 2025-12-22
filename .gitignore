@@ -1,3 +1,5 @@
+postmanAPIspec.yaml
+
 # Dependencies
 node_modules/
 npm-debug.log*
@@ -21,6 +23,7 @@ coverage/
 *.swp
 *.swo
 *~
+*workspace*
 .DS_Store
 
 # Logs

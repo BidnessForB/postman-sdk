@@ -1,5 +1,11 @@
 # Postman SDK
 
+![Tests](https://img.shields.io/badge/tests-62%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
+![Modules](https://img.shields.io/badge/modules-4-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-31%2F191%20(16.2%25)-yellow)
+![License](https://img.shields.io/badge/license-ISC-blue)
+
 A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.
 
 ## Installation
