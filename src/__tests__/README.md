@@ -68,6 +68,14 @@ clearTestIds(['collectionId', 'collectionName']);
 // After deleting a folder - only clear folder properties
 clearTestIds(['folderId', 'folderName']);
 // Result: { workspaceId: 'xyz789', collectionId: 'abc123', folderId: null, folderName: null, ..., clearedAt: '2025-12-21...' }
+
+// After deleting a comment - only clear comment properties
+clearTestIds(['commentId']);
+// Result: { workspaceId: 'xyz789', collectionId: 'abc123', folderId: 'def456', commentId: null, ..., clearedAt: '2025-12-21...' }
+
+// After deleting a reply comment - only clear reply comment property
+clearTestIds(['replyCommentId']);
+// Result: { workspaceId: 'xyz789', collectionId: 'abc123', commentId: '123', replyCommentId: null, ..., clearedAt: '2025-12-21...' }
 ```
 
 #### `deleteTestIdsFile()`

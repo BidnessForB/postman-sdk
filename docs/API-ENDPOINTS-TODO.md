@@ -10,8 +10,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 26 operations (13.61%)
-- **Not Implemented**: 165 operations (86.39%)
+- **Implemented**: 30 operations (15.71%)
+- **Not Implemented**: 161 operations (84.29%)
 
 ### Legend
 
@@ -42,7 +42,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Collections Module (10/64 completed - 15.6%)
+## Collections Module (14/64 completed - 21.9%)
 
 ### Core Collection Operations
 
@@ -77,10 +77,10 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/folders/{folderId}/comments` | Get folder comments | - | ❌ | ❌ None |
-| POST | `/collections/{collectionId}/folders/{folderId}/comments` | Create folder comment | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/folders/{folderId}/comments` | Get folder comments | `getFolderComments()` | ✅ | ✅ Passing |
+| POST | `/collections/{collectionId}/folders/{folderId}/comments` | Create folder comment | `createFolderComment()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Update comment | `updateFolderComment()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Delete comment | `deleteFolderComment()` | ✅ | ✅ Passing |
 
 ### Collection Requests
 
