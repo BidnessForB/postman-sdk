@@ -156,13 +156,14 @@ describe('workspaces functional tests (sequential flow)', () => {
   test('6. getWorkspace - should verify name update using persisted ID', async () => {
     // USE PERSISTED ID from test 1 and updated name from test 5
     expect(testWorkspaceId).toBeDefined();
-    expect(updatedWorkspaceName).toBeDefined();
+    const { workspaceName: updatedWorkspaceNameFromFile } = loadTestIds();
+    expect(updatedWorkspaceNameFromFile).toBeDefined();
     
     const result = await getWorkspace(testWorkspaceId);
 
     expect(result.status).toBe(200);
     expect(result.data.workspace.id).toBe(testWorkspaceId);
-    expect(result.data.workspace.name).toBe(updatedWorkspaceName);
+    expect(result.data.workspace.name).toBe(updatedWorkspaceNameFromFile);
   });
 
   test('7. updateWorkspace - should update workspace description', async () => {
