@@ -124,6 +124,104 @@ describe('test-helpers shared utilities', () => {
       expect(cleared.workspaceId).toBe('ws-123');
       expect(cleared.workspaceName).toBe('Test Workspace');
     });
+
+    test('should NOT remove properties - all properties should still exist', () => {
+      const originalIds = {
+        userId: 12345,
+        workspaceId: 'ws-123',
+        workspaceName: 'Test Workspace',
+        collectionId: 'col-789',
+        collectionName: 'Test Collection',
+        specId: 'spec-456',
+        specName: 'Test Spec',
+        folderId: 'folder-999',
+        folderName: 'Test Folder'
+      };
+
+      saveTestIds(originalIds);
+      const cleared = clearTestIds(['collectionId', 'collectionName']);
+
+      // All original properties should still exist in the object
+      expect(cleared).toHaveProperty('userId');
+      expect(cleared).toHaveProperty('workspaceId');
+      expect(cleared).toHaveProperty('workspaceName');
+      expect(cleared).toHaveProperty('collectionId');
+      expect(cleared).toHaveProperty('collectionName');
+      expect(cleared).toHaveProperty('specId');
+      expect(cleared).toHaveProperty('specName');
+      expect(cleared).toHaveProperty('folderId');
+      expect(cleared).toHaveProperty('folderName');
+      expect(cleared).toHaveProperty('clearedAt');
+
+      // Count of properties should be original + clearedAt
+      const propertyCount = Object.keys(cleared).length;
+      expect(propertyCount).toBe(Object.keys(originalIds).length + 1); // +1 for clearedAt
+    });
+
+    test('should NOT delete the file - file should still exist after clearing', () => {
+      const originalIds = {
+        workspaceId: 'ws-123',
+        specId: 'spec-456'
+      };
+
+      saveTestIds(originalIds);
+      expect(fs.existsSync(TEST_IDS_FILE)).toBe(true);
+
+      clearTestIds(['workspaceId']);
+
+      // File should still exist
+      expect(fs.existsSync(TEST_IDS_FILE)).toBe(true);
+
+      // File should be readable and valid JSON
+      const fileContent = fs.readFileSync(TEST_IDS_FILE, 'utf8');
+      expect(() => JSON.parse(fileContent)).not.toThrow();
+
+      // Cleared property should be null but still present
+      const loaded = loadTestIds();
+      expect(loaded).toHaveProperty('workspaceId');
+      expect(loaded.workspaceId).toBeNull();
+      expect(loaded).toHaveProperty('specId');
+      expect(loaded.specId).toBe('spec-456');
+    });
+
+    test('should preserve all properties when clearing multiple times', () => {
+      const originalIds = {
+        workspaceId: 'ws-123',
+        collectionId: 'col-789',
+        specId: 'spec-456',
+        folderId: 'folder-999'
+      };
+
+      saveTestIds(originalIds);
+      
+      // Clear workspace
+      clearTestIds(['workspaceId']);
+      let loaded = loadTestIds();
+      expect(loaded.workspaceId).toBeNull();
+      expect(loaded.collectionId).toBe('col-789');
+      expect(loaded.specId).toBe('spec-456');
+      expect(loaded.folderId).toBe('folder-999');
+      expect(loaded).toHaveProperty('workspaceId'); // Property still exists
+
+      // Clear collection
+      clearTestIds(['collectionId']);
+      loaded = loadTestIds();
+      expect(loaded.workspaceId).toBeNull(); // Still null
+      expect(loaded.collectionId).toBeNull(); // Now null
+      expect(loaded.specId).toBe('spec-456'); // Still there
+      expect(loaded.folderId).toBe('folder-999'); // Still there
+      expect(loaded).toHaveProperty('workspaceId'); // Property still exists
+      expect(loaded).toHaveProperty('collectionId'); // Property still exists
+
+      // All properties should still be present
+      expect(Object.keys(loaded)).toEqual(expect.arrayContaining([
+        'workspaceId',
+        'collectionId',
+        'specId',
+        'folderId',
+        'clearedAt'
+      ]));
+    });
   });
 
   describe('deleteTestIdsFile', () => {

@@ -342,20 +342,11 @@ describe('collections functional tests (sequential flow)', () => {
     expect(testCollectionId).toBeDefined();
     expect(testFolderId).toBeDefined();
 
-    try {
-      const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
+    const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
 
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('data');
-      expect(Array.isArray(result.data.data)).toBe(true);
-    } catch (error) {
-      // Comments API might return 403 if not available for this user/workspace
-      if (error.response && error.response.status === 403) {
-        console.log('Comments API returned 403 - feature may not be available for this account');
-        return; // Skip test
-      }
-      throw error;
-    }
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(Array.isArray(result.data.data)).toBe(true);
   });
 
   test('15. createFolderComment - should create a comment on the folder', async () => {
@@ -372,32 +363,23 @@ describe('collections functional tests (sequential flow)', () => {
       body: 'This is a test comment created by SDK functional tests'
     };
 
-    try {
-      const result = await createFolderComment(testUserId, testCollectionId, testFolderId, commentData);
+    const result = await createFolderComment(testUserId, testCollectionId, testFolderId, commentData);
 
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('data');
-      expect(result.data.data).toHaveProperty('id');
-      expect(result.data.data).toHaveProperty('body');
-      expect(result.data.data.body).toBe(commentData.body);
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data).toHaveProperty('id');
+    expect(result.data.data).toHaveProperty('body');
+    expect(result.data.data.body).toBe(commentData.body);
 
-      testCommentId = result.data.data.id;
+    testCommentId = result.data.data.id;
 
-      // Persist comment ID for future test runs
-      saveTestIds({
-        ...loadTestIds(),
-        commentId: testCommentId
-      });
+    // Persist comment ID for future test runs
+    saveTestIds({
+      ...loadTestIds(),
+      commentId: testCommentId
+    });
 
-      console.log(`Created and persisted comment ID: ${testCommentId}`);
-    } catch (error) {
-      // Comments API might return 400/403 if not available for this user/workspace
-      if (error.response && (error.response.status === 400 || error.response.status === 403)) {
-        console.log(`Comments API returned ${error.response.status} - feature may not be available for this account`);
-        return; // Skip test
-      }
-      throw error;
-    }
+    console.log(`Created and persisted comment ID: ${testCommentId}`);
   });
 
   test('16. getFolderComments - should retrieve comments including the new one', async () => {
@@ -409,21 +391,13 @@ describe('collections functional tests (sequential flow)', () => {
       return;
     }
 
-    try {
-      const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
+    const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
 
-      expect(result.status).toBe(200);
-      expect(result.data.data.length).toBeGreaterThan(0);
-      
-      const comment = result.data.data.find(c => c.id === testCommentId);
-      expect(comment).toBeDefined();
-    } catch (error) {
-      if (error.response && error.response.status === 403) {
-        console.log('Comments API returned 403 - skipping test');
-        return;
-      }
-      throw error;
-    }
+    expect(result.status).toBe(200);
+    expect(result.data.data.length).toBeGreaterThan(0);
+    
+    const comment = result.data.data.find(c => c.id === testCommentId);
+    expect(comment).toBeDefined();
   });
 
   test('17. createFolderComment - should create a reply comment', async () => {
@@ -446,30 +420,22 @@ describe('collections functional tests (sequential flow)', () => {
       threadId: testCommentId
     };
 
-    try {
-      const result = await createFolderComment(testUserId, testCollectionId, testFolderId, replyData);
+    const result = await createFolderComment(testUserId, testCollectionId, testFolderId, replyData);
 
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('data');
-      expect(result.data.data).toHaveProperty('id');
-      expect(result.data.data.body).toBe(replyData.body);
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data).toHaveProperty('id');
+    expect(result.data.data.body).toBe(replyData.body);
 
-      testReplyCommentId = result.data.data.id;
+    testReplyCommentId = result.data.data.id;
 
-      // Persist reply comment ID for future test runs
-      saveTestIds({
-        ...loadTestIds(),
-        replyCommentId: testReplyCommentId
-      });
+    // Persist reply comment ID for future test runs
+    saveTestIds({
+      ...loadTestIds(),
+      replyCommentId: testReplyCommentId
+    });
 
-      console.log(`Created and persisted reply comment ID: ${testReplyCommentId}`);
-    } catch (error) {
-      if (error.response && (error.response.status === 400 || error.response.status === 403)) {
-        console.log(`Comments API returned ${error.response.status} - skipping test`);
-        return;
-      }
-      throw error;
-    }
+    console.log(`Created and persisted reply comment ID: ${testReplyCommentId}`);
   });
 
   test('18. updateFolderComment - should update the comment', async () => {
@@ -485,19 +451,11 @@ describe('collections functional tests (sequential flow)', () => {
       body: 'This is an updated test comment'
     };
 
-    try {
-      const result = await updateFolderComment(testUserId, testCollectionId, testFolderId, testCommentId, updatedData);
+    const result = await updateFolderComment(testUserId, testCollectionId, testFolderId, testCommentId, updatedData);
 
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('data');
-      expect(result.data.data.body).toBe(updatedData.body);
-    } catch (error) {
-      if (error.response && (error.response.status === 403 || error.response.status === 404)) {
-        console.log(`Comments API returned ${error.response.status} - skipping test`);
-        return;
-      }
-      throw error;
-    }
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data.body).toBe(updatedData.body);
   });
 
   test('19. deleteFolderComment - should delete the reply comment', async () => {
@@ -509,24 +467,16 @@ describe('collections functional tests (sequential flow)', () => {
       return;
     }
 
-    try {
-      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testReplyCommentId);
+    const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testReplyCommentId);
 
-      expect(result.status).toBe(204);
+    expect(result.status).toBe(204);
 
-      // Clear reply comment ID from persisted file
-      const clearedIds = clearTestIds(['replyCommentId']);
-      expect(clearedIds.replyCommentId).toBeNull();
-      expect(clearedIds).toHaveProperty('clearedAt');
-      
-      console.log('Reply comment deleted and replyCommentId cleared from test-ids.json');
-    } catch (error) {
-      if (error.response && (error.response.status === 403 || error.response.status === 404)) {
-        console.log(`Comments API returned ${error.response.status} - skipping test`);
-        return;
-      }
-      throw error;
-    }
+    // Clear reply comment ID from persisted file
+    const clearedIds = clearTestIds(['replyCommentId']);
+    expect(clearedIds.replyCommentId).toBeNull();
+    expect(clearedIds).toHaveProperty('clearedAt');
+    
+    console.log('Reply comment deleted and replyCommentId cleared from test-ids.json');
   });
 
   test('20. deleteFolderComment - should delete the main comment', async () => {
@@ -538,24 +488,16 @@ describe('collections functional tests (sequential flow)', () => {
       return;
     }
 
-    try {
-      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testCommentId);
+    const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testCommentId);
 
-      expect(result.status).toBe(204);
+    expect(result.status).toBe(204);
 
-      // Clear comment ID from persisted file
-      const clearedIds = clearTestIds(['commentId']);
-      expect(clearedIds.commentId).toBeNull();
-      expect(clearedIds).toHaveProperty('clearedAt');
-      
-      console.log('Main comment deleted and commentId cleared from test-ids.json');
-    } catch (error) {
-      if (error.response && (error.response.status === 403 || error.response.status === 404)) {
-        console.log(`Comments API returned ${error.response.status} - skipping test`);
-        return;
-      }
-      throw error;
-    }
+    // Clear comment ID from persisted file
+    const clearedIds = clearTestIds(['commentId']);
+    expect(clearedIds.commentId).toBeNull();
+    expect(clearedIds).toHaveProperty('clearedAt');
+    
+    console.log('Main comment deleted and commentId cleared from test-ids.json');
   });
 
   test('21. deleteFolder - should delete the folder and update test-ids.json', async () => {
