@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "." 
+		}
+	],
+	"settings": {
+		"jest.jestCommandLine": "npm test --",
+		"jest.autoRun": "off",
+		"jest.rootPath": ".",
+		"jest.testExplorer": {
+			"enabled": true
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"orta.vscode-jest"
+		]
+	}
+}

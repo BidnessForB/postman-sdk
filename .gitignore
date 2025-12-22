@@ -18,6 +18,7 @@ coverage/
 .env.*.local
 
 # IDE and editor files
+*workspace*
 .vscode/
 .idea/
 *.swp
