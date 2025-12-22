@@ -16,7 +16,7 @@ The functional tests for workspaces implement **persistent ID storage** to allow
 
 - **Faster test execution** - Skip resource creation on subsequent runs (workspace created once, reused forever)
 - **Avoid rate limits** - Drastically reduce API calls to Postman
-- **Manual testing** - Resources stay alive indefinitely for manual testing and debugging
+- **Manual testing** - Resources stay alive indefinitely for manual testing and debugging 
 - **Consistent test environment** - Always use the exact same workspace across all test runs
 - **Real-world testing** - Test against a persistent, evolving workspace state
 

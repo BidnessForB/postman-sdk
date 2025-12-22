@@ -37,7 +37,7 @@ describe('workspaces functional tests (sequential flow)', () => {
 
   test('1. createWorkspace - should create a team workspace', async () => {
     // Skip creation if workspace already exists from previous run
-    if (testWorkspaceId) {
+    if (testWorkspaceId) { 
       console.log(`Using existing workspace ID from file: ${testWorkspaceId}`);
       try {
         // Verify the workspace still exists

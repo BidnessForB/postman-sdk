@@ -7,5 +7,5 @@ module.exports = {
   collections: require('./collections'),
   workspaces: require('./workspaces'),
   specs: require('./specs')
-};
+}; 
 

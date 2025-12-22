@@ -284,7 +284,7 @@ describe('workspaces unit tests', () => {
         expect.objectContaining({
           url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
         })
-      );
+      ); 
     });
   });
 

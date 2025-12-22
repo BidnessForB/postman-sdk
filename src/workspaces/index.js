@@ -91,7 +91,7 @@ async function updateWorkspace(workspaceId, name = null, type = null, descriptio
   const data = { workspace };
   const config = buildAxiosConfig('put', endpoint, data);
   return await executeRequest(config);
-}
+} 
 
 /**
  * Deletes an existing workspace
