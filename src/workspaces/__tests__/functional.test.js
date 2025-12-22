@@ -180,28 +180,6 @@ describe('workspaces functional tests (sequential flow)', () => {
     console.log(`Workspace ${testWorkspaceId} updated and will persist for future test runs`);
   });
 
-  test('8. deleteWorkspace - should delete the workspace and update test-ids.json', async () => {
-    // USE PERSISTED ID from test 1
-    expect(testWorkspaceId).toBeDefined();
-    
-    const result = await deleteWorkspace(testWorkspaceId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('workspace');
-    expect(result.data.workspace.id).toBe(testWorkspaceId);
-    
-    // Clear test IDs: Set all properties to null using shared utility
-    const clearedIds = clearTestIds(persistedIds);
-    expect(clearedIds.workspaceId).toBeNull();
-    expect(clearedIds.workspaceName).toBeNull();
-    expect(clearedIds).toHaveProperty('clearedAt');
-    
-    console.log('Workspace deleted and test-ids.json cleared using shared utility');
-    
-    // Verify workspace is actually deleted
-    await expect(getWorkspace(testWorkspaceId)).rejects.toThrow();
-  });
-
   describe('error handling', () => {
     test('should handle getting non-existent workspace', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
@@ -225,21 +203,6 @@ describe('workspaces functional tests (sequential flow)', () => {
       await expect(
         createWorkspace('Invalid Workspace', 'invalid-type')
       ).rejects.toThrow();
-    });
-  });
-
-  describe('manual cleanup (optional)', () => {
-    test.skip('deleteWorkspace - manually delete test workspace if needed', async () => {
-      // This test is skipped by default to preserve the workspace
-      // Remove .skip to manually delete the workspace
-      if (testWorkspaceId) {
-        const result = await deleteWorkspace(testWorkspaceId);
-        expect(result.status).toBe(200);
-        
-        // Clear the file after manual deletion
-        clearTestIds();
-        console.log('Workspace manually deleted and test-ids.json cleared');
-      }
     });
   });
 });

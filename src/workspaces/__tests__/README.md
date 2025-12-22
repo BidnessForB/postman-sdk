@@ -43,23 +43,35 @@ The file is automatically created at `src/__tests__/test-ids.json` (shared acros
 
 Resources are **NEVER deleted automatically**. To clean up:
 
-**Option 1: Delete the workspace manually via Postman UI**
+**Option 1: Use the manual cleanup test file**
+```bash
+# Edit manual-cleanup.test.js and remove .skip from the cleanup test, then run:
+npx jest src/workspaces/__tests__/manual-cleanup.test.js
+```
 
-**Option 2: Use the SDK directly**
+This is the **recommended approach** as it:
+- Deletes the workspace via the API
+- Clears only workspace-related properties from test-ids.json (preserving other test data)
+- Verifies the workspace was actually deleted
+
+**Option 2: Delete the workspace manually via Postman UI**
+- Go to Postman → Workspaces
+- Find and delete the test workspace
+- Manually edit `src/__tests__/test-ids.json` to set `workspaceId` and `workspaceName` to `null`
+
+**Option 3: Use the SDK directly**
 ```javascript
 const { deleteWorkspace } = require('./src/workspaces');
+const { clearTestIds } = require('../__tests__/test-helpers');
+
 await deleteWorkspace('1f0df51a-8658-4ee8-a2a1-d2567dfa09a9');
+clearTestIds(['workspaceId', 'workspaceName']);
 ```
 
-**Option 3: Run the skipped cleanup test**
+**Option 4: Start completely fresh**
 ```bash
-# Edit functional.test.js and remove .skip from the cleanup test, then run:
-npm test -- src/workspaces/__tests__/functional.test.js -t "deleteWorkspace"
-```
-
-**Option 4: Start fresh**
-```bash
-# Delete the shared file to force creation of new resources next run
+# Delete the shared file to force creation of ALL new resources next run
+# WARNING: This affects all test modules (workspaces, specs, collections, etc.)
 rm src/__tests__/test-ids.json
 ```
 
@@ -76,14 +88,35 @@ Until manually cleaned up:
   - Same workspace ID used across ALL test runs indefinitely
 ```
 
+### Test Organization
+
+The workspace tests are organized into three separate files:
+
+1. **`unit.test.js`** - Unit tests with mocked API calls
+2. **`functional.test.js`** - Functional tests that create and test real workspaces (no automatic cleanup)
+3. **`manual-cleanup.test.js`** - Manual cleanup tests (skipped by default)
+
+When you run all workspace tests with `npx jest src/workspaces/__tests__/`, the manual cleanup tests are skipped automatically. This prevents accidental deletion of test resources.
+
 ### Shared Utility Functions
 
 All test modules use shared utility functions from `src/__tests__/test-helpers.js`:
 
 - `loadTestIds()` - Load persisted IDs from shared file (returns empty object if file doesn't exist)
 - `saveTestIds(ids)` - Save/update IDs in shared file (merges with existing data)
-- `clearTestIds(existingIds)` - Set all properties to null while preserving the file (used after resource deletion)
+- `clearTestIds(keysToClear)` - Set specific properties to null while preserving the file and other properties
 - `deleteTestIdsFile()` - Completely remove the test-ids.json file (use to start fresh)
 
 **Note**: These functions are shared across all test modules (workspaces, specs, collections, etc.) to maintain a single source of truth for test IDs.
+
+### Scoped Cleanup
+
+The `clearTestIds` function supports scoped cleanup, allowing you to clear only workspace-related properties without affecting other test data:
+
+```javascript
+// Clear only workspace properties
+clearTestIds(['workspaceId', 'workspaceName']);
+
+// This preserves specId, collectionId, etc. from other test modules
+```
 
