@@ -15,11 +15,12 @@ const {
   deleteFolderComment
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
-const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('../../__tests__/test-helpers');
 
 const DEFAULT_WORKSPACE_ID = '5fbcd502-1112-435f-9dac-4c943d3d0b37';
 
 describe('collections functional tests (sequential flow)', () => {
+  let testUserId;
   let testWorkspaceId;
   let testCollectionId;
   let testCollectionName;
@@ -29,10 +30,13 @@ describe('collections functional tests (sequential flow)', () => {
   let testReplyCommentId;
   let persistedIds = {};
 
-  beforeAll(() => {
+  beforeAll(async () => {
     if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
       throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
     }
+
+    // Initialize userId first
+    testUserId = await initializeUserId();
 
     persistedIds = loadTestIds();
     testWorkspaceId = persistedIds.workspaceId || DEFAULT_WORKSPACE_ID;
@@ -339,11 +343,11 @@ describe('collections functional tests (sequential flow)', () => {
     expect(testFolderId).toBeDefined();
 
     try {
-      const result = await getFolderComments(testCollectionId, testFolderId);
+      const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
 
       expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('comments');
-      expect(Array.isArray(result.data.comments)).toBe(true);
+      expect(result.data).toHaveProperty('data');
+      expect(Array.isArray(result.data.data)).toBe(true);
     } catch (error) {
       // Comments API might return 403 if not available for this user/workspace
       if (error.response && error.response.status === 403) {
@@ -369,15 +373,15 @@ describe('collections functional tests (sequential flow)', () => {
     };
 
     try {
-      const result = await createFolderComment(testCollectionId, testFolderId, commentData);
+      const result = await createFolderComment(testUserId, testCollectionId, testFolderId, commentData);
 
-      expect(result.status).toBe(201);
-      expect(result.data).toHaveProperty('comment');
-      expect(result.data.comment).toHaveProperty('id');
-      expect(result.data.comment).toHaveProperty('body');
-      expect(result.data.comment.body).toBe(commentData.body);
+      expect(result.status).toBe(200);
+      expect(result.data).toHaveProperty('data');
+      expect(result.data.data).toHaveProperty('id');
+      expect(result.data.data).toHaveProperty('body');
+      expect(result.data.data.body).toBe(commentData.body);
 
-      testCommentId = result.data.comment.id;
+      testCommentId = result.data.data.id;
 
       // Persist comment ID for future test runs
       saveTestIds({
@@ -406,12 +410,12 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     try {
-      const result = await getFolderComments(testCollectionId, testFolderId);
+      const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
 
       expect(result.status).toBe(200);
-      expect(result.data.comments.length).toBeGreaterThan(0);
+      expect(result.data.data.length).toBeGreaterThan(0);
       
-      const comment = result.data.comments.find(c => c.id === testCommentId);
+      const comment = result.data.data.find(c => c.id === testCommentId);
       expect(comment).toBeDefined();
     } catch (error) {
       if (error.response && error.response.status === 403) {
@@ -443,14 +447,14 @@ describe('collections functional tests (sequential flow)', () => {
     };
 
     try {
-      const result = await createFolderComment(testCollectionId, testFolderId, replyData);
+      const result = await createFolderComment(testUserId, testCollectionId, testFolderId, replyData);
 
-      expect(result.status).toBe(201);
-      expect(result.data).toHaveProperty('comment');
-      expect(result.data.comment).toHaveProperty('id');
-      expect(result.data.comment.body).toBe(replyData.body);
+      expect(result.status).toBe(200);
+      expect(result.data).toHaveProperty('data');
+      expect(result.data.data).toHaveProperty('id');
+      expect(result.data.data.body).toBe(replyData.body);
 
-      testReplyCommentId = result.data.comment.id;
+      testReplyCommentId = result.data.data.id;
 
       // Persist reply comment ID for future test runs
       saveTestIds({
@@ -482,11 +486,11 @@ describe('collections functional tests (sequential flow)', () => {
     };
 
     try {
-      const result = await updateFolderComment(testCollectionId, testFolderId, testCommentId, updatedData);
+      const result = await updateFolderComment(testUserId, testCollectionId, testFolderId, testCommentId, updatedData);
 
       expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('comment');
-      expect(result.data.comment.body).toBe(updatedData.body);
+      expect(result.data).toHaveProperty('data');
+      expect(result.data.data.body).toBe(updatedData.body);
     } catch (error) {
       if (error.response && (error.response.status === 403 || error.response.status === 404)) {
         console.log(`Comments API returned ${error.response.status} - skipping test`);
@@ -506,7 +510,7 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     try {
-      const result = await deleteFolderComment(testCollectionId, testFolderId, testReplyCommentId);
+      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testReplyCommentId);
 
       expect(result.status).toBe(204);
 
@@ -535,7 +539,7 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     try {
-      const result = await deleteFolderComment(testCollectionId, testFolderId, testCommentId);
+      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testCommentId);
 
       expect(result.status).toBe(204);
 
@@ -684,7 +688,7 @@ describe('collections functional tests (sequential flow)', () => {
         return;
       }
       const fakeId = '00000000-0000-0000-0000-000000000000';
-      await expect(getFolderComments(testCollectionId, fakeId)).rejects.toThrow();
+      await expect(getFolderComments(testUserId, testCollectionId, fakeId)).rejects.toThrow();
     });
 
     test('should handle creating comment on non-existent folder', async () => {
@@ -694,7 +698,7 @@ describe('collections functional tests (sequential flow)', () => {
       }
       const fakeId = '00000000-0000-0000-0000-000000000000';
       const commentData = { body: 'Test comment' };
-      await expect(createFolderComment(testCollectionId, fakeId, commentData)).rejects.toThrow();
+      await expect(createFolderComment(testUserId, testCollectionId, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle updating non-existent comment', async () => {
@@ -704,7 +708,7 @@ describe('collections functional tests (sequential flow)', () => {
       }
       const fakeId = '999999';
       const commentData = { body: 'Updated comment' };
-      await expect(updateFolderComment(testCollectionId, testFolderId, fakeId, commentData)).rejects.toThrow();
+      await expect(updateFolderComment(testUserId, testCollectionId, testFolderId, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle deleting non-existent comment', async () => {
@@ -713,7 +717,7 @@ describe('collections functional tests (sequential flow)', () => {
         return;
       }
       const fakeId = '999999';
-      await expect(deleteFolderComment(testCollectionId, testFolderId, fakeId)).rejects.toThrow();
+      await expect(deleteFolderComment(testUserId, testCollectionId, testFolderId, fakeId)).rejects.toThrow();
     });
   });
 });

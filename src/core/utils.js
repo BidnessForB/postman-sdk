@@ -27,7 +27,18 @@ function getContentFS(filePath) {
   return { content: fileContent };
 }
 
+/**
+ * Builds a UID from a user ID and an object ID
+ * @param {string|number} userId - The user's ID
+ * @param {string} objectId - The object's ID (e.g., collection ID, workspace ID)
+ * @returns {string} The UID in format: userId-objectId
+ */
+function buildUid(userId, objectId) {
+  return `${userId}-${objectId}`;
+}
+
 module.exports = {
   buildQueryString,
-  getContentFS
+  getContentFS,
+  buildUid
 };

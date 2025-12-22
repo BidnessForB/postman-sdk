@@ -1,5 +1,5 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, buildUid } = require('../core/utils');
 
 /**
  * Gets all collections
@@ -168,56 +168,68 @@ async function deleteFolder(collectionId, folderId) {
 
 /**
  * Gets all comments left by users in a folder
- * Postman API endpoint and method: GET /collections/{collectionId}/folders/{folderId}/comments
+ * Postman API endpoint and method: GET /collections/{collectionUid}/folders/{folderUid}/comments
+ * @param {string|number} userId - The user's ID
  * @param {string} collectionId - The collection's ID
  * @param {string} folderId - The folder's ID
  * @returns {Promise} Axios response
  */
-async function getFolderComments(collectionId, folderId) {
-  const endpoint = `/collections/${collectionId}/folders/${folderId}/comments`;
+async function getFolderComments(userId, collectionId, folderId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const folderUid = buildUid(userId, folderId);
+  const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
 }
 
 /**
  * Creates a comment on a folder
- * Postman API endpoint and method: POST /collections/{collectionId}/folders/{folderId}/comments
+ * Postman API endpoint and method: POST /collections/{collectionUid}/folders/{folderUid}/comments
+ * @param {string|number} userId - The user's ID
  * @param {string} collectionId - The collection's ID
  * @param {string} folderId - The folder's ID
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-async function createFolderComment(collectionId, folderId, commentData) {
-  const endpoint = `/collections/${collectionId}/folders/${folderId}/comments`;
+async function createFolderComment(userId, collectionId, folderId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const folderUid = buildUid(userId, folderId);
+  const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments`;
   const config = buildAxiosConfig('post', endpoint, commentData);
   return await executeRequest(config);
 }
 
 /**
  * Updates a comment on a folder
- * Postman API endpoint and method: PUT /collections/{collectionId}/folders/{folderId}/comments/{commentId}
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
  * @param {string} collectionId - The collection's ID
  * @param {string} folderId - The folder's ID
  * @param {string} commentId - The comment's ID
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-async function updateFolderComment(collectionId, folderId, commentId, commentData) {
-  const endpoint = `/collections/${collectionId}/folders/${folderId}/comments/${commentId}`;
+async function updateFolderComment(userId, collectionId, folderId, commentId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const folderUid = buildUid(userId, folderId);
+  const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
   return await executeRequest(config);
 }
 
 /**
  * Deletes a comment from a folder
- * Postman API endpoint and method: DELETE /collections/{collectionId}/folders/{folderId}/comments/{commentId}
+ * Postman API endpoint and method: DELETE /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
  * @param {string} collectionId - The collection's ID
  * @param {string} folderId - The folder's ID
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-async function deleteFolderComment(collectionId, folderId, commentId) {
-  const endpoint = `/collections/${collectionId}/folders/${folderId}/comments/${commentId}`;
+async function deleteFolderComment(userId, collectionId, folderId, commentId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const folderUid = buildUid(userId, folderId);
+  const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
 }

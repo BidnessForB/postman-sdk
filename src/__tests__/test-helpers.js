@@ -84,11 +84,46 @@ function deleteTestIdsFile() {
   }
 }
 
+/**
+ * Initialize userId by calling /me endpoint if not already persisted
+ * This should be called in beforeAll hooks of test suites
+ * @returns {Promise<number>} The user's ID
+ */
+async function initializeUserId() {
+  const ids = loadTestIds();
+  
+  // If userId already exists, return it
+  if (ids.userId) {
+    console.log('Using persisted user ID:', ids.userId);
+    return ids.userId;
+  }
+  
+  // Otherwise, fetch it from the API
+  try {
+    const { getAuthenticatedUser } = require('../users/index');
+    const result = await getAuthenticatedUser();
+    const userId = result.data.user.id;
+    
+    // Persist it
+    saveTestIds({
+      ...ids,
+      userId
+    });
+    
+    console.log('Retrieved and persisted user ID:', userId);
+    return userId;
+  } catch (error) {
+    console.error('Failed to initialize user ID:', error.message);
+    throw error;
+  }
+}
+
 module.exports = {
   loadTestIds,
   saveTestIds,
   clearTestIds,
   deleteTestIdsFile,
+  initializeUserId,
   TEST_IDS_FILE
 };
 

@@ -537,7 +537,7 @@ describe('collections unit tests', () => {
   });
 
   describe('getFolderComments', () => {
-    test('should call GET /collections/{collectionId}/folders/{folderId}/comments', async () => {
+    test('should call GET /collections/{collectionUid}/folders/{folderUid}/comments', async () => {
       const mockResponse = {
         status: 200,
         data: {
@@ -551,12 +551,15 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getFolderComments('col-123', 'folder-123');
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const folderId = 'folder-123';
+      const result = await getFolderComments(userId, collectionId, folderId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123/comments'
+          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -564,7 +567,7 @@ describe('collections unit tests', () => {
   });
 
   describe('createFolderComment', () => {
-    test('should call POST /collections/{collectionId}/folders/{folderId}/comments', async () => {
+    test('should call POST /collections/{collectionUid}/folders/{folderUid}/comments', async () => {
       const mockResponse = {
         status: 201,
         data: {
@@ -576,16 +579,19 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const folderId = 'folder-123';
       const commentData = {
         body: 'Test comment'
       };
 
-      const result = await createFolderComment('col-123', 'folder-123', commentData);
+      const result = await createFolderComment(userId, collectionId, folderId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123/comments',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments',
           data: commentData
         })
       );
@@ -605,12 +611,13 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
+      const userId = 12345678;
       const commentData = {
         body: 'Reply comment',
         threadId: 1
       };
 
-      await createFolderComment('col-123', 'folder-123', commentData);
+      await createFolderComment(userId, 'col-123', 'folder-123', commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -623,7 +630,7 @@ describe('collections unit tests', () => {
   });
 
   describe('updateFolderComment', () => {
-    test('should call PUT /collections/{collectionId}/folders/{folderId}/comments/{commentId}', async () => {
+    test('should call PUT /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}', async () => {
       const mockResponse = {
         status: 200,
         data: {
@@ -635,16 +642,20 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const folderId = 'folder-123';
+      const commentId = '1';
       const commentData = {
         body: 'Updated comment'
       };
 
-      const result = await updateFolderComment('col-123', 'folder-123', '1', commentData);
+      const result = await updateFolderComment(userId, collectionId, folderId, commentId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123/comments/1',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments/1',
           data: commentData
         })
       );
@@ -653,19 +664,24 @@ describe('collections unit tests', () => {
   });
 
   describe('deleteFolderComment', () => {
-    test('should call DELETE /collections/{collectionId}/folders/{folderId}/comments/{commentId}', async () => {
+    test('should call DELETE /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}', async () => {
       const mockResponse = {
         status: 204,
         data: ''
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteFolderComment('col-123', 'folder-123', '1');
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const folderId = 'folder-123';
+      const commentId = '1';
+
+      const result = await deleteFolderComment(userId, collectionId, folderId, commentId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123/comments/1'
+          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments/1'
         })
       );
       expect(result).toEqual(mockResponse);

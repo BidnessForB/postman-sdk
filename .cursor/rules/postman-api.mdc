@@ -48,6 +48,15 @@ async function functionName(data = null, param1, param2) {
   return await executeRequest(config);
 }
 
+## ID vs. UID
+ - Some API endpoints use an object ID and some use a UID.  The UID is constructed by prepending the ID with the UserID of the currently authenticated user: 
+  - collectionId: d4dd588d-111f-4651-b64d-463e4b093f4b
+  - collectionUid: 34829850-d4dd588d-111f-4651-b64d-463e4b093f4b
+ - Code should identify whether an endpoint requires an ID or a UID 
+ - Initialization code should call the /me endpoint, retrieve the currently authenticated userId from the 'id' property of the response, and persist that to test-ids.json.  
+
+
+
 ## Responses
 1. Read and apply the documentation in the OAS to determine the shape of request and response payloads.  Do not assume payload properties which don't exist. 
 
