@@ -142,7 +142,7 @@ This SDK is built incrementally, starting with a small subset of endpoints to es
 
 ## CI/CD
 
-### GitHub Actions
+### GitHub Actions 
 
 The repository includes automated testing via GitHub Actions that runs on:
 - All pull requests to `main`
