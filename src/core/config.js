@@ -4,7 +4,7 @@
  */
 
 
-const POSTMAN_API_KEY_ENV_VAR = 'POSTMAN_API_KEY_BRKC';
+const POSTMAN_API_KEY_ENV_VAR = 'POSTMAN_API_KEY';
 const apiKey = process.env[POSTMAN_API_KEY_ENV_VAR];
 const baseUrl = 'https://api.getpostman.com';
 
