@@ -26,14 +26,31 @@ The file is automatically created at `src/__tests__/test-ids.json` (shared acros
 
 ```json
 {
-  "workspaceId": "1f0df51a-8658-4ee8-a2a1-d2567dfa09a9",
-  "workspaceName": "Updated Workspace Name 1734607890",
-  "specId": "abc123-spec-id",
-  "specName": "My API Spec",
-  "collectionId": "def456-collection-id",
-  "collectionName": "My Collection",
-  "createdAt": "2025-12-19T10:30:00.000Z",
-  "updatedAt": "2025-12-19T10:31:00.000Z"
+  "workspace": {
+    "id": "1f0df51a-8658-4ee8-a2a1-d2567dfa09a9",
+    "name": "Updated Workspace Name 1734607890"
+  },
+  "spec": {
+    "id": "abc123-spec-id",
+    "name": "My API Spec",
+    "createdAt": "2025-12-19T10:30:00.000Z",
+    "updatedAt": "2025-12-19T10:31:00.000Z"
+  },
+  "user": {
+    "id": 34829850
+  },
+  "collection": {
+    "id": "def456-collection-id",
+    "name": "My Collection",
+    "comment": {
+      "id": null,
+      "replyId": null
+    },
+    "thread": {
+      "id": null,
+      "clearedAt": null
+    }
+  }
 }
 ```
 
@@ -57,7 +74,7 @@ This is the **recommended approach** as it:
 **Option 2: Delete the workspace manually via Postman UI**
 - Go to Postman → Workspaces
 - Find and delete the test workspace
-- Manually edit `src/__tests__/test-ids.json` to set `workspaceId` and `workspaceName` to `null`
+- Manually edit `src/__tests__/test-ids.json` to set `workspace.id` and `workspace.name` to `null`
 
 **Option 3: Use the SDK directly**
 ```javascript
@@ -65,7 +82,7 @@ const { deleteWorkspace } = require('./src/workspaces');
 const { clearTestIds } = require('../__tests__/test-helpers');
 
 await deleteWorkspace('1f0df51a-8658-4ee8-a2a1-d2567dfa09a9');
-clearTestIds(['workspaceId', 'workspaceName']);
+clearTestIds(['workspace.id', 'workspace.name']);
 ```
 
 **Option 4: Start completely fresh**
@@ -111,12 +128,13 @@ All test modules use shared utility functions from `src/__tests__/test-helpers.j
 
 ### Scoped Cleanup
 
-The `clearTestIds` function supports scoped cleanup, allowing you to clear only workspace-related properties without affecting other test data:
+The `clearTestIds` function supports scoped cleanup with nested paths, allowing you to clear only workspace-related properties without affecting other test data:
 
 ```javascript
-// Clear only workspace properties
-clearTestIds(['workspaceId', 'workspaceName']);
+// Clear only workspace properties using nested paths
+clearTestIds(['workspace.id', 'workspace.name']);
 
-// This preserves specId, collectionId, etc. from other test modules
+// This preserves spec, collection, folder, etc. data from other test modules
+// Result: { workspace: { id: null, name: null }, spec: { id: 'abc', ... }, ... }
 ```
 

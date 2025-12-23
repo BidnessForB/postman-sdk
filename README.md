@@ -1,9 +1,9 @@
 # Postman SDK
 
-![Tests](https://img.shields.io/badge/tests-128%20passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-92.17%25-brightgreen)
-![Modules](https://img.shields.io/badge/modules-4-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-31%2F191%20(16.2%25)-yellow)
+![Tests](https://img.shields.io/badge/tests-145%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-92.5%25-brightgreen)
+![Modules](https://img.shields.io/badge/modules-5-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 
 A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.  Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
@@ -57,9 +57,10 @@ postman-sdk/
 
 The SDK is organized by resource groups:
 
-- **collections**: Endpoints for managing Postman Collections
+- **collections**: Endpoints for managing Postman Collections, folders, and comments
 - **workspaces**: Endpoints for managing Postman Workspaces
 - **specs**: Endpoints for managing Postman API Specifications
+- **users**: Endpoints for user information and authentication
 
 
 ## Testing
@@ -83,6 +84,25 @@ Generate coverage report:
 ```bash
 npm run test:coverage
 ```
+
+### All-Up Functional Test
+
+Run the complete functional test suite (executes all functional tests in proper dependency order):
+
+```bash
+npm run test:all-up
+```
+
+This orchestrates all functional tests in sequence:
+0. Reset (clears test-ids.json to start fresh)
+1. Workspaces (create/test workspace)
+2. Collections (create/test collection in workspace)
+3. Folders (create/test folder in collection)
+4. Folder Comments (create/test comments on folder)
+5. Collection Comments (create/test comments on collection)
+6. Specs (create/test API specs in workspace)
+
+**Note**: This test resets test-ids.json at the start to ensure a clean test run. It creates real resources via the Postman API. Resources are NOT automatically deleted after the test.
 
 ### Manual API Tests
 

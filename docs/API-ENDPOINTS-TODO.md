@@ -1,6 +1,6 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**Generated**: December 19, 2025
+**Generated**: December 23, 2025
 
 ## Overview
 
@@ -10,8 +10,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 31 operations (16.23%)
-- **Not Implemented**: 160 operations (83.77%)
+- **Implemented**: 35 operations (18.32%)
+- **Not Implemented**: 156 operations (81.68%)
 
 ### Legend
 
@@ -42,7 +42,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Collections Module (14/64 completed - 21.9%)
+## Collections Module (18/64 completed - 28.1%)
 
 ### Core Collection Operations
 
@@ -59,10 +59,10 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/comments` | Get collection comments | - | ❌ | ❌ None |
-| POST | `/collections/{collectionId}/comments` | Create collection comment | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/comments` | Get collection comments | `getCollectionComments()` | ✅ | ✅ Passing |
+| POST | `/collections/{collectionId}/comments` | Create collection comment | `createCollectionComment()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/comments/{commentId}` | Update comment | `updateCollectionComment()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/comments/{commentId}` | Delete comment | `deleteCollectionComment()` | ✅ | ✅ Passing |
 
 ### Collection Folders
 
@@ -422,10 +422,11 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Users Module (0/2 completed - 0%)
+## Users Module (1/3 completed - 33.3%)
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
+| GET | `/me` | Get authenticated user | `getAuthenticatedUser()` | ✅ | ✅ Passing |
 | GET | `/users` | Get all users | - | ❌ | ❌ None |
 | GET | `/users/{userId}` | Get a user | - | ❌ | ❌ None |
 
@@ -505,12 +506,6 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/secret-types` | Get secret types | - | ❌ | ❌ None |
 
-### User Info (1/1 - 100%)
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/me` | Get authenticated user | `getAuthenticatedUser()` | ✅ | ✅ Passing |
-
 ### Tasks (0/1)
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
@@ -563,4 +558,4 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-**Last Updated**: December 19, 2025
+**Last Updated**: December 23, 2025

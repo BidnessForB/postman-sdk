@@ -2,6 +2,17 @@
 
 This directory contains shared test utilities and resources used across all functional test modules in the SDK.
 
+## All-Up Functional Test
+
+The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
+0. Reset (clears test-ids.json) → 1. Workspaces → 2. Collections → 3. Folders → 4. Folder Comments → 5. Collection Comments → 6. Specs
+
+Run with: `npm run test:all-up`
+
+**⚠️ Warning**: This test DELETES `test-ids.json` at the start to ensure a clean test run.
+
+See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
+
 ## Test Helpers (`test-helpers.js`)
 
 Provides utility functions for managing persistent test IDs across all functional test modules.
@@ -42,40 +53,44 @@ saveTestIds({
 ```
 
 #### `clearTestIds(keysToClear)`
-Clears specific test ID properties by setting them to `null` while preserving all other properties. This is useful for scoped cleanup after tests - e.g., only clearing workspace properties when deleting a workspace, or only spec properties when deleting a spec.
+Clears specific test ID properties by setting them to `null` while preserving all other properties. This is useful for scoped cleanup after tests. Supports nested paths using dot notation (e.g., `'folder.comment.id'`, `'workspace.id'`).
 
 **Parameters:**
-- `keysToClear` (`string[]`) - Array of property keys to set to `null` (e.g., `['workspaceId', 'workspaceName']`)
+- `keysToClear` (`string[]`) - Array of property paths to set to `null` (e.g., `['workspace.id', 'folder.comment.id']`)
 
-**Returns:** `Object` - Updated test IDs object with specified properties set to `null` and an updated `clearedAt` timestamp
+**Returns:** `Object` - Updated test IDs object with specified properties set to `null`
 
 **Example:**
 ```javascript
 const { clearTestIds } = require('../__tests__/test-helpers');
 
 // After deleting a workspace - only clear workspace properties
-clearTestIds(['workspaceId', 'workspaceName']);
-// Result: { workspaceId: null, workspaceName: null, specId: 'abc123', ..., clearedAt: '2025-12-21...' }
+clearTestIds(['workspace.id', 'workspace.name']);
+// Result: { workspace: { id: null, name: null }, collection: { id: 'abc123', ... }, ... }
 
 // After deleting a spec - only clear spec properties
-clearTestIds(['specId', 'specName']);
-// Result: { workspaceId: 'xyz789', specId: null, specName: null, ..., clearedAt: '2025-12-21...' }
+clearTestIds(['spec.id', 'spec.name']);
+// Result: { spec: { id: null, name: null, ... }, workspace: { id: 'xyz789', ... }, ... }
 
 // After deleting a collection - only clear collection properties
-clearTestIds(['collectionId', 'collectionName']);
-// Result: { workspaceId: 'xyz789', collectionId: null, collectionName: null, ..., clearedAt: '2025-12-21...' }
+clearTestIds(['collection.id', 'collection.name']);
+// Result: { collection: { id: null, name: null, ... }, folder: { id: 'def456', ... }, ... }
 
 // After deleting a folder - only clear folder properties
-clearTestIds(['folderId', 'folderName']);
-// Result: { workspaceId: 'xyz789', collectionId: 'abc123', folderId: null, folderName: null, ..., clearedAt: '2025-12-21...' }
+clearTestIds(['folder.id', 'folder.name']);
+// Result: { folder: { id: null, name: null, ... }, collection: { id: 'abc123', ... }, ... }
 
-// After deleting a comment - only clear comment properties
-clearTestIds(['commentId']);
-// Result: { workspaceId: 'xyz789', collectionId: 'abc123', folderId: 'def456', commentId: null, ..., clearedAt: '2025-12-21...' }
+// After deleting a collection comment - only clear collection comment properties
+clearTestIds(['collection.comment.id', 'collection.thread.id']);
+// Result: { collection: { comment: { id: null, ... }, thread: { id: null, ... } }, ... }
+
+// After deleting a folder comment - only clear folder comment properties
+clearTestIds(['folder.comment.id', 'folder.thread.id']);
+// Result: { folder: { comment: { id: null, ... }, thread: { id: null, ... } }, ... }
 
 // After deleting a reply comment - only clear reply comment property
-clearTestIds(['replyCommentId']);
-// Result: { workspaceId: 'xyz789', collectionId: 'abc123', commentId: '123', replyCommentId: null, ..., clearedAt: '2025-12-21...' }
+clearTestIds(['folder.comment.replyId']);
+// Result: { folder: { comment: { id: 123, replyId: null }, ... }, ... }
 ```
 
 #### `deleteTestIdsFile()`
@@ -104,27 +119,56 @@ This file stores resource IDs created during functional tests, allowing them to 
 
 ### Structure
 
+The file uses a nested structure where each Postman object type is an object containing its properties:
+
 ```json
 {
-  "workspaceId": "1f0df51a-8658-4ee8-a2a1-d2567dfa09a9",
-  "workspaceName": "SDK Test Workspace",
-  "specId": "abc123-spec-id",
-  "specName": "My API Spec",
-  "collectionId": "def456-collection-id",
-  "collectionName": "My Collection",
-  "environmentId": "ghi789-env-id",
-  "environmentName": "Test Environment",
-  "createdAt": "2025-12-19T10:30:00.000Z",
-  "updatedAt": "2025-12-19T10:31:00.000Z",
-  "clearedAt": null
+  "workspace": {
+    "id": "1f0df51a-8658-4ee8-a2a1-d2567dfa09a9",
+    "name": "SDK Test Workspace"
+  },
+  "spec": {
+    "id": "abc123-spec-id",
+    "name": "My API Spec",
+    "createdAt": "2025-12-19T10:30:00.000Z",
+    "updatedAt": "2025-12-19T10:31:00.000Z"
+  },
+  "user": {
+    "id": 34829850
+  },
+  "collection": {
+    "id": "def456-collection-id",
+    "name": "My Collection",
+    "comment": {
+      "id": 2411528,
+      "replyId": 2411529
+    },
+    "thread": {
+      "id": 2110160,
+      "clearedAt": null
+    }
+  },
+  "folder": {
+    "id": "ghi789-folder-id",
+    "name": "My Folder",
+    "comment": {
+      "id": 2411530,
+      "replyId": 2411531
+    },
+    "thread": {
+      "id": 2110161,
+      "clearedAt": null
+    }
+  }
 }
 ```
 
 ### Properties
 
-- **Module-specific IDs**: Each test module (workspaces, specs, collections, etc.) uses specific properties
-- **Timestamps**: `createdAt`, `updatedAt`, `clearedAt` track when resources were created, modified, or cleared
-- **Null values**: When a resource is deleted, its ID is set to `null` using `clearTestIds()`
+- **Nested Structure**: Each Postman object type (workspace, spec, collection, folder) has its own object containing related properties
+- **Comments as Sub-objects**: Comments are nested under their parent objects (e.g., `collection.comment`, `folder.comment`)
+- **Timestamps**: Various timestamp properties track when resources were created, modified, or cleared
+- **Null values**: When a resource is deleted, its properties are set to `null` using `clearTestIds()` with dot notation paths
 
 ### Git Ignore
 
