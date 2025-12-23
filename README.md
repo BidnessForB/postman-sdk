@@ -15,7 +15,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (35/191, 18.3%)
 
 ## Installation
-
+   
 ### From GitHub Packages
 
 First, configure npm to use GitHub Packages for the `@bidnessforb` scope. Create or edit `~/.npmrc`:
