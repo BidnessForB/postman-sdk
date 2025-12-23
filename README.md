@@ -1,5 +1,6 @@
 # Postman SDK
 
+![PR Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
 ![Functional Tests](https://img.shields.io/badge/functional%20tests-145%20passing-brightgreen)
 ![Functional Coverage](https://img.shields.io/badge/functional%20coverage-92.5%25-brightgreen)
 ![Unit Tests](https://img.shields.io/badge/unit%20tests-passing-brightgreen)
@@ -138,4 +139,27 @@ npm run test:createSpec [workspaceId] [specType]
 ## Development
 
 This SDK is built incrementally, starting with a small subset of endpoints to establish patterns before expanding to cover the full Postman API.
+
+## CI/CD
+
+### GitHub Actions
+
+The repository includes automated testing via GitHub Actions that runs on all pull requests to `main`:
+
+**Workflow Jobs:**
+1. **Unit Tests** - Fast, mocked tests
+2. **Functional Tests** - All-up functional test suite with real API calls
+3. **Coverage Report** - Comprehensive test coverage analysis
+
+**Setup Required:**
+- Add `POSTMAN_API_KEY_POSTMAN` secret in GitHub repository settings
+- See [.github/workflows/README.md](.github/workflows/README.md) for detailed setup instructions
+
+**Local Testing:**
+Run the same tests locally before pushing:
+```bash
+npm run test:unit           # Unit tests
+npm run test:all-up         # Functional tests
+npm run test:coverage       # Coverage report
+```
 
