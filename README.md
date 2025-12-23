@@ -136,7 +136,7 @@ npm run test:createSpec [workspaceId] [specType]
 # Spec types: openapi-3.0, openapi-3.1, asyncapi-2.0, multi-file
 ```
 
-## Development
+## Development 
 
 This SDK is built incrementally, starting with a small subset of endpoints to establish patterns before expanding to cover the full Postman API.
 
