@@ -1,9 +1,7 @@
 # Postman SDK
 
 ![PR Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
-![Functional Tests](https://img.shields.io/badge/functional%20tests-145%20passing-brightgreen)
-![Functional Coverage](https://img.shields.io/badge/functional%20coverage-92.5%25-brightgreen)
-![Unit Tests](https://img.shields.io/badge/unit%20tests-passing-brightgreen)
+[![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
@@ -153,11 +151,17 @@ The repository includes automated testing via GitHub Actions that runs on:
 **Workflow Jobs:**
 1. **Unit Tests** - Fast, mocked tests
 2. **Functional Tests** - All-up functional test suite with real API calls
-3. **Coverage Report** - Comprehensive test coverage analysis
+3. **Coverage Report** - Comprehensive test coverage analysis with Codecov integration
 
 **Setup Required:**
 - Add `POSTMAN_API_KEY` secret in GitHub repository settings
+- Add `CODECOV_TOKEN` for automatic coverage badge updates (optional)
 - See [.github/workflows/README.md](.github/workflows/README.md) for detailed setup instructions
+
+**Coverage Tracking:**
+- Coverage reports are automatically uploaded to [Codecov](https://codecov.io)
+- The coverage badge updates automatically after each test run
+- No manual README updates needed - eliminates merge conflicts
 
 **Local Testing:**
 Run the same tests locally before pushing:

@@ -20,25 +20,40 @@ This workflow automatically runs tests when a pull request is opened against the
 #### 3. Test Coverage Report
 - Runs after unit and functional tests complete
 - Generates comprehensive coverage report
-- Uploads coverage report for 30 days
+- Uploads coverage to Codecov for dynamic badge generation
+- Uploads coverage report as artifact for 30 days
 - Displays coverage summary in PR
 
 ### Required Secrets
 
-To run the functional tests, you need to configure the following GitHub secret:
+To run the workflow, you need to configure the following GitHub secrets:
 
 **`POSTMAN_API_KEY`**
 - Your Postman API key
 - Used for making authenticated API calls during functional tests
+
+**`CODECOV_TOKEN`** (Optional but recommended)
+- Your Codecov upload token
+- Ensures secure and reliable coverage uploads
+- Get this from [codecov.io](https://codecov.io) after signing up
 
 #### How to Add Secrets
 
 1. Go to your repository on GitHub
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
-4. Name: `POSTMAN_API_KEY`
-5. Value: Your Postman API key
-6. Click **Add secret**
+4. Add both secrets:
+   - Name: `POSTMAN_API_KEY`, Value: Your Postman API key
+   - Name: `CODECOV_TOKEN`, Value: Your Codecov token (from codecov.io)
+5. Click **Add secret** for each
+
+#### Setting up Codecov
+
+1. Go to [codecov.io](https://codecov.io) and sign in with GitHub
+2. Add your repository (it's free for open source)
+3. Copy the upload token from the repository settings
+4. Add it as `CODECOV_TOKEN` secret in GitHub (see above)
+5. The coverage badge will automatically update after the first workflow run
 
 #### How to Manually Trigger the Workflow
 
@@ -64,15 +79,28 @@ All test results and coverage reports are uploaded as artifacts and can be downl
 - Functional test results: 7 days
 - Coverage reports: 30 days
 
-### Status Badge
+### Status Badges
 
-Add this badge to your README.md to show the workflow status:
+Add these badges to your README.md to show the workflow and coverage status:
 
+**Workflow Status Badge:**
 ```markdown
 ![PR Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
 ```
 
+**Codecov Coverage Badge:**
+```markdown
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+```
+
 Replace `YOUR_USERNAME` with your actual GitHub username or organization name.
+
+**Benefits of Codecov Badge:**
+- Automatically updates after each workflow run
+- No merge conflicts (hosted externally)
+- Shows real-time coverage percentage
+- Clickable link to detailed coverage reports
+- Coverage history and trend graphs
 
 ### Local Development
 
