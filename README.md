@@ -1,7 +1,7 @@
 # Postman SDK
 
 ![PR Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/bidnessforb/postman-sdk)
+[![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
