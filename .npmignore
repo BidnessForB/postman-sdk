@@ -21,6 +21,9 @@ util/cleanup-branches.sh
 util/cleanup-remote-branches.sh
 util/*.sh
 
+# Examples - keep them in the package
+!examples/
+
 # Documentation (keep only README.md)
 docs/
 *.md

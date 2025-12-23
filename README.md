@@ -102,6 +102,24 @@ const deleteWorkspaces = require('@bidnessforb/postman-sdk/util/delete-test-work
 
 These utilities are helpful for cleaning up test resources created during development.
 
+### Examples
+
+The SDK includes complete example scripts demonstrating common workflows:
+
+**Create and Populate Workspace:**
+```bash
+# Run the example
+node node_modules/@bidnessforb/postman-sdk/examples/create-populate-workspace.js
+```
+
+This example demonstrates:
+- Creating a workspace
+- Creating a collection in the workspace
+- Creating an API spec in the workspace
+- Error handling and response parsing
+
+You can copy and modify these examples for your own use cases.
+
 ## Project Structure
 
 ```

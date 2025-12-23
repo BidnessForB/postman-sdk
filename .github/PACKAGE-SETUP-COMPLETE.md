@@ -65,6 +65,9 @@ Comprehensive publishing guide covering:
 - `util/get-test-workspaces.js` - Find workspaces by pattern
 - `util/delete-test-workspaces.js` - Delete workspaces by pattern
 
+**Examples:**
+- `examples/create-populate-workspace.js` - Complete workflow example
+
 **Documentation:**
 - `README.md` - Usage guide
 - `LICENSE` - ISC license

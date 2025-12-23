@@ -1,6 +1,6 @@
 {
   "name": "@bidnessforb/postman-sdk",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Barebones SDK for the Postman API",
   "license": "ISC",
   "author": "Bryan Cross",
@@ -33,6 +33,7 @@
     "!src/**/*.test.js",
     "util/get-test-workspaces.js",
     "util/delete-test-workspaces.js",
+    "examples/**/*.js",
     "README.md",
     "LICENSE"
   ],
