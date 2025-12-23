@@ -53,7 +53,7 @@ jobs:
       
       - name: Run all-up functional tests
         env:
-          POSTMAN_API_KEY_POSTMAN: ${{ secrets.POSTMAN_API_KEY_POSTMAN }}
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
         run: npm run test:all-up
       
       - name: Upload functional test results
