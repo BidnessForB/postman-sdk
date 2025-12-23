@@ -36,7 +36,8 @@ function saveTestIds(ids) {
 /**
  * Clear specific test ID properties by setting them to null while preserving all other properties
  * This is useful for cleanup after tests without losing unrelated test data
- * @param {string[]} keysToClear - Array of property keys to set to null (e.g., ['workspaceId', 'workspaceName'])
+ * Supports nested paths using dot notation (e.g., 'folder.comment.id', 'workspace.id')
+ * @param {string[]} keysToClear - Array of property keys or paths to set to null (e.g., ['workspace.id', 'folder.comment.id'])
  * @returns {Object} Updated test IDs object
  */
 function clearTestIds(keysToClear = []) {
@@ -50,13 +51,29 @@ function clearTestIds(keysToClear = []) {
       return ids;
     }
     
-    // Set only the specified keys to null
+    // Set only the specified keys to null (supports nested paths)
     keysToClear.forEach(key => {
-      ids[key] = null;
+      const parts = key.split('.');
+      let current = ids;
+      
+      // Navigate to the parent object
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) {
+          current[parts[i]] = {};
+        }
+        current = current[parts[i]];
+      }
+      
+      // Set the final property to null
+      current[parts[parts.length - 1]] = null;
     });
     
-    // Add/update clearedAt timestamp
-    ids.clearedAt = new Date().toISOString();
+    // Add/update clearedAt timestamp for thread
+    if (!ids.folder) ids.folder = {};
+    if (!ids.folder.thread) ids.folder.thread = {};
+    if (keysToClear.some(k => k.startsWith('folder.'))) {
+      ids.folder.thread.clearedAt = new Date().toISOString();
+    }
     
     // Save the updated state
     saveTestIds(ids);
@@ -93,9 +110,9 @@ async function initializeUserId() {
   const ids = loadTestIds();
   
   // If userId already exists, return it
-  if (ids.userId) {
-    console.log('Using persisted user ID:', ids.userId);
-    return ids.userId;
+  if (ids.user && ids.user.id) {
+    console.log('Using persisted user ID:', ids.user.id);
+    return ids.user.id;
   }
   
   // Otherwise, fetch it from the API
@@ -107,7 +124,10 @@ async function initializeUserId() {
     // Persist it
     saveTestIds({
       ...ids,
-      userId
+      user: {
+        ...ids.user,
+        id: userId
+      }
     });
     
     console.log('Retrieved and persisted user ID:', userId);

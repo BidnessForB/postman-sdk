@@ -22,11 +22,11 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     persistedIds = loadTestIds();
-    testWorkspaceId = persistedIds.workspaceId || DEFAULT_WORKSPACE_ID;
-    testCollectionId = persistedIds.collectionId || null;
-    testCollectionName = persistedIds.collectionName || null;
+    testWorkspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
+    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
+    testCollectionName = (persistedIds.collection && persistedIds.collection.name) || null;
 
-    if (persistedIds.workspaceId) {
+    if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log('Using persisted workspace ID:', testWorkspaceId);
     } else {
       console.log('Using default workspace ID:', testWorkspaceId);
@@ -80,10 +80,14 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.data.collection.name).toBe(testCollectionName);
 
     testCollectionId = result.data.collection.id;
-    persistedIds.collectionId = testCollectionId;
-    persistedIds.collectionName = testCollectionName;
-    if (!persistedIds.createdAt) {
-      persistedIds.createdAt = new Date().toISOString();
+    persistedIds.collection = {
+      ...persistedIds.collection,
+      id: testCollectionId,
+      name: testCollectionName
+    };
+    if (!persistedIds.spec) persistedIds.spec = {};
+    if (!persistedIds.spec.createdAt) {
+      persistedIds.spec.createdAt = new Date().toISOString();
     }
     saveTestIds(persistedIds);
     console.log(`Created and persisted collection ID: ${testCollectionId}`);
@@ -170,7 +174,10 @@ describe('collections functional tests (sequential flow)', () => {
     
     // Update our local reference
     testCollectionName = updatedName;
-    persistedIds.collectionName = updatedName;
+    persistedIds.collection = {
+      ...persistedIds.collection,
+      name: updatedName
+    };
     saveTestIds(persistedIds);
   });
 

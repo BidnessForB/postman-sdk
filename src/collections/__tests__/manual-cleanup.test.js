@@ -39,11 +39,11 @@ describe('collections manual cleanup', () => {
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();
-    testUserId = persistedIds.userId;
-    testCollectionId = persistedIds.collectionId;
-    testFolderId = persistedIds.folderId;
-    testCommentId = persistedIds.commentId;
-    testReplyCommentId = persistedIds.replyCommentId;
+    testUserId = persistedIds.user && persistedIds.user.id;
+    testCollectionId = persistedIds.collection && persistedIds.collection.id;
+    testFolderId = persistedIds.folder && persistedIds.folder.id;
+    testCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id;
+    testReplyCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.replyId;
   });
 
   ('deleteFolderComments - manually delete folder comments', async () => {
@@ -68,7 +68,7 @@ describe('collections manual cleanup', () => {
     }
     
     // Clear comment properties only
-    clearTestIds(['commentId', 'replyCommentId']);
+    clearTestIds(['folder.comment.id', 'folder.comment.replyId']);
     console.log('Comments deleted and comment properties cleared from test-ids.json');
     
     // Verify comments are deleted (should return empty array)
@@ -97,7 +97,7 @@ describe('collections manual cleanup', () => {
     expect(result.data.folder.id).toBe(testFolderId);
     
     // Clear folder-related properties only
-    clearTestIds(['folderId', 'folderName']);
+    clearTestIds(['folder.id', 'folder.name']);
     console.log('Folder deleted and folder properties cleared from test-ids.json');
     
     // Verify folder is actually deleted
@@ -120,7 +120,7 @@ describe('collections manual cleanup', () => {
     expect(result.data.collection.id).toBe(testCollectionId);
     
     // Clear collection-related properties only
-    clearTestIds(['collectionId', 'collectionName']);
+    clearTestIds(['collection.id', 'collection.name']);
     console.log('Collection deleted and collection properties cleared from test-ids.json');
     
     // Verify collection is actually deleted

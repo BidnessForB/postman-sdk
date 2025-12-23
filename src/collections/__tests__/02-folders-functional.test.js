@@ -19,9 +19,9 @@ describe('folders functional tests (sequential flow)', () => {
     }
 
     persistedIds = loadTestIds();
-    testCollectionId = persistedIds.collectionId || null;
-    testFolderId = persistedIds.folderId || null;
-    testFolderName = persistedIds.folderName || null;
+    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
+    testFolderId = (persistedIds.folder && persistedIds.folder.id) || null;
+    testFolderName = (persistedIds.folder && persistedIds.folder.name) || null;
 
     if (!testCollectionId) {
       throw new Error('No collection ID found. Please run collection tests first to create a test collection.');
@@ -75,10 +75,14 @@ describe('folders functional tests (sequential flow)', () => {
     testFolderId = result.data.data.id;
 
     // Persist folder IDs for future test runs
+    const ids = loadTestIds();
     saveTestIds({
-      ...loadTestIds(),
-      folderId: testFolderId,
-      folderName: testFolderName
+      ...ids,
+      folder: {
+        ...ids.folder,
+        id: testFolderId,
+        name: testFolderName
+      }
     });
 
     console.log(`Created and persisted folder ID: ${testFolderId}`);
@@ -120,7 +124,10 @@ describe('folders functional tests (sequential flow)', () => {
     const persisted = loadTestIds();
     saveTestIds({
       ...persisted,
-      folderName: updatedName
+      folder: {
+        ...persisted.folder,
+        name: updatedName
+      }
     });
     testFolderName = updatedName;
   });

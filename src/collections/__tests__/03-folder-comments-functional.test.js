@@ -25,11 +25,11 @@ describe('folder comments functional tests (sequential flow)', () => {
     testUserId = await initializeUserId();
 
     persistedIds = loadTestIds();
-    testCollectionId = persistedIds.collectionId || null;
-    testFolderId = persistedIds.folderId || null;
-    testCommentId = persistedIds.commentId || null;
-    testThreadId = persistedIds.threadId || null;
-    testReplyCommentId = persistedIds.replyCommentId || null;
+    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
+    testFolderId = (persistedIds.folder && persistedIds.folder.id) || null;
+    testCommentId = (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) || null;
+    testThreadId = (persistedIds.folder && persistedIds.folder.thread && persistedIds.folder.thread.id) || null;
+    testReplyCommentId = (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.replyId) || null;
 
     if (!testCollectionId) {
       throw new Error('No collection ID found. Please run collection tests first to create a test collection.');
@@ -79,9 +79,16 @@ describe('folder comments functional tests (sequential flow)', () => {
           // Update threadId if not already set
           if (existingComment.threadId && !testThreadId) {
             testThreadId = existingComment.threadId;
+            const ids = loadTestIds();
             saveTestIds({
-              ...loadTestIds(),
-              threadId: testThreadId
+              ...ids,
+              folder: {
+                ...ids.folder,
+                thread: {
+                  ...ids.folder.thread,
+                  id: testThreadId
+                }
+              }
             });
           }
           console.log(`Using persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
@@ -110,10 +117,20 @@ describe('folder comments functional tests (sequential flow)', () => {
     testThreadId = result.data.data.threadId;
 
     // Persist comment ID and thread ID for future test runs
+    const ids = loadTestIds();
     saveTestIds({
-      ...loadTestIds(),
-      commentId: testCommentId,
-      threadId: testThreadId
+      ...ids,
+      folder: {
+        ...ids.folder,
+        comment: {
+          ...ids.folder.comment,
+          id: testCommentId
+        },
+        thread: {
+          ...ids.folder.thread,
+          id: testThreadId
+        }
+      }
     });
 
     console.log(`Created and persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
@@ -168,9 +185,16 @@ describe('folder comments functional tests (sequential flow)', () => {
       testReplyCommentId = result.data.data.id;
 
       // Persist reply comment ID for future test runs
+      const ids = loadTestIds();
       saveTestIds({
-        ...loadTestIds(),
-        replyCommentId: testReplyCommentId
+        ...ids,
+        folder: {
+          ...ids.folder,
+          comment: {
+            ...ids.folder.comment,
+            replyId: testReplyCommentId
+          }
+        }
       });
 
       console.log(`Created and persisted reply comment ID: ${testReplyCommentId}`);
@@ -214,9 +238,8 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(result.status).toBe(204);
 
     // Clear reply comment ID from persisted file
-    const clearedIds = clearTestIds(['replyCommentId']);
-    expect(clearedIds.replyCommentId).toBeNull();
-    expect(clearedIds).toHaveProperty('clearedAt');
+    const clearedIds = clearTestIds(['folder.comment.replyId']);
+    expect(clearedIds.folder.comment.replyId).toBeNull();
     
     console.log('Reply comment deleted and replyCommentId cleared from test-ids.json');
   });
@@ -235,10 +258,9 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(result.status).toBe(204);
 
     // Clear comment ID and thread ID from persisted file
-    const clearedIds = clearTestIds(['commentId', 'threadId']);
-    expect(clearedIds.commentId).toBeNull();
-    expect(clearedIds.threadId).toBeNull();
-    expect(clearedIds).toHaveProperty('clearedAt');
+    const clearedIds = clearTestIds(['folder.comment.id', 'folder.thread.id']);
+    expect(clearedIds.folder.comment.id).toBeNull();
+    expect(clearedIds.folder.thread.id).toBeNull();
     
     console.log('Main comment deleted and commentId/threadId cleared from test-ids.json');
   });

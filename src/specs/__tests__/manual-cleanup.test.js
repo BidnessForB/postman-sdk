@@ -26,7 +26,7 @@ describe('specs manual cleanup', () => {
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();
-    testSpecId = persistedIds.specId;
+    testSpecId = persistedIds.spec && persistedIds.spec.id;
   });
 
   test.skip('deleteSpec - manually delete test spec', async () => {
@@ -44,10 +44,9 @@ describe('specs manual cleanup', () => {
     expect(result.status).toBe(204);
     
     // Clear spec-related properties only
-    const clearedIds = clearTestIds(['specId', 'specName']);
-    expect(clearedIds.specId).toBeNull();
-    expect(clearedIds.specName).toBeNull();
-    expect(clearedIds).toHaveProperty('clearedAt');
+    const clearedIds = clearTestIds(['spec.id', 'spec.name']);
+    expect(clearedIds.spec.id).toBeNull();
+    expect(clearedIds.spec.name).toBeNull();
     
     console.log('Spec deleted and spec properties cleared from test-ids.json');
     

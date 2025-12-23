@@ -22,9 +22,9 @@ describe('workspaces functional tests (sequential flow)', () => {
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();
-    if (persistedIds.workspaceId) {
-      testWorkspaceId = persistedIds.workspaceId;
-      workspaceName = persistedIds.workspaceName;
+    if (persistedIds.workspace && persistedIds.workspace.id) {
+      testWorkspaceId = persistedIds.workspace.id;
+      workspaceName = persistedIds.workspace.name;
       console.log(`Loaded persisted workspace ID: ${testWorkspaceId}`);
     }
   });
@@ -72,10 +72,11 @@ describe('workspaces functional tests (sequential flow)', () => {
     testWorkspaceId = result.data.workspace.id;
     
     // PERSIST ID TO FILE: Save to file for reuse across test runs
-    persistedIds.workspaceId = testWorkspaceId;
-    persistedIds.workspaceName = workspaceName;
-    persistedIds.createdAt = new Date().toISOString();
-    delete persistedIds.deletedAt; // Clear any previous deletion timestamp
+    persistedIds.workspace = {
+      ...persistedIds.workspace,
+      id: testWorkspaceId,
+      name: workspaceName
+    };
     saveTestIds(persistedIds);
     
     // Verify ID was persisted
@@ -148,15 +149,18 @@ describe('workspaces functional tests (sequential flow)', () => {
     expect(result.data.workspace.name).toBe(updatedWorkspaceName);
     
     // PERSIST UPDATED NAME TO FILE: Save updated name for subsequent test runs
-    persistedIds.workspaceName = updatedWorkspaceName;
-    persistedIds.updatedAt = new Date().toISOString();
+    persistedIds.workspace = {
+      ...persistedIds.workspace,
+      name: updatedWorkspaceName
+    };
     saveTestIds(persistedIds);
   });
 
   test('6. getWorkspace - should verify name update using persisted ID', async () => {
     // USE PERSISTED ID from test 1 and updated name from test 5
     expect(testWorkspaceId).toBeDefined();
-    const { workspaceName: updatedWorkspaceNameFromFile } = loadTestIds();
+    const ids = loadTestIds();
+    const updatedWorkspaceNameFromFile = ids.workspace && ids.workspace.name;
     expect(updatedWorkspaceNameFromFile).toBeDefined();
     
     const result = await getWorkspace(testWorkspaceId);

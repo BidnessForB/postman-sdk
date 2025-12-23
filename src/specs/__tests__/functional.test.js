@@ -37,10 +37,10 @@ describe('specs functional tests', () => {
 
     // Load persisted IDs and use workspaceId if available
     persistedIds = loadTestIds();
-    testWorkspaceId = persistedIds.workspaceId || DEFAULT_WORKSPACE_ID;
-    testSpecId = persistedIds.specId || null;
+    testWorkspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
+    testSpecId = (persistedIds.spec && persistedIds.spec.id) || null;
     
-    if (persistedIds.workspaceId) {
+    if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log(`Using persisted workspace ID: ${testWorkspaceId}`);
     } else {
       console.log(`Using default workspace ID: ${testWorkspaceId}`);
@@ -63,7 +63,7 @@ describe('specs functional tests', () => {
     // Skip creation if we have a persisted spec ID
     if (testSpecId) {
       console.log('Reusing persisted spec ID, skipping creation');
-      testSpecName = persistedIds.specName || testSpecName;
+      testSpecName = (persistedIds.spec && persistedIds.spec.name) || testSpecName;
       return;
     }
 
@@ -99,10 +99,13 @@ paths:
 
     // Save the spec ID for subsequent tests and persist to file
     testSpecId = result.data.id;
-    persistedIds.specId = testSpecId;
-    persistedIds.specName = testSpecName;
-    if (!persistedIds.createdAt) {
-      persistedIds.createdAt = new Date().toISOString();
+    persistedIds.spec = {
+      ...persistedIds.spec,
+      id: testSpecId,
+      name: testSpecName
+    };
+    if (!persistedIds.spec.createdAt) {
+      persistedIds.spec.createdAt = new Date().toISOString();
     }
     saveTestIds(persistedIds);
     console.log(`Created and persisted spec ID: ${testSpecId}`);

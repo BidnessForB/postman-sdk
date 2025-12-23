@@ -13,7 +13,7 @@ describe('users functional tests', () => {
 
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();
-    testUserId = persistedIds.userId || null;
+    testUserId = (persistedIds.user && persistedIds.user.id) || null;
 
     if (testUserId) {
       console.log('Found persisted user ID:', testUserId);
@@ -32,9 +32,13 @@ describe('users functional tests', () => {
     testUserId = result.data.user.id;
 
     // Persist user ID for future test runs
+    const ids = loadTestIds();
     saveTestIds({
-      ...loadTestIds(),
-      userId: testUserId
+      ...ids,
+      user: {
+        ...ids.user,
+        id: testUserId
+      }
     });
 
     console.log(`Retrieved and persisted user ID: ${testUserId}`);
