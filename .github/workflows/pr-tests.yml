@@ -1,4 +1,4 @@
-name: Pull Request Tests
+name: Postman SDK Tests
 
 on:
   pull_request:
