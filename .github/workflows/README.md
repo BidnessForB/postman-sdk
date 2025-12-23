@@ -27,7 +27,7 @@ This workflow automatically runs tests when a pull request is opened against the
 
 To run the functional tests, you need to configure the following GitHub secret:
 
-**`POSTMAN_API_KEY_POSTMAN`**
+**`POSTMAN_API_KEY`**
 - Your Postman API key
 - Used for making authenticated API calls during functional tests
 
@@ -36,9 +36,18 @@ To run the functional tests, you need to configure the following GitHub secret:
 1. Go to your repository on GitHub
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
-4. Name: `POSTMAN_API_KEY_POSTMAN`
+4. Name: `POSTMAN_API_KEY`
 5. Value: Your Postman API key
 6. Click **Add secret**
+
+#### How to Manually Trigger the Workflow
+
+1. Go to your repository on GitHub
+2. Click **Actions** tab
+3. Select **Postman SDK Tests** workflow from the left sidebar
+4. Click **Run workflow** button
+5. Select the branch (default: main)
+6. Click **Run workflow** to start the tests
 
 ### Workflow Triggers
 
@@ -46,6 +55,7 @@ The workflow runs when:
 - A pull request is opened against `main`
 - A pull request is synchronized (new commits pushed)
 - A pull request is reopened
+- Manually triggered via GitHub Actions UI (workflow dispatch)
 
 ### Test Results
 
