@@ -11,28 +11,96 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (35/191, 18.3%)
 
 ## Installation
-       
+
+### From GitHub Packages
+
+First, configure npm to use GitHub Packages for the `@bidnessforb` scope. Create or edit `~/.npmrc`:
+
 ```bash
+@bidnessforb:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+```
+
+**Generate a GitHub Personal Access Token:**
+1. Go to GitHub **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
+2. Click **Generate new token (classic)**
+3. Give it a name and select the `read:packages` scope
+4. Copy the token and replace `YOUR_GITHUB_TOKEN` in your `~/.npmrc`
+
+Then install the package:
+
+```bash
+npm install @bidnessforb/postman-sdk
+```
+
+### For Development
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/bidnessforb/postman-sdk.git
+cd postman-sdk
 npm install
 ```
 
 ## Configuration
 
-Set your Postman API key as an environment variable, then specify that variable name in config.js
+Set your Postman API key as an environment variable:
 
 ```bash
-export POSTMAN_API_KEY_POSTMAN=your_api_key_here
+export POSTMAN_API_KEY=your_api_key_here
+```
+
+Or set it programmatically before using the SDK:
+
+```javascript
+process.env.POSTMAN_API_KEY = 'your_api_key_here';
 ```
 
 ## Usage
 
-```javascript
-const { collections, workspaces, specs } = require('postman-sdk');
+### Basic Example
 
-// Example usage (once endpoints are implemented)
-// const allCollections = await collections.getCollections();
-// const workspace = await workspaces.getWorkspace(workspaceId);
+```javascript
+const { collections, workspaces, specs } = require('@bidnessforb/postman-sdk');
+
+// Make sure your API key is set
+process.env.POSTMAN_API_KEY = 'your_api_key_here';
+
+async function example() {
+  // Get all workspaces
+  const workspacesResponse = await workspaces.getWorkspaces();
+  console.log('Workspaces:', workspacesResponse.data);
+
+  // Get all collections
+  const collectionsResponse = await collections.getCollections();
+  console.log('Collections:', collectionsResponse.data);
+
+  // Get all specs
+  const specsResponse = await specs.getSpecs();
+  console.log('Specs:', specsResponse.data);
+}
+
+example().catch(console.error);
 ```
+
+### Included Utilities
+
+The SDK includes utility scripts for managing test workspaces:
+
+**Find workspaces by pattern:**
+```javascript
+const getWorkspaces = require('@bidnessforb/postman-sdk/util/get-test-workspaces');
+// Run: node node_modules/@bidnessforb/postman-sdk/util/get-test-workspaces.js "*Test*"
+```
+
+**Delete workspaces by pattern:**
+```javascript
+const deleteWorkspaces = require('@bidnessforb/postman-sdk/util/delete-test-workspaces');
+// Run: node node_modules/@bidnessforb/postman-sdk/util/delete-test-workspaces.js "*Test*"
+```
+
+These utilities are helpful for cleaning up test resources created during development.
 
 ## Project Structure
 

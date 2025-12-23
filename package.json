@@ -1,11 +1,44 @@
 {
-  "name": "postman-sdk",
+  "name": "@bidnessforb/postman-sdk",
   "version": "1.0.0",
   "description": "Barebones SDK for the Postman API",
   "license": "ISC",
-  "author": "",
+  "author": "Bryan Cross",
   "type": "commonjs",
   "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bidnessforb/postman-sdk.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "bugs": {
+    "url": "https://github.com/bidnessforb/postman-sdk/issues"
+  },
+  "homepage": "https://github.com/bidnessforb/postman-sdk#readme",
+  "keywords": [
+    "postman",
+    "api",
+    "sdk",
+    "postman-api",
+    "rest-api",
+    "collections",
+    "workspaces",
+    "specs"
+  ],
+  "files": [
+    "src/**/*.js",
+    "!src/**/__tests__/**",
+    "!src/**/*.test.js",
+    "util/get-test-workspaces.js",
+    "util/delete-test-workspaces.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -13,6 +46,9 @@
     "test:coverage": "./scripts/test-coverage.sh",
     "test:badges": "./scripts/test-badges.sh",
     "test:all-up": "./scripts/test-all-up.sh",
+    "prepublishOnly": "npm run test:unit",
+    "version": "npm run test:unit && git add -A",
+    "postversion": "git push && git push --tags",
     "util:get-workspaces": "node util/get-test-workspaces.js",
     "util:delete-workspaces": "node util/delete-test-workspaces.js"
   },
