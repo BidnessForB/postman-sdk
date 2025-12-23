@@ -11,7 +11,7 @@
 A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.  Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
 
 ## Installation
-    
+      
 ```bash
 npm install
 ```
