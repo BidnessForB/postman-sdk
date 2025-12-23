@@ -1,6 +1,6 @@
 {
   "name": "@bidnessforb/postman-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Barebones SDK for the Postman API",
   "license": "ISC",
   "author": "Bryan Cross",
