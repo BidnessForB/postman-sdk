@@ -131,7 +131,7 @@ node scripts/test-getSpecs.js get <specId>
 
 Test the createSpec endpoint:
 
-```bash
+```bash  
 npm run test:createSpec [workspaceId] [specType]
 # Spec types: openapi-3.0, openapi-3.1, asyncapi-2.0, multi-file
 ```
