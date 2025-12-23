@@ -125,7 +125,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(comment).toBeDefined();
   });
 
-  test('4. createFolderComment - should create a reply comment', async () => {
+  test('4. createFolderCommentReply - should create a reply comment', async () => {
     expect(testCollectionId).toBeDefined();
     expect(testFolderId).toBeDefined();
     
