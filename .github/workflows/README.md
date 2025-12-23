@@ -9,20 +9,20 @@ This workflow automatically runs tests when a pull request is opened against the
 #### 1. Unit Tests
 - Runs all unit tests using `npm run test:unit`
 - Fast execution (mocked, no API calls)
-- Uploads test results as artifacts
+- Runs independently for quick feedback
+- Uploads test results as artifacts (7 days retention)
 
-#### 2. Functional Tests (All-Up)
-- Runs the complete functional test suite using `npm run test:all-up`
+#### 2. Functional Tests & Coverage
+- Runs after unit tests complete successfully
+- Executes the complete functional test suite with coverage using `npm run test:coverage`
 - Makes real API calls to Postman API
-- Requires `POSTMAN_API_KEY_POSTMAN` secret to be configured
-- Uploads test results and generated `test-ids.json` as artifacts
-
-#### 3. Test Coverage Report
-- Runs after unit and functional tests complete
-- Generates comprehensive coverage report
+- Requires `POSTMAN_API_KEY` secret to be configured
+- Generates comprehensive coverage reports
 - Uploads coverage to Codecov for dynamic badge generation
-- Uploads coverage report as artifact for 30 days
+- Uploads test results, coverage, and `test-ids.json` as artifacts (30 days retention)
 - Displays coverage summary in PR
+
+**Note:** Functional tests run only once with coverage enabled to avoid duplication and reduce API calls.
 
 ### Required Secrets
 
@@ -76,8 +76,9 @@ The workflow runs when:
 
 All test results and coverage reports are uploaded as artifacts and can be downloaded from the workflow run page. Artifacts are retained for:
 - Unit test results: 7 days
-- Functional test results: 7 days
-- Coverage reports: 30 days
+- Functional tests & coverage (includes test-ids.json): 30 days
+
+Coverage reports are also automatically uploaded to Codecov for detailed analysis and badge generation.
 
 ### Status Badges
 

@@ -149,9 +149,8 @@ The repository includes automated testing via GitHub Actions that runs on:
 - Manual trigger via GitHub Actions UI (workflow dispatch)
 
 **Workflow Jobs:**
-1. **Unit Tests** - Fast, mocked tests
-2. **Functional Tests** - All-up functional test suite with real API calls
-3. **Coverage Report** - Comprehensive test coverage analysis with Codecov integration
+1. **Unit Tests** - Fast, mocked tests for quick feedback
+2. **Functional Tests & Coverage** - All-up functional test suite with real API calls and comprehensive coverage analysis
 
 **Setup Required:**
 - Add `POSTMAN_API_KEY` secret in GitHub repository settings
