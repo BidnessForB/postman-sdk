@@ -12,6 +12,7 @@ describe('folder comments functional tests (sequential flow)', () => {
   let testCollectionId;
   let testFolderId;
   let testCommentId;
+  let testThreadId;
   let testReplyCommentId;
   let persistedIds = {};
 
@@ -27,6 +28,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     testCollectionId = persistedIds.collectionId || null;
     testFolderId = persistedIds.folderId || null;
     testCommentId = persistedIds.commentId || null;
+    testThreadId = persistedIds.threadId || null;
     testReplyCommentId = persistedIds.replyCommentId || null;
 
     if (!testCollectionId) {
@@ -72,9 +74,17 @@ describe('folder comments functional tests (sequential flow)', () => {
     if (testCommentId) {
       try {
         const existingComments = await getFolderComments(testUserId, testCollectionId, testFolderId);
-        const commentExists = existingComments.data.data.some(c => c.id === testCommentId);
-        if (commentExists) {
-          console.log(`Using persisted comment ID: ${testCommentId}`);
+        const existingComment = existingComments.data.data.find(c => c.id === testCommentId);
+        if (existingComment) {
+          // Update threadId if not already set
+          if (existingComment.threadId && !testThreadId) {
+            testThreadId = existingComment.threadId;
+            saveTestIds({
+              ...loadTestIds(),
+              threadId: testThreadId
+            });
+          }
+          console.log(`Using persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
           return;
         } else {
           console.log('Persisted comment ID not found in folder, creating new comment');
@@ -97,14 +107,16 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(result.data.data.body).toBe(commentData.body);
 
     testCommentId = result.data.data.id;
+    testThreadId = result.data.data.threadId;
 
-    // Persist comment ID for future test runs
+    // Persist comment ID and thread ID for future test runs
     saveTestIds({
       ...loadTestIds(),
-      commentId: testCommentId
+      commentId: testCommentId,
+      threadId: testThreadId
     });
 
-    console.log(`Created and persisted comment ID: ${testCommentId}`);
+    console.log(`Created and persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
   });
 
   test('3. getFolderComments - should retrieve comments including the new one', async () => {
@@ -129,8 +141,8 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(testCollectionId).toBeDefined();
     expect(testFolderId).toBeDefined();
     
-    if (!testCommentId) {
-      console.log('Skipping test - no parent comment available');
+    if (!testThreadId) {
+      console.log('Skipping test - no thread ID available for reply');
       return;
     }
 
@@ -142,7 +154,7 @@ describe('folder comments functional tests (sequential flow)', () => {
 
     const replyData = {
       body: 'This is a reply to the test comment',
-      threadId: testCommentId
+      threadId: testThreadId
     };
 
     try {
@@ -222,12 +234,13 @@ describe('folder comments functional tests (sequential flow)', () => {
 
     expect(result.status).toBe(204);
 
-    // Clear comment ID from persisted file
-    const clearedIds = clearTestIds(['commentId']);
+    // Clear comment ID and thread ID from persisted file
+    const clearedIds = clearTestIds(['commentId', 'threadId']);
     expect(clearedIds.commentId).toBeNull();
+    expect(clearedIds.threadId).toBeNull();
     expect(clearedIds).toHaveProperty('clearedAt');
     
-    console.log('Main comment deleted and commentId cleared from test-ids.json');
+    console.log('Main comment deleted and commentId/threadId cleared from test-ids.json');
   });
 
   describe('error handling', () => {
