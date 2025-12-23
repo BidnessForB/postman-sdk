@@ -82,8 +82,8 @@ To run the same tests locally:
 # Run unit tests
 npm run test:unit
 
-# Run all-up functional tests (requires POSTMAN_API_KEY_POSTMAN env var)
-export POSTMAN_API_KEY_POSTMAN=your_api_key_here
+# Run all-up functional tests (requires POSTMAN_API_KEY_BRKC env var)
+export POSTMAN_API_KEY_BRKC=your_api_key_here
 npm run test:all-up
 
 # Generate coverage report
@@ -93,7 +93,8 @@ npm run test:coverage
 ### Troubleshooting
 
 **Functional tests fail with "API key required" error:**
-- Ensure the `POSTMAN_API_KEY_POSTMAN` secret is properly configured in GitHub
+- Ensure the `POSTMAN_API_KEY` secret is properly configured in GitHub
+- The workflow sets the `POSTMAN_API_KEY_BRKC` environment variable from this secret
 - Verify the secret name matches exactly (case-sensitive)
 
 **Tests timeout or fail intermittently:**

@@ -87,7 +87,7 @@ jobs:
       
       - name: Generate coverage report
         env:
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }} 
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
         run: npm run test:coverage
       
       - name: Upload coverage report

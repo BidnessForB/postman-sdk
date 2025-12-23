@@ -144,7 +144,9 @@ This SDK is built incrementally, starting with a small subset of endpoints to es
 
 ### GitHub Actions
 
-The repository includes automated testing via GitHub Actions that runs on all pull requests to `main`:
+The repository includes automated testing via GitHub Actions that runs on:
+- All pull requests to `main`
+- Manual trigger via GitHub Actions UI (workflow dispatch)
 
 **Workflow Jobs:**
 1. **Unit Tests** - Fast, mocked tests
@@ -152,7 +154,7 @@ The repository includes automated testing via GitHub Actions that runs on all pu
 3. **Coverage Report** - Comprehensive test coverage analysis
 
 **Setup Required:**
-- Add `POSTMAN_API_KEY_POSTMAN` secret in GitHub repository settings
+- Add `POSTMAN_API_KEY` secret in GitHub repository settings
 - See [.github/workflows/README.md](.github/workflows/README.md) for detailed setup instructions
 
 **Local Testing:**
