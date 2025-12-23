@@ -10,9 +10,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:unit": "jest --testPathPattern=unit",
-    "test:coverage": "rm src/__tests__/test-ids.json && jest src/__tests__/all-up-functional.test.js --coverage --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov",
-    "test:badges": "npm run test:coverage",
-    "test:all-up": "jest src/__tests__/all-up-functional.test.js",
+    "test:coverage": "./scripts/test-coverage.sh",
+    "test:badges": "./scripts/test-badges.sh",
+    "test:all-up": "./scripts/test-all-up.sh",
     "util:get-workspaces": "node util/get-test-workspaces.js",
     "util:delete-workspaces": "node util/delete-test-workspaces.js"
   },
