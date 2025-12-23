@@ -1,7 +1,8 @@
 # Postman SDK
 
-![Tests](https://img.shields.io/badge/tests-145%20passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-92.5%25-brightgreen)
+![Functional Tests](https://img.shields.io/badge/functional%20tests-145%20passing-brightgreen)
+![Functional Coverage](https://img.shields.io/badge/functional%20coverage-92.5%25-brightgreen)
+![Unit Tests](https://img.shields.io/badge/unit%20tests-passing-brightgreen)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
@@ -67,7 +68,39 @@ The SDK is organized by resource groups:
 
 ### Unit Tests
 
-Run tests with:
+Run unit tests only (mocked, fast):
+
+```bash
+npm run test:unit
+```
+
+### Functional Tests
+
+Run the complete functional test suite (executes all functional tests in proper dependency order):
+
+```bash
+npm run test:all-up
+```
+
+This orchestrates all functional tests in sequence:
+1. Workspaces (create/test workspace)
+2. Collections (create/test collection in workspace)
+3. Collection Comments (create/test comments on collection)
+4. Folders (create/test folder in collection)
+5. Folder Comments (create/test comments on folder)
+6. Specs (create/test API specs in workspace)
+
+**Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
+
+Generate functional test coverage report:
+
+```bash
+npm run test:coverage
+```
+
+### All Tests
+
+Run all tests (unit + functional):
 
 ```bash
 npm test
@@ -78,31 +111,6 @@ Run tests in watch mode:
 ```bash
 npm run test:watch
 ```
-
-Generate coverage report:
-
-```bash
-npm run test:coverage
-```
-
-### All-Up Functional Test
-
-Run the complete functional test suite (executes all functional tests in proper dependency order):
-
-```bash
-npm run test:all-up
-```
-
-This orchestrates all functional tests in sequence:
-0. Reset (clears test-ids.json to start fresh)
-1. Workspaces (create/test workspace)
-2. Collections (create/test collection in workspace)
-3. Folders (create/test folder in collection)
-4. Folder Comments (create/test comments on folder)
-5. Collection Comments (create/test comments on collection)
-6. Specs (create/test API specs in workspace)
-
-**Note**: This test resets test-ids.json at the start to ensure a clean test run. It creates real resources via the Postman API. Resources are NOT automatically deleted after the test.
 
 ### Manual API Tests
 
