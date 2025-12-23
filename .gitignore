@@ -1,4 +1,5 @@
 postmanAPIspec.yaml
+PostmanAPI.postman_collection.json
 **/test-ids.json
 # Dependencies
 node_modules/
