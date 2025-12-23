@@ -164,6 +164,31 @@ async function deleteSpecFile(specId, filePath) {
   return await executeRequest(config);
 }
 
+/**
+ * Generates a collection from an API specification
+ * Postman API endpoint and method: POST /specs/{specId}/generations/{elementType}
+ * @param {string} specId - The spec ID
+ * @param {string} elementType - The element type (typically 'collection')
+ * @param {string} [name] - The name for the generated collection
+ * @param {Object} [options] - Generation options
+ * @returns {Promise} Axios response with taskId and url for polling
+ */
+async function createSpecGeneration(specId, elementType, name = null, options = null) {
+  const endpoint = `/specs/${specId}/generations/${elementType}`;
+  const data = {};
+  
+  if (name !== null) {
+    data.name = name;
+  }
+  
+  if (options !== null) {
+    data.options = options;
+  }
+  
+  const config = buildAxiosConfig('post', endpoint, Object.keys(data).length > 0 ? data : null);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getSpecs,
   getSpec,
@@ -175,6 +200,7 @@ module.exports = {
   createSpecFile,
   getSpecFile,
   modifySpecFile,
-  deleteSpecFile
+  deleteSpecFile,
+  createSpecGeneration
 };
 

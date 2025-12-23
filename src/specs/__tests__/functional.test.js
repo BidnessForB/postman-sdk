@@ -9,7 +9,8 @@ const {
   createSpecFile,
   getSpecFile,
   modifySpecFile,
-  deleteSpecFile
+  deleteSpecFile,
+  createSpecGeneration
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
@@ -269,6 +270,38 @@ paths:
     ).rejects.toThrow();
   });
 
+  test('11. createSpecGeneration - should generate a collection from spec', async () => {
+    const collectionName = `Generated Collection ${Date.now()}`;
+    const options = {
+      requestNameSource: 'Fallback',
+      folderStrategy: 'Paths',
+      includeAuthInfoInExample: true
+    };
+
+    const result = await createSpecGeneration(testSpecId, 'collection', collectionName, options);
+
+    expect(result.status).toBe(202);
+    expect(result.data).toHaveProperty('taskId');
+    expect(result.data).toHaveProperty('url');
+    expect(typeof result.data.taskId).toBe('string');
+    expect(typeof result.data.url).toBe('string');
+    expect(result.data.url).toContain(`/specs/${testSpecId}/tasks/`);
+    
+    console.log(`Collection generation started with taskId: ${result.data.taskId}`);
+    console.log(`Poll status at: ${result.data.url}`);
+  });
+
+  test('12. createSpecGeneration - should generate with minimal params', async () => {
+    // Test with no optional parameters (just spec ID and element type)
+    const result = await createSpecGeneration(testSpecId, 'collection');
+
+    expect(result.status).toBe(202);
+    expect(result.data).toHaveProperty('taskId');
+    expect(result.data).toHaveProperty('url');
+    
+    console.log(`Collection generation (minimal) started with taskId: ${result.data.taskId}`);
+  });
+
   // Error handling tests
   describe('error handling', () => {
     test('getSpec - should throw error for non-existent spec ID', async () => {
@@ -344,6 +377,12 @@ paths:
     test('deleteSpecFile - should throw error for non-existent spec ID', async () => {
       await expect(
         deleteSpecFile('00000000-0000-0000-0000-000000000000', 'test.json')
+      ).rejects.toThrow();
+    });
+
+    test('createSpecGeneration - should throw error for non-existent spec ID', async () => {
+      await expect(
+        createSpecGeneration('00000000-0000-0000-0000-000000000000', 'collection', 'Test')
       ).rejects.toThrow();
     });
   });

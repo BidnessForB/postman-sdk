@@ -10,7 +10,8 @@ const {
   createSpecFile,
   getSpecFile,
   modifySpecFile,
-  deleteSpecFile
+  deleteSpecFile,
+  createSpecGeneration
 } = require('../index');
 
 jest.mock('axios');
@@ -602,6 +603,150 @@ describe('specs unit tests', () => {
             'Content-Type': 'application/json',
             'X-API-Key': 'test-api-key'
           }
+        })
+      );
+    });
+  });
+
+  describe('createSpecGeneration', () => {
+    test('should call POST /specs/{specId}/generations/{elementType} with full params', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: '66ae9950-0869-4e65-96b0-1e0e47e771af',
+          url: '/specs/73e15000-bc7a-4802-b80e-05fff18fd7f8/tasks/66ae9950-0869-4e65-96b0-1e0e47e771af'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const name = 'Generated Collection';
+      const options = {
+        requestNameSource: 'Fallback',
+        folderStrategy: 'Paths',
+        includeAuthInfoInExample: true
+      };
+      const result = await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', name, options);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+          data: {
+            name,
+            options
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.taskId).toBe('66ae9950-0869-4e65-96b0-1e0e47e771af');
+    });
+
+    test('should call POST with only name parameter', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-123',
+          url: '/specs/spec-123/tasks/task-123'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const name = 'My Collection';
+      await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', name, null);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            name: 'My Collection'
+          }
+        })
+      );
+    });
+
+    test('should call POST with only options parameter', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-456',
+          url: '/specs/spec-456/tasks/task-456'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const options = {
+        requestNameSource: 'Fallback'
+      };
+      await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', null, options);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            options: {
+              requestNameSource: 'Fallback'
+            }
+          }
+        })
+      );
+    });
+
+    test('should call POST with no optional parameters', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-789',
+          url: '/specs/spec-789/tasks/task-789'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await createSpecGeneration(DEFAULT_SPEC_ID, 'collection');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+          data: null
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-123',
+          url: '/specs/spec-123/tasks/task-123'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', 'Test', null);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          }
+        })
+      );
+    });
+
+    test('should handle different element types', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-999',
+          url: '/specs/spec-999/tasks/task-999'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', 'Test Collection');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringContaining('/generations/collection')
         })
       );
     });
