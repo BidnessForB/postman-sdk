@@ -167,6 +167,66 @@ async function deleteFolder(collectionId, folderId) {
 }
 
 /**
+ * Gets all comments left by users in a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/comments
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @returns {Promise} Axios response
+ */
+async function getCollectionComments(userId, collectionId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/comments`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a comment on a collection
+ * Postman API endpoint and method: POST /collections/{collectionUid}/comments
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {Object} commentData - The comment data (body, threadId, tags)
+ * @returns {Promise} Axios response
+ */
+async function createCollectionComment(userId, collectionId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/comments`;
+  const config = buildAxiosConfig('post', endpoint, commentData);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates a comment on a collection
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} commentId - The comment's ID
+ * @param {Object} commentData - The comment data (body, tags)
+ * @returns {Promise} Axios response
+ */
+async function updateCollectionComment(userId, collectionId, commentId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
+  const config = buildAxiosConfig('put', endpoint, commentData);
+  return await executeRequest(config);
+}
+
+/**
+ * Deletes a comment from a collection
+ * Postman API endpoint and method: DELETE /collections/{collectionUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} commentId - The comment's ID
+ * @returns {Promise} Axios response
+ */
+async function deleteCollectionComment(userId, collectionId, commentId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
+  const config = buildAxiosConfig('delete', endpoint);
+  return await executeRequest(config);
+}
+
+/**
  * Gets all comments left by users in a folder
  * Postman API endpoint and method: GET /collections/{collectionUid}/folders/{folderUid}/comments
  * @param {string|number} userId - The user's ID
@@ -245,6 +305,10 @@ module.exports = {
   getFolder,
   updateFolder,
   deleteFolder,
+  getCollectionComments,
+  createCollectionComment,
+  updateCollectionComment,
+  deleteCollectionComment,
   getFolderComments,
   createFolderComment,
   updateFolderComment,

@@ -3,6 +3,8 @@ const {
   getCollection,
   deleteFolder,
   getFolder,
+  deleteCollectionComment,
+  getCollectionComments,
   deleteFolderComment,
   getFolderComments
 } = require('../index');
@@ -29,8 +31,10 @@ describe('collections manual cleanup', () => {
   let testUserId;
   let testCollectionId;
   let testFolderId;
-  let testCommentId;
-  let testReplyCommentId;
+  let testFolderCommentId;
+  let testFolderReplyCommentId;
+  let testCollectionCommentId;
+  let testCollectionReplyCommentId;
   
   beforeAll(() => {
     if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
@@ -42,8 +46,43 @@ describe('collections manual cleanup', () => {
     testUserId = persistedIds.user && persistedIds.user.id;
     testCollectionId = persistedIds.collection && persistedIds.collection.id;
     testFolderId = persistedIds.folder && persistedIds.folder.id;
-    testCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id;
-    testReplyCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.replyId;
+    testFolderCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id;
+    testFolderReplyCommentId = persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.replyId;
+    testCollectionCommentId = persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.id;
+    testCollectionReplyCommentId = persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.replyId;
+  });
+
+  ('deleteCollectionComments - manually delete collection comments', async () => {
+    
+    if (!testUserId || !testCollectionId) {
+      console.log('No userId or collectionId found in test-ids.json');
+      return;
+    }
+
+    // Delete reply comment first (if exists)
+    if (testCollectionReplyCommentId) {
+      console.log(`Deleting collection reply comment: ${testCollectionReplyCommentId}`);
+      const result = await deleteCollectionComment(testUserId, testCollectionId, testCollectionReplyCommentId);
+      expect(result.status).toBe(204);
+    }
+
+    // Delete main comment (if exists)
+    if (testCollectionCommentId) {
+      console.log(`Deleting collection comment: ${testCollectionCommentId}`);
+      const result = await deleteCollectionComment(testUserId, testCollectionId, testCollectionCommentId);
+      expect(result.status).toBe(204);
+    }
+    
+    // Clear comment properties only
+    clearTestIds(['collection.comment.id', 'collection.comment.replyId']);
+    console.log('Collection comments deleted and comment properties cleared from test-ids.json');
+    
+    // Verify comments are deleted
+    const commentsResult = await getCollectionComments(testUserId, testCollectionId);
+    const ourComments = commentsResult.data.data.filter(c => 
+      c.id === testCollectionCommentId || c.id === testCollectionReplyCommentId
+    );
+    expect(ourComments.length).toBe(0);
   });
 
   ('deleteFolderComments - manually delete folder comments', async () => {
@@ -54,26 +93,29 @@ describe('collections manual cleanup', () => {
     }
 
     // Delete reply comment first (if exists)
-    if (testReplyCommentId) {
-      console.log(`Deleting reply comment: ${testReplyCommentId}`);
-      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testReplyCommentId);
-      expect(result.status).toBe(200);
+    if (testFolderReplyCommentId) {
+      console.log(`Deleting folder reply comment: ${testFolderReplyCommentId}`);
+      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testFolderReplyCommentId);
+      expect(result.status).toBe(204);
     }
 
     // Delete main comment (if exists)
-    if (testCommentId) {
-      console.log(`Deleting comment: ${testCommentId}`);
-      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testCommentId);
-      expect(result.status).toBe(200);
+    if (testFolderCommentId) {
+      console.log(`Deleting folder comment: ${testFolderCommentId}`);
+      const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testFolderCommentId);
+      expect(result.status).toBe(204);
     }
     
     // Clear comment properties only
     clearTestIds(['folder.comment.id', 'folder.comment.replyId']);
-    console.log('Comments deleted and comment properties cleared from test-ids.json');
+    console.log('Folder comments deleted and comment properties cleared from test-ids.json');
     
-    // Verify comments are deleted (should return empty array)
+    // Verify comments are deleted
     const commentsResult = await getFolderComments(testUserId, testCollectionId, testFolderId);
-    expect(commentsResult.data.data).toEqual([]);
+    const ourComments = commentsResult.data.data.filter(c => 
+      c.id === testFolderCommentId || c.id === testFolderReplyCommentId
+    );
+    expect(ourComments.length).toBe(0);
   });
 
   ('deleteFolder - manually delete test folder', async () => {
