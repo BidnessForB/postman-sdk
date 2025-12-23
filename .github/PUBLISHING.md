@@ -1,6 +1,24 @@
 # Publishing Guide
 
+**Current Version**: 0.2.0 (Alpha)
+
 This guide explains how to publish new versions of the Postman SDK to GitHub Packages.
+
+## Alpha Development (0.x.x)
+
+The SDK is currently in alpha development (version 0.x.x). During this phase:
+
+- **0.0.x** - Extremely unstable, initial development
+- **0.x.0** - May include breaking changes (API not stable yet)
+- **0.x.y** - Bug fixes and minor improvements
+
+Breaking changes are acceptable in minor versions (0.x.0) until we reach 1.0.0. Once we release 1.0.0, we'll follow strict semantic versioning where breaking changes only occur in major versions.
+
+**Path to 1.0.0:**
+- Complete core endpoint implementations
+- Stabilize the API surface
+- Comprehensive test coverage
+- Production-ready documentation
 
 ## Prerequisites
 
@@ -17,14 +35,14 @@ This is the easiest and most reliable method.
 
 1. **Update version and tag:**
    ```bash
-   # For patch release (1.0.0 → 1.0.1) - bug fixes
+   # For patch release (0.2.0 → 0.2.1) - bug fixes
    npm version patch -m "Release v%s: Bug fixes and improvements"
    
-   # For minor release (1.0.0 → 1.1.0) - new features
+   # For minor release (0.2.0 → 0.3.0) - new features/breaking changes (OK during alpha)
    npm version minor -m "Release v%s: New features"
    
-   # For major release (1.0.0 → 2.0.0) - breaking changes
-   npm version major -m "Release v%s: Breaking changes"
+   # For major release (0.x.x → 1.0.0) - stable API release
+   npm version major -m "Release v%s: Stable API release"
    ```
 
 2. **Push the tag:**

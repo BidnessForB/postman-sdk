@@ -1,6 +1,7 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**Generated**: December 23, 2025
+**SDK Version**: 0.2.0  
+**Last Updated**: December 23, 2025
 
 ## Overview
 
