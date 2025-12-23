@@ -1,12 +1,16 @@
 # Postman SDK
 
+![Version](https://img.shields.io/badge/version-0.2.0-blue)
 ![PR Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
+![Status](https://img.shields.io/badge/status-alpha-orange)
 
-A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution.  Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
+A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution. Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
+
+> ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (35/191, 18.3%)
 

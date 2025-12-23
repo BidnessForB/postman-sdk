@@ -1,5 +1,7 @@
 # GitHub Package Setup - Complete ✅
 
+**Current Version**: 0.2.0 (Alpha)
+
 The Postman SDK is now configured for distribution via GitHub Packages!
 
 ## What Was Created/Updated
@@ -123,7 +125,11 @@ Create/edit `~/.npmrc`:
 ### Install Package
 
 ```bash
+# Install latest version
 npm install @bidnessforb/postman-sdk
+
+# Install specific version (e.g., 0.2.0)
+npm install @bidnessforb/postman-sdk@0.2.0
 ```
 
 ### Use in Code
@@ -132,7 +138,7 @@ npm install @bidnessforb/postman-sdk
 const { collections, workspaces, specs } = require('@bidnessforb/postman-sdk');
 
 // Set API key
-process.env.POSTMAN_API_KEY = 'your_api_key';
+process.env.POSTMAN_API_KEY_BRKC = 'your_api_key';
 
 // Use the SDK
 const response = await workspaces.getWorkspaces();

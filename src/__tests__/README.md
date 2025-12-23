@@ -5,11 +5,12 @@ This directory contains shared test utilities and resources used across all func
 ## All-Up Functional Test
 
 The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
-0. Reset (clears test-ids.json) → 1. Workspaces → 2. Collections → 3. Folders → 4. Folder Comments → 5. Collection Comments → 6. Specs
+
+1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs
 
 Run with: `npm run test:all-up`
 
-**⚠️ Warning**: This test DELETES `test-ids.json` at the start to ensure a clean test run.
+**Note**: Test IDs are persisted in `test-ids.json` and reused across test runs. To start fresh, manually delete the file before running tests.
 
 See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
 
