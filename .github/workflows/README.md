@@ -95,6 +95,7 @@ To run the workflow, you need to configure the following GitHub secrets:
 - Your Codecov upload token
 - Ensures secure and reliable coverage uploads
 - Get this from [codecov.io](https://codecov.io) after signing up
+- Required for accurate status check reporting
 
 #### How to Add Secrets
 
@@ -202,6 +203,29 @@ npm run test:all-up
 npm run test:coverage
 ```
 
+### Codecov Configuration
+
+The repository uses an optimized Codecov configuration (`codecov.yml`) to prevent status check issues:
+
+**Status Check Strategy:**
+- **`codecov/project`** - Combined coverage from both test suites (blocking, 2% threshold)
+- **`codecov/project/unit`** - Unit test coverage only (informational)
+- **`codecov/project/functional`** - Functional test coverage only (informational)
+- **`codecov/patch`** - Patch coverage (informational)
+
+**Key Configuration Details:**
+- `require_ci_to_pass: no` - Prevents circular dependencies with GitHub Actions
+- `wait_for_ci: no` - Reports coverage immediately without waiting
+- Individual flag checks are informational - won't block PRs
+- Only the combined `codecov/project` check can block merges
+- 2% coverage threshold for reasonable flexibility
+
+This configuration ensures:
+- ✅ No "waiting for status checks" deadlocks
+- ✅ Fast feedback on coverage changes
+- ✅ Visibility into both test suite coverages
+- ✅ Only one blocking codecov check for simplicity
+
 ### Troubleshooting
 
 **Functional tests fail with "API key required" error:**
@@ -217,4 +241,15 @@ npm run test:coverage
 **Coverage report not generated:**
 - Coverage job runs only if both unit and functional tests succeed
 - Check individual test job logs for errors
+
+**"All Tests" status check waiting indefinitely:**
+- Verify branch protection requires `Postman SDK - All Tests / Run unit and functional tests with coverage`
+- The exact status check name matters - check your PR to see what's reported
+- Avoid requiring outdated or renamed status checks
+
+**Codecov status checks failing:**
+- Check if coverage decreased by more than 2%
+- Review the Codecov report linked in the PR
+- Individual flag checks (unit/functional) are informational and won't block
+- Only `codecov/project` (combined) check will block merges
 
