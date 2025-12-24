@@ -23,35 +23,10 @@ jobs:
 
   cleanup:
     name: Cleanup Test Resources
-    runs-on: ubuntu-latest
     needs: [functional-tests]
     if: always()
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Run workspace cleanup
-        env:
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
-        run: npm run util:delete-test-workspaces
-        continue-on-error: true
-      
-      - name: Cleanup Summary
-        if: always()
-        run: |
-          echo "### 🧹 Cleanup Completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Test workspace cleanup has been executed." >> $GITHUB_STEP_SUMMARY
-          echo "This step runs independently and does not affect pipeline status." >> $GITHUB_STEP_SUMMARY
+    uses: ./.github/workflows/cleanup-test-resources.yml
+    secrets: inherit
 
   all-tests-status:
     name: Run unit and functional tests with coverage
