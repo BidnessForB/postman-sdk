@@ -1,0 +1,150 @@
+name: Cleanup Test Resources
+
+on:
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      pattern:
+        description: 'Workspace name pattern to delete (e.g., "*Updated*")'
+        required: false
+        default: 'Updated Workspace Name*'
+        type: string
+  
+  # Allow calling from other workflows
+  workflow_call:
+    inputs:
+      pattern:
+        description: 'Workspace name pattern to delete'
+        required: false
+        default: 'Updated Workspace Name*'
+        type: string
+    secrets:
+      POSTMAN_API_KEY:
+        required: true
+  
+  # Optional: Schedule daily cleanup at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  cleanup-workspaces:
+    name: Delete Test Workspaces
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Delete test workspaces
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: |
+          PATTERN="${{ inputs.pattern || 'Updated Workspace Name*' }}"
+          echo "Deleting workspaces matching pattern: $PATTERN"
+          node util/delete-test-workspaces.js "$PATTERN" --force
+        continue-on-error: true
+      
+      - name: Cleanup Summary
+        if: always()
+        run: |
+          echo "### 🧹 Test Resources Cleanup" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pattern:** \`${{ inputs.pattern || 'Updated Workspace Name*' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test workspace cleanup has been executed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This workflow deletes workspaces matching the specified pattern." >> $GITHUB_STEP_SUMMARY
+          echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
+
+  cleanup-collections:
+    name: Delete Test Collections
+    runs-on: ubuntu-latest
+    needs: [cleanup-workspaces]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run collection cleanup tests
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: npx jest src/collections/__tests__/manual-cleanup.test.js
+        continue-on-error: true
+      
+      - name: Collection Cleanup Summary
+        if: always()
+        run: |
+          echo "### 🗑️ Collections Cleanup" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test collection cleanup has been executed." >> $GITHUB_STEP_SUMMARY
+          echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
+
+  cleanup-specs:
+    name: Delete Test Specs
+    runs-on: ubuntu-latest
+    needs: [cleanup-workspaces]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run specs cleanup tests
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: npx jest src/specs/__tests__/manual-cleanup.test.js
+        continue-on-error: true
+      
+      - name: Specs Cleanup Summary
+        if: always()
+        run: |
+          echo "### 📄 Specs Cleanup" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test spec cleanup has been executed." >> $GITHUB_STEP_SUMMARY
+          echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
+
+  summary:
+    name: Cleanup Summary
+    runs-on: ubuntu-latest
+    needs: [cleanup-workspaces, cleanup-collections, cleanup-specs]
+    if: always()
+    
+    steps:
+      - name: Overall Summary
+        run: |
+          echo "### ✅ Cleanup Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All cleanup jobs have been executed:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧹 Workspaces: ${{ needs.cleanup-workspaces.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🗑️ Collections: ${{ needs.cleanup-collections.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📄 Specs: ${{ needs.cleanup-specs.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Note: All cleanup operations use 'continue-on-error: true'" >> $GITHUB_STEP_SUMMARY
+          echo "and do not affect the overall workflow status." >> $GITHUB_STEP_SUMMARY
+

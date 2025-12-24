@@ -52,7 +52,7 @@
     "version": "npm run test:unit && git add -A",
     "postversion": "git push && git push --tags",
     "util:get-workspaces": "node util/get-test-workspaces.js",
-    "util:delete-workspaces": "node util/delete-test-workspaces.js"
+    "util:delete-test-workspaces": "node util/delete-test-workspaces.js 'Updated Workspace Name*' --force"
   },
   "dependencies": {
     "axios": "^1.6.0"
