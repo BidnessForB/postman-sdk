@@ -9,11 +9,6 @@ const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('..
 
 describe('folder comments functional tests (sequential flow)', () => {
   let testUserId;
-  let testCollectionId;
-  let testFolderId;
-  let testCommentId;
-  let testThreadId;
-  let testReplyCommentId;
   let persistedIds = {};
 
   beforeAll(async () => {
@@ -25,41 +20,39 @@ describe('folder comments functional tests (sequential flow)', () => {
     testUserId = await initializeUserId();
 
     persistedIds = loadTestIds();
-    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
-    testFolderId = (persistedIds.folder && persistedIds.folder.id) || null;
-    testCommentId = (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) || null;
-    testThreadId = (persistedIds.folder && persistedIds.folder.thread && persistedIds.folder.thread.id) || null;
-    testReplyCommentId = (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.replyId) || null;
 
-    if (!testCollectionId) {
+    if (!persistedIds.collection || !persistedIds.collection.id) {
       throw new Error('No collection ID found. Please run collection tests first to create a test collection.');
     }
 
-    if (!testFolderId) {
+    if (!persistedIds.folder || !persistedIds.folder.id) {
       throw new Error('No folder ID found. Please run folder tests first to create a test folder.');
     }
 
-    console.log('Using collection ID:', testCollectionId);
-    console.log('Using folder ID:', testFolderId);
+    console.log('Using collection ID:', persistedIds.collection.id);
+    console.log('Using folder ID:', persistedIds.folder.id);
 
-    if (testCommentId) {
-      console.log('Found persisted comment ID:', testCommentId);
+    if (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) {
+      console.log('Found persisted comment ID:', persistedIds.folder.comment.id);
     }
   });
 
   afterAll(async () => {
     // NO CLEANUP - Comments persist indefinitely for reuse across test runs
-    if (testCommentId) {
-      console.log(`Comment ${testCommentId} will persist for future test runs`);
+    if (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) {
+      console.log(`Comment ${persistedIds.folder.comment.id} will persist for future test runs`);
       console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
     }
   });
 
   test('1. getFolderComments - should retrieve comments (initially empty)', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
+    
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
 
-    const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
+    const result = await getFolderComments(testUserId, collectionId, folderId);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -67,45 +60,17 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('2. createFolderComment - should create a comment on the folder', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
-
-    // Check if comment already exists and is valid
-    if (testCommentId) {
-      try {
-        const existingComments = await getFolderComments(testUserId, testCollectionId, testFolderId);
-        const existingComment = existingComments.data.data.find(c => c.id === testCommentId);
-        if (existingComment) {
-          // Update threadId if not already set
-          if (existingComment.threadId && !testThreadId) {
-            testThreadId = existingComment.threadId;
-            const ids = loadTestIds();
-            saveTestIds({
-              ...ids,
-              folder: {
-                ...ids.folder,
-                thread: {
-                  ...ids.folder.thread,
-                  id: testThreadId
-                }
-              }
-            });
-          }
-          console.log(`Using persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
-          return;
-        } else {
-          console.log('Persisted comment ID not found in folder, creating new comment');
-        }
-      } catch (error) {
-        console.log('Error checking existing comments, creating new comment');
-      }
-    }
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
+    
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
 
     const commentData = {
       body: 'This is a test comment created by SDK functional tests'
     };
 
-    const result = await createFolderComment(testUserId, testCollectionId, testFolderId, commentData);
+    const result = await createFolderComment(testUserId, collectionId, folderId, commentData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -113,91 +78,73 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(result.data.data).toHaveProperty('body');
     expect(result.data.data.body).toBe(commentData.body);
 
-    testCommentId = result.data.data.id;
-    testThreadId = result.data.data.threadId;
-
     // Persist comment ID and thread ID for future test runs
-    const ids = loadTestIds();
-    saveTestIds({
-      ...ids,
-      folder: {
-        ...ids.folder,
-        comment: {
-          ...ids.folder.comment,
-          id: testCommentId
-        },
-        thread: {
-          ...ids.folder.thread,
-          id: testThreadId
-        }
-      }
-    });
+    if (!persistedIds.folder.comment) persistedIds.folder.comment = {};
+    if (!persistedIds.folder.thread) persistedIds.folder.thread = {};
+    
+    persistedIds.folder.comment.id = result.data.data.id;
+    persistedIds.folder.thread.id = result.data.data.threadId;
+    persistedIds.folder.comment.createdAt = new Date().toISOString();
+    
+    saveTestIds(persistedIds);
 
-    console.log(`Created and persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
+    console.log(`Created and persisted comment ID: ${persistedIds.folder.comment.id}, thread ID: ${persistedIds.folder.thread.id}`);
   });
 
   test('3. getFolderComments - should retrieve comments including the new one', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
     
-    if (!testCommentId) {
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
+    
+    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
       console.log('Skipping test - no comment was created');
       return;
     }
 
-    const result = await getFolderComments(testUserId, testCollectionId, testFolderId);
+    const result = await getFolderComments(testUserId, collectionId, folderId);
 
     expect(result.status).toBe(200);
     expect(result.data.data.length).toBeGreaterThan(0);
     
-    const comment = result.data.data.find(c => c.id === testCommentId);
+    const commentId = persistedIds.folder.comment.id;
+    const comment = result.data.data.find(c => c.id === commentId);
     expect(comment).toBeDefined();
   });
 
   test('4. createFolderCommentReply - should create a reply comment', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
     
-    if (!testThreadId) {
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
+    
+    if (!persistedIds.folder.thread || !persistedIds.folder.thread.id) {
       console.log('Skipping test - no thread ID available for reply');
       return;
     }
 
-    // Skip if reply comment already exists
-    if (testReplyCommentId) {
-      console.log(`Using persisted reply comment ID: ${testReplyCommentId}`);
-      return;
-    }
-
+    const threadId = persistedIds.folder.thread.id;
     const replyData = {
       body: 'This is a reply to the test comment',
-      threadId: testThreadId
+      threadId: threadId
     };
 
     try {
-      const result = await createFolderComment(testUserId, testCollectionId, testFolderId, replyData);
+      const result = await createFolderComment(testUserId, collectionId, folderId, replyData);
 
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('data');
       expect(result.data.data).toHaveProperty('id');
       expect(result.data.data.body).toBe(replyData.body);
 
-      testReplyCommentId = result.data.data.id;
-
       // Persist reply comment ID for future test runs
-      const ids = loadTestIds();
-      saveTestIds({
-        ...ids,
-        folder: {
-          ...ids.folder,
-          comment: {
-            ...ids.folder.comment,
-            replyId: testReplyCommentId
-          }
-        }
-      });
+      if (!persistedIds.folder.comment) persistedIds.folder.comment = {};
+      persistedIds.folder.comment.replyId = result.data.data.id;
+      saveTestIds(persistedIds);
 
-      console.log(`Created and persisted reply comment ID: ${testReplyCommentId}`);
+      console.log(`Created and persisted reply comment ID: ${persistedIds.folder.comment.replyId}`);
     } catch (error) {
       // Reply comments may not be supported by the API or require special permissions
       console.log('Reply comment creation not supported or failed:', error.message);
@@ -205,19 +152,23 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('5. updateFolderComment - should update the comment', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
     
-    if (!testCommentId) {
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
+    
+    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
       console.log('Skipping test - no comment available');
       return;
     }
 
+    const commentId = persistedIds.folder.comment.id;
     const updatedData = {
       body: 'This is an updated test comment'
     };
 
-    const result = await updateFolderComment(testUserId, testCollectionId, testFolderId, testCommentId, updatedData);
+    const result = await updateFolderComment(testUserId, collectionId, folderId, commentId, updatedData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -225,15 +176,19 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('6. deleteFolderComment - should delete the reply comment', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
     
-    if (!testReplyCommentId) {
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
+    
+    if (!persistedIds.folder.comment || !persistedIds.folder.comment.replyId) {
       console.log('Skipping test - no reply comment available');
       return;
     }
 
-    const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testReplyCommentId);
+    const replyCommentId = persistedIds.folder.comment.replyId;
+    const result = await deleteFolderComment(testUserId, collectionId, folderId, replyCommentId);
 
     expect(result.status).toBe(204);
 
@@ -241,19 +196,26 @@ describe('folder comments functional tests (sequential flow)', () => {
     const clearedIds = clearTestIds(['folder.comment.replyId']);
     expect(clearedIds.folder.comment.replyId).toBeNull();
     
+    // Update local persistedIds
+    persistedIds = loadTestIds();
+    
     console.log('Reply comment deleted and replyCommentId cleared from test-ids.json');
   });
 
   test('7. deleteFolderComment - should delete the main comment', async () => {
-    expect(testCollectionId).toBeDefined();
-    expect(testFolderId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    const folderId = persistedIds.folder.id;
     
-    if (!testCommentId) {
+    expect(collectionId).toBeDefined();
+    expect(folderId).toBeDefined();
+    
+    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
       console.log('Skipping test - no comment available');
       return;
     }
 
-    const result = await deleteFolderComment(testUserId, testCollectionId, testFolderId, testCommentId);
+    const commentId = persistedIds.folder.comment.id;
+    const result = await deleteFolderComment(testUserId, collectionId, folderId, commentId);
 
     expect(result.status).toBe(204);
 
@@ -262,24 +224,32 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(clearedIds.folder.comment.id).toBeNull();
     expect(clearedIds.folder.thread.id).toBeNull();
     
+    // Update local persistedIds
+    persistedIds = loadTestIds();
+    
     console.log('Main comment deleted and commentId/threadId cleared from test-ids.json');
   });
 
   describe('error handling', () => {
     test('should handle getting comments from non-existent collection', async () => {
+      const folderId = persistedIds.folder.id;
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
-      await expect(getFolderComments(testUserId, fakeCollectionId, testFolderId)).rejects.toThrow();
+      await expect(getFolderComments(testUserId, fakeCollectionId, folderId)).rejects.toThrow();
     });
 
     test('should handle updating non-existent comment', async () => {
+      const collectionId = persistedIds.collection.id;
+      const folderId = persistedIds.folder.id;
       const fakeId = '999999';
       const commentData = { body: 'Updated comment' };
-      await expect(updateFolderComment(testUserId, testCollectionId, testFolderId, fakeId, commentData)).rejects.toThrow();
+      await expect(updateFolderComment(testUserId, collectionId, folderId, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle deleting non-existent comment', async () => {
+      const collectionId = persistedIds.collection.id;
+      const folderId = persistedIds.folder.id;
       const fakeId = '999999';
-      await expect(deleteFolderComment(testUserId, testCollectionId, testFolderId, fakeId)).rejects.toThrow();
+      await expect(deleteFolderComment(testUserId, collectionId, folderId, fakeId)).rejects.toThrow();
     });
   });
 });
