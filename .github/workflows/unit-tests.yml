@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Postman SDK - Unit Tests
 
 on:
   pull_request:

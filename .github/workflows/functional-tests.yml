@@ -1,4 +1,4 @@
-name: Functional Tests & Coverage
+name: Postman SDK - Functional Tests & Coverage
 
 on:
   pull_request:
