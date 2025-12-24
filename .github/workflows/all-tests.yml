@@ -42,7 +42,7 @@ jobs:
       - name: Run workspace cleanup
         env:
           POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
-        run: node util/delete-test-workspaces.js 'Updated Workspace Name*' --force
+        run: npm run util:delete-test-workspaces
         continue-on-error: true
       
       - name: Cleanup Summary
