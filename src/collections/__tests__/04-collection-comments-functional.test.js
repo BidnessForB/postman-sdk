@@ -9,10 +9,6 @@ const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('..
 
 describe('collection comments functional tests (sequential flow)', () => {
   let testUserId;
-  let testCollectionId;
-  let testCommentId;
-  let testThreadId;
-  let testReplyCommentId;
   let persistedIds = {};
 
   beforeAll(async () => {
@@ -24,34 +20,31 @@ describe('collection comments functional tests (sequential flow)', () => {
     testUserId = await initializeUserId();
 
     persistedIds = loadTestIds();
-    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
-    testCommentId = (persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.id) || null;
-    testThreadId = (persistedIds.collection && persistedIds.collection.thread && persistedIds.collection.thread.id) || null;
-    testReplyCommentId = (persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.replyId) || null;
 
-    if (!testCollectionId) {
+    if (!persistedIds.collection || !persistedIds.collection.id) {
       throw new Error('No collection ID found. Please run collection tests first to create a test collection.');
     }
 
-    console.log('Using collection ID:', testCollectionId);
+    console.log('Using collection ID:', persistedIds.collection.id);
 
-    if (testCommentId) {
-      console.log('Found persisted comment ID:', testCommentId);
+    if (persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.id) {
+      console.log('Found persisted comment ID:', persistedIds.collection.comment.id);
     }
   });
 
   afterAll(async () => {
     // NO CLEANUP - Comments persist indefinitely for reuse across test runs
-    if (testCommentId) {
-      console.log(`Comment ${testCommentId} will persist for future test runs`);
+    if (persistedIds.collection && persistedIds.collection.comment && persistedIds.collection.comment.id) {
+      console.log(`Comment ${persistedIds.collection.comment.id} will persist for future test runs`);
       console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
     }
   });
 
   test('1. getCollectionComments - should retrieve comments (initially empty or with existing comments)', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
-    const result = await getCollectionComments(testUserId, testCollectionId);
+    const result = await getCollectionComments(testUserId, collectionId);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -59,44 +52,14 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('2. createCollectionComment - should create a comment on the collection', async () => {
-    expect(testCollectionId).toBeDefined();
-
-    // Check if comment already exists and is valid
-    if (testCommentId) {
-      try {
-        const existingComments = await getCollectionComments(testUserId, testCollectionId);
-        const existingComment = existingComments.data.data.find(c => c.id === testCommentId);
-        if (existingComment) {
-          // Update threadId if not already set
-          if (existingComment.threadId && !testThreadId) {
-            testThreadId = existingComment.threadId;
-            const ids = loadTestIds();
-            saveTestIds({
-              ...ids,
-              collection: {
-                ...ids.collection,
-                thread: {
-                  ...ids.collection.thread,
-                  id: testThreadId
-                }
-              }
-            });
-          }
-          console.log(`Using persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
-          return;
-        } else {
-          console.log('Persisted comment ID not found in collection, creating new comment');
-        }
-      } catch (error) {
-        console.log('Error checking existing comments, creating new comment');
-      }
-    }
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
     const commentData = {
       body: 'This is a test comment on the collection created by SDK functional tests'
     };
 
-    const result = await createCollectionComment(testUserId, testCollectionId, commentData);
+    const result = await createCollectionComment(testUserId, collectionId, commentData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -104,89 +67,67 @@ describe('collection comments functional tests (sequential flow)', () => {
     expect(result.data.data).toHaveProperty('body');
     expect(result.data.data.body).toBe(commentData.body);
 
-    testCommentId = result.data.data.id;
-    testThreadId = result.data.data.threadId;
-
     // Persist comment ID and thread ID for future test runs
-    const ids = loadTestIds();
-    saveTestIds({
-      ...ids,
-      collection: {
-        ...ids.collection,
-        comment: {
-          ...ids.collection.comment,
-          id: testCommentId
-        },
-        thread: {
-          ...ids.collection.thread,
-          id: testThreadId
-        }
-      }
-    });
+    if (!persistedIds.collection.comment) persistedIds.collection.comment = {};
+    if (!persistedIds.collection.thread) persistedIds.collection.thread = {};
+    
+    persistedIds.collection.comment.id = result.data.data.id;
+    persistedIds.collection.thread.id = result.data.data.threadId;
+    persistedIds.collection.comment.createdAt = new Date().toISOString();
+    
+    saveTestIds(persistedIds);
 
-    console.log(`Created and persisted comment ID: ${testCommentId}, thread ID: ${testThreadId}`);
+    console.log(`Created and persisted comment ID: ${persistedIds.collection.comment.id}, thread ID: ${persistedIds.collection.thread.id}`);
   });
 
   test('3. getCollectionComments - should retrieve comments including the new one', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
     
-    if (!testCommentId) {
+    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
       console.log('Skipping test - no comment was created');
       return;
     }
 
-    const result = await getCollectionComments(testUserId, testCollectionId);
+    const result = await getCollectionComments(testUserId, collectionId);
 
     expect(result.status).toBe(200);
     expect(result.data.data.length).toBeGreaterThan(0);
     
-    const comment = result.data.data.find(c => c.id === testCommentId);
+    const commentId = persistedIds.collection.comment.id;
+    const comment = result.data.data.find(c => c.id === commentId);
     expect(comment).toBeDefined();
   });
 
   test('4. createCollectionCommentReply - should create a reply comment', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
     
-    if (!testThreadId) {
+    if (!persistedIds.collection.thread || !persistedIds.collection.thread.id) {
       console.log('Skipping test - no thread ID available for reply');
       return;
     }
 
-    // Skip if reply comment already exists
-    if (testReplyCommentId) {
-      console.log(`Using persisted reply comment ID: ${testReplyCommentId}`);
-      return;
-    }
-
+    const threadId = persistedIds.collection.thread.id;
     const replyData = {
       body: 'This is a reply to the collection comment',
-      threadId: testThreadId
+      threadId: threadId
     };
 
     try {
-      const result = await createCollectionComment(testUserId, testCollectionId, replyData);
+      const result = await createCollectionComment(testUserId, collectionId, replyData);
 
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('data');
       expect(result.data.data).toHaveProperty('id');
       expect(result.data.data.body).toBe(replyData.body);
 
-      testReplyCommentId = result.data.data.id;
-
       // Persist reply comment ID for future test runs
-      const ids = loadTestIds();
-      saveTestIds({
-        ...ids,
-        collection: {
-          ...ids.collection,
-          comment: {
-            ...ids.collection.comment,
-            replyId: testReplyCommentId
-          }
-        }
-      });
+      if (!persistedIds.collection.comment) persistedIds.collection.comment = {};
+      persistedIds.collection.comment.replyId = result.data.data.id;
+      saveTestIds(persistedIds);
 
-      console.log(`Created and persisted reply comment ID: ${testReplyCommentId}`);
+      console.log(`Created and persisted reply comment ID: ${persistedIds.collection.comment.replyId}`);
     } catch (error) {
       // Reply comments may not be supported by the API or require special permissions
       console.log('Reply comment creation not supported or failed:', error.message);
@@ -194,18 +135,20 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('5. updateCollectionComment - should update the comment', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
     
-    if (!testCommentId) {
+    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
       console.log('Skipping test - no comment available');
       return;
     }
 
+    const commentId = persistedIds.collection.comment.id;
     const updatedData = {
       body: 'This is an updated test comment on the collection'
     };
 
-    const result = await updateCollectionComment(testUserId, testCollectionId, testCommentId, updatedData);
+    const result = await updateCollectionComment(testUserId, collectionId, commentId, updatedData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -213,14 +156,16 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('6. deleteCollectionComment - should delete the reply comment', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
     
-    if (!testReplyCommentId) {
+    if (!persistedIds.collection.comment || !persistedIds.collection.comment.replyId) {
       console.log('Skipping test - no reply comment available');
       return;
     }
 
-    const result = await deleteCollectionComment(testUserId, testCollectionId, testReplyCommentId);
+    const replyCommentId = persistedIds.collection.comment.replyId;
+    const result = await deleteCollectionComment(testUserId, collectionId, replyCommentId);
 
     expect(result.status).toBe(204);
 
@@ -228,18 +173,23 @@ describe('collection comments functional tests (sequential flow)', () => {
     const clearedIds = clearTestIds(['collection.comment.replyId']);
     expect(clearedIds.collection.comment.replyId).toBeNull();
     
+    // Update local persistedIds
+    persistedIds = loadTestIds();
+    
     console.log('Reply comment deleted and replyCommentId cleared from test-ids.json');
   });
 
   test('7. deleteCollectionComment - should delete the main comment', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
     
-    if (!testCommentId) {
+    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
       console.log('Skipping test - no comment available');
       return;
     }
 
-    const result = await deleteCollectionComment(testUserId, testCollectionId, testCommentId);
+    const commentId = persistedIds.collection.comment.id;
+    const result = await deleteCollectionComment(testUserId, collectionId, commentId);
 
     expect(result.status).toBe(204);
 
@@ -247,6 +197,9 @@ describe('collection comments functional tests (sequential flow)', () => {
     const clearedIds = clearTestIds(['collection.comment.id', 'collection.thread.id']);
     expect(clearedIds.collection.comment.id).toBeNull();
     expect(clearedIds.collection.thread.id).toBeNull();
+    
+    // Update local persistedIds
+    persistedIds = loadTestIds();
     
     console.log('Main comment deleted and commentId/threadId cleared from test-ids.json');
   });
@@ -258,14 +211,16 @@ describe('collection comments functional tests (sequential flow)', () => {
     });
 
     test('should handle updating non-existent comment', async () => {
+      const collectionId = persistedIds.collection.id;
       const fakeId = '999999';
       const commentData = { body: 'Updated comment' };
-      await expect(updateCollectionComment(testUserId, testCollectionId, fakeId, commentData)).rejects.toThrow();
+      await expect(updateCollectionComment(testUserId, collectionId, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle deleting non-existent comment', async () => {
+      const collectionId = persistedIds.collection.id;
       const fakeId = '999999';
-      await expect(deleteCollectionComment(testUserId, testCollectionId, fakeId)).rejects.toThrow();
+      await expect(deleteCollectionComment(testUserId, collectionId, fakeId)).rejects.toThrow();
     });
   });
 });
