@@ -95,7 +95,7 @@ describe('collections functional tests (sequential flow)', () => {
       expect(foundCollection).toBeDefined();
       expect(foundCollection.name).toBe(persistedIds.collection.name);
     }
-  });
+  }, 10000);
 
   test('3. getCollections - should retrieve collections without workspace filter', async () => {
     const result = await getCollections();
@@ -103,7 +103,7 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collections');
     expect(Array.isArray(result.data.collections)).toBe(true);
-  });
+  }, 10000);
 
   test('4. getCollections - should filter collections by name', async () => {
     /*
@@ -111,7 +111,7 @@ describe('collections functional tests (sequential flow)', () => {
       console.log('Skipping name filter test - no collection name available');
       return;
     }
-      */
+    */
 
     const collectionName = persistedIds.collection.name;
     const result = await getCollections(testWorkspaceId, collectionName);
@@ -125,7 +125,7 @@ describe('collections functional tests (sequential flow)', () => {
         expect(col.name).toContain(collectionName);
       });
     }
-  });
+  }, 10000);
 
   test('5. getCollections - should support pagination with limit and offset', async () => {
     const result = await getCollections(testWorkspaceId, null, 5, 0);
@@ -134,7 +134,7 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.data).toHaveProperty('collections');
     expect(Array.isArray(result.data.collections)).toBe(true);
     expect(result.data.collections.length).toBeLessThanOrEqual(5);
-  });
+  }, 10000);
 
   test('6. getCollection - should retrieve collection by ID', async () => {
     const collectionId = persistedIds.collection.id;
@@ -228,7 +228,7 @@ describe('collections functional tests (sequential flow)', () => {
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('collections');
       expect(result.data.collections).toEqual([]);
-    });
+    }, 10000);
 
     test('should handle createCollection with invalid data', async () => {
       const workspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;

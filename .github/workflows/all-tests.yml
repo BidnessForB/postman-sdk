@@ -1,0 +1,63 @@
+name: Postman SDK - All Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    uses: ./.github/workflows/unit-tests.yml
+
+  functional-tests:
+    name: Functional Tests
+    uses: ./.github/workflows/functional-tests.yml
+    secrets: inherit
+
+  all-tests-status:
+    name: All Tests Status Check
+    runs-on: ubuntu-latest
+    needs: [unit-tests, functional-tests]
+    if: always()
+    
+    steps:
+      - name: Check test results
+        run: |
+          echo "Unit Tests: ${{ needs.unit-tests.result }}"
+          echo "Functional Tests: ${{ needs.functional-tests.result }}"
+          
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "❌ Unit tests failed or were cancelled"
+            exit 1
+          fi
+          
+          if [ "${{ needs.functional-tests.result }}" != "success" ]; then
+            echo "❌ Functional tests failed or were cancelled"
+            exit 1
+          fi
+          
+          echo "✅ All tests passed successfully!"
+      
+      - name: Summary
+        if: success()
+        run: |
+          echo "### ✅ All Tests Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Both unit tests and functional tests completed successfully." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Unit Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Functional Tests: Passed" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Summary (Failure)
+        if: failure()
+        run: |
+          echo "### ❌ Tests Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "One or more test suites failed:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Unit Tests: ${{ needs.unit-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Functional Tests: ${{ needs.functional-tests.result }}" >> $GITHUB_STEP_SUMMARY
+

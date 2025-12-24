@@ -1,19 +1,53 @@
 # GitHub Actions Workflows
 
-## Pull Request Tests (`pr-tests.yml`)
+This project uses **three workflows** for comprehensive testing:
 
-This workflow automatically runs tests when a pull request is opened against the `main` branch.
+## 1. All Tests (`all-tests.yml`) - **Recommended for Branch Protection**
 
-### Workflow Jobs
+Orchestrates both unit and functional tests, requiring both to succeed.
 
-#### 1. Unit Tests
-- Runs all unit tests using `npm run test:unit`
+### Features
+- Calls both unit-tests and functional-tests workflows as reusable workflows
+- Runs both test suites in parallel
+- Single status check that requires both to pass
+- Ideal for branch protection rules
+- Provides clear summary of overall test status
+
+### When It Runs
+- Pull requests to `main`
+- Manually via GitHub Actions UI
+
+**Use Case:** Set this as a required status check in branch protection rules to ensure both unit and functional tests pass before merging.
+
+## 2. Unit Tests (`unit-tests.yml`)
+
+Runs all unit tests with mocked dependencies - fast feedback without API calls.
+
+### Features
+- Can run standalone or be called by `all-tests.yml`
+- Triggers on pull requests and pushes to `main`
+- Runs all unit tests with coverage enabled
 - Fast execution (mocked, no API calls)
-- Runs independently for quick feedback
-- Uploads test results as artifacts (7 days retention)
+- Generates coverage reports and uploads to Codecov with `unit` flag
+- Path filtering (only runs when relevant files change)
+- Manual trigger support via workflow dispatch
+- Uploads test results and coverage as artifacts (7 days retention)
+- Displays coverage summary in PR
 
-#### 2. Functional Tests & Coverage
-- Runs after unit tests complete successfully
+### When It Runs
+- Pull requests to `main`
+- Pushes to `main`
+- Changes to: `src/**`, `package.json`, `package-lock.json`, `jest.config.js`
+- Manually via GitHub Actions UI
+- Called by `all-tests.yml` workflow
+
+## 3. Functional Tests & Coverage (`functional-tests.yml`)
+
+Runs comprehensive functional tests with real API calls and generates coverage reports.
+
+### Features
+- Can run standalone or be called by `all-tests.yml`
+- Triggers independently (parallel with unit tests)
 - Executes the complete functional test suite with coverage using `npm run test:coverage`
 - Makes real API calls to Postman API
 - Requires `POSTMAN_API_KEY` secret to be configured
@@ -21,8 +55,35 @@ This workflow automatically runs tests when a pull request is opened against the
 - Uploads coverage to Codecov for dynamic badge generation
 - Uploads test results, coverage, and `test-ids.json` as artifacts (30 days retention)
 - Displays coverage summary in PR
+- Path filtering (only runs when relevant files change)
+- Manual trigger support via workflow dispatch
 
-**Note:** Functional tests run only once with coverage enabled to avoid duplication and reduce API calls.
+### When It Runs
+- Pull requests to `main`
+- Pushes to `main`
+- Changes to: `src/**`, `package.json`, `package-lock.json`, `jest.config.js`
+- Manually via GitHub Actions UI
+- Called by `all-tests.yml` workflow
+
+## Workflow Execution Strategy
+
+### On Pull Requests
+- `all-tests.yml` runs, which internally calls:
+  - `unit-tests.yml` (runs in parallel)
+  - `functional-tests.yml` (runs in parallel)
+- All three workflows show individual status checks
+- `all-tests.yml` only succeeds if both unit and functional tests pass
+
+### On Push to Main
+- `unit-tests.yml` runs independently
+- `functional-tests.yml` runs independently
+- Both run in parallel for fast feedback
+
+**Benefits:**
+- ✅ Fast parallel execution
+- ✅ Clear individual test status visibility
+- ✅ Single combined status for branch protection
+- ✅ Flexible execution (standalone or combined)
 
 ### Required Secrets
 
@@ -55,22 +116,16 @@ To run the workflow, you need to configure the following GitHub secrets:
 4. Add it as `CODECOV_TOKEN` secret in GitHub (see above)
 5. The coverage badge will automatically update after the first workflow run
 
-#### How to Manually Trigger the Workflow
+#### How to Manually Trigger Workflows
 
 1. Go to your repository on GitHub
 2. Click **Actions** tab
-3. Select **Postman SDK Tests** workflow from the left sidebar
+3. Select either **Unit Tests** or **Functional Tests & Coverage** workflow from the left sidebar
 4. Click **Run workflow** button
 5. Select the branch (default: main)
 6. Click **Run workflow** to start the tests
 
-### Workflow Triggers
-
-The workflow runs when:
-- A pull request is opened against `main`
-- A pull request is synchronized (new commits pushed)
-- A pull request is reopened
-- Manually triggered via GitHub Actions UI (workflow dispatch)
+**Tip:** You can trigger both workflows independently for testing purposes.
 
 ### Test Results
 
@@ -82,26 +137,56 @@ Coverage reports are also automatically uploaded to Codecov for detailed analysi
 
 ### Status Badges
 
-Add these badges to your README.md to show the workflow and coverage status:
+Add these badges to your README.md to show workflow and coverage status:
 
-**Workflow Status Badge:**
+**Option 1: Combined Status (Recommended)**
 ```markdown
-![PR Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
+![All Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
 ```
 
-**Codecov Coverage Badge:**
+**Option 2: Separate Status Badges**
 ```markdown
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+![Unit Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
+![Functional Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
 ```
 
-Replace `YOUR_USERNAME` with your actual GitHub username or organization name.
+**Option 3: All Status Badges with Separate Coverage (Maximum Visibility)**
+```markdown
+![All Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
+![Unit Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
+![Functional Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![Unit Coverage](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN&flag=unit)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![Functional Coverage](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN&flag=functional)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+```
 
-**Benefits of Codecov Badge:**
+Replace `YOUR_USERNAME` with your actual GitHub username or organization name, and `YOUR_TOKEN` with your Codecov repository token.
+
+**Benefits of Combined Badge:**
+- Single status check for branch protection
+- Simpler README appearance
+- Clear pass/fail status for PRs
+
+**Benefits of Separate Badges:**
+- Clear visibility into which test suite passes/fails
+- Independent monitoring of unit vs functional tests
+- Faster identification of issues (unit vs integration)
+
+**Benefits of Separate Coverage Badges:**
+- Monitor unit test coverage independently
+- Track functional test coverage separately
+- Identify which test suite needs more coverage
+- Codecov flags (`unit` and `functional`) enable independent tracking
+
+**Benefits of Codecov Badges:**
 - Automatically updates after each workflow run
 - No merge conflicts (hosted externally)
 - Shows real-time coverage percentage
 - Clickable link to detailed coverage reports
 - Coverage history and trend graphs
+- Flag-specific badges show coverage for specific test types
 
 ### Local Development
 

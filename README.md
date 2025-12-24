@@ -1,8 +1,12 @@
 # Postman SDK
 
 ![Version](https://img.shields.io/badge/version-0.2.0-blue)
-![PR Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/pr-tests.yml/badge.svg)
+![All Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
+![Unit Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
+![Functional Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
+[![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
+[![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
@@ -234,29 +238,57 @@ This SDK is built incrementally, starting with a small subset of endpoints to es
 
 ### GitHub Actions
 
-The repository includes automated testing via GitHub Actions that runs on:
-- All pull requests to `main`
-- Manual trigger via GitHub Actions UI (workflow dispatch)
+The repository uses **three workflows** for comprehensive testing:
 
-**Workflow Jobs:**
-1. **Unit Tests** - Fast, mocked tests for quick feedback
-2. **Functional Tests & Coverage** - All-up functional test suite with real API calls and comprehensive coverage analysis
+#### 1. All Tests Workflow (`all-tests.yml`) - **Recommended for Branch Protection**
+- Orchestrates both unit and functional tests
+- Runs both test suites in parallel
+- Single status check that requires both to pass
+- Ideal for branch protection rules
+
+#### 2. Unit Tests Workflow (`unit-tests.yml`)
+- Fast, mocked tests for quick feedback
+- Generates unit test coverage with `unit` flag
+- No API key required
+- Runs standalone or called by `all-tests.yml`
+- Uploads coverage to Codecov
+
+#### 3. Functional Tests & Coverage Workflow (`functional-tests.yml`)
+- All-up functional test suite with real API calls
+- Generates functional test coverage with `functional` flag
+- Comprehensive coverage analysis
+- Uploads coverage to Codecov
+- Runs standalone or called by `all-tests.yml`
+
+**Execution Strategy:**
+- **On PRs**: `all-tests.yml` orchestrates both test suites in parallel
+- **On Push to main**: Unit and functional tests run independently
+- ✅ Parallel execution for faster feedback
+- ✅ Clear separation of concerns
+- ✅ Single combined status for branch protection
+- ✅ Independent monitoring of each test suite
+- ✅ Separate coverage tracking (unit vs functional)
 
 **Setup Required:**
-- Add `POSTMAN_API_KEY` secret in GitHub repository settings
+- Add `POSTMAN_API_KEY` secret for functional tests
 - Add `CODECOV_TOKEN` for automatic coverage badge updates (optional)
 - See [.github/workflows/README.md](.github/workflows/README.md) for detailed setup instructions
 
 **Coverage Tracking:**
-- Coverage reports are automatically uploaded to [Codecov](https://codecov.io)
-- The coverage badge updates automatically after each test run
+- Both workflows generate and upload coverage to [Codecov](https://codecov.io)
+- Unit tests tagged with `unit` flag for independent tracking
+- Functional tests tagged with `functional` flag for independent tracking
+- Overall coverage badge shows combined coverage
+- Flag-specific badges show unit and functional coverage separately
+- All badges update automatically after each workflow run
 - No manual README updates needed - eliminates merge conflicts
 
 **Local Testing:**
 Run the same tests locally before pushing:
 ```bash
-npm run test:unit           # Unit tests
-npm run test:all-up         # Functional tests
-npm run test:coverage       # Coverage report
+npm run test:unit              # Unit tests (no coverage)
+npm run test:unit-coverage     # Unit tests with coverage
+npm run test:all-up            # Functional tests
+npm run test:coverage          # Functional tests with coverage
 ```
 
