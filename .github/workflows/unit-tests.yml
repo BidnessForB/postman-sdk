@@ -8,7 +8,7 @@ on:
         required: false
 
 jobs:
-  unit-tests:
+  unit-tests-coverage:
     name: Unit Tests with Coverage
     runs-on: ubuntu-latest
     
