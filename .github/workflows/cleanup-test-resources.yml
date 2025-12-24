@@ -22,9 +22,7 @@ on:
       POSTMAN_API_KEY:
         required: true
   
-  # Optional: Schedule daily cleanup at 2 AM UTC
-  schedule:
-    - cron: '0 2 * * *'
+  
 
 jobs:
   cleanup-workspaces:
@@ -49,7 +47,7 @@ jobs:
         run: |
           PATTERN="${{ inputs.pattern || 'Updated Workspace Name*' }}"
           echo "Deleting workspaces matching pattern: $PATTERN"
-          node util/delete-test-workspaces.js "$PATTERN" --force
+          npm run util:delete-test-workspaces
         continue-on-error: true
       
       - name: Cleanup Summary
@@ -64,74 +62,11 @@ jobs:
           echo "This workflow deletes workspaces matching the specified pattern." >> $GITHUB_STEP_SUMMARY
           echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
 
-  cleanup-collections:
-    name: Delete Test Collections
-    runs-on: ubuntu-latest
-    needs: [cleanup-workspaces]
-    if: always()
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Run collection cleanup tests
-        env:
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
-        run: npx jest src/collections/__tests__/manual-cleanup.test.js
-        continue-on-error: true
-      
-      - name: Collection Cleanup Summary
-        if: always()
-        run: |
-          echo "### 🗑️ Collections Cleanup" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Test collection cleanup has been executed." >> $GITHUB_STEP_SUMMARY
-          echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
-
-  cleanup-specs:
-    name: Delete Test Specs
-    runs-on: ubuntu-latest
-    needs: [cleanup-workspaces]
-    if: always()
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Run specs cleanup tests
-        env:
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
-        run: npx jest src/specs/__tests__/manual-cleanup.test.js
-        continue-on-error: true
-      
-      - name: Specs Cleanup Summary
-        if: always()
-        run: |
-          echo "### 📄 Specs Cleanup" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Test spec cleanup has been executed." >> $GITHUB_STEP_SUMMARY
-          echo "Failures are non-blocking - check logs for details." >> $GITHUB_STEP_SUMMARY
 
   summary:
     name: Cleanup Summary
     runs-on: ubuntu-latest
-    needs: [cleanup-workspaces, cleanup-collections, cleanup-specs]
+    needs: [cleanup-workspaces]
     if: always()
     
     steps:
