@@ -10,6 +10,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      cleanUp:
+        description: 'Run cleanup after tests'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   unit-tests:
@@ -24,7 +30,7 @@ jobs:
   cleanup:
     name: Cleanup Test Resources
     needs: [functional-tests]
-    if: always()
+    if: always() && (github.event_name != 'workflow_dispatch' || inputs.cleanUp)
     uses: ./.github/workflows/cleanup-test-resources.yml
     secrets: inherit
 
@@ -61,6 +67,12 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Unit Tests: Passed" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Functional Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ inputs.cleanUp }}" == "false" ]; then
+            echo "- ⏭️ Cleanup: Skipped (manual trigger with cleanUp=false)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- 🧹 Cleanup: Executed" >> $GITHUB_STEP_SUMMARY
+          fi
       
       - name: Summary (Failure)
         if: failure()
@@ -71,4 +83,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Unit Tests: ${{ needs.unit-tests.result }}" >> $GITHUB_STEP_SUMMARY
           echo "- Functional Tests: ${{ needs.functional-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ inputs.cleanUp }}" == "false" ]; then
+            echo "- ⏭️ Cleanup: Skipped (manual trigger with cleanUp=false)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- 🧹 Cleanup: Executed" >> $GITHUB_STEP_SUMMARY
+          fi
 
