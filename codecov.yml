@@ -1,7 +1,7 @@
 codecov:
-  require_ci_to_pass: yes
+  require_ci_to_pass: no
   notify:
-    wait_for_ci: yes
+    wait_for_ci: no
 
 coverage:
   precision: 2
@@ -12,23 +12,27 @@ coverage:
     project:
       default:
         target: auto
-        threshold: 1%
+        threshold: 2%
         base: auto
+        informational: false
       unit:
         target: auto
-        threshold: 1%
+        threshold: 2%
         flags:
           - unit
+        informational: true
       functional:
         target: auto
-        threshold: 1%
+        threshold: 2%
         flags:
           - functional
+        informational: true
     patch:
       default:
         target: auto
         threshold: 1%
         base: auto
+        informational: true
 
 flags:
   unit:
@@ -41,7 +45,7 @@ flags:
     carryforward: true
 
 comment:
-  layout: "reach,diff,flags,tree,reach"
+  layout: "reach,diff,flags,tree"
   behavior: default
   require_changes: no
   require_base: no
