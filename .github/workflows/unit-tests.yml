@@ -1,28 +1,14 @@
 name: Postman SDK - Unit Tests
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'jest.config.js'
-      - '.github/workflows/unit-tests.yml'
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'jest.config.js'
   workflow_dispatch:
   workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: false
 
 jobs:
-  unit-tests:
+  unit-tests-coverage:
     name: Unit Tests with Coverage
     runs-on: ubuntu-latest
     

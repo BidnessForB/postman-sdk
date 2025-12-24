@@ -1,25 +1,13 @@
 name: Postman SDK - Functional Tests & Coverage
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'jest.config.js'
-      - '.github/workflows/functional-tests.yml'
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'jest.config.js'
   workflow_dispatch:
   workflow_call:
+    secrets:
+      POSTMAN_API_KEY:
+        required: true
+      CODECOV_TOKEN:
+        required: false
 
 jobs:
   functional-tests-coverage:

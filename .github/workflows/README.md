@@ -14,76 +14,74 @@ Orchestrates both unit and functional tests, requiring both to succeed.
 - Provides clear summary of overall test status
 
 ### When It Runs
-- Pull requests to `main`
+- Pull requests to `main` or `dev`
 - Manually via GitHub Actions UI
 
 **Use Case:** Set this as a required status check in branch protection rules to ensure both unit and functional tests pass before merging.
+
+**Note:** This is the **only** workflow that runs automatically on pull requests and pushes. The individual unit-tests and functional-tests workflows are called by this orchestrator.
 
 ## 2. Unit Tests (`unit-tests.yml`)
 
 Runs all unit tests with mocked dependencies - fast feedback without API calls.
 
 ### Features
-- Can run standalone or be called by `all-tests.yml`
-- Triggers on pull requests and pushes to `main`
+- Called by `all-tests.yml` as a reusable workflow
 - Runs all unit tests with coverage enabled
 - Fast execution (mocked, no API calls)
 - Generates coverage reports and uploads to Codecov with `unit` flag
-- Path filtering (only runs when relevant files change)
 - Manual trigger support via workflow dispatch
 - Uploads test results and coverage as artifacts (7 days retention)
 - Displays coverage summary in PR
 
 ### When It Runs
-- Pull requests to `main`
-- Pushes to `main`
-- Changes to: `src/**`, `package.json`, `package-lock.json`, `jest.config.js`
-- Manually via GitHub Actions UI
-- Called by `all-tests.yml` workflow
+- **Called by `all-tests.yml` workflow** (automatic on PRs and pushes)
+- Manually via GitHub Actions UI (workflow_dispatch)
 
 ## 3. Functional Tests & Coverage (`functional-tests.yml`)
 
 Runs comprehensive functional tests with real API calls and generates coverage reports.
 
 ### Features
-- Can run standalone or be called by `all-tests.yml`
-- Triggers independently (parallel with unit tests)
+- Called by `all-tests.yml` as a reusable workflow
 - Executes the complete functional test suite with coverage using `npm run test:coverage`
 - Makes real API calls to Postman API
 - Requires `POSTMAN_API_KEY` secret to be configured
 - Generates comprehensive coverage reports
-- Uploads coverage to Codecov for dynamic badge generation
+- Uploads coverage to Codecov for dynamic badge generation with `functional` flag
 - Uploads test results, coverage, and `test-ids.json` as artifacts (30 days retention)
 - Displays coverage summary in PR
-- Path filtering (only runs when relevant files change)
 - Manual trigger support via workflow dispatch
 
 ### When It Runs
-- Pull requests to `main`
-- Pushes to `main`
-- Changes to: `src/**`, `package.json`, `package-lock.json`, `jest.config.js`
-- Manually via GitHub Actions UI
-- Called by `all-tests.yml` workflow
+- **Called by `all-tests.yml` workflow** (automatic on PRs and pushes)
+- Manually via GitHub Actions UI (workflow_dispatch)
+- Requires `POSTMAN_API_KEY` and optionally `CODECOV_TOKEN` secrets when called
 
 ## Workflow Execution Strategy
 
-### On Pull Requests
-- `all-tests.yml` runs, which internally calls:
-  - `unit-tests.yml` (runs in parallel)
-  - `functional-tests.yml` (runs in parallel)
-- All three workflows show individual status checks
+### On Pull Requests (to `main` or `dev`)
+- **Only `all-tests.yml` runs automatically**, which internally calls:
+  - `unit-tests.yml` (runs in parallel via `workflow_call`)
+  - `functional-tests.yml` (runs in parallel via `workflow_call`)
+- All three workflows show individual status checks in the PR
 - `all-tests.yml` only succeeds if both unit and functional tests pass
 
-### On Push to Main
-- `unit-tests.yml` runs independently
-- `functional-tests.yml` runs independently
+### On Push/Merge (to `main` or `dev`)
+- **Only `all-tests.yml` runs automatically** (no separate runs)
+- It calls both unit and functional tests as reusable workflows
 - Both run in parallel for fast feedback
+
+### Manual Execution
+- Individual workflows can still be triggered manually via `workflow_dispatch`
+- Useful for debugging specific test suites
 
 **Benefits:**
 - ✅ Fast parallel execution
-- ✅ Clear individual test status visibility
+- ✅ Single orchestrator - no duplicate workflow runs
+- ✅ Clear individual test status visibility in PRs
 - ✅ Single combined status for branch protection
-- ✅ Flexible execution (standalone or combined)
+- ✅ Efficient resource usage (tests run only once per event)
 
 ### Required Secrets
 
