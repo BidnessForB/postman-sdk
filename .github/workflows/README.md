@@ -4,22 +4,30 @@ This project uses **three workflows** for comprehensive testing:
 
 ## 1. All Tests (`all-tests.yml`) - **Recommended for Branch Protection**
 
-Orchestrates both unit and functional tests, requiring both to succeed.
+Orchestrates both unit and functional tests, requiring both to succeed, with automatic cleanup.
 
 ### Features
 - Calls both unit-tests and functional-tests workflows as reusable workflows
 - Runs both test suites in parallel
 - Single status check that requires both to pass
+- Automatic cleanup of test resources (runs always, even on failure)
 - Ideal for branch protection rules
 - Provides clear summary of overall test status
 
+### Workflow Jobs
+1. **unit-tests** - Runs unit tests with coverage
+2. **functional-tests** - Runs functional tests with coverage
+3. **cleanup** - Deletes test workspace (runs always, independent of test results)
+4. **all-tests-status** - Reports combined test status
+
 ### When It Runs
 - Pull requests to `main` or `dev`
+- Pushes to `main`
 - Manually via GitHub Actions UI
 
 **Use Case:** Set this as a required status check in branch protection rules to ensure both unit and functional tests pass before merging.
 
-**Note:** This is the **only** workflow that runs automatically on pull requests and pushes. The individual unit-tests and functional-tests workflows are called by this orchestrator.
+**Note:** This is the **only** workflow that runs automatically on pull requests and pushes. The individual unit-tests and functional-tests workflows are called by this orchestrator. The cleanup job runs independently and does not affect the pipeline status.
 
 ## 2. Unit Tests (`unit-tests.yml`)
 

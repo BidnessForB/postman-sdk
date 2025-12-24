@@ -243,6 +243,7 @@ The repository uses **three workflows** for comprehensive testing:
 #### 1. All Tests Workflow (`all-tests.yml`) - **Recommended for Branch Protection**
 - Orchestrates both unit and functional tests
 - Runs both test suites in parallel
+- Automatic cleanup of test resources (always runs, even on test failure)
 - Single status check that requires both to pass
 - Ideal for branch protection rules
 
