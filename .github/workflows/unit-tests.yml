@@ -3,6 +3,9 @@ name: Postman SDK - Unit Tests
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: false
 
 jobs:
   unit-tests:
