@@ -1,0 +1,57 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Example API 3.1 JSON",
+    "version": "2.0.0",
+    "description": "An example OpenAPI 3.1 specification in JSON"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v2",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "List products",
+        "operationId": "listProducts",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "title", "price"]
+      }
+    }
+  }
+}
+

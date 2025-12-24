@@ -15,6 +15,7 @@ const {
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
+const { loadSpecFixture, getAllSpecFixtures } = require('./fixtures-loader');
 
 // Add custom JEST matcher for YAML validation
 expect.extend({
@@ -110,6 +111,86 @@ paths:
     }
     saveTestIds(persistedIds);
     console.log(`Created and persisted spec ID: ${testSpecId}`);
+  });
+
+  // Comprehensive fixture-based tests for all spec types and formats
+  describe('1a. createSpec with fixtures - comprehensive format tests', () => {
+    const createdSpecIds = [];
+
+    afterAll(async () => {
+      // Clean up all specs created in this test suite
+      console.log(`\nCleaning up ${createdSpecIds.length} test specs created from fixtures...`);
+      for (const specId of createdSpecIds) {
+        try {
+          await deleteSpec(specId);
+          console.log(`✓ Deleted spec: ${specId}`);
+        } catch (error) {
+          console.log(`✗ Failed to delete spec ${specId}:`, error.message);
+        }
+      }
+    });
+
+    // Test all spec types and formats
+    const allFixtures = getAllSpecFixtures();
+    
+    allFixtures.forEach(({ specType, format, config }) => {
+      test(`should create ${specType} spec in ${format.toUpperCase()} format`, async () => {
+        const fixture = loadSpecFixture(specType, format);
+        const specName = `${config.name} ${Date.now()}`;
+        
+        const files = [
+          {
+            path: fixture.path,
+            content: fixture.content
+          }
+        ];
+
+        const result = await createSpec(testWorkspaceId, specName, specType, files);
+
+        expect(result.status).toBe(201);
+        expect(result.data).toHaveProperty('id');
+        expect(result.data).toHaveProperty('name');
+        expect(result.data.name).toBe(specName);
+        expect(result.data.type).toBe(specType);
+
+        // Track for cleanup
+        createdSpecIds.push(result.data.id);
+
+        console.log(`✓ Created ${specType} ${format} spec: ${result.data.id}`);
+
+        // Verify we can retrieve it
+        const getResult = await getSpec(result.data.id);
+        expect(getResult.status).toBe(200);
+        expect(getResult.data.id).toBe(result.data.id);
+        expect(getResult.data.type).toBe(specType);
+
+        // Verify definition can be retrieved
+        const defResult = await getSpecDefinition(result.data.id);
+        expect(defResult.status).toBe(200);
+        //expect(defResult.data).toHaveProperty('definition');
+
+        // Parse and validate definition based on spec type
+        const definition = parseContent(defResult.data);
+        
+        if (specType.startsWith('OPENAPI:2')) {
+          expect(definition).toHaveProperty('swagger');
+          expect(definition.swagger).toBe('2.0');
+        } else if (specType.startsWith('OPENAPI:3.0')) {
+          expect(definition).toHaveProperty('openapi');
+          expect(definition.openapi).toBe('3.0.0');
+        } else if (specType.startsWith('OPENAPI:3.1')) {
+          expect(definition).toHaveProperty('openapi');
+          expect(definition.openapi).toBe('3.1.0');
+        } else if (specType.startsWith('ASYNCAPI')) {
+          expect(definition).toHaveProperty('asyncapi');
+          expect(definition.asyncapi).toBe('2.0.0');
+        }
+
+        expect(definition).toHaveProperty('info');
+        expect(definition.info).toHaveProperty('title');
+        expect(definition.info).toHaveProperty('version');
+      });
+    });
   });
 
   test('2. getSpec - should retrieve the created spec by ID', async () => {
