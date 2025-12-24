@@ -182,19 +182,44 @@ The full suite typically takes 30-60 seconds as it creates fresh resources on ev
 
 ## Cleanup
 
-### Important: Old Resources Accumulate
+### Important: Old Resources Accumulate Locally
 
-Because the all-up test resets `test-ids.json` on each run, it loses track of previously created resources. This means:
+When running tests **locally**, the all-up test resets `test-ids.json` on each run, which means it loses track of previously created resources:
 
-- **Multiple Runs Create Multiple Resources**: Each run creates a new workspace, collection, folder, etc.
+- **Multiple Local Runs Create Multiple Resources**: Each local run creates a new workspace, collection, folder, etc.
 - **Old Resources Remain**: Previous test resources stay in your Postman account
-- **Manual Cleanup Required**: You'll need to manually delete old test resources from Postman UI
+- **Cleanup Required**: You'll need to clean up old test resources
 
 **Best Practice**: Periodically clean up old test workspaces from Postman to avoid clutter.
 
-Resources created by the all-up test are **NOT automatically deleted**. To clean up:
+### GitHub Actions Automatic Cleanup
 
-### Option 1: Manual Cleanup Tests
+When running tests via the **`all-tests.yml` GitHub Actions workflow**:
+
+- ✅ **Automatic cleanup enabled by default** - Cleanup runs after functional tests complete
+- ✅ **Intelligent cleanup** - Uses `test-ids.json` artifact to delete the specific workspace by ID
+- ✅ **Runs even on test failure** - Ensures cleanup happens regardless of test results
+- ✅ **Optional** - Can be disabled by setting `cleanUp: false` when manually triggering the workflow
+
+This automatic cleanup prevents resource accumulation in CI/CD environments.
+
+### Local Cleanup Options
+
+For **local test runs**, resources are **NOT automatically deleted**. To clean up:
+
+### Option 1: Utility Script (Recommended)
+
+Use the utility scripts to delete workspaces by ID or pattern:
+
+```bash
+# Delete by workspace ID (from test-ids.json)
+node util/delete-test-workspaces.js --workspaceId=abc123-def456 --force
+
+# Delete by pattern (e.g., all test workspaces)
+node util/delete-test-workspaces.js "*SDK Test*" --force
+```
+
+### Option 2: Manual Cleanup Tests
 
 Each module has a manual cleanup test file:
 ```bash
@@ -203,7 +228,7 @@ npx jest src/collections/__tests__/manual-cleanup.test.js
 npx jest src/specs/__tests__/manual-cleanup.test.js
 ```
 
-### Option 2: Start Fresh
+### Option 3: Start Fresh
 
 Delete the test IDs file to force creation of new resources:
 ```bash
@@ -212,7 +237,7 @@ rm src/__tests__/test-ids.json
 
 **Warning**: This affects all test modules.
 
-### Option 3: Manual Cleanup via Postman UI
+### Option 4: Manual Cleanup via Postman UI
 
 1. Delete resources in Postman UI
 2. Edit `src/__tests__/test-ids.json` to clear the IDs

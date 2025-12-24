@@ -56,27 +56,46 @@ The file is automatically created at `src/__tests__/test-ids.json` (shared acros
 
 **Note**: This file is ignored by git (via `.gitignore`) and should not be committed. It stores IDs for all test modules (workspaces, specs, collections, etc.).
 
-### Manual Cleanup
+### Cleanup Options
 
-Resources are **NEVER deleted automatically**. To clean up:
+Resources are **NOT deleted automatically during test runs**. However, when running tests via GitHub Actions, the `all-tests.yml` workflow includes an automatic cleanup step. For local testing, use these manual cleanup options:
 
-**Option 1: Use the manual cleanup test file**
+**Option 1: GitHub Actions (Automatic)**
+
+When running tests via the `all-tests.yml` workflow:
+- The workflow automatically downloads the `test-ids.json` artifact after functional tests
+- Extracts the workspace ID from the artifact
+- Calls the `cleanup-test-resources.yml` workflow which:
+  - Deletes the specific workspace by ID (precise cleanup)
+  - Falls back to pattern-based cleanup if artifact unavailable
+  - Runs even if tests fail
+- Can be disabled by setting `cleanUp: false` when manually triggering the workflow
+
+**Option 2: Use the manual cleanup test file**
 ```bash
-# Edit manual-cleanup.test.js and remove .skip from the cleanup test, then run:
 npx jest src/workspaces/__tests__/manual-cleanup.test.js
 ```
 
-This is the **recommended approach** as it:
+This is the **recommended approach for local cleanup** as it:
 - Deletes the workspace via the API
 - Clears only workspace-related properties from test-ids.json (preserving other test data)
 - Verifies the workspace was actually deleted
 
-**Option 2: Delete the workspace manually via Postman UI**
+**Option 3: Use the utility script**
+```bash
+# Delete by workspace ID
+node util/delete-test-workspaces.js --workspaceId=abc123-def456 --force
+
+# Or delete by pattern
+node util/delete-test-workspaces.js "*SDK Test*" --force
+```
+
+**Option 4: Delete via Postman UI**
 - Go to Postman → Workspaces
 - Find and delete the test workspace
 - Manually edit `src/__tests__/test-ids.json` to set `workspace.id` and `workspace.name` to `null`
 
-**Option 3: Use the SDK directly**
+**Option 5: Use the SDK directly**
 ```javascript
 const { deleteWorkspace } = require('./src/workspaces');
 const { clearTestIds } = require('../__tests__/test-helpers');
@@ -85,7 +104,7 @@ await deleteWorkspace('1f0df51a-8658-4ee8-a2a1-d2567dfa09a9');
 clearTestIds(['workspace.id', 'workspace.name']);
 ```
 
-**Option 4: Start completely fresh**
+**Option 6: Start completely fresh**
 ```bash
 # Delete the shared file to force creation of ALL new resources next run
 # WARNING: This affects all test modules (workspaces, specs, collections, etc.)

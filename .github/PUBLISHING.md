@@ -1,6 +1,6 @@
 # Publishing Guide
 
-**Current Version**: 0.2.0 (Alpha)
+**Current Version**: 0.2.2 (Alpha)
 
 This guide explains how to publish new versions of the Postman SDK to GitHub Packages.
 
@@ -126,8 +126,9 @@ The published package includes:
 ### ✅ Included
 - All source code in `src/` (excluding tests)
 - Workspace utility scripts:
-  - `util/get-test-workspaces.js`
-  - `util/delete-test-workspaces.js`
+  - `util/get-test-workspaces.js` - Find workspaces by pattern
+  - `util/delete-test-workspaces.js` - Delete by pattern or ID (`--workspaceId`)
+- Example scripts in `examples/`
 - `README.md`
 - `LICENSE`
 - `package.json`

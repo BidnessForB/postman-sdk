@@ -8,7 +8,7 @@
 [![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
+![Endpoints](https://img.shields.io/badge/endpoints-36%2F191%20(18.85%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -16,7 +16,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (35/191, 18.3%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (36/191, 18.85%)
 
 ## Installation
    
@@ -97,15 +97,18 @@ example().catch(console.error);
 The SDK includes utility scripts for managing test workspaces:
 
 **Find workspaces by pattern:**
-```javascript
-const getWorkspaces = require('@bidnessforb/postman-sdk/util/get-test-workspaces');
-// Run: node node_modules/@bidnessforb/postman-sdk/util/get-test-workspaces.js "*Test*"
+```bash
+node node_modules/@bidnessforb/postman-sdk/util/get-test-workspaces.js "*Test*"
 ```
 
 **Delete workspaces by pattern:**
-```javascript
-const deleteWorkspaces = require('@bidnessforb/postman-sdk/util/delete-test-workspaces');
-// Run: node node_modules/@bidnessforb/postman-sdk/util/delete-test-workspaces.js "*Test*"
+```bash
+node node_modules/@bidnessforb/postman-sdk/util/delete-test-workspaces.js "*Test*" --force
+```
+
+**Delete workspace by ID:**
+```bash
+node node_modules/@bidnessforb/postman-sdk/util/delete-test-workspaces.js --workspaceId=abc123-def456 --force
 ```
 
 These utilities are helpful for cleaning up test resources created during development.
@@ -243,7 +246,11 @@ The repository uses **three workflows** for comprehensive testing:
 #### 1. All Tests Workflow (`all-tests.yml`) - **Recommended for Branch Protection**
 - Orchestrates both unit and functional tests
 - Runs both test suites in parallel
-- Automatic cleanup of test resources (always runs, even on test failure)
+- Automatic cleanup of test resources using test-ids.json artifact
+  - Cleanup runs by default (can be disabled with `cleanUp: false` on manual triggers)
+  - Uses workspace ID from functional tests for precise cleanup
+  - Falls back to pattern-based cleanup if artifact unavailable
+  - Always runs, even on test failure
 - Single status check that requires both to pass
 - Ideal for branch protection rules
 

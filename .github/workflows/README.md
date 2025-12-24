@@ -1,6 +1,6 @@
 # GitHub Actions Workflows
 
-This project uses **three workflows** for comprehensive testing:
+This project uses **four workflows** for comprehensive testing and cleanup:
 
 ## 1. All Tests (`all-tests.yml`) - **Recommended for Branch Protection**
 
@@ -16,9 +16,14 @@ Orchestrates both unit and functional tests, requiring both to succeed, with aut
 
 ### Workflow Jobs
 1. **unit-tests** - Runs unit tests with coverage
-2. **functional-tests** - Runs functional tests with coverage
-3. **cleanup** - Deletes test workspace (runs always, independent of test results)
+2. **functional-tests** - Runs functional tests with coverage (uploads test-ids.json artifact)
+3. **cleanup** - Calls the cleanup-test-resources workflow (runs always, independent of test results)
 4. **all-tests-status** - Reports combined test status
+
+### Manual Trigger Options
+- **cleanUp** (boolean, default: `true`) - Whether to run cleanup after tests
+  - Set to `false` to preserve test resources for debugging
+  - Only applies to manual workflow triggers (always runs on PR/push)
 
 ### When It Runs
 - Pull requests to `main` or `dev`
@@ -29,7 +34,45 @@ Orchestrates both unit and functional tests, requiring both to succeed, with aut
 
 **Note:** This is the **only** workflow that runs automatically on pull requests and pushes. The individual unit-tests and functional-tests workflows are called by this orchestrator. The cleanup job runs independently and does not affect the pipeline status.
 
-## 2. Unit Tests (`unit-tests.yml`)
+## 2. Cleanup Test Resources (`cleanup-test-resources.yml`)
+
+Standalone workflow for cleaning up test resources created during test runs.
+
+### Features
+- Called by `all-tests.yml` after functional tests complete
+- Can be run manually for on-demand cleanup
+- Automatically downloads `test-ids.json` artifact from functional tests
+- Intelligent cleanup strategy:
+  - **ID-based cleanup** (preferred): Deletes specific workspace by ID from artifact
+  - **Pattern-based cleanup** (fallback): Deletes workspaces matching pattern
+- Runs even if tests fail (continue-on-error: true)
+- Does not affect pipeline status
+
+### Cleanup Strategy
+1. Attempts to download `test-ids.json` artifact from most recent functional test run
+2. Extracts workspace ID from artifact
+3. If workspace ID found:
+   - Deletes workspace by specific ID using `--workspaceId` flag
+   - Surgical precision, no accidental deletions
+4. If artifact/ID not available:
+   - Falls back to pattern-based cleanup (`Updated Workspace Name*`)
+   - Cleans up any matching test workspaces
+
+### When It Runs
+- **Automatically** - Called by `all-tests.yml` after functional tests (default)
+- **Manually** - Via GitHub Actions UI with optional custom pattern
+- **Scheduled** - Never (not configured by default)
+
+### Manual Trigger Options
+- **pattern** (string, default: `'Updated Workspace Name*'`) - Workspace name pattern to delete
+
+### Workflow Jobs
+1. **cleanup-workspaces** - Downloads artifact, extracts ID, deletes workspace
+2. **summary** - Provides cleanup status summary
+
+**Use Case:** Run manually to clean up orphaned test resources or when debugging test failures locally.
+
+## 3. Unit Tests (`unit-tests.yml`)
 
 Runs all unit tests with mocked dependencies - fast feedback without API calls.
 
@@ -46,7 +89,7 @@ Runs all unit tests with mocked dependencies - fast feedback without API calls.
 - **Called by `all-tests.yml` workflow** (automatic on PRs and pushes)
 - Manually via GitHub Actions UI (workflow_dispatch)
 
-## 3. Functional Tests & Coverage (`functional-tests.yml`)
+## 4. Functional Tests & Coverage (`functional-tests.yml`)
 
 Runs comprehensive functional tests with real API calls and generates coverage reports.
 

@@ -1,6 +1,6 @@
 # GitHub Package Setup - Complete ✅
 
-**Current Version**: 0.2.0 (Alpha)
+**Current Version**: 0.2.2 (Alpha)
 
 The Postman SDK is now configured for distribution via GitHub Packages!
 
@@ -24,6 +24,10 @@ Created to exclude:
 - Configuration files
 - Documentation except README
 - API spec files
+
+**Note:** Workspace utilities support both pattern-based and ID-based deletion:
+- `util/get-test-workspaces.js` - Find workspaces by pattern
+- `util/delete-test-workspaces.js` - Delete by pattern or `--workspaceId`
 
 ### 3. **LICENSE** ✅
 Created ISC license file as specified in package.json
@@ -65,7 +69,7 @@ Comprehensive publishing guide covering:
 
 **Utilities:**
 - `util/get-test-workspaces.js` - Find workspaces by pattern
-- `util/delete-test-workspaces.js` - Delete workspaces by pattern
+- `util/delete-test-workspaces.js` - Delete workspaces by pattern or ID (`--workspaceId`)
 
 **Examples:**
 - `examples/create-populate-workspace.js` - Complete workflow example

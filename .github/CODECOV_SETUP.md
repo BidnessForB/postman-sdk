@@ -47,16 +47,21 @@ This guide will help you set up Codecov for automatic coverage tracking and badg
 
 ## What Was Configured
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
 - Added `codecov/codecov-action@v4` to upload coverage reports
 - Configured to upload `lcov.info` coverage file
-- Set to flag reports as "functional" tests
+- Unit tests flagged as "unit", functional tests flagged as "functional"
+- Both workflows run in parallel via `all-tests.yml`
+- Separate coverage tracking for each test type
 
 ### Codecov Configuration (`codecov.yml`)
 - Precision: 2 decimal places
 - Range: 70-100% for color coding
 - Auto-comments on pull requests with coverage changes
 - Ignores test files, node_modules, and utility scripts
+- Separate flags for unit and functional test coverage
+- Combined `codecov/project` check (2% threshold, blocking)
+- Individual flag checks (informational only, non-blocking)
 
 ### README Badge
 The static badges were replaced with:
