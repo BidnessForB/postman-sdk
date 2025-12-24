@@ -106,10 +106,12 @@ describe('collections functional tests (sequential flow)', () => {
   });
 
   test('4. getCollections - should filter collections by name', async () => {
+    /*
     if (!persistedIds.collection || !persistedIds.collection.name) {
       console.log('Skipping name filter test - no collection name available');
       return;
     }
+      */
 
     const collectionName = persistedIds.collection.name;
     const result = await getCollections(testWorkspaceId, collectionName);
