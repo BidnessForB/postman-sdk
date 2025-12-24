@@ -1,4 +1,5 @@
 name: Postman SDK - All Tests
+# run 'em all'
 
 on:
   pull_request:
