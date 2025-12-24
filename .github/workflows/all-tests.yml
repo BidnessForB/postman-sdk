@@ -1,5 +1,5 @@
 name: Postman SDK - All Tests
-# run 'em all now
+# run 'em all now dangit
 
 on:
   pull_request:
