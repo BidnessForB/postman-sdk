@@ -1,6 +1,10 @@
+# Fixtures, data, packages,  etc
 postmanAPIspec.yaml
 PostmanAPI.postman_collection.json
 **/test-ids.json
+*.tgz
+
+
 # Dependencies
 node_modules/
 npm-debug.log*
