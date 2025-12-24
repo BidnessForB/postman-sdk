@@ -1,6 +1,6 @@
 # Postman SDK
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![Version](https://img.shields.io/badge/version-0.2.2-blue)
 ![All Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
 ![Unit Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
 ![Functional Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
@@ -278,10 +278,15 @@ The repository uses **three workflows** for comprehensive testing:
 - Both workflows generate and upload coverage to [Codecov](https://codecov.io)
 - Unit tests tagged with `unit` flag for independent tracking
 - Functional tests tagged with `functional` flag for independent tracking
-- Overall coverage badge shows combined coverage
+- Overall coverage badge shows combined coverage from both test suites
 - Flag-specific badges show unit and functional coverage separately
 - All badges update automatically after each workflow run
 - No manual README updates needed - eliminates merge conflicts
+- **Codecov Status Checks:**
+  - `codecov/project` - Combined coverage check (blocking, 2% threshold)
+  - `codecov/project/unit` - Unit coverage check (informational only)
+  - `codecov/project/functional` - Functional coverage check (informational only)
+  - `codecov/patch` - Patch coverage check (informational only)
 
 **Local Testing:**
 Run the same tests locally before pushing:
