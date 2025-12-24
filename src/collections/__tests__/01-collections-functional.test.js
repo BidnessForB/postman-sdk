@@ -12,8 +12,6 @@ const DEFAULT_WORKSPACE_ID = '5fbcd502-1112-435f-9dac-4c943d3d0b37';
 
 describe('collections functional tests (sequential flow)', () => {
   let testWorkspaceId;
-  let testCollectionId;
-  let testCollectionName;
   let persistedIds = {};
 
   beforeAll(async () => {
@@ -23,8 +21,6 @@ describe('collections functional tests (sequential flow)', () => {
 
     persistedIds = loadTestIds();
     testWorkspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
-    testCollectionId = (persistedIds.collection && persistedIds.collection.id) || null;
-    testCollectionName = (persistedIds.collection && persistedIds.collection.name) || null;
 
     if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log('Using persisted workspace ID:', testWorkspaceId);
@@ -32,30 +28,26 @@ describe('collections functional tests (sequential flow)', () => {
       console.log('Using default workspace ID:', testWorkspaceId);
     }
 
-    if (testCollectionId) {
-      console.log('Found persisted collection ID:', testCollectionId);
+    if (persistedIds.collection && persistedIds.collection.id) {
+      console.log('Found persisted collection ID:', persistedIds.collection.id);
     }
   });
 
   afterAll(async () => {
     // NO CLEANUP - Collection persists indefinitely for reuse across test runs
-    if (testCollectionId) {
-      console.log(`Collection ${testCollectionId} will persist for future test runs`);
+    if (persistedIds.collection && persistedIds.collection.id) {
+      console.log(`Collection ${persistedIds.collection.id} will persist for future test runs`);
       console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
     }
   });
 
   test('1. createCollection - should create a collection in workspace', async () => {
-    // Skip creation if we have a persisted collection ID
-    if (testCollectionId) {
-      console.log('Reusing persisted collection ID, skipping creation');
-      return;
-    }
+    
 
-    testCollectionName = `SDK Test Collection ${Date.now()}`;
+    const collectionName = `SDK Test Collection ${Date.now()}`;
     const collectionData = {
       info: {
-        name: testCollectionName,
+        name: collectionName,
         description: 'Test collection created by SDK functional tests',
         schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
       },
@@ -77,20 +69,16 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.data).toHaveProperty('collection');
     expect(result.data.collection).toHaveProperty('id');
     expect(result.data.collection).toHaveProperty('name');
-    expect(result.data.collection.name).toBe(testCollectionName);
+    expect(result.data.collection.name).toBe(collectionName);
 
-    testCollectionId = result.data.collection.id;
     persistedIds.collection = {
       ...persistedIds.collection,
-      id: testCollectionId,
-      name: testCollectionName
+      id: result.data.collection.id,
+      name: collectionName,
+      createdAt: new Date().toISOString()
     };
-    if (!persistedIds.spec) persistedIds.spec = {};
-    if (!persistedIds.spec.createdAt) {
-      persistedIds.spec.createdAt = new Date().toISOString();
-    }
     saveTestIds(persistedIds);
-    console.log(`Created and persisted collection ID: ${testCollectionId}`);
+    console.log(`Created and persisted collection ID: ${persistedIds.collection.id}`);
   }, 10000);
 
   test('2. getCollections - should retrieve collections from workspace', async () => {
@@ -101,12 +89,13 @@ describe('collections functional tests (sequential flow)', () => {
     expect(Array.isArray(result.data.collections)).toBe(true);
     
     // If we have a test collection, verify it's in the list
-    if (testCollectionId) {
-      const foundCollection = result.data.collections.find(col => col.id === testCollectionId);
+    if (persistedIds.collection && persistedIds.collection.id) {
+      const collectionId = persistedIds.collection.id;
+      const foundCollection = result.data.collections.find(col => col.id === collectionId);
       expect(foundCollection).toBeDefined();
-      expect(foundCollection.name).toBe(testCollectionName);
+      expect(foundCollection.name).toBe(persistedIds.collection.name);
     }
-  });
+  }, 10000);
 
   test('3. getCollections - should retrieve collections without workspace filter', async () => {
     const result = await getCollections();
@@ -114,15 +103,18 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collections');
     expect(Array.isArray(result.data.collections)).toBe(true);
-  });
+  }, 10000);
 
   test('4. getCollections - should filter collections by name', async () => {
-    if (!testCollectionName) {
+    /*
+    if (!persistedIds.collection || !persistedIds.collection.name) {
       console.log('Skipping name filter test - no collection name available');
       return;
     }
+    */
 
-    const result = await getCollections(testWorkspaceId, testCollectionName);
+    const collectionName = persistedIds.collection.name;
+    const result = await getCollections(testWorkspaceId, collectionName);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collections');
@@ -130,10 +122,10 @@ describe('collections functional tests (sequential flow)', () => {
     
     if (result.data.collections.length > 0) {
       result.data.collections.forEach(col => {
-        expect(col.name).toContain(testCollectionName);
+        expect(col.name).toContain(collectionName);
       });
     }
-  });
+  }, 10000);
 
   test('5. getCollections - should support pagination with limit and offset', async () => {
     const result = await getCollections(testWorkspaceId, null, 5, 0);
@@ -142,38 +134,39 @@ describe('collections functional tests (sequential flow)', () => {
     expect(result.data).toHaveProperty('collections');
     expect(Array.isArray(result.data.collections)).toBe(true);
     expect(result.data.collections.length).toBeLessThanOrEqual(5);
-  });
+  }, 10000);
 
   test('6. getCollection - should retrieve collection by ID', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
-    const result = await getCollection(testCollectionId);
+    const result = await getCollection(collectionId);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collection');
     expect(result.data.collection).toHaveProperty('info');
-    expect(result.data.collection.info._postman_id).toBe(testCollectionId);
-    expect(result.data.collection.info.name).toBe(testCollectionName);
+    expect(result.data.collection.info._postman_id).toBe(collectionId);
+    expect(result.data.collection.info.name).toBe(persistedIds.collection.name);
   });
 
   test('7. modifyCollection - should update collection name', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
-    const updatedName = `${testCollectionName} - Updated`;
+    const updatedName = `${persistedIds.collection.name} - Updated`;
     const partialData = {
       info: {
         name: updatedName
       }
     };
 
-    const result = await modifyCollection(testCollectionId, partialData);
+    const result = await modifyCollection(collectionId, partialData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collection');
     // PATCH response returns minimal data, just verify success
     
-    // Update our local reference
-    testCollectionName = updatedName;
+    // Update persisted name
     persistedIds.collection = {
       ...persistedIds.collection,
       name: updatedName
@@ -182,19 +175,21 @@ describe('collections functional tests (sequential flow)', () => {
   });
 
   test('8. getCollection - should verify name update', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
-    const result = await getCollection(testCollectionId);
+    const result = await getCollection(collectionId);
 
     expect(result.status).toBe(200);
-    expect(result.data.collection.info.name).toBe(testCollectionName);
+    expect(result.data.collection.info.name).toBe(persistedIds.collection.name);
   });
 
   test('9. updateCollection - should replace collection data', async () => {
-    expect(testCollectionId).toBeDefined();
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
 
     // First get the current collection to preserve its structure
-    const currentResult = await getCollection(testCollectionId);
+    const currentResult = await getCollection(collectionId);
     const currentCollection = currentResult.data.collection;
 
     // Update the collection with new data
@@ -216,7 +211,7 @@ describe('collections functional tests (sequential flow)', () => {
       ]
     };
 
-    const result = await updateCollection(testCollectionId, updatedCollection);
+    const result = await updateCollection(collectionId, updatedCollection);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('collection');
@@ -233,14 +228,15 @@ describe('collections functional tests (sequential flow)', () => {
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('collections');
       expect(result.data.collections).toEqual([]);
-    });
+    }, 10000);
 
     test('should handle createCollection with invalid data', async () => {
+      const workspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
       const invalidData = {
         // Missing required 'info' property
       };
 
-      await expect(createCollection(invalidData, testWorkspaceId)).rejects.toThrow();
+      await expect(createCollection(invalidData, workspaceId)).rejects.toThrow();
     });
 
     test('should handle getting non-existent collection', async () => {

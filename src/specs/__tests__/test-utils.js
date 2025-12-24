@@ -59,16 +59,23 @@ function parseYaml(yamlString) {
  * @throws {Error} If content is neither valid JSON nor YAML
  */
 function parseContent(content) {
-  try {
-    return JSON.parse(content);
-  } catch (jsonError) {
+  if(typeof content === 'object') {
+    return content;
+  }
+  if(typeof content === 'string') {
     try {
-      return parseYaml(content);
-    } catch (yamlError) {
-      throw new Error(`Content is neither valid JSON nor YAML. JSON error: ${jsonError.message}, YAML error: ${yamlError.message}`);
+      return JSON.parse(content);
+    } catch (jsonError) {
+      try {
+        return parseYaml(content);
+      } catch (yamlError) {
+        throw new Error(`Content is neither valid JSON nor YAML. JSON error: ${jsonError.message}, YAML error: ${yamlError.message}`);
+      }
     }
   }
+  throw new Error(`Content is not a string or object: ${typeof content}`);
 }
+
 
 module.exports = {
   isValidYaml,

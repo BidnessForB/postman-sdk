@@ -82,7 +82,7 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
    - get
    - modify
    - delete
-13. all functional tests should first attempt to use persisted values for properties like workspaceId.  Only if no value is found should the default workspace be used.  
+13. all functional tests should use persisted values for properties like workspaceId.  
 14. All API calls should throw an error on a non-success response from the API, and include the API response in the error.
 15. Content for specs could be either JSON or YAML.  Ensure tests on these objects seamlessly handle either JSON or YAML.  
  - Example: Asserting a property exists in content: 

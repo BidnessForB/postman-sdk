@@ -1,0 +1,42 @@
+{
+  "asyncapi": "2.0.0",
+  "info": {
+    "title": "Example AsyncAPI JSON",
+    "version": "1.0.0",
+    "description": "An example AsyncAPI 2.0 specification in JSON"
+  },
+  "servers": {
+    "production": {
+      "url": "wss://api.example.com",
+      "protocol": "wss"
+    }
+  },
+  "channels": {
+    "user/signedup": {
+      "publish": {
+        "message": {
+          "$ref": "#/components/messages/UserSignedUp"
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "UserSignedUp": {
+        "payload": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "integer"
+            },
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": ["userId", "email"]
+        }
+      }
+    }
+  }
+}
+

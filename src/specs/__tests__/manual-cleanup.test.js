@@ -29,11 +29,11 @@ describe('specs manual cleanup', () => {
     testSpecId = persistedIds.spec && persistedIds.spec.id;
   });
 
-  test.skip('deleteSpec - manually delete test spec', async () => {
+  test('deleteSpec - manually delete test spec', async () => {
     // This test is skipped by default to preserve the spec
     // Remove .skip to manually delete the spec
     
-    if (!testSpecId) {
+    if (!(testSpecId && persistedIds.spec && persistedIds.spec.id)) {
       console.log('No specId found in test-ids.json');
       return;
     }
