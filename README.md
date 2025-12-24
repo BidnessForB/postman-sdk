@@ -5,6 +5,8 @@
 ![Unit Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
 ![Functional Tests](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
+[![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
+[![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-35%2F191%20(18.3%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
@@ -246,13 +248,16 @@ The repository uses **three workflows** for comprehensive testing:
 
 #### 2. Unit Tests Workflow (`unit-tests.yml`)
 - Fast, mocked tests for quick feedback
+- Generates unit test coverage with `unit` flag
 - No API key required
 - Runs standalone or called by `all-tests.yml`
+- Uploads coverage to Codecov
 
 #### 3. Functional Tests & Coverage Workflow (`functional-tests.yml`)
 - All-up functional test suite with real API calls
+- Generates functional test coverage with `functional` flag
 - Comprehensive coverage analysis
-- Uploads results to Codecov
+- Uploads coverage to Codecov
 - Runs standalone or called by `all-tests.yml`
 
 **Execution Strategy:**
@@ -262,6 +267,7 @@ The repository uses **three workflows** for comprehensive testing:
 - ✅ Clear separation of concerns
 - ✅ Single combined status for branch protection
 - ✅ Independent monitoring of each test suite
+- ✅ Separate coverage tracking (unit vs functional)
 
 **Setup Required:**
 - Add `POSTMAN_API_KEY` secret for functional tests
@@ -269,8 +275,12 @@ The repository uses **three workflows** for comprehensive testing:
 - See [.github/workflows/README.md](.github/workflows/README.md) for detailed setup instructions
 
 **Coverage Tracking:**
-- Coverage reports are automatically uploaded to [Codecov](https://codecov.io)
-- The coverage badge updates automatically after each workflow run
+- Both workflows generate and upload coverage to [Codecov](https://codecov.io)
+- Unit tests tagged with `unit` flag for independent tracking
+- Functional tests tagged with `functional` flag for independent tracking
+- Overall coverage badge shows combined coverage
+- Flag-specific badges show unit and functional coverage separately
+- All badges update automatically after each workflow run
 - No manual README updates needed - eliminates merge conflicts
 
 **Local Testing:**

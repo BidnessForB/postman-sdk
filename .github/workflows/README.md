@@ -26,11 +26,13 @@ Runs all unit tests with mocked dependencies - fast feedback without API calls.
 ### Features
 - Can run standalone or be called by `all-tests.yml`
 - Triggers on pull requests and pushes to `main`
-- Runs all unit tests using `npm run test:unit`
+- Runs all unit tests with coverage enabled
 - Fast execution (mocked, no API calls)
+- Generates coverage reports and uploads to Codecov with `unit` flag
 - Path filtering (only runs when relevant files change)
 - Manual trigger support via workflow dispatch
-- Uploads test results as artifacts (7 days retention)
+- Uploads test results and coverage as artifacts (7 days retention)
+- Displays coverage summary in PR
 
 ### When It Runs
 - Pull requests to `main`
@@ -140,25 +142,27 @@ Add these badges to your README.md to show workflow and coverage status:
 **Option 1: Combined Status (Recommended)**
 ```markdown
 ![All Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
 ```
 
 **Option 2: Separate Status Badges**
 ```markdown
 ![Unit Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
 ![Functional Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
 ```
 
-**Option 3: All Status Badges (Maximum Visibility)**
+**Option 3: All Status Badges with Separate Coverage (Maximum Visibility)**
 ```markdown
 ![All Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/all-tests.yml/badge.svg)
 ![Unit Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/unit-tests.yml/badge.svg)
 ![Functional Tests](https://github.com/YOUR_USERNAME/postman-sdk/actions/workflows/functional-tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![Unit Coverage](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN&flag=unit)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
+[![Functional Coverage](https://codecov.io/gh/YOUR_USERNAME/postman-sdk/branch/main/graph/badge.svg?token=YOUR_TOKEN&flag=functional)](https://codecov.io/gh/YOUR_USERNAME/postman-sdk)
 ```
 
-Replace `YOUR_USERNAME` with your actual GitHub username or organization name.
+Replace `YOUR_USERNAME` with your actual GitHub username or organization name, and `YOUR_TOKEN` with your Codecov repository token.
 
 **Benefits of Combined Badge:**
 - Single status check for branch protection
@@ -170,12 +174,19 @@ Replace `YOUR_USERNAME` with your actual GitHub username or organization name.
 - Independent monitoring of unit vs functional tests
 - Faster identification of issues (unit vs integration)
 
-**Benefits of Codecov Badge:**
+**Benefits of Separate Coverage Badges:**
+- Monitor unit test coverage independently
+- Track functional test coverage separately
+- Identify which test suite needs more coverage
+- Codecov flags (`unit` and `functional`) enable independent tracking
+
+**Benefits of Codecov Badges:**
 - Automatically updates after each workflow run
 - No merge conflicts (hosted externally)
 - Shows real-time coverage percentage
 - Clickable link to detailed coverage reports
 - Coverage history and trend graphs
+- Flag-specific badges show coverage for specific test types
 
 ### Local Development
 

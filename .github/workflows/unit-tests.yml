@@ -23,7 +23,7 @@ on:
 
 jobs:
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests with Coverage
     runs-on: ubuntu-latest
     
     steps:
@@ -38,8 +38,17 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Run unit tests
-        run: npm run test:unit
+      - name: Run unit tests with coverage
+        run: jest --testPathPattern=unit --coverage --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          flags: unit
+          name: codecov-unit
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
       
       - name: Upload unit test results
         if: always()
@@ -48,4 +57,13 @@ jobs:
           name: unit-test-results
           path: coverage/
           retention-days: 7
+      
+      - name: Display coverage summary
+        if: always()
+        run: |
+          echo "### Unit Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat coverage/coverage-summary.json | grep -A 10 "total" >> $GITHUB_STEP_SUMMARY || echo "Coverage summary not found"
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 

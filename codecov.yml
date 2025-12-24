@@ -14,11 +14,31 @@ coverage:
         target: auto
         threshold: 1%
         base: auto
+      unit:
+        target: auto
+        threshold: 1%
+        flags:
+          - unit
+      functional:
+        target: auto
+        threshold: 1%
+        flags:
+          - functional
     patch:
       default:
         target: auto
         threshold: 1%
         base: auto
+
+flags:
+  unit:
+    paths:
+      - src/
+    carryforward: true
+  functional:
+    paths:
+      - src/
+    carryforward: true
 
 comment:
   layout: "reach,diff,flags,tree,reach"
