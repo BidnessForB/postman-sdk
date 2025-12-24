@@ -16,9 +16,11 @@ npm run test:unit-coverage
 ```
 
 **What it does:**
-- Runs all unit tests (tests matching `unit` pattern)
+- Runs all unit tests (tests matching `unit` pattern using Jest's `--testPathPatterns`)
 - Generates coverage reports (json-summary, text, lcov)
 - No cleanup needed (unit tests use mocks, no API calls)
+
+**Note:** Uses Jest 30 compatible `--testPathPatterns` flag (previously `--testPathPattern` in Jest ≤29)
 
 **Used by:**
 - GitHub Actions: `unit-tests.yml` workflow

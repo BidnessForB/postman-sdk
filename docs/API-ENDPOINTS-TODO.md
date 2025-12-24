@@ -1,7 +1,8 @@
 # Postman API SDK - Endpoint Implementation Status
 
 **SDK Version**: 0.2.2  
-**Last Updated**: December 24, 2025
+**Last Updated**: December 24, 2025  
+**Jest Version**: 30.2.0
 
 ## Overview
 
@@ -11,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 35 operations (18.32%)
-- **Not Implemented**: 156 operations (81.68%)
+- **Implemented**: 36 operations (18.85%)
+- **Not Implemented**: 155 operations (81.15%)
 
 ### Legend
 
@@ -22,7 +23,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Specs Module (11/14 completed - 78.6%)
+## Specs Module (12/14 completed - 85.7%)
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -37,8 +38,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/specs/{specId}/files/{filePath}` | Get spec file content | `getSpecFile()` | ✅ | ✅ Passing |
 | PATCH | `/specs/{specId}/files/{filePath}` | Update spec file | `modifySpecFile()` | ✅ | ✅ Passing |
 | DELETE | `/specs/{specId}/files/{filePath}` | Delete spec file | `deleteSpecFile()` | ✅ | ✅ Passing |
+| POST | `/specs/{specId}/generations/{elementType}` | Generate collection from spec | `createSpecGeneration()` | ✅ | ✅ Passing |
 | GET | `/specs/{specId}/generations/{elementType}` | Get generated collection | - | ❌ | ❌ None |
-| POST | `/specs/{specId}/generations/{elementType}` | Generate collection from spec | - | ❌ | ❌ None |
 | PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | - | ❌ | ❌ None |
 
 ---

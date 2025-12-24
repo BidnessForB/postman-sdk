@@ -6,5 +6,5 @@
 echo "Running unit tests with coverage..."
 
 # Run unit tests with coverage
-jest --testPathPattern=unit --coverage --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov
+jest --testPathPatterns=unit --coverage --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov
 
