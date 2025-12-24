@@ -25,7 +25,7 @@ postman-sdk.code-workspace
 *.swp
 *.swo
 *~
-*workspace*
+
 .DS_Store
 
 # Logs
