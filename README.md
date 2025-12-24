@@ -8,7 +8,7 @@
 [![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-36%2F191%20(18.85%25)-yellow)
+![Endpoints](https://img.shields.io/badge/endpoints-38%2F192%20(19.79%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -16,7 +16,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (36/191, 18.85%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (37/191, 19.37%)
 
 ## Installation
    

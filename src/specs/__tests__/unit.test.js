@@ -1,17 +1,19 @@
 const axios = require('axios');
-const { 
-  getSpecs, 
-  getSpec, 
-  createSpec, 
-  modifySpec, 
-  deleteSpec, 
+const {
+  getSpecs,
+  getSpec,
+  createSpec,
+  modifySpec,
+  deleteSpec,
   getSpecDefinition,
   getSpecFiles,
   createSpecFile,
   getSpecFile,
   modifySpecFile,
   deleteSpecFile,
-  createSpecGeneration
+  createSpecGeneration,
+  getSpecTaskStatus,
+  getSpecGenerations
 } = require('../index');
 
 jest.mock('axios');
@@ -747,6 +749,172 @@ describe('specs unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           url: expect.stringContaining('/generations/collection')
+        })
+      );
+    });
+  });
+
+  describe('getSpecTaskStatus', () => {
+    test('should call GET /specs/{specId}/tasks/{taskId}', async () => {
+      const taskId = 'task-123-abc';
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'completed',
+          meta: {
+            model: 'collection',
+            action: 'generation'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getSpecTaskStatus(DEFAULT_SPEC_ID, taskId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/tasks/${taskId}`,
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': expect.any(String)
+          })
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.status).toBe('completed');
+      expect(result.data.meta.model).toBe('collection');
+    });
+
+    test('should handle pending status', async () => {
+      const taskId = 'task-456-def';
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'pending',
+          meta: {
+            model: 'spec',
+            action: 'generation'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getSpecTaskStatus(DEFAULT_SPEC_ID, taskId);
+
+      expect(result.data.status).toBe('pending');
+    });
+
+    test('should throw error for non-existent task', async () => {
+      const error = new Error('Request failed with status code 404');
+      error.response = {
+        status: 404,
+        data: {
+          type: 'notFoundError',
+          title: 'Instance not found',
+          status: 404,
+          detail: 'Entity that you are trying to access does not exist.'
+        }
+      };
+      axios.request.mockRejectedValue(error);
+
+      await expect(
+        getSpecTaskStatus(DEFAULT_SPEC_ID, 'non-existent-task')
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('getSpecGenerations', () => {
+    test('should call GET /specs/{specId}/generations/{elementType} without query params', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          collections: [
+            {
+              id: 'col-123',
+              name: 'Generated Collection',
+              state: 'in-sync',
+              createdAt: '2025-03-17T11:03:15Z',
+              updatedAt: '2025-03-17T12:03:15Z',
+              createdBy: 12345678,
+              updatedBy: 12345678
+            }
+          ],
+          meta: {
+            nextCursor: null
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getSpecGenerations(DEFAULT_SPEC_ID, 'collection');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+        })
+      );
+      expect(result.status).toBe(200);
+      expect(result.data.collections).toHaveLength(1);
+      expect(result.data.meta).toHaveProperty('nextCursor');
+    });
+
+    test('should include limit and cursor query params when provided', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          collections: [],
+          meta: {
+            nextCursor: 'cursor-abc'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getSpecGenerations(DEFAULT_SPEC_ID, 'collection', 5, 'cursor-123');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection?limit=5&cursor=cursor-123`,
+        })
+      );
+      expect(result.status).toBe(200);
+    });
+
+    test('should handle null optional parameters', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          collections: [],
+          meta: { nextCursor: null }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getSpecGenerations(DEFAULT_SPEC_ID, 'collection', null, null);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = { status: 200, data: { collections: [], meta: {} } };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getSpecGenerations(DEFAULT_SPEC_ID, 'collection');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'X-API-Key': expect.any(String),
+            'Content-Type': 'application/json'
+          })
         })
       );
     });

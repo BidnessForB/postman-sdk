@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 36 operations (18.85%)
-- **Not Implemented**: 155 operations (81.15%)
+- **Implemented**: 37 operations (19.37%)
+- **Not Implemented**: 154 operations (80.63%)
 
 ### Legend
 
@@ -23,7 +23,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Specs Module (12/14 completed - 85.7%)
+## Specs Module (14/15 completed - 93.3%)
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -39,7 +39,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PATCH | `/specs/{specId}/files/{filePath}` | Update spec file | `modifySpecFile()` | ✅ | ✅ Passing |
 | DELETE | `/specs/{specId}/files/{filePath}` | Delete spec file | `deleteSpecFile()` | ✅ | ✅ Passing |
 | POST | `/specs/{specId}/generations/{elementType}` | Generate collection from spec | `createSpecGeneration()` | ✅ | ✅ Passing |
-| GET | `/specs/{specId}/generations/{elementType}` | Get generated collection | - | ❌ | ❌ None |
+| GET | `/specs/{specId}/generations/{elementType}` | Get generated collections | `getSpecGenerations()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/tasks/{taskId}` | Get async task status | `getSpecTaskStatus()` | ✅ | ✅ Passing |
 | PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | - | ❌ | ❌ None |
 
 ---
