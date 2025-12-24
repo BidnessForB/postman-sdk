@@ -76,6 +76,7 @@ function parseContent(content) {
   throw new Error(`Content is not a string or object: ${typeof content}`);
 }
 
+
 module.exports = {
   isValidYaml,
   toBeValidYaml,

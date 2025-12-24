@@ -63,31 +63,20 @@ describe('specs functional tests', () => {
 
   test('1. createSpec - should create an OpenAPI 3.0 spec', async () => {
     // Skip creation if we have a persisted spec ID
-    if (testSpecId) {
+    /* if (testSpecId) {
       console.log('Reusing persisted spec ID, skipping creation');
       testSpecName = (persistedIds.spec && persistedIds.spec.name) || testSpecName;
       return;
-    }
+    } */
 
+    // Load fixture content
+    const fixture = loadSpecFixture('OPENAPI:3.0', 'yaml');
     testSpecName = `SDK Functional Test Spec ${Date.now()}`;
+    
     const files = [
       {
         path: rootFileName,
-        content: `openapi: 3.0.0
-info:
-  title: Functional Test API
-  version: 1.0.0
-paths:
-  /test:
-    get:
-      summary: Test endpoint
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: './components/schemas.json#/TestSchema'`
+        content: fixture.content
       }
     ];
 
@@ -201,7 +190,7 @@ paths:
     expect(result.data).toHaveProperty('name');
     expect(result.data).toHaveProperty('type');
     expect(result.data.id).toBe(testSpecId);
-    expect(result.data.name).toBe(testSpecName);
+    expect(result.data.name).toBe((persistedIds.spec && persistedIds.spec.name) || testSpecName));
     expect(result.data.type).toBe('OPENAPI:3.0');
   });
 
@@ -228,7 +217,7 @@ paths:
     expect(specDefinition.openapi).toBe('3.0.0');
     expect(specDefinition).toHaveProperty('info');
     expect(specDefinition.info).toHaveProperty('title');
-    expect(specDefinition.info.title).toBe('Functional Test API');
+    expect(specDefinition.info.title).toBe('Example API'); // From OpenAPI 3.0 fixture
     expect(specDefinition).toHaveProperty('paths');
   });
 
