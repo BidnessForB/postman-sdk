@@ -39,7 +39,7 @@ jobs:
         run: npm install
       
       - name: Run unit tests with coverage
-        run: jest --testPathPattern=unit --coverage --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov
+        run: npm run test:unit-coverage
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

@@ -286,8 +286,9 @@ The repository uses **three workflows** for comprehensive testing:
 **Local Testing:**
 Run the same tests locally before pushing:
 ```bash
-npm run test:unit           # Unit tests
-npm run test:all-up         # Functional tests
-npm run test:coverage       # Coverage report
+npm run test:unit              # Unit tests (no coverage)
+npm run test:unit-coverage     # Unit tests with coverage
+npm run test:all-up            # Functional tests
+npm run test:coverage          # Functional tests with coverage
 ```
 
