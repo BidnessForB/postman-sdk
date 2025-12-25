@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 53 operations (27.75%)
-- **Not Implemented**: 138 operations (72.25%)
+- **Implemented**: 55 operations (28.80%)
+- **Not Implemented**: 136 operations (71.20%)
 
 ### Legend
 
@@ -88,15 +88,6 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/collections/{collectionId}/folders/{folderId}/comments` | Create folder comment | `createFolderComment()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Update comment | `updateFolderComment()` | ✅ | ✅ Passing |
 | DELETE | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Delete comment | `deleteFolderComment()` | ✅ | ✅ Passing |
-
-### Collection Requests
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| POST | `/collections/{collectionId}/requests` | Create a request | - | ❌ | ❌ None |
-| GET | `/collections/{collectionId}/requests/{requestId}` | Get a request | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/requests/{requestId}` | Update a request | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/requests/{requestId}` | Delete a request | - | ❌ | ❌ None |
 
 ### Request Comments
 
@@ -195,6 +186,22 @@ This document tracks the implementation status of all Postman API endpoints in t
 | DELETE | `/collection-access-keys/{keyId}` | Delete collection access key | - | ❌ | ❌ None |
 | PUT | `/collection-merges` | Merge or pull changes | - | ❌ | ❌ None |
 | GET | `/collection-merges-tasks/{taskId}` | Get merge/pull task status | - | ❌ | ❌ None |
+
+</details>
+
+---
+
+<details open>
+<summary><strong>Requests Module (4/4 completed - 100%) ✅</strong></summary>
+
+### Collection Requests
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/requests` | Create a request | `createRequest()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionId}/requests/{requestId}` | Get a request | `getRequest()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/requests/{requestId}` | Update a request | `updateRequest()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/requests/{requestId}` | Delete a request | `deleteRequest()` | ✅ | ✅ Passing |
 
 </details>
 
