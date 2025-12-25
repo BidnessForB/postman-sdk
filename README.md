@@ -8,7 +8,7 @@
 [![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-5-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-39%2F192%20(20.31%25)-yellow)
+![Endpoints](https://img.shields.io/badge/endpoints-43%2F191%20(22.51%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -187,6 +187,7 @@ This orchestrates all functional tests in sequence:
 4. Folders (create/test folder in collection)
 5. Folder Comments (create/test comments on folder)
 6. Specs (create/test API specs in workspace)
+7. Transformations (test bidirectional sync between specs and collections)
 
 **Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
 

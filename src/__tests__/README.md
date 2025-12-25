@@ -14,19 +14,31 @@ Run with: `npm run test:all-up`
 
 See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
 
-## Transformations Functional Test
+## Transformations Functional Test Suite
 
-The `transformations-functional.test.js` file tests bi-directional synchronization between specs and collections, organized by transformation direction:
+The `transformations-functional.test.js` file tests bi-directional transformations and synchronization between specs and collections. The suite creates its own dedicated test resources and is organized by transformation direction:
 
-**spec-to-collection:**
-- **syncSpecWithCollection**: Syncs a generated spec back to its source collection
+### Structure
 
-**collection-to-spec:**
-- **syncCollectionWithSpec**: Syncs a collection with a generated spec
+**Setup Tests:**
+- **CreateSourceCollection**: Creates a dedicated collection for transformations testing
+- **CreateSourceSpec**: Creates a dedicated spec for transformations testing
+
+**spec-to-collection:** Tests generating collections from specs and syncing collections with specs
+- `createSpecGeneration` - Generate collection from spec
+- `getSpecTaskStatus` - Poll generation task status
+- `getSpecGenerations` - List generated collections
+- `syncCollectionWithSpec` - Sync collection with spec (update collection based on spec)
+
+**collection-to-spec:** Tests generating specs from collections and syncing specs with collections
+- `createCollectionGeneration` - Generate spec from collection
+- `getCollectionTaskStatus` - Poll generation task status
+- `getCollectionGenerations` - List generated specs
+- `syncSpecWithCollection` - Sync spec with collection (update spec based on collection)
 
 Run with: `npm test -- src/__tests__/transformations-functional.test.js`
 
-**Prerequisites**: Requires a collection and a spec generated from it (see collections test 11b).
+**Note**: This suite is self-contained and creates its own test resources under the `transformations` property in `test-ids.json`.
 
 See [TRANSFORMATIONS-TEST-README.md](./TRANSFORMATIONS-TEST-README.md) for detailed documentation.
 

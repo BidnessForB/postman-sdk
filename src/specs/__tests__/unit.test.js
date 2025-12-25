@@ -757,7 +757,7 @@ describe('specs unit tests', () => {
 
   describe('getSpecTaskStatus', () => {
     test('should call GET /specs/{specId}/tasks/{taskId}', async () => {
-      const taskId = 'task-123-abc';
+      const taskId = '11223344-5566-7788-99aa-bbccddeeff00';
       const mockResponse = {
         status: 200,
         data: {
@@ -788,7 +788,7 @@ describe('specs unit tests', () => {
     });
 
     test('should handle pending status', async () => {
-      const taskId = 'task-456-def';
+      const taskId = '22334455-6677-8899-aabb-ccddeeff0011';
       const mockResponse = {
         status: 200,
         data: {
@@ -932,14 +932,14 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const collectionUid = '12345678-col-123';
+      const collectionUid = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6';
 
       const result = await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/synchronizations?collectionUid=12345678-col-123`,
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/synchronizations?collectionUid=12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6`,
         })
       );
       expect(result.status).toBe(202);
@@ -957,7 +957,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const collectionUid = '12345678-col-123';
+      const collectionUid = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6';
 
       await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
 

@@ -195,14 +195,17 @@ All-Up Functional Test Suite
       ✓ 2. getCollections - should retrieve collections from workspace
       ... (more tests)
 
-  Phase 3: Folders
-  Phase 4: Folder Comments
-  Phase 5: Collection Comments
+  Phase 3: Collection Comments
+  Phase 4: Folders
+  Phase 5: Folder Comments
   Phase 6: Specs
+  Phase 7: Transformations
 
 Test Suites: 1 passed, 1 total
-Tests:       145 passed, 145 total
+Tests:       106 passed, 106 total
 ```
+c6d2471c-3664-47b5-adc8-35d52484f2f6
+
 
 ### Test Duration
 
