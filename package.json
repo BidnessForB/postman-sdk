@@ -33,6 +33,7 @@
     "!src/**/*.test.js",
     "util/get-test-workspaces.js",
     "util/delete-test-workspaces.js",
+    "util/delete-test-objects.js",
     "examples/**/*.js",
     "README.md",
     "LICENSE"

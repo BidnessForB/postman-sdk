@@ -125,9 +125,10 @@ The published package includes:
 
 ### ✅ Included
 - All source code in `src/` (excluding tests)
-- Workspace utility scripts:
+- Utility scripts:
   - `util/get-test-workspaces.js` - Find workspaces by pattern
-  - `util/delete-test-workspaces.js` - Delete by pattern or ID (`--workspaceId`)
+  - `util/delete-test-workspaces.js` - Delete workspaces by pattern or ID (`--workspaceId`)
+  - `util/delete-test-objects.js` - Delete collections/specs/environments from workspace
 - Example scripts in `examples/`
 - `README.md`
 - `LICENSE`
