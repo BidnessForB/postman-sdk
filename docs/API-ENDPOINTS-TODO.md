@@ -1,6 +1,6 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**SDK Version**: 0.4.0  
+**SDK Version**: 0.6.0  
 **Last Updated**: December 25, 2025  
 **Jest Version**: 30.2.0
 
