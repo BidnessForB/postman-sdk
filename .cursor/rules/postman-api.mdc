@@ -88,9 +88,10 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
  - Example: Asserting a property exists in content: 
       const specDefinition = parseContent(result.data.definition);
       expect(result.data).toHaveProperty('definition');
-16. 'Update all READMEs and TODOs includes:
+16. 'Update all READMEs and TODOs' includes:
  - .github/**/*.md
  - ./src/**/*.md 
  - ./docs/**/*.md 
  - ./scripts/**/*.md 
  - ./fixtures/**/*.md 
+17. Do not update documentation until told to do so

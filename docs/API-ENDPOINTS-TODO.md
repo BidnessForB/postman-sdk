@@ -1,7 +1,7 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**SDK Version**: 0.2.2  
-**Last Updated**: December 24, 2025  
+**SDK Version**: 0.3.0  
+**Last Updated**: December 25, 2025  
 **Jest Version**: 30.2.0
 
 ## Overview
@@ -23,7 +23,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Specs Module (15/15 completed - 100%)
+<details open>
+<summary><strong>Specs Module (15/15 completed - 100%) ✅</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -43,9 +44,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/specs/{specId}/tasks/{taskId}` | Get async task status | `getSpecTaskStatus()` | ✅ | ✅ Passing |
 | PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | `syncSpecWithCollection()` | ✅ | ✅ Passing |
 
+</details>
+
 ---
 
-## Collections Module (22/64 completed - 34.4%)
+<details>
+<summary><strong>Collections Module (22/64 completed - 34.4%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -192,9 +196,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PUT | `/collection-merges` | Merge or pull changes | - | ❌ | ❌ None |
 | GET | `/collection-merges-tasks/{taskId}` | Get merge/pull task status | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## APIs Module (0/30 completed - 0%)
+<details>
+<summary><strong>APIs Module (0/30 completed - 0%)</strong></summary>
 
 ### Core API Operations
 
@@ -261,9 +268,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PUT | `/apis/{apiId}/versions/{versionId}` | Update a version | - | ❌ | ❌ None |
 | DELETE | `/apis/{apiId}/versions/{versionId}` | Delete a version | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Workspaces Module (5/14 completed - 35.7%)
+<details>
+<summary><strong>Workspaces Module (5/14 completed - 35.7%)</strong></summary>
 
 ### Core Workspace Operations
 
@@ -299,9 +309,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | POST | `/workspaces/{workspaceId}/element-transfers` | Transfer elements | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Environments Module (5/10 completed - 50%)
+<details>
+<summary><strong>Environments Module (5/10 completed - 50%)</strong></summary>
 
 ### Core Environment Operations
 
@@ -323,9 +336,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/environments/{environmentId}/merges` | Merge a fork | - | ❌ | ❌ None |
 | POST | `/environments/{environmentId}/pulls` | Pull source changes | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Mocks Module (0/13 completed - 0%)
+<details>
+<summary><strong>Mocks Module (0/13 completed - 0%)</strong></summary>
 
 ### Core Mock Operations
 
@@ -355,9 +371,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PUT | `/mocks/{mockId}/server-responses/{serverResponseId}` | Update server response | - | ❌ | ❌ None |
 | DELETE | `/mocks/{mockId}/server-responses/{serverResponseId}` | Delete server response | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Monitors Module (0/6 completed - 0%)
+<details>
+<summary><strong>Monitors Module (0/6 completed - 0%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -368,9 +387,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | DELETE | `/monitors/{monitorId}` | Delete a monitor | - | ❌ | ❌ None |
 | POST | `/monitors/{monitorId}/run` | Run a monitor | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## SCIM Module (0/12 completed - 0%)
+<details>
+<summary><strong>SCIM Module (0/12 completed - 0%)</strong></summary>
 
 ### SCIM Groups
 
@@ -399,9 +421,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/scim/v2/ResourceTypes` | Get resource types | - | ❌ | ❌ None |
 | GET | `/scim/v2/ServiceProviderConfig` | Get service provider config | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Network Module (0/6 completed - 0%)
+<details>
+<summary><strong>Network Module (0/6 completed - 0%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -412,9 +437,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/network/private/network-entity/request/all` | Get all network entity requests | - | ❌ | ❌ None |
 | PUT | `/network/private/network-entity/request/{requestId}` | Update network entity request | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Pull Requests Module (0/3 completed - 0%)
+<details>
+<summary><strong>Pull Requests Module (0/3 completed - 0%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -422,18 +450,24 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PUT | `/pull-requests/{pullRequestId}` | Update a pull request | - | ❌ | ❌ None |
 | POST | `/pull-requests/{pullRequestId}/tasks` | Create PR task | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Groups Module (0/2 completed - 0%)
+<details>
+<summary><strong>Groups Module (0/2 completed - 0%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/groups` | Get all groups | - | ❌ | ❌ None |
 | GET | `/groups/{groupId}` | Get a group | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Users Module (1/3 completed - 33.3%)
+<details>
+<summary><strong>Users Module (1/3 completed - 33.3%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -441,18 +475,24 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/users` | Get all users | - | ❌ | ❌ None |
 | GET | `/users/{userId}` | Get a user | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Billing Module (0/2 completed - 0%)
+<details>
+<summary><strong>Billing Module (0/2 completed - 0%)</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/accounts` | Get billing accounts | - | ❌ | ❌ None |
 | GET | `/accounts/{accountId}/invoices` | List account invoices | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
-## Other Modules
+<details>
+<summary><strong>Other Modules (0/13 completed - 0%)</strong></summary>
 
 ### Audit (0/1)
 
@@ -523,6 +563,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/{elementType}/{elementId}/tasks/{taskId}` | Get async task status | - | ❌ | ❌ None |
 
+</details>
+
 ---
 
 ## Implementation Priority Recommendations
@@ -569,4 +611,4 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-**Last Updated**: December 23, 2025
+**Last Updated**: December 25, 2025
