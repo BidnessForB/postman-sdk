@@ -136,6 +136,42 @@ When creating or updating requests, the `requestData` object can include the fol
 
 ## Testing
 
+### Unit Tests
+
+The requests module includes comprehensive unit tests with mocked API calls.
+
+**Run unit tests:**
+```bash
+npm run test:unit -- requests
+# or
+npm test -- src/requests/__tests__/unit.test.js
+```
+
+**Unit test coverage (21 tests):**
+- ✅ `createRequest()` - 5 tests
+  - POST to collection root
+  - POST with folder parameter
+  - Null folder parameter handling
+  - Complex request properties
+  - Header validation
+- ✅ `getRequest()` - 7 tests
+  - GET request by ID
+  - Query parameters (ids, uid, populate)
+  - All query parameters combined
+  - Null parameter handling
+  - Header validation
+- ✅ `updateRequest()` - 6 tests
+  - PUT with full request data
+  - Partial updates (name only)
+  - Method and URL updates
+  - Request body data updates
+  - Auth configuration updates
+  - Header validation
+- ✅ `deleteRequest()` - 3 tests
+  - DELETE request
+  - Response structure validation
+  - Header validation
+
 ### Functional Tests
 
 The requests module includes comprehensive functional tests that make real API calls to the Postman API.
@@ -150,9 +186,7 @@ npm test -- src/requests/__tests__/functional.test.js
 - An existing collection (created by collection tests or all-up test)
 - Test IDs persisted in `test-ids.json`
 
-### Test Coverage
-
-The functional tests cover:
+**Functional test coverage (10 tests):**
 - ✅ Creating requests in collection root
 - ✅ Creating requests in folders
 - ✅ Getting request details
