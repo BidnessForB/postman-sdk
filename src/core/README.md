@@ -104,6 +104,80 @@ The `buildUid()` function is used extensively in comment-related endpoints:
 - Folder comments: `/collections/{collectionUid}/folders/{folderUid}/comments`
 - Request comments: `/collections/{collectionUid}/requests/{requestUid}/comments`
 
+### `fixtures.js`
+Provides utilities for loading test fixture files for specs and API definitions.
+
+## Fixtures Functions
+
+### `loadFixture(fixturePath)`
+
+Loads a fixture file from the fixtures directory.
+
+**Parameters:**
+- `fixturePath` (string) - Path relative to `fixtures/` directory (e.g., `'specs/openapi-3.0.yaml'`)
+
+**Returns:** `string` - File content as string
+
+**Throws:** `Error` - If fixture file is not found
+
+**Example:**
+```javascript
+const { loadFixture } = require('./core/fixtures');
+
+const specContent = loadFixture('specs/openapi-3.0.yaml');
+console.log(specContent); // YAML content as string
+```
+
+### `loadSpecFiles(specType)`
+
+Loads spec files for createSpec based on spec type. Returns an array of file objects ready for use with the Postman API.
+
+**Parameters:**
+- `specType` (string) - Type of spec: `'openapi-3.0'`, `'openapi-3.1'`, `'asyncapi-2.0'`, or `'multi-file'`
+
+**Returns:** `Array<Object>` - Array of file objects with `path` and `content` properties
+
+**Throws:** `Error` - If spec type is unknown
+
+**File Object Structure:**
+```javascript
+// Single-file specs
+{
+  path: 'openapi.yaml',
+  content: '<file content>'
+}
+
+// Multi-file specs (includes type property)
+{
+  path: 'openapi.yaml',
+  content: '<file content>',
+  type: 'ROOT'  // or 'DEFAULT'
+}
+```
+
+**Example:**
+```javascript
+const { loadSpecFiles } = require('./core/fixtures');
+
+// Load single-file spec
+const openapi30Files = loadSpecFiles('openapi-3.0');
+// Returns: [{ path: 'openapi.yaml', content: '...' }]
+
+// Load multi-file spec
+const multiFiles = loadSpecFiles('multi-file');
+// Returns: [
+//   { path: 'openapi.yaml', content: '...', type: 'ROOT' },
+//   { path: 'components/schemas.json', content: '...', type: 'DEFAULT' },
+//   { path: 'components/responses.json', content: '...', type: 'DEFAULT' }
+// ]
+```
+
+**Available Spec Types:**
+- `'openapi-3.0'` - OpenAPI 3.0 specification
+- `'openapi-3.1'` - OpenAPI 3.1 specification
+- `'asyncapi-2.0'` - AsyncAPI 2.0 specification
+- `'multi-file'` - Multi-file OpenAPI specification with separated components
+
 ## Testing
 
 ### Unit Tests
@@ -111,9 +185,13 @@ The `buildUid()` function is used extensively in comment-related endpoints:
 Run core utility unit tests:
 ```bash
 npm test -- src/core/__tests__/utils.unit.test.js
+npm test -- src/core/__tests__/request.unit.test.js
+npm test -- src/core/__tests__/fixtures.unit.test.js
 ```
 
 **Test coverage:**
+
+#### `utils.js`
 - ✅ `buildQueryString()` - 5 tests
   - Basic query string building
   - Handling undefined/null values
@@ -130,6 +208,68 @@ npm test -- src/core/__tests__/utils.unit.test.js
   - Handling pre-existing UIDs (45 chars)
   - Rejecting invalid objectId formats
   - Various valid UUID formats
+
+#### `request.js`
+- ✅ `buildAxiosConfig()` - 8 tests
+  - Config building with method and endpoint
+  - Including data when provided
+  - Handling undefined/null data
+  - Merging extra config options
+  - Different HTTP methods
+  - URL construction
+  - Required headers
+  
+- ✅ `executeRequest()` - 9 tests
+  - Successful 2xx responses
+  - Error handling for 4xx/5xx responses
+  - Network error handling
+  - Error message formatting
+
+#### `fixtures.js` (Unit Tests)
+- ✅ `loadFixture()` - 4 tests (mocked)
+  - Loading fixture from fixtures directory
+  - Throwing error for non-existent file
+  - Handling nested fixture paths
+  - Reading with utf8 encoding
+  
+- ✅ `loadSpecFiles()` - 9 tests (mocked)
+  - Loading each spec type (openapi-3.0, openapi-3.1, asyncapi-2.0, multi-file)
+  - Multi-file spec structure validation
+  - Error handling for unknown spec types
+  - Error message content validation
+
+### Integration Tests
+
+Run core fixtures integration tests:
+```bash
+npm test -- src/core/__tests__/fixtures.integration.test.js
+```
+
+These tests run actual file system operations (not mocked) to provide real-world validation and achieve actual code coverage.
+
+**Integration test coverage:**
+
+#### `fixtures.js` (Integration Tests)
+- ✅ `loadFixture()` - 7 tests (real filesystem)
+  - Loading actual OpenAPI 3.0, 3.1 fixtures
+  - Loading actual AsyncAPI 2.0 fixture
+  - Throwing error for non-existent files
+  - Loading nested fixture files
+  - Loading JSON fixture files
+  - Handling deeply nested paths
+  
+- ✅ `loadSpecFiles()` - 10 tests (real filesystem)
+  - Loading all spec types with actual files
+  - Multi-file spec structure validation
+  - Error handling and messages
+  - Valid content verification
+  - Type property validation
+  - Comparing loaded content with direct file reads
+
+**Why Both Unit and Integration Tests?**
+- **Unit tests** use mocks for fast, isolated testing
+- **Integration tests** use real files for validation and code coverage
+- Together they provide comprehensive test coverage
 
 ## Notes
 

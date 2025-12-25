@@ -1,6 +1,29 @@
 # Shared Test Utilities
 
-This directory contains shared test utilities and resources used across all functional test modules in the SDK.
+This directory contains shared test utilities and resources used across all functional test modules in the SDK, as well as unit tests for the SDK entry point.
+
+## SDK Entry Point Unit Tests (`index.unit.test.js`)
+
+Unit tests for the main SDK entry point (`src/index.js`) that validates module exports and structure.
+
+### Coverage
+
+Tests verify that:
+- All 9 modules are exported (collections, requests, responses, workspaces, specs, environments, tags, users, mocks)
+- Each module is properly structured as an object
+- Expected functions exist in key modules (collections, specs, workspaces, users)
+- All exported modules are non-null and defined
+- The SDK exports exactly 9 modules with correct names
+
+### Running Tests
+
+```bash
+npm test -- src/__tests__/index.unit.test.js
+```
+
+### Test Coverage
+- ✅ 11 test cases
+- ✅ 100% coverage of main entry point
 
 ## All-Up Functional Test
 

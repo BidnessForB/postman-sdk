@@ -1118,5 +1118,256 @@ describe('collections unit tests', () => {
     });
   });
 
+  describe('syncCollectionWithSpec', () => {
+    test('should call PUT /collections/{collectionUid}/synchronizations with specId', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'task-123',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tasks/task-123'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const specId = 'spec-123';
+
+      const result = await syncCollectionWithSpec(userId, collectionId, specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: expect.stringContaining(`/collections/12345678-${collectionId}/synchronizations`),
+          url: expect.stringContaining(`specId=${specId}`)
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should construct correct collection UID', async () => {
+      const mockResponse = {
+        status: 202,
+        data: { taskId: 'task-123', url: 'https://example.com' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 87654321;
+      const collectionId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
+      const specId = 'spec-456';
+
+      await syncCollectionWithSpec(userId, collectionId, specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringContaining(`87654321-${collectionId}`)
+        })
+      );
+    });
+  });
+
+  describe('createCollectionGeneration', () => {
+    test('should call POST /collections/{collectionUid}/generations/{elementType}', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'gen-task-123',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tasks/gen-task-123'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const elementType = 'spec';
+      const name = 'Generated Spec';
+      const type = 'OPENAPI:3.0';
+      const format = 'JSON';
+
+      const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: expect.stringContaining(`/collections/12345678-${collectionId}/generations/${elementType}`),
+          data: {
+            name,
+            type,
+            format
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include all required parameters in request body', async () => {
+      const mockResponse = {
+        status: 202,
+        data: { taskId: 'task-456', url: 'https://example.com' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 87654321;
+      const collectionId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
+
+      await createCollectionGeneration(userId, collectionId, 'spec', 'My API Spec', 'OPENAPI:3.1', 'YAML');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            name: 'My API Spec',
+            type: 'OPENAPI:3.1',
+            format: 'YAML'
+          }
+        })
+      );
+    });
+  });
+
+  describe('getCollectionGenerations', () => {
+    test('should call GET /collections/{collectionUid}/generations/{elementType}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          specs: [
+            {
+              id: 'spec-1',
+              name: 'Generated Spec 1',
+              state: 'active',
+              createdAt: '2024-01-01T00:00:00.000Z',
+              updatedAt: '2024-01-01T00:00:00.000Z',
+              createdBy: 12345678
+            }
+          ],
+          meta: {
+            nextCursor: null
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const elementType = 'spec';
+
+      const result = await getCollectionGenerations(userId, collectionId, elementType);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: expect.stringContaining(`/collections/12345678-${collectionId}/generations/${elementType}`)
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should construct correct collection UID', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { specs: [], meta: { nextCursor: null } }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 87654321;
+      const collectionId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
+
+      await getCollectionGenerations(userId, collectionId, 'spec');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringContaining(`87654321-${collectionId}`)
+        })
+      );
+    });
+  });
+
+  describe('getCollectionTaskStatus', () => {
+    test('should call GET /collections/{collectionUid}/tasks/{taskId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'completed',
+          meta: {
+            model: 'spec',
+            action: 'generation'
+          },
+          details: {
+            resources: [
+              {
+                id: 'spec-123',
+                name: 'Generated Spec'
+              }
+            ]
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const taskId = 'task-123';
+
+      const result = await getCollectionTaskStatus(userId, collectionId, taskId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: expect.stringContaining(`/collections/12345678-${collectionId}/tasks/${taskId}`)
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should construct correct collection UID', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { status: 'pending' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 87654321;
+      const collectionId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
+      const taskId = 'task-456';
+
+      await getCollectionTaskStatus(userId, collectionId, taskId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: expect.stringContaining(`87654321-${collectionId}`)
+        })
+      );
+    });
+
+    test('should handle pending status', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { status: 'pending' }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getCollectionTaskStatus(12345678, 'collection-id', 'task-id');
+
+      expect(result.data.status).toBe('pending');
+    });
+
+    test('should handle failed status', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'failed',
+          error: {
+            message: 'Generation failed'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getCollectionTaskStatus(12345678, 'collection-id', 'task-id');
+
+      expect(result.data.status).toBe('failed');
+      expect(result.data.error).toBeDefined();
+    });
+  });
+
 });
 

@@ -189,6 +189,16 @@ The SDK is organized by resource groups:
 
 ## Testing
 
+The SDK includes comprehensive test coverage with unit tests, integration tests, and functional tests.
+
+### Test Organization
+
+The test suite is organized into three levels:
+
+1. **Unit Tests** - Fast, mocked tests for individual functions and modules
+2. **Integration Tests** - Tests that use real resources (e.g., file system) but don't call external APIs
+3. **Functional Tests** - End-to-end tests that make real API calls to Postman
+
 ### Unit Tests
 
 Run unit tests only (mocked, fast):
@@ -196,6 +206,15 @@ Run unit tests only (mocked, fast):
 ```bash
 npm run test:unit
 ```
+
+Unit tests cover:
+- Main SDK entry point (`src/__tests__/index.unit.test.js`)
+- Core utilities (request building, query strings, UID construction)
+- All module exports and function signatures
+- Error handling and edge cases
+
+**Integration Tests** are included in the unit test suite and run actual file system operations:
+- Fixtures loading (`src/core/__tests__/fixtures.integration.test.js`)
 
 ### Functional Tests
 
