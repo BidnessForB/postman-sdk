@@ -16,7 +16,7 @@ Project was undertaken as a vehicle for learning how to use Cursor more effectiv
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (69/161, 42.86%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** 
 
 ## Installation
    
