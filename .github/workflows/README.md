@@ -4,7 +4,7 @@ This project uses **four workflows** for comprehensive testing and cleanup:
 
 ## 1. All Tests (`all-tests.yml`) - **Recommended for Branch Protection**
 
-Orchestrates both unit and functional tests, requiring both to succeed, with automatic cleanup. and stuff
+Orchestrates both unit and functional tests, requiring both to succeed, with automatic cleanup. 
 
 ### Features
 - Calls both unit-tests and functional-tests workflows as reusable workflows
