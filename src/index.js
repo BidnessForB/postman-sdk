@@ -11,6 +11,7 @@ module.exports = {
   specs: require('./specs'),
   environments: require('./environments'),
   tags: require('./tags'),
-  users: require('./users')
+  users: require('./users'),
+  mocks: require('./mocks')
 }; 
 
