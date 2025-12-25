@@ -51,24 +51,96 @@ The suite is organized into two main transformation direction groups:
 
 ### 1. spec-to-collection
 
-Tests transformations that sync specs to collections.
+Tests transformations from specs to collections (generating collections from specs and syncing collections with specs).
 
-#### syncSpecWithCollection
+#### Test 1: createSpecGeneration
 
-Tests the synchronization of a generated spec back to its source collection.
+Generates a collection from the transformations source spec.
 
 **Test Cases:**
-- `1. should sync generated spec with source collection` - Tests syncing a spec (generated from a collection) back to that collection
-- `2. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
+- `1. createSpecGeneration - should generate a collection from spec` - Generates a Postman collection from an OpenAPI spec
+
+**Prerequisites:**
+- Transformations source spec must exist (created by `CreateSourceSpec` test)
+
+**Persists:**
+- `transformations.sourceSpec.generatedCollection` - Contains taskId, url, name
+
+#### Test 2: createSpecGeneration - should fail with minimal params
+
+Tests error handling when generation is called without required options.
+
+**Test Cases:**
+- `2. createSpecGeneration - should fail with minimal params (no options)` - Validates that generation fails without proper options
+
+**Prerequisites:**
+- Transformations source spec must exist
+
+#### Test 3: getSpecTaskStatus
+
+Gets the status of the collection generation task once.
+
+**Test Cases:**
+- `3. getSpecTaskStatus - should get status of generation task` - Retrieves the current status of the generation task
+
+**Prerequisites:**
+- Transformations source spec must exist
+- Generation task must have been created (test 1)
+
+#### Test 4: getSpecTaskStatus - Poll until complete
+
+Polls the generation task status until completion and extracts the generated collection ID.
+
+**Test Cases:**
+- `4. getSpecTaskStatus - Poll until complete` - Polls every 5 seconds for up to 30 seconds until the task completes
+
+**Prerequisites:**
+- Transformations source spec must exist
+- Generation task must have been created (test 1)
+
+**Persists:**
+- `transformations.sourceSpec.generatedCollection.id` - The ID of the generated collection
+
+#### Test 5: getSpecGenerations
+
+Retrieves the list of all collections generated from the transformations source spec.
+
+**Test Cases:**
+- `5. getSpecGenerations - should retrieve generated collections list` - Gets all generated collections and verifies their structure
+
+**Prerequisites:**
+- Transformations source spec must exist
+- At least one collection should have been generated (test 4)
+
+#### Test 6: getSpecGenerations - should support pagination
+
+Tests pagination functionality for retrieving generated collections.
+
+**Test Cases:**
+- `6. getSpecGenerations - should support pagination with limit` - Tests limit parameter for pagination
+
+**Prerequisites:**
+- Transformations source spec must exist
+
+#### syncCollectionWithSpec
+
+Tests the synchronization of a collection with a spec (updating the collection based on spec changes).
+
+**Test Cases:**
+- `7. should sync collection with generated spec` - Tests syncing a collection with a spec
+- `8. should handle error for non-existent collection` - Validates error handling for invalid collection IDs
+- `9. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
 
 **Prerequisites:**
 - Collection must exist (created in collections functional tests)
-- Spec must have been generated from that collection (test 11b in collections tests)
+- Spec must exist
 - User ID must be available
+
+**Note:** This endpoint only works with collections that were originally generated from the spec.
 
 ### 2. collection-to-spec
 
-Tests transformations that sync collections to specs.
+Tests transformations from collections to specs (generating specs from collections and syncing specs with collections).
 
 #### Test 1: createCollectionGeneration
 
@@ -120,19 +192,20 @@ Retrieves the list of all specs generated from the transformations source collec
 - Transformations source collection must exist
 - At least one spec should have been generated (test 3)
 
-#### syncCollectionWithSpec
+#### syncSpecWithCollection
 
-Tests the synchronization of a collection with its generated spec.
+Tests the synchronization of a spec with a collection (updating the spec based on collection changes).
 
 **Test Cases:**
-- `5. should sync collection with generated spec` - Tests syncing a collection with a spec generated from it
-- `6. should handle error for non-existent collection` - Validates error handling for invalid collection IDs
-- `7. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
+- `5. should sync generated spec with source collection` - Tests syncing a spec with a collection
+- `6. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
 
 **Prerequisites:**
 - Collection must exist (created in collections functional tests)
-- Spec must have been generated from that collection (test 11b in collections tests)
+- Spec must exist
 - User ID must be available
+
+**Note:** This endpoint only works with specs that were originally generated from the collection.
 
 ## Running the Tests
 
