@@ -1,8 +1,12 @@
-const { 
+const {
   createRequest,
   getRequest,
   updateRequest,
-  deleteRequest
+  deleteRequest,
+  getRequestComments,
+  createRequestComment,
+  updateRequestComment,
+  deleteRequestComment
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
@@ -231,6 +235,99 @@ describe('requests functional tests (sequential flow)', () => {
       const collectionId = persistedIds.collection.id;
       const fakeId = '00000000-0000-0000-0000-000000000000';
       await expect(deleteRequest(collectionId, fakeId)).rejects.toThrow();
+    });
+  });
+});
+
+describe('request comments functional tests', () => {
+  let commentId;
+
+  describe('comment lifecycle', () => {
+    test('should create a comment on a request', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const requestId = persistedIds.request.id;
+      
+      const commentData = {
+        body: 'This is a test comment on a request'
+      };
+
+      const result = await createRequestComment(userId, collectionId, requestId, commentData);
+
+      expect(result.status).toBeGreaterThanOrEqual(200);
+      expect(result.status).toBeLessThan(300);
+      expect(result.data).toBeDefined();
+      expect(result.data.data).toBeDefined();
+      expect(result.data.data.id).toBeDefined();
+      expect(result.data.data.body).toBe(commentData.body);
+
+      // Save comment ID for subsequent tests
+      commentId = result.data.data.id;
+    });
+
+    test('should get all comments on a request', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const requestId = persistedIds.request.id;
+
+      const result = await getRequestComments(userId, collectionId, requestId);
+
+      expect(result.status).toBe(200);
+      expect(result.data).toBeDefined();
+      expect(result.data.data).toBeDefined();
+      expect(Array.isArray(result.data.data)).toBe(true);
+      
+      // Should include our created comment
+      const ourComment = result.data.data.find(c => c.id === commentId);
+      expect(ourComment).toBeDefined();
+      expect(ourComment.body).toBe('This is a test comment on a request');
+    });
+
+    test('should update a comment on a request', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const requestId = persistedIds.request.id;
+      
+      const updatedCommentData = {
+        body: 'This is an updated comment on a request'
+      };
+
+      const result = await updateRequestComment(userId, collectionId, requestId, commentId, updatedCommentData);
+
+      expect(result.status).toBe(200);
+      expect(result.data).toBeDefined();
+      expect(result.data.data).toBeDefined();
+      expect(result.data.data.id).toBe(commentId);
+      expect(result.data.data.body).toBe(updatedCommentData.body);
+    });
+
+    test('should delete a comment from a request', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const requestId = persistedIds.request.id;
+
+      const result = await deleteRequestComment(userId, collectionId, requestId, commentId);
+
+      expect(result.status).toBe(204);
+    });
+  });
+
+  describe('error handling', () => {
+    test('should return 404 for comments on non-existent request', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const nonExistentRequestId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+
+      await expect(getRequestComments(userId, collectionId, nonExistentRequestId)).rejects.toThrow();
+    });
+
+    test('should return error for invalid comment ID', async () => {
+      const userId = persistedIds.userId;
+      const collectionId = persistedIds.collection.id;
+      const requestId = persistedIds.request.id;
+      const invalidCommentId = 999999999;
+
+      await expect(updateRequestComment(userId, collectionId, requestId, invalidCommentId, { body: 'test' })).rejects.toThrow();
     });
   });
 });

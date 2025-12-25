@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 55 operations (28.80%)
-- **Not Implemented**: 136 operations (71.20%)
+- **Implemented**: 59 operations (30.89%)
+- **Not Implemented**: 132 operations (69.11%)
 
 ### Legend
 
@@ -88,15 +88,6 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/collections/{collectionId}/folders/{folderId}/comments` | Create folder comment | `createFolderComment()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Update comment | `updateFolderComment()` | ✅ | ✅ Passing |
 | DELETE | `/collections/{collectionId}/folders/{folderId}/comments/{commentId}` | Delete comment | `deleteFolderComment()` | ✅ | ✅ Passing |
-
-### Request Comments
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/requests/{requestId}/comments` | Get request comments | - | ❌ | ❌ None |
-| POST | `/collections/{collectionId}/requests/{requestId}/comments` | Create request comment | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/requests/{requestId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/requests/{requestId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
 
 ### Collection Responses
 
@@ -192,7 +183,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details open>
-<summary><strong>Requests Module (4/4 completed - 100%) ✅</strong></summary>
+<summary><strong>Requests Module (8/8 completed - 100%) ✅</strong></summary>
 
 ### Collection Requests
 
@@ -202,6 +193,15 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/collections/{collectionId}/requests/{requestId}` | Get a request | `getRequest()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionId}/requests/{requestId}` | Update a request | `updateRequest()` | ✅ | ✅ Passing |
 | DELETE | `/collections/{collectionId}/requests/{requestId}` | Delete a request | `deleteRequest()` | ✅ | ✅ Passing |
+
+### Request Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionUid}/requests/{requestUid}/comments` | Get request comments | `getRequestComments()` | ✅ | ✅ Passing |
+| POST | `/collections/{collectionUid}/requests/{requestUid}/comments` | Create request comment | `createRequestComment()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionUid}/requests/{requestUid}/comments/{commentId}` | Update comment | `updateRequestComment()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionUid}/requests/{requestUid}/comments/{commentId}` | Delete comment | `deleteRequestComment()` | ✅ | ✅ Passing |
 
 </details>
 

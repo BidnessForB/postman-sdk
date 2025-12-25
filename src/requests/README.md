@@ -113,6 +113,140 @@ const response = await requests.deleteRequest(collectionId, requestId);
 console.log('Deleted request:', response.data);
 ```
 
+### `getRequestComments(userId, collectionId, requestId)`
+
+Gets all comments left by users in a request.
+
+**Parameters:**
+- `userId` (string|number) - The user's ID (required for building UID)
+- `collectionId` (string) - The collection's ID
+- `requestId` (string) - The request's ID
+
+**Returns:** Promise<AxiosResponse>
+
+**Example:**
+```javascript
+const { requests, users } = require('@bidnessforb/postman-sdk');
+
+// Get authenticated user ID
+const meResponse = await users.getMe();
+const userId = meResponse.data.user.id;
+
+const collectionId = 'abc-123-collection-id';
+const requestId = 'xyz-789-request-id';
+
+const response = await requests.getRequestComments(userId, collectionId, requestId);
+console.log('Comments:', response.data.data);
+```
+
+### `createRequestComment(userId, collectionId, requestId, commentData)`
+
+Creates a comment on a request.
+
+**Parameters:**
+- `userId` (string|number) - The user's ID (required for building UID)
+- `collectionId` (string) - The collection's ID
+- `requestId` (string) - The request's ID
+- `commentData` (Object) - The comment data:
+  - `body` (string) - Comment text (required, max 10,000 characters)
+  - `threadId` (integer, optional) - Thread ID for replies
+  - `tags` (Object, optional) - Tagged users
+
+**Returns:** Promise<AxiosResponse>
+
+**Example:**
+```javascript
+const { requests, users } = require('@bidnessforb/postman-sdk');
+
+// Get authenticated user ID
+const meResponse = await users.getMe();
+const userId = meResponse.data.user.id;
+
+const collectionId = 'abc-123-collection-id';
+const requestId = 'xyz-789-request-id';
+
+// Simple comment
+const commentData = {
+  body: 'This endpoint needs authentication'
+};
+const response = await requests.createRequestComment(userId, collectionId, requestId, commentData);
+console.log('Created comment:', response.data.data);
+
+// Comment with tagged users
+const taggedComment = {
+  body: 'Hey @teammate, can you review this?',
+  tags: {
+    '@teammate': {
+      type: 'user',
+      id: '12345678'
+    }
+  }
+};
+const taggedResponse = await requests.createRequestComment(userId, collectionId, requestId, taggedComment);
+```
+
+### `updateRequestComment(userId, collectionId, requestId, commentId, commentData)`
+
+Updates a comment on a request.
+
+**Parameters:**
+- `userId` (string|number) - The user's ID (required for building UID)
+- `collectionId` (string) - The collection's ID
+- `requestId` (string) - The request's ID
+- `commentId` (string) - The comment's ID
+- `commentData` (Object) - The updated comment data:
+  - `body` (string) - Updated comment text (required, max 10,000 characters)
+  - `tags` (Object, optional) - Updated tagged users
+
+**Returns:** Promise<AxiosResponse>
+
+**Example:**
+```javascript
+const { requests, users } = require('@bidnessforb/postman-sdk');
+
+// Get authenticated user ID
+const meResponse = await users.getMe();
+const userId = meResponse.data.user.id;
+
+const collectionId = 'abc-123-collection-id';
+const requestId = 'xyz-789-request-id';
+const commentId = '46814';
+
+const updatedData = {
+  body: 'Updated: This endpoint requires Bearer token authentication'
+};
+const response = await requests.updateRequestComment(userId, collectionId, requestId, commentId, updatedData);
+console.log('Updated comment:', response.data.data);
+```
+
+### `deleteRequestComment(userId, collectionId, requestId, commentId)`
+
+Deletes a comment from a request.
+
+**Parameters:**
+- `userId` (string|number) - The user's ID (required for building UID)
+- `collectionId` (string) - The collection's ID
+- `requestId` (string) - The request's ID
+- `commentId` (string) - The comment's ID
+
+**Returns:** Promise<AxiosResponse> with status 204 (No Content)
+
+**Example:**
+```javascript
+const { requests, users } = require('@bidnessforb/postman-sdk');
+
+// Get authenticated user ID
+const meResponse = await users.getMe();
+const userId = meResponse.data.user.id;
+
+const collectionId = 'abc-123-collection-id';
+const requestId = 'xyz-789-request-id';
+const commentId = '46814';
+
+await requests.deleteRequestComment(userId, collectionId, requestId, commentId);
+console.log('Comment deleted successfully');
+```
+
 ## Request Data Structure
 
 When creating or updating requests, the `requestData` object can include the following properties (refer to the [Postman Collection Format documentation](https://schema.postman.com/collection/json/v2.1.0/draft-07/docs/index.html) for complete details):
@@ -147,7 +281,7 @@ npm run test:unit -- requests
 npm test -- src/requests/__tests__/unit.test.js
 ```
 
-**Unit test coverage (21 tests):**
+**Unit test coverage (34 tests):**
 - ✅ `createRequest()` - 5 tests
   - POST to collection root
   - POST with folder parameter
@@ -171,6 +305,24 @@ npm test -- src/requests/__tests__/unit.test.js
   - DELETE request
   - Response structure validation
   - Header validation
+- ✅ `getRequestComments()` - 3 tests
+  - GET comments with UID building
+  - UID format validation
+  - Header validation
+- ✅ `createRequestComment()` - 4 tests
+  - POST comment with body
+  - Comment with tags
+  - Comment with threadId
+  - Header validation
+- ✅ `updateRequestComment()` - 4 tests
+  - PUT comment update
+  - Update with tags
+  - URL construction with commentId
+  - Header validation
+- ✅ `deleteRequestComment()` - 3 tests
+  - DELETE comment
+  - URL construction
+  - Header validation
 
 ### Functional Tests
 
@@ -186,7 +338,9 @@ npm test -- src/requests/__tests__/functional.test.js
 - An existing collection (created by collection tests or all-up test)
 - Test IDs persisted in `test-ids.json`
 
-**Functional test coverage (10 tests):**
+**Functional test coverage (16 tests):**
+
+Request Management (10 tests):
 - ✅ Creating requests in collection root
 - ✅ Creating requests in folders
 - ✅ Getting request details
@@ -194,6 +348,14 @@ npm test -- src/requests/__tests__/functional.test.js
 - ✅ Deleting requests
 - ✅ Error handling for invalid IDs
 - ✅ Error handling for non-existent resources
+
+Request Comments (6 tests):
+- ✅ Creating comments on requests
+- ✅ Getting all comments on a request
+- ✅ Updating comments
+- ✅ Deleting comments
+- ✅ Error handling for comments on non-existent requests
+- ✅ Error handling for invalid comment IDs
 
 ## Integration with All-Up Tests
 
@@ -220,8 +382,16 @@ For complete API documentation, see:
 
 ## Notes
 
-- Collection ID (not UID) must be used for these endpoints
+### Request Management
+- Collection ID (not UID) must be used for request CRUD endpoints
 - Requests can be created at collection root level or within folders
 - Request IDs are persisted in `test-ids.json` for reuse across test runs
 - Folder of a request cannot be changed via update - use transfer endpoints instead
+
+### Request Comments
+- Collection UID and Request UID must be used for comment endpoints (format: `{userId}-{id}`)
+- Comments support tagging users with the `tags` property
+- Comments have a maximum length of 10,000 characters
+- Comment IDs are simple integers (not UIDs)
+- Thread IDs allow creating threaded comment conversations
 
