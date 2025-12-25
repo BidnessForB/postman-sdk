@@ -218,6 +218,36 @@ describe('workspaces unit tests', () => {
         })
       );
     });
+
+    test('should include about when provided without description', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { 
+          workspace: { 
+            id: DEFAULT_WORKSPACE_ID, 
+            name: 'Test Workspace' 
+          } 
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await createWorkspace('Test Workspace', 'team', null, 'About text');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            workspace: {
+              name: 'Test Workspace',
+              type: 'team',
+              about: 'About text'
+            }
+          }
+        })
+      );
+      // Should not have description
+      const callData = axios.request.mock.calls[0][0].data;
+      expect(callData.workspace).not.toHaveProperty('description');
+    });
   });
 
   describe('getWorkspace', () => {
