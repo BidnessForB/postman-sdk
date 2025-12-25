@@ -9,7 +9,7 @@
  * Options:
  *   -c, --collections    Delete ALL collections in the workspace
  *   -s, --specs          Delete ALL specs in the workspace
- *   -e, --environments   Delete ALL environments in the workspace (NOT YET IMPLEMENTED)
+ *   -e, --environments   Delete ALL environments in the workspace
  *   --force              Skip confirmation prompt and delete immediately
  * 
  * Examples:
@@ -28,7 +28,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-const { collections, specs } = require('../src/index');
+const { collections, specs, environments } = require('../src/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../src/core/config');
 
 const TEST_IDS_PATH = path.join(__dirname, '../src/__tests__/test-ids.json');
@@ -129,6 +129,34 @@ async function fetchSpecs(workspaceId) {
 }
 
 /**
+ * Fetch all environments from workspace
+ * @param {string} workspaceId - The workspace ID
+ * @returns {Promise<Array<Object>>} Array of environment objects with id and name
+ */
+async function fetchEnvironments(workspaceId) {
+  try {
+    console.log('Fetching environments from workspace...');
+    const response = await environments.getEnvironments(workspaceId);
+    const environmentList = response.data.environments || [];
+    
+    return environmentList.map(env => ({
+      id: env.id,
+      uid: env.uid,
+      name: env.name
+    }));
+  } catch (error) {
+    console.error('Error fetching environments:');
+    if (error.response) {
+      console.error(`Status: ${error.response.status}`);
+      console.error(`Message: ${JSON.stringify(error.response.data, null, 2)}`);
+    } else {
+      console.error(error.message);
+    }
+    throw error;
+  }
+}
+
+/**
  * Delete collections
  * @param {Array<Object>} collectionIds - Array of collection objects with id and name
  * @returns {Object} Summary with success and fail counts
@@ -197,6 +225,40 @@ async function deleteSpecs(specIds) {
 }
 
 /**
+ * Delete environments
+ * @param {Array<Object>} environmentIds - Array of environment objects with id and name
+ * @returns {Object} Summary with success and fail counts
+ */
+async function deleteEnvironments(environmentIds) {
+  let successCount = 0;
+  let failCount = 0;
+  
+  console.log('\n--- Deleting Environments ---\n');
+  
+  for (const env of environmentIds) {
+    try {
+      console.log(`Deleting: ${env.name}`);
+      console.log(`  ID: ${env.id}`);
+      await environments.deleteEnvironment(env.id);
+      console.log(`  ✓ Successfully deleted\n`);
+      successCount++;
+    } catch (error) {
+      console.error(`  ✗ Failed to delete`);
+      if (error.response) {
+        console.error(`    Status: ${error.response.status}`);
+        console.error(`    Message: ${JSON.stringify(error.response.data, null, 2)}`);
+      } else {
+        console.error(`    Error: ${error.message}`);
+      }
+      console.log('');
+      failCount++;
+    }
+  }
+  
+  return { successCount, failCount };
+}
+
+/**
  * Main function
  */
 async function main() {
@@ -221,7 +283,7 @@ async function main() {
     console.error('Options:');
     console.error('  -c, --collections    Delete ALL collections in workspace');
     console.error('  -s, --specs          Delete ALL specs in workspace');
-    console.error('  -e, --environments   Delete ALL environments in workspace (NOT YET IMPLEMENTED)');
+    console.error('  -e, --environments   Delete ALL environments in workspace');
     console.error('  --force              Skip confirmation prompt');
     console.error('');
     console.error('Examples:');
@@ -241,15 +303,10 @@ async function main() {
   console.log(`Workspace ID: ${workspaceId}`);
   console.log('========================================\n');
 
-  // Check if environments flag is used
-  if (deleteEnvironmentsFlag) {
-    console.log('⚠️  WARNING: Environments deletion is not yet implemented');
-    console.log('The environments API module does not exist yet.\n');
-  }
-
   // Fetch objects to delete
   let collectionsToDelete = [];
   let specsToDelete = [];
+  let environmentsToDelete = [];
 
   try {
     if (deleteCollectionsFlag) {
@@ -260,6 +317,11 @@ async function main() {
     if (deleteSpecsFlag) {
       specsToDelete = await fetchSpecs(workspaceId);
       console.log(`Found ${specsToDelete.length} spec(s)\n`);
+    }
+
+    if (deleteEnvironmentsFlag) {
+      environmentsToDelete = await fetchEnvironments(workspaceId);
+      console.log(`Found ${environmentsToDelete.length} environment(s)\n`);
     }
   } catch (error) {
     console.log('========================================\n');
@@ -293,6 +355,18 @@ async function main() {
     console.log('No specs found in workspace.\n');
   }
 
+  if (environmentsToDelete.length > 0) {
+    console.log('Environments to delete:');
+    environmentsToDelete.forEach((env, index) => {
+      console.log(`  ${index + 1}. ${env.name}`);
+      console.log(`     ID: ${env.id}`);
+    });
+    console.log('');
+    totalCount += environmentsToDelete.length;
+  } else if (deleteEnvironmentsFlag) {
+    console.log('No environments found in workspace.\n');
+  }
+
   if (totalCount === 0) {
     console.log('No objects found to delete.');
     console.log('========================================\n');
@@ -318,7 +392,8 @@ async function main() {
   // Perform deletions
   const results = {
     collections: { successCount: 0, failCount: 0 },
-    specs: { successCount: 0, failCount: 0 }
+    specs: { successCount: 0, failCount: 0 },
+    environments: { successCount: 0, failCount: 0 }
   };
 
   if (collectionsToDelete.length > 0) {
@@ -327,6 +402,10 @@ async function main() {
 
   if (specsToDelete.length > 0) {
     results.specs = await deleteSpecs(specsToDelete);
+  }
+
+  if (environmentsToDelete.length > 0) {
+    results.environments = await deleteEnvironments(environmentsToDelete);
   }
 
   // Display summary
@@ -348,8 +427,15 @@ async function main() {
     console.log(`  Total: ${specsToDelete.length}`);
   }
   
-  const totalSuccess = results.collections.successCount + results.specs.successCount;
-  const totalFailed = results.collections.failCount + results.specs.failCount;
+  if (deleteEnvironmentsFlag) {
+    console.log('Environments:');
+    console.log(`  Successfully deleted: ${results.environments.successCount}`);
+    console.log(`  Failed: ${results.environments.failCount}`);
+    console.log(`  Total: ${environmentsToDelete.length}`);
+  }
+  
+  const totalSuccess = results.collections.successCount + results.specs.successCount + results.environments.successCount;
+  const totalFailed = results.collections.failCount + results.specs.failCount + results.environments.failCount;
   
   console.log('');
   console.log(`Overall: ${totalSuccess} succeeded, ${totalFailed} failed`);
