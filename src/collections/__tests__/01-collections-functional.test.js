@@ -4,6 +4,7 @@ const {
   getCollection,
   updateCollection,
   modifyCollection,
+  deleteCollection,
   syncCollectionWithSpec
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users/index');
@@ -291,6 +292,42 @@ describe('collections functional tests (sequential flow)', () => {
     console.log(`Collection sync started with taskId: ${result.data.taskId}`);
     console.log(`Poll status at: ${result.data.url}`);
   });
+
+  test('11. deleteCollection - should delete a collection', async () => {
+    // Create a temporary collection specifically for deletion testing
+    const tempCollectionData = {
+      info: {
+        name: `Temp Collection for Deletion ${Date.now()}`,
+        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      },
+      item: []
+    };
+
+    const workspaceId = persistedIds.workspace?.id;
+    expect(workspaceId).toBeDefined();
+
+    // Create the temporary collection
+    const createResult = await createCollection(tempCollectionData, workspaceId);
+    expect(createResult.status).toBe(200);
+    expect(createResult.data).toHaveProperty('collection');
+    const tempCollectionId = createResult.data.collection.id;
+    expect(tempCollectionId).toBeDefined();
+
+    console.log(`Created temporary collection ${tempCollectionId} for deletion testing`);
+
+    // Delete the collection
+    const deleteResult = await deleteCollection(tempCollectionId);
+    expect(deleteResult.status).toBe(200);
+    expect(deleteResult.data).toHaveProperty('collection');
+    expect(deleteResult.data.collection.id).toBe(tempCollectionId);
+
+    console.log(`Successfully deleted collection ${tempCollectionId}`);
+
+    // Verify the collection is deleted by attempting to get it (should fail)
+    await expect(getCollection(tempCollectionId)).rejects.toThrow();
+    console.log('Verified collection no longer exists');
+  });
+
   describe('error handling', () => {
     test('should handle invalid workspace ID gracefully', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';

@@ -119,7 +119,7 @@ describe('collections manual cleanup', () => {
   });
 
   ('deleteFolder - manually delete test folder', async () => {
-    
+    // Note: There is now a functional test for deleteFolder in 02-folders-functional.test.js
     
     if (!testCollectionId) {
       console.log('No collectionId found in test-ids.json');
@@ -135,8 +135,8 @@ describe('collections manual cleanup', () => {
     
     const result = await deleteFolder(testCollectionId, testFolderId);
     expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('folder');
-    expect(result.data.folder.id).toBe(testFolderId);
+    expect(result.data).toHaveProperty('data');
+    expect(result.data.data.id).toBe(testFolderId);
     
     // Clear folder-related properties only
     clearTestIds(['folder.id', 'folder.name']);
@@ -147,7 +147,7 @@ describe('collections manual cleanup', () => {
   });
 
   test('deleteCollection - manually delete test collection', async () => {
-    
+    // Note: There is now a functional test for deleteCollection in 01-collections-functional.test.js
     
     if (!testCollectionId) {
       console.log('No collectionId found in test-ids.json');

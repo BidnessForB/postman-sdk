@@ -131,6 +131,37 @@ describe('folders functional tests (sequential flow)', () => {
     expect(result.data.data.name).toBe(persistedIds.folder.name);
   });
 
+  test('5. deleteFolder - should delete a folder', async () => {
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
+
+    // Create a temporary folder specifically for deletion testing
+    const tempFolderData = {
+      name: `Temp Folder for Deletion ${Date.now()}`,
+      description: 'This folder will be deleted as part of testing'
+    };
+
+    const createResult = await createFolder(collectionId, tempFolderData);
+    expect(createResult.status).toBe(200);
+    expect(createResult.data.data).toHaveProperty('id');
+    const tempFolderId = createResult.data.data.id;
+    expect(tempFolderId).toBeDefined();
+
+    console.log(`Created temporary folder ${tempFolderId} for deletion testing`);
+
+    // Delete the folder
+    const deleteResult = await deleteFolder(collectionId, tempFolderId);
+    expect(deleteResult.status).toBe(200);
+    expect(deleteResult.data).toHaveProperty('data');
+    expect(deleteResult.data.data.id).toBe(tempFolderId);
+
+    console.log(`Successfully deleted folder ${tempFolderId}`);
+
+    // Verify the folder is deleted by attempting to get it (should fail)
+    await expect(getFolder(collectionId, tempFolderId)).rejects.toThrow();
+    console.log('Verified folder no longer exists');
+  });
+
   describe('error handling', () => {
     test('should handle creating folder in non-existent collection', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
