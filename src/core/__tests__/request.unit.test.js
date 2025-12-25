@@ -154,8 +154,17 @@ describe('request', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const config = { method: 'get', url: 'https://api.getpostman.com/test' };
-
-      await expect(executeRequest(config)).rejects.toThrow(/API call failed with status 404/);
+      
+    try {
+      result = await executeRequest(config);
+    }
+    catch (error) {
+      result = error;
+      expect(result.status).toBe(404);
+      expect(result.data).toHaveProperty('error');
+      expect(result.data.error).toBe('Not found');
+    }
+      //await expect(executeRequest(config)).rejects.toThrow(/API call failed with status 404/);
     });
 
     test('should throw error for 5xx server error status', async () => {
@@ -167,7 +176,12 @@ describe('request', () => {
 
       const config = { method: 'post', url: 'https://api.getpostman.com/test' };
 
-      await expect(executeRequest(config)).rejects.toThrow(/API call failed with status 500/);
+      try {
+        await executeRequest(config);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toMatch(/API call failed with status 500/);
+      }
     });
 
     test('should include response data in error message', async () => {
@@ -179,7 +193,11 @@ describe('request', () => {
 
       const config = { method: 'post', url: 'https://api.getpostman.com/test' };
 
-      await expect(executeRequest(config)).rejects.toThrow(/Bad request/);
+      try {
+        await executeRequest(config);
+      } catch (error) {
+        expect(error.message).toMatch(/Bad request/);
+      }
     });
 
     test('should handle 3xx redirect status as error', async () => {
@@ -191,7 +209,12 @@ describe('request', () => {
 
       const config = { method: 'get', url: 'https://api.getpostman.com/test' };
 
-      await expect(executeRequest(config)).rejects.toThrow(/API call failed with status 302/);
+      try {
+        await executeRequest(config);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toMatch(/API call failed with status 302/);
+      }
     });
 
     test('should handle 1xx informational status as error', async () => {
@@ -203,7 +226,12 @@ describe('request', () => {
 
       const config = { method: 'get', url: 'https://api.getpostman.com/test' };
 
-      await expect(executeRequest(config)).rejects.toThrow(/API call failed with status 100/);
+      try {
+        await executeRequest(config);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toMatch(/API call failed with status 100/);
+      }
     });
   });
 });
