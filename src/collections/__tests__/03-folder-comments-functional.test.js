@@ -38,11 +38,7 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Comments persist indefinitely for reuse across test runs
-    if (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) {
-      console.log(`Comment ${persistedIds.folder.comment.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
-    }
+    
   });
 
   test('1. getFolderComments - should retrieve comments (initially empty)', async () => {
@@ -98,10 +94,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(folderId).toBeDefined();
     
-    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
-      console.log('Skipping test - no comment was created');
-      return;
-    }
+    
 
     const result = await getFolderComments(testUserId, collectionId, folderId);
 
@@ -120,10 +113,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(folderId).toBeDefined();
     
-    if (!persistedIds.folder.thread || !persistedIds.folder.thread.id) {
-      console.log('Skipping test - no thread ID available for reply');
-      return;
-    }
+    
 
     const threadId = persistedIds.folder.thread.id;
     const replyData = {
@@ -158,10 +148,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(folderId).toBeDefined();
     
-    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
-      console.log('Skipping test - no comment available');
-      return;
-    }
+    
 
     const commentId = persistedIds.folder.comment.id;
     const updatedData = {
@@ -182,10 +169,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(folderId).toBeDefined();
     
-    if (!persistedIds.folder.comment || !persistedIds.folder.comment.replyId) {
-      console.log('Skipping test - no reply comment available');
-      return;
-    }
+    
 
     const replyCommentId = persistedIds.folder.comment.replyId;
     const result = await deleteFolderComment(testUserId, collectionId, folderId, replyCommentId);
@@ -209,10 +193,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(folderId).toBeDefined();
     
-    if (!persistedIds.folder.comment || !persistedIds.folder.comment.id) {
-      console.log('Skipping test - no comment available');
-      return;
-    }
+    
 
     const commentId = persistedIds.folder.comment.id;
     const result = await deleteFolderComment(testUserId, collectionId, folderId, commentId);

@@ -29,11 +29,7 @@ describe('folders functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Folder persists indefinitely for reuse across test runs
-    if (persistedIds.folder && persistedIds.folder.id) {
-      console.log(`Folder ${persistedIds.folder.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
-    }
+    
   });
 
   test('1. createFolder - should create a folder in the collection', async () => {
@@ -129,6 +125,37 @@ describe('folders functional tests (sequential flow)', () => {
     
     // Verify the name matches what we expect (updated or original)
     expect(result.data.data.name).toBe(persistedIds.folder.name);
+  });
+
+  test('5. deleteFolder - should delete a folder', async () => {
+    const collectionId = persistedIds.collection.id;
+    expect(collectionId).toBeDefined();
+
+    // Create a temporary folder specifically for deletion testing
+    const tempFolderData = {
+      name: `Temp Folder for Deletion ${Date.now()}`,
+      description: 'This folder will be deleted as part of testing'
+    };
+
+    const createResult = await createFolder(collectionId, tempFolderData);
+    expect(createResult.status).toBe(200);
+    expect(createResult.data.data).toHaveProperty('id');
+    const tempFolderId = createResult.data.data.id;
+    expect(tempFolderId).toBeDefined();
+
+    console.log(`Created temporary folder ${tempFolderId} for deletion testing`);
+
+    // Delete the folder
+    const deleteResult = await deleteFolder(collectionId, tempFolderId);
+    expect(deleteResult.status).toBe(200);
+    expect(deleteResult.data).toHaveProperty('data');
+    expect(deleteResult.data.data.id).toBe(tempFolderId);
+
+    console.log(`Successfully deleted folder ${tempFolderId}`);
+
+    // Verify the folder is deleted by attempting to get it (should fail)
+    await expect(getFolder(collectionId, tempFolderId)).rejects.toThrow();
+    console.log('Verified folder no longer exists');
   });
 
   describe('error handling', () => {

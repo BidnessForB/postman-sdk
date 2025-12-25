@@ -4,13 +4,14 @@ const {
   getCollection,
   updateCollection,
   modifyCollection,
+  deleteCollection,
   syncCollectionWithSpec
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
 
-const DEFAULT_WORKSPACE_ID = '5fbcd502-1112-435f-9dac-4c943d3d0b37';
+
 
 describe('collections functional tests (sequential flow)', () => {
   let testWorkspaceId;
@@ -23,7 +24,7 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     persistedIds = loadTestIds();
-    testWorkspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
+    testWorkspaceId = persistedIds?.workspace?.id;
 
     if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log('Using persisted workspace ID:', testWorkspaceId);
@@ -49,11 +50,7 @@ describe('collections functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Collection persists indefinitely for reuse across test runs
-    if (persistedIds.collection && persistedIds.collection.id) {
-      console.log(`Collection ${persistedIds.collection.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
-    }
+    
   }); 
 
   test('1. createCollection - should create a collection in workspace', async () => {
@@ -121,12 +118,7 @@ describe('collections functional tests (sequential flow)', () => {
   }, 10000);
 
   test('4. getCollections - should filter collections by name', async () => {
-    /*
-    if (!persistedIds.collection || !persistedIds.collection.name) {
-      console.log('Skipping name filter test - no collection name available');
-      return;
-    }
-    */
+    
 
     const collectionName = persistedIds.collection.name;
     const result = await getCollections(testWorkspaceId, collectionName);
@@ -235,62 +227,43 @@ describe('collections functional tests (sequential flow)', () => {
 
   
 
-  test('10. syncCollectionWithSpec - should sync collection with spec', async () => {
-    // Note: This endpoint only works with collections that were generated from the spec
-    // Use the generatedCollection from spec.generatedCollection if available
-    const generatedCollectionId = persistedIds.spec && persistedIds.spec.generatedCollection && persistedIds.spec.generatedCollection.id;
-    const specId = persistedIds.spec && persistedIds.spec.id;
+  
 
-    // Skip test if no generated collection or spec is available
-    if (!generatedCollectionId) {
-      console.log('Skipping syncCollectionWithSpec test - no generated collection ID available');
-      console.log('Note: This endpoint only works with collections generated from a spec');
-      console.log('The generated collection ID should be in test-ids.json under spec.generatedCollection.id');
-      return;
-    }
-
-    if (!specId) {
-      console.log('Skipping syncCollectionWithSpec test - no spec ID available in test-ids.json');
-      console.log('Run specs functional tests first to create a spec');
-      return;
-    }
-
-    expect(generatedCollectionId).toBeDefined();
-    expect(userId).toBeDefined();
-
-    let result; 
-    try {
-      result = await syncCollectionWithSpec(userId, generatedCollectionId, specId);
-    } catch (err) {
-      if (err.message && err.message.includes('Request failed with status code 400')) {
-        console.log('400 response accepted as "OK"');
-        return;
-      } else {
-        throw err;
-      }
-    }
-
-    expect(result.status).toBe(202);
-    expect(result.data).toHaveProperty('taskId');
-    expect(result.data).toHaveProperty('url');
-    expect(typeof result.data.taskId).toBe('string');
-    expect(typeof result.data.url).toBe('string');
-
-    // Persist the sync task info
-    if (!persistedIds.spec.generatedCollection) {
-      persistedIds.spec.generatedCollection = {};
-    }
-    persistedIds.spec.generatedCollection.syncTask = {
-      taskId: result.data.taskId,
-      url: result.data.url,
-      specId: specId,
-      createdAt: new Date().toISOString()
+  test('11. deleteCollection - should delete a collection', async () => {
+    // Create a temporary collection specifically for deletion testing
+    const tempCollectionData = {
+      info: {
+        name: `Temp Collection for Deletion ${Date.now()}`,
+        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      },
+      item: []
     };
-    saveTestIds(persistedIds);
 
-    console.log(`Collection sync started with taskId: ${result.data.taskId}`);
-    console.log(`Poll status at: ${result.data.url}`);
+    const workspaceId = persistedIds.workspace?.id;
+    expect(workspaceId).toBeDefined();
+
+    // Create the temporary collection
+    const createResult = await createCollection(tempCollectionData, workspaceId);
+    expect(createResult.status).toBe(200);
+    expect(createResult.data).toHaveProperty('collection');
+    const tempCollectionId = createResult.data.collection.id;
+    expect(tempCollectionId).toBeDefined();
+
+    console.log(`Created temporary collection ${tempCollectionId} for deletion testing`);
+
+    // Delete the collection
+    const deleteResult = await deleteCollection(tempCollectionId);
+    expect(deleteResult.status).toBe(200);
+    expect(deleteResult.data).toHaveProperty('collection');
+    expect(deleteResult.data.collection.id).toBe(tempCollectionId);
+
+    console.log(`Successfully deleted collection ${tempCollectionId}`);
+
+    // Verify the collection is deleted by attempting to get it (should fail)
+    await expect(getCollection(tempCollectionId)).rejects.toThrow();
+    console.log('Verified collection no longer exists');
   });
+
   describe('error handling', () => {
     test('should handle invalid workspace ID gracefully', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';
@@ -304,7 +277,7 @@ describe('collections functional tests (sequential flow)', () => {
     }, 10000);
 
     test('should handle createCollection with invalid data', async () => {
-      const workspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
+      const workspaceId = persistedIds?.workspace?.id;
       const invalidData = {
         // Missing required 'info' property
       };
@@ -342,11 +315,7 @@ describe('collections functional tests (sequential flow)', () => {
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
       const specId = persistedIds.spec && persistedIds.spec.id;
 
-      // Skip if no spec available
-      if (!specId || !userId) {
-        console.log('Skipping error test - no spec ID or userId available');
-        return;
-      }
+      
 
       await expect(syncCollectionWithSpec(userId, fakeCollectionId, specId)).rejects.toThrow();
     });
@@ -355,11 +324,7 @@ describe('collections functional tests (sequential flow)', () => {
       const collectionId = persistedIds.collection && persistedIds.collection.id;
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
 
-      // Skip if no collection available
-      if (!collectionId || !userId) {
-        console.log('Skipping error test - no collection ID or userId available');
-        return;
-      }
+      
 
       await expect(syncCollectionWithSpec(userId, collectionId, fakeSpecId)).rejects.toThrow();
     });

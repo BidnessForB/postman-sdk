@@ -30,9 +30,7 @@ describe('workspaces functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Workspace persists for reuse across test runs
-    console.log(`Test workspace ID ${testWorkspaceId} persisted for future test runs`);
-    console.log(`Delete manually if needed using: await deleteWorkspace('${testWorkspaceId}')`);
+    
   });
 
   test('1. createWorkspace - should create a team workspace', async () => {
