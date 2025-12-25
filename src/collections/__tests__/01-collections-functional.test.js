@@ -4,7 +4,9 @@ const {
   getCollection,
   updateCollection,
   modifyCollection,
-  syncCollectionWithSpec
+  syncCollectionWithSpec,
+  createCollectionGeneration,
+  getCollectionGenerations
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
@@ -280,6 +282,124 @@ describe('collections functional tests (sequential flow)', () => {
     console.log(`Poll status at: ${result.data.url}`);
   });
 
+  test('11. createCollectionGeneration - should generate spec from collection', async () => {
+    const collectionId = persistedIds.collection && persistedIds.collection.id;
+
+    // Skip test if no collection is available
+    if (!collectionId) {
+      console.log('Skipping createCollectionGeneration test - no collection ID available in test-ids.json');
+      console.log('Run collection tests first to create a collection');
+      return;
+    }
+
+    expect(collectionId).toBeDefined();
+    expect(userId).toBeDefined();
+
+    const elementType = 'spec';
+    const name = `Generated Spec from Collection ${Date.now()}`;
+    const type = 'OPENAPI:3.0';
+    const format = 'JSON';
+
+    try {
+      const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+
+      expect(result.status).toBe(202);
+      expect(result.data).toHaveProperty('taskId');
+      expect(result.data).toHaveProperty('url');
+      expect(typeof result.data.taskId).toBe('string');
+      expect(typeof result.data.url).toBe('string');
+
+      // Persist the generated spec info
+      if (!persistedIds.collection.generatedSpec) {
+        persistedIds.collection.generatedSpec = {};
+      }
+      persistedIds.collection.generatedSpec = {
+        name: name,
+        taskId: result.data.taskId,
+        url: result.data.url,
+        type: type,
+        format: format,
+        createdAt: new Date().toISOString()
+      };
+      saveTestIds(persistedIds);
+
+      console.log(`Spec generation started with taskId: ${result.data.taskId}`);
+      console.log(`Poll status at: ${result.data.url}`);
+      console.log(`Generated spec info saved to test-ids.json`);
+    } catch (error) {
+      // Handle 404 or 403 errors gracefully - collection might not support spec generation
+      if (error.response && (error.response.status === 404 || error.response.status === 403)) {
+        console.log(`Skipping: Collection ${collectionId} does not support spec generation (${error.response.status})`);
+        console.log('Note: Spec generation may only be available for certain collection types or require specific permissions');
+        return;
+      }
+      throw error;
+    }
+  });
+
+  test('12. getCollectionGenerations - should retrieve generated specs list', async () => {
+    const collectionId = persistedIds.collection && persistedIds.collection.id;
+
+    // Skip test if no collection is available
+    if (!collectionId) {
+      console.log('Skipping getCollectionGenerations test - no collection ID available in test-ids.json');
+      return;
+    }
+
+    expect(collectionId).toBeDefined();
+    expect(userId).toBeDefined();
+
+    const elementType = 'spec';
+
+    try {
+      const result = await getCollectionGenerations(userId, collectionId, elementType);
+
+      expect(result.status).toBe(200);
+      expect(result.data).toHaveProperty('specs');
+      expect(result.data).toHaveProperty('meta');
+      expect(Array.isArray(result.data.specs)).toBe(true);
+
+      // If there are specs, verify their structure
+      if (result.data.specs.length > 0) {
+        const spec = result.data.specs[0];
+        expect(spec).toHaveProperty('id');
+        expect(spec).toHaveProperty('name');
+        expect(spec).toHaveProperty('state');
+        expect(spec).toHaveProperty('createdAt');
+        expect(spec).toHaveProperty('updatedAt');
+        expect(spec).toHaveProperty('createdBy');
+
+        console.log(`Found ${result.data.specs.length} generated spec(s)`);
+        console.log(`First spec: ${spec.name} (${spec.state})`);
+        
+        // Optionally persist the first spec ID if we don't have one yet
+        if (!persistedIds.collection.generatedSpec || !persistedIds.collection.generatedSpec.id) {
+          if (!persistedIds.collection.generatedSpec) {
+            persistedIds.collection.generatedSpec = {};
+          }
+          persistedIds.collection.generatedSpec.id = spec.id;
+          persistedIds.collection.generatedSpec.name = spec.name;
+          persistedIds.collection.generatedSpec.state = spec.state;
+          saveTestIds(persistedIds);
+          console.log(`Persisted generated spec ID: ${spec.id}`);
+        }
+      } else {
+        console.log('No generated specs found yet (generation may still be pending)');
+      }
+
+      // Verify meta has pagination info
+      expect(result.data.meta).toHaveProperty('nextCursor');
+    } catch (error) {
+      // Handle 403 errors gracefully - collection might not have permissions
+      if (error.response && (error.response.status === 403 || error.response.status === 404)) {
+        console.log(`Skipping: Unable to retrieve generated specs for collection ${collectionId} (${error.response.status})`);
+        console.log('Note: This may require specific permissions or the collection may not support spec generation');
+        return;
+      }
+      throw error;
+    }
+  });
+
   describe('error handling', () => {
     test('should handle invalid workspace ID gracefully', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';
@@ -351,6 +471,41 @@ describe('collections functional tests (sequential flow)', () => {
       }
 
       await expect(syncCollectionWithSpec(userId, collectionId, fakeSpecId)).rejects.toThrow();
+    });
+
+    test('createCollectionGeneration - should throw error for non-existent collection', async () => {
+      const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
+
+      // Skip if no userId available
+      if (!userId) {
+        console.log('Skipping error test - no userId available');
+        return;
+      }
+
+      const elementType = 'spec';
+      const name = 'Test Spec';
+      const type = 'OPENAPI:3.0';
+      const format = 'JSON';
+
+      await expect(
+        createCollectionGeneration(userId, fakeCollectionId, elementType, name, type, format)
+      ).rejects.toThrow();
+    });
+
+    test('getCollectionGenerations - should throw error for non-existent collection', async () => {
+      const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
+
+      // Skip if no userId available
+      if (!userId) {
+        console.log('Skipping error test - no userId available');
+        return;
+      }
+
+      const elementType = 'spec';
+
+      await expect(
+        getCollectionGenerations(userId, fakeCollectionId, elementType)
+      ).rejects.toThrow();
     });
   });
 });

@@ -313,6 +313,43 @@ async function syncCollectionWithSpec(userId, collectionId, specId) {
   return await executeRequest(config);
 }
 
+/**
+ * Generates a spec from a collection
+ * Postman API endpoint and method: POST /collections/{collectionUid}/generations/{elementType}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} elementType - The element type (e.g., 'spec')
+ * @param {string} name - The API specification's name
+ * @param {string} type - The specification's type (e.g., 'OPENAPI:3.0')
+ * @param {string} format - The format of the API specification (e.g., 'JSON', 'YAML')
+ * @returns {Promise} Axios response with taskId and url
+ */
+async function createCollectionGeneration(userId, collectionId, elementType, name, type, format) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
+  const config = buildAxiosConfig('post', endpoint, {
+    name,
+    type,
+    format
+  });
+  return await executeRequest(config);
+}
+
+/**
+ * Gets the list of specs generated from a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/generations/{elementType}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} elementType - The element type (e.g., 'spec')
+ * @returns {Promise} Axios response with specs array and pagination metadata
+ */
+async function getCollectionGenerations(userId, collectionId, elementType) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -332,5 +369,7 @@ module.exports = {
   createFolderComment,
   updateFolderComment,
   deleteFolderComment,
-  syncCollectionWithSpec
+  syncCollectionWithSpec,
+  createCollectionGeneration,
+  getCollectionGenerations
 };

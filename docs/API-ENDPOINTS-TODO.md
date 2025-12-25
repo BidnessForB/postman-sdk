@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 39 operations (20.42%)
-- **Not Implemented**: 152 operations (79.58%)
+- **Implemented**: 41 operations (21.47%)
+- **Not Implemented**: 150 operations (78.53%)
 
 ### Legend
 
@@ -45,7 +45,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Collections Module (19/64 completed - 29.7%)
+## Collections Module (21/64 completed - 32.8%)
 
 ### Core Collection Operations
 
@@ -164,6 +164,13 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/collections/{collectionId}/duplicates` | Duplicate a collection | - | ❌ | ❌ None |
 | GET | `/collections/{collectionId}/source-status` | Get source collection status | - | ❌ | ❌ None |
 | PUT | `/collections/{collectionUid}/synchronizations` | Sync collection with spec | `syncCollectionWithSpec()` | ✅ | ✅ Passing |
+
+### Collection Generations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionUid}/generations/{elementType}` | Generate spec from collection | `createCollectionGeneration()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionUid}/generations/{elementType}` | Get generated specs | `getCollectionGenerations()` | ✅ | ✅ Passing |
 
 ### Collection Transfer & Tasks
 

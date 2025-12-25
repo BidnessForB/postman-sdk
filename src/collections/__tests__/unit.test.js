@@ -14,7 +14,9 @@ const {
   createFolderComment,
   updateFolderComment,
   deleteFolderComment,
-  syncCollectionWithSpec
+  syncCollectionWithSpec,
+  createCollectionGeneration,
+  getCollectionGenerations
 } = require('../index');
 
 jest.mock('axios');
@@ -730,6 +732,139 @@ describe('collections unit tests', () => {
       const specId = 'spec-456';
 
       await syncCollectionWithSpec(userId, collectionId, specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('createCollectionGeneration', () => {
+    test('should call POST /collections/{collectionUid}/generations/{elementType}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          taskId: '66ae9950-0869-4e65-96b0-1e0e47e771af',
+          url: '/collections/12345678-col-123/tasks/66ae9950-0869-4e65-96b0-1e0e47e771af'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const elementType = 'spec';
+      const name = 'My Generated Spec';
+      const type = 'OPENAPI:3.0';
+      const format = 'JSON';
+
+      const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/generations/spec',
+          data: {
+            name: 'My Generated Spec',
+            type: 'OPENAPI:3.0',
+            format: 'JSON'
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.taskId).toBeDefined();
+      expect(result.data.url).toBeDefined();
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          taskId: 'test-task-id',
+          url: '/collections/test-collection/tasks/test-task-id'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const elementType = 'spec';
+      const name = 'Test Spec';
+      const type = 'OPENAPI:3.0';
+      const format = 'YAML';
+
+      await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('getCollectionGenerations', () => {
+    test('should call GET /collections/{collectionUid}/generations/{elementType}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          meta: {
+            nextCursor: null
+          },
+          specs: [
+            {
+              id: 'e8a015e0-f472-4bb3-a523-57ce7c4583ef',
+              name: 'Sample API',
+              state: 'in-sync',
+              createdAt: '2022-03-29T11:37:15Z',
+              updatedAt: '2022-03-29T11:37:15Z',
+              createdBy: 12345678,
+              updatedBy: 12345678
+            }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const elementType = 'spec';
+
+      const result = await getCollectionGenerations(userId, collectionId, elementType);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/generations/spec'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.specs).toBeDefined();
+      expect(Array.isArray(result.data.specs)).toBe(true);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          meta: { nextCursor: null },
+          specs: []
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const elementType = 'spec';
+
+      await getCollectionGenerations(userId, collectionId, elementType);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
