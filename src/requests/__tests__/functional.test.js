@@ -333,7 +333,7 @@ describe('requests functional tests (sequential flow)', () => {
       test('should return 404 for comments on non-existent request', async () => {
         const userId = persistedIds.userId;
         const collectionId = persistedIds.collection.id;
-        const nonExistentRequestId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        const nonExistentRequestId = '00000000-0000-0000-0000-000000000000';
         const result = await getRequestComments(userId, collectionId, nonExistentRequestId);
         expect(result.status).toBe(200);
         expect(result.data).toBeDefined();

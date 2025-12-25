@@ -45,7 +45,7 @@ else if(uuidWithPrefixRegex.test(objectId)) {
   return objectId;
 }
 else {
-  throw new Error('Invalid object ID');
+  return null;
 }
 }
 
