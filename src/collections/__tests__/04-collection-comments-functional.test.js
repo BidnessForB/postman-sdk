@@ -80,10 +80,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     const collectionId = persistedIds.collection.id;
     expect(collectionId).toBeDefined();
     
-    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
-      console.log('Skipping test - no comment was created');
-      return;
-    }
+    
 
     const result = await getCollectionComments(testUserId, collectionId);
 
@@ -99,10 +96,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     const collectionId = persistedIds.collection.id;
     expect(collectionId).toBeDefined();
     
-    if (!persistedIds.collection.thread || !persistedIds.collection.thread.id) {
-      console.log('Skipping test - no thread ID available for reply');
-      return;
-    }
+    
 
     const threadId = persistedIds.collection.thread.id;
     const replyData = {
@@ -134,10 +128,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     const collectionId = persistedIds.collection.id;
     expect(collectionId).toBeDefined();
     
-    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
-      console.log('Skipping test - no comment available');
-      return;
-    }
+    
 
     const commentId = persistedIds.collection.comment.id;
     const updatedData = {
@@ -155,10 +146,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     const collectionId = persistedIds.collection.id;
     expect(collectionId).toBeDefined();
     
-    if (!persistedIds.collection.comment || !persistedIds.collection.comment.replyId) {
-      console.log('Skipping test - no reply comment available');
-      return;
-    }
+    
 
     const replyCommentId = persistedIds.collection.comment.replyId;
     const result = await deleteCollectionComment(testUserId, collectionId, replyCommentId);
@@ -179,10 +167,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     const collectionId = persistedIds.collection.id;
     expect(collectionId).toBeDefined();
     
-    if (!persistedIds.collection.comment || !persistedIds.collection.comment.id) {
-      console.log('Skipping test - no comment available');
-      return;
-    }
+    
 
     const commentId = persistedIds.collection.comment.id;
     const result = await deleteCollectionComment(testUserId, collectionId, commentId);

@@ -33,10 +33,7 @@ describe('transformations functional tests', () => {
   test('CreateSourceCollection - should create a new collection for transformations', async () => {
     const workspaceId = persistedIds.workspace?.id;
 
-    if (!workspaceId) {
-      console.log('Skipping CreateSourceCollection - missing workspaceId');
-      return;
-    }
+    
 
     const timestamp = Date.now();
     const collectionName = `Transformations Test Collection ${timestamp}`;
@@ -91,10 +88,7 @@ describe('transformations functional tests', () => {
   test('CreateSourceSpec - should create a new spec for transformations', async () => {
     const workspaceId = persistedIds.workspace?.id;
 
-    if (!workspaceId) {
-      console.log('Skipping CreateSourceSpec - missing workspaceId');
-      return;
-    }
+    
 
     const timestamp = Date.now();
     const specName = `Transformations Test Spec ${timestamp}`;
@@ -165,11 +159,7 @@ describe('transformations functional tests', () => {
     test('1. createSpecGeneration - should generate a collection from spec', async () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
 
-      if (!specId) {
-        console.log('Skipping createSpecGeneration test - no transformations source spec ID available');
-        console.log('Run CreateSourceSpec test first');
-        return;
-      }
+      
 
       expect(specId).toBeDefined();
 
@@ -209,10 +199,7 @@ describe('transformations functional tests', () => {
     test('2. createSpecGeneration - should fail with minimal params (no options)', async () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
 
-      if (!specId) {
-        console.log('Skipping test - no transformations source spec ID available');
-        return;
-      }
+      
 
       // Test with no optional parameters (just spec ID and element type)
       await expect(
@@ -224,11 +211,7 @@ describe('transformations functional tests', () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
       const taskId = persistedIds?.transformations?.sourceSpec?.generatedCollection?.taskId;
       
-      if (!specId || !taskId) {
-        console.log('Skipping getSpecTaskStatus test - no spec ID or taskId available');
-        console.log('Run test 1 (createSpecGeneration) first');
-        return;
-      }
+      
 
       expect(specId).toBeDefined();
       expect(taskId).toBeDefined();
@@ -264,10 +247,7 @@ describe('transformations functional tests', () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
       const taskId = persistedIds?.transformations?.sourceSpec?.generatedCollection?.taskId;
       
-      if (!specId || !taskId) {
-        console.log('Skipping polling test - no spec ID or taskId available');
-        return;
-      }
+      
 
       expect(specId).toBeDefined();
       expect(taskId).toBeDefined();
@@ -336,10 +316,7 @@ describe('transformations functional tests', () => {
     test('5. getSpecGenerations - should retrieve generated collections list', async () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
 
-      if (!specId) {
-        console.log('Skipping getSpecGenerations test - no transformations source spec ID available');
-        return;
-      }
+      
 
       expect(specId).toBeDefined();
 
@@ -376,10 +353,7 @@ describe('transformations functional tests', () => {
     test('6. getSpecGenerations - should support pagination with limit', async () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
 
-      if (!specId) {
-        console.log('Skipping pagination test - no transformations source spec ID available');
-        return;
-      }
+      
 
       expect(specId).toBeDefined();
 
@@ -456,10 +430,7 @@ describe('transformations functional tests', () => {
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
       const userId = persistedIds?.userId;
 
-      if (!genSpecId || !userId) {
-        console.log('Skipping error test - prerequisites not available');
-        return;
-      }
+      
 
       await expect(
         syncCollectionWithSpec(userId, fakeCollectionId, genSpecId)
@@ -471,10 +442,7 @@ describe('transformations functional tests', () => {
       const srcCollectionId = persistedIds?.collection?.id;
       const userId = persistedIds?.userId;
 
-      if (!srcCollectionId || !userId) {
-        console.log('Skipping error test - prerequisites not available');
-        return;
-      }
+      
 
       await expect(
         syncCollectionWithSpec(userId, srcCollectionId, fakeSpecId)
@@ -488,17 +456,7 @@ describe('transformations functional tests', () => {
       const collectionId = persistedIds?.transformations?.sourceCollection?.id;
       const userId = persistedIds?.userId;
 
-      // Skip test if no collection is available
-      if (!collectionId) {
-        console.log('Skipping createCollectionGeneration test - no transformations source collection ID available');
-        console.log('Run CreateSourceCollection test first');
-        return;
-      }
-
-      if (!userId) {
-        console.log('Skipping createCollectionGeneration test - no userId available');
-        return;
-      }
+      
 
       expect(collectionId).toBeDefined();
       expect(userId).toBeDefined();
@@ -551,17 +509,9 @@ describe('transformations functional tests', () => {
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
       const userId = persistedIds?.userId;
 
-      // Skip test if no collection or taskId is available
-      if (!collectionId || !taskId) {
-        console.log('Skipping getCollectionTaskStatus test - no collection ID or taskId available');
-        console.log('Run test 1 (createCollectionGeneration) first to create a generation task');
-        return;
-      }
+      
 
-      if (!userId) {
-        console.log('Skipping getCollectionTaskStatus test - no userId available');
-        return;
-      }
+      
 
       expect(collectionId).toBeDefined();
       expect(taskId).toBeDefined();
@@ -596,16 +546,9 @@ describe('transformations functional tests', () => {
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
       const userId = persistedIds?.userId;
 
-      // Skip test if no collection or taskId is available
-      if (!collectionId || !taskId) {
-        console.log('Skipping polling test - no collection ID or taskId available');
-        return;
-      }
+      
 
-      if (!userId) {
-        console.log('Skipping polling test - no userId available');
-        return;
-      }
+      
 
       expect(collectionId).toBeDefined();
       expect(taskId).toBeDefined();
@@ -686,16 +629,8 @@ describe('transformations functional tests', () => {
       const collectionId = persistedIds?.transformations?.sourceCollection?.id;
       const userId = persistedIds?.userId;
 
-      // Skip test if no collection is available
-      if (!collectionId) {
-        console.log('Skipping getCollectionGenerations test - no transformations source collection ID available');
-        return;
-      }
+      
 
-      if (!userId) {
-        console.log('Skipping getCollectionGenerations test - no userId available');
-        return;
-      }
 
       expect(collectionId).toBeDefined();
       expect(userId).toBeDefined();
@@ -809,10 +744,7 @@ describe('transformations functional tests', () => {
       const srcCollectionId = persistedIds?.collection?.id;
       const userId = persistedIds?.userId;
 
-      if (!srcCollectionId || !userId) {
-        console.log('Skipping error test - prerequisites not available');
-        return;
-      }
+      
 
       const collectionUid = buildUid(userId, srcCollectionId);
 

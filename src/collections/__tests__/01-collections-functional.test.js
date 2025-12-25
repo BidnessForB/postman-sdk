@@ -118,12 +118,7 @@ describe('collections functional tests (sequential flow)', () => {
   }, 10000);
 
   test('4. getCollections - should filter collections by name', async () => {
-    /*
-    if (!persistedIds.collection || !persistedIds.collection.name) {
-      console.log('Skipping name filter test - no collection name available');
-      return;
-    }
-    */
+    
 
     const collectionName = persistedIds.collection.name;
     const result = await getCollections(testWorkspaceId, collectionName);
@@ -320,11 +315,7 @@ describe('collections functional tests (sequential flow)', () => {
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
       const specId = persistedIds.spec && persistedIds.spec.id;
 
-      // Skip if no spec available
-      if (!specId || !userId) {
-        console.log('Skipping error test - no spec ID or userId available');
-        return;
-      }
+      
 
       await expect(syncCollectionWithSpec(userId, fakeCollectionId, specId)).rejects.toThrow();
     });
@@ -333,11 +324,7 @@ describe('collections functional tests (sequential flow)', () => {
       const collectionId = persistedIds.collection && persistedIds.collection.id;
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
 
-      // Skip if no collection available
-      if (!collectionId || !userId) {
-        console.log('Skipping error test - no collection ID or userId available');
-        return;
-      }
+      
 
       await expect(syncCollectionWithSpec(userId, collectionId, fakeSpecId)).rejects.toThrow();
     });

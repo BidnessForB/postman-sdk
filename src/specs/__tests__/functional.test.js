@@ -432,11 +432,7 @@ describe('specs functional tests', () => {
       const specId = persistedIds.spec && persistedIds.spec.id;
       const fakeCollectionUid = '12345678-00000000-0000-0000-0000-000000000000';
 
-      // Skip if no spec available
-      if (!specId) {
-        console.log('Skipping error test - no spec ID available');
-        return;
-      }
+      
 
       await expect(
         syncSpecWithCollection(specId, fakeCollectionUid)
