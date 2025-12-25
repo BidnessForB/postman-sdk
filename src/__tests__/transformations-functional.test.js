@@ -404,24 +404,7 @@ describe('transformations functional tests', () => {
       const genCollectionid = persistedIds?.transformations?.sourceSpec?.generatedCollection?.id;
       const userId = persistedIds?.userId;
 
-      // Skip test if prerequisites aren't met
-      if (!srcSpecId) {
-        console.log('Skipping syncCollectionWithSpec test - no generated spec ID available');
-        console.log('Run collections functional tests first to generate a spec from a collection');
-        console.log('Specifically, run test 11b (getCollectionTaskStatus - Poll until complete)');
-        return;
-      }
-
-      if (!genCollectionid) {
-        console.log('Skipping syncCollectionWithSpec test - no collection ID available');
-        console.log('Run collections functional tests first to create a collection');
-        return;
-      }
-
-      if (!userId) {
-        console.log('Skipping syncCollectionWithSpec test - no userId available');
-        return;
-      }
+      
 
       expect(srcSpecId).toBeDefined();
       expect(genCollectionid).toBeDefined();
@@ -435,8 +418,12 @@ describe('transformations functional tests', () => {
         result = await syncCollectionWithSpec(userId, genCollectionid, srcSpecId);  
       } catch (err) {
         // Handle known error responses
+        if(err?.response?.data?.status === 400 && err?.response?.data?.detail === 'Collection is already in sync') {
+          console.log('Received 400, already in sync, OK');
+          return;
+        }
         console.log(err);
-        throw err;
+        fail('syncCollectionWithSpec threw unexpected error: ' + (err && err.message ? err.message : JSON.stringify(err)));
       } 
 
       // If we got here, the sync was successful
