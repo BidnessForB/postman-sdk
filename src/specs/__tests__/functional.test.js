@@ -383,34 +383,12 @@ describe('specs functional tests', () => {
 
   test('13. getSpecTaskStatus - should get status of generation task', async () => {
     const specId = persistedIds.spec.id;
-    
-    // First create a generation task using the same options as test 11
-    const collectionName = `Generated Collection ${Date.now()}`;
-    const options = {
-      requestNameSource: 'Fallback',
-      folderStrategy: 'Paths',
-      includeAuthInfoInExample: true
-    };
-    
-    let generationResult;
     let taskId;
+    let needsNewGeneration = false;
     
-    try {
-      // Try to create a new generation task
-      generationResult = await createSpecGeneration(specId, 'collection', collectionName, options);
-      expect(generationResult.status).toBe(202);
-      expect(generationResult.data).toHaveProperty('taskId');
-      taskId = generationResult.data.taskId;
-    } catch (error) {
-      // If 423 (generation already in progress), extract taskId from the URL in test 11
-      // For this test, we'll just skip if there's already a generation in progress
-      if (error.response && error.response.status === 423) {
-        console.log('Generation already in progress (423), test will use a mock taskId for demonstration');
-        // We can still test the error case in the error handling section
-        return;
-      }
-      throw error;
-    }
+    // Use persisted taskId from test 11 if available
+      taskId = persistedIds.spec.generatedCollection.taskId;
+      console.log(`Using persisted taskId from test 11: ${taskId}`);
     
     // Now poll the task status
     const statusResult = await getSpecTaskStatus(specId, taskId);
@@ -421,6 +399,17 @@ describe('specs functional tests', () => {
     if (statusResult.data.meta) {
       expect(statusResult.data.meta).toHaveProperty('model');
       expect(statusResult.data.meta).toHaveProperty('action');
+    }
+    
+    // If task is completed and has a collection ID, persist it
+    if (statusResult.data.status === 'completed' && statusResult.data.meta && statusResult.data.meta.collection) {
+      persistedIds.spec.generatedCollection = {
+        ...persistedIds.spec.generatedCollection,
+        id: statusResult.data.meta.collection.id,
+        uid: statusResult.data.meta.collection.uid
+      };
+      saveTestIds(persistedIds);
+      console.log(`Generated collection ID persisted: ${statusResult.data.meta.collection.id}`);
     }
     
     console.log(`Task status: ${statusResult.data.status}`);

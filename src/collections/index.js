@@ -294,6 +294,25 @@ async function deleteFolderComment(userId, collectionId, folderId, commentId) {
   return await executeRequest(config);
 }
 
+/**
+ * Sync collection with spec
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/synchronizations
+ * @param {string} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} specId - The spec's ID
+ * @returns {Promise} Axios response
+ */
+async function syncCollectionWithSpec(userId, collectionId, specId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/synchronizations`;
+  const queryParams = {
+    specId
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('put', fullEndpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -312,5 +331,6 @@ module.exports = {
   getFolderComments,
   createFolderComment,
   updateFolderComment,
-  deleteFolderComment
+  deleteFolderComment,
+  syncCollectionWithSpec
 };

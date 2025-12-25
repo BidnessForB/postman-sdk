@@ -13,7 +13,8 @@ const {
   getFolderComments,
   createFolderComment,
   updateFolderComment,
-  deleteFolderComment
+  deleteFolderComment,
+  syncCollectionWithSpec
 } = require('../index');
 
 jest.mock('axios');
@@ -685,6 +686,59 @@ describe('collections unit tests', () => {
         })
       );
       expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('syncCollectionWithSpec', () => {
+    test('should call PUT /collections/{collectionUid}/synchronizations with specId query param', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: '66ae9950-0869-4e65-96b0-1e0e47e771af',
+          url: '/specs/73e15000-bc7a-4802-b80e-05fff18fd7f8/tasks/66ae9950-0869-4e65-96b0-1e0e47e771af'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const specId = 'spec-456';
+
+      const result = await syncCollectionWithSpec(userId, collectionId, specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/synchronizations?specId=spec-456'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'test-task-id',
+          url: '/specs/test-spec/tasks/test-task-id'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const specId = 'spec-456';
+
+      await syncCollectionWithSpec(userId, collectionId, specId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
     });
   });
 });
