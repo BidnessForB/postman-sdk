@@ -43,10 +43,13 @@ describe('specs manual cleanup', () => {
     const result = await deleteSpec(testSpecId);
     expect(result.status).toBe(204);
     
-    // Clear spec-related properties only
-    const clearedIds = clearTestIds(['spec.id', 'spec.name']);
+    // Clear spec-related properties including generated collection info
+    const clearedIds = clearTestIds(['spec.id', 'spec.name', 'spec.generatedCollection']);
     expect(clearedIds.spec.id).toBeNull();
     expect(clearedIds.spec.name).toBeNull();
+    if (clearedIds.spec.generatedCollection !== undefined) {
+      expect(clearedIds.spec.generatedCollection).toBeNull();
+    }
     
     console.log('Spec deleted and spec properties cleared from test-ids.json');
     

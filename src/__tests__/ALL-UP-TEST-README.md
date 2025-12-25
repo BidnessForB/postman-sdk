@@ -41,6 +41,14 @@ The tests run in the following sequence to respect resource dependencies:
    - Tests spec file operations
    - Persists spec IDs
 
+7. **Transformations** (`transformations/__tests__/functional.test.js`)
+   - Creates dedicated test collection and spec for transformations
+   - Tests bi-directional synchronization between specs and collections
+   - Syncs generated specs with source collections (spec-to-collection)
+   - Syncs collections with generated specs (collection-to-spec)
+   - Persists transformation resource IDs under `transformations` key
+   - Uses resources created in previous phases for sync operations
+
 ## Running the Test
 
 ### ⚠️ Important Warning
@@ -141,7 +149,27 @@ After running the all-up test, your `test-ids.json` will contain:
     "id": "jkl-012-spec-id",
     "name": "SDK Functional Test Spec",
     "createdAt": "2025-12-23T10:30:00.000Z",
-    "updatedAt": "2025-12-23T10:31:00.000Z"
+    "generatedCollection": {
+      "id": "userId-collectionId",
+      "name": "Generated Collection 1234567890",
+      "taskId": "task-id-123"
+    }
+  },
+  "transformations": {
+    "sourceCollection": {
+      "id": "mno-345-collection-id",
+      "uid": "userId-mno-345-collection-id",
+      "name": "Transformations Test Collection 1234567890",
+      "workspaceId": "abc-123-workspace-id",
+      "createdAt": "2025-12-23T10:32:00.000Z"
+    },
+    "sourceSpec": {
+      "id": "pqr-678-spec-id",
+      "name": "Transformations Test Spec 1234567890",
+      "workspaceId": "abc-123-workspace-id",
+      "type": "OPENAPI:3.0",
+      "createdAt": "2025-12-23T10:32:01.000Z"
+    }
   }
 }
 ```
@@ -167,14 +195,17 @@ All-Up Functional Test Suite
       ✓ 2. getCollections - should retrieve collections from workspace
       ... (more tests)
 
-  Phase 3: Folders
-  Phase 4: Folder Comments
-  Phase 5: Collection Comments
+  Phase 3: Collection Comments
+  Phase 4: Folders
+  Phase 5: Folder Comments
   Phase 6: Specs
+  Phase 7: Transformations
 
 Test Suites: 1 passed, 1 total
-Tests:       145 passed, 145 total
+Tests:       106 passed, 106 total
 ```
+c6d2471c-3664-47b5-adc8-35d52484f2f6
+
 
 ### Test Duration
 

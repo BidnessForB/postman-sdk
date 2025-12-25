@@ -189,6 +189,57 @@ async function createSpecGeneration(specId, elementType, name = null, options = 
   return await executeRequest(config);
 }
 
+/**
+ * Gets the status of an asynchronous API specification task
+ * Postman API endpoint and method: GET /specs/{specId}/tasks/{taskId}
+ * @param {string} specId - The spec ID
+ * @param {string} taskId - The task ID (returned from async operations like createSpecGeneration)
+ * @returns {Promise} Axios response with status and meta information
+ */
+async function getSpecTaskStatus(specId, taskId) {
+  const endpoint = `/specs/${specId}/tasks/${taskId}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Gets a list of collections generated from a spec
+ * Postman API endpoint and method: GET /specs/{specId}/generations/{elementType}
+ * @param {string} specId - The spec ID
+ * @param {string} elementType - The element type (e.g., 'collection')
+ * @param {number} limit - The maximum number of rows to return (default 10)
+ * @param {string} cursor - Pagination cursor for next set of results
+ * @returns {Promise} Axios response with collections array and pagination metadata
+ */
+async function getSpecGenerations(specId, elementType, limit = null, cursor = null) {
+  const endpoint = `/specs/${specId}/generations/${elementType}`;
+  const queryParams = {
+    limit,
+    cursor
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('get', fullEndpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Syncs a spec with a collection
+ * Postman API endpoint and method: PUT /specs/{specId}/synchronizations
+ * @param {string} specId - The spec ID
+ * @param {string} collectionUid - The collection's unique ID (userId-collectionId)
+ * @returns {Promise} Axios response with taskId and url
+ */
+async function syncSpecWithCollection(specId, collectionUid) {
+  const endpoint = `/specs/${specId}/synchronizations`;
+  const queryParams = {
+    collectionUid
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('put', fullEndpoint);
+  const results = await executeRequest(config);
+  return results;
+}
+
 module.exports = {
   getSpecs,
   getSpec,
@@ -201,6 +252,9 @@ module.exports = {
   getSpecFile,
   modifySpecFile,
   deleteSpecFile,
-  createSpecGeneration
+  createSpecGeneration,
+  getSpecTaskStatus,
+  getSpecGenerations,
+  syncSpecWithCollection
 };
 

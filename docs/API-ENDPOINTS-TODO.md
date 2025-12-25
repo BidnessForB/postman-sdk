@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 36 operations (18.85%)
-- **Not Implemented**: 155 operations (81.15%)
+- **Implemented**: 43 operations (22.51%)
+- **Not Implemented**: 148 operations (77.49%)
 
 ### Legend
 
@@ -23,7 +23,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Specs Module (12/14 completed - 85.7%)
+## Specs Module (15/15 completed - 100%)
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
@@ -39,12 +39,13 @@ This document tracks the implementation status of all Postman API endpoints in t
 | PATCH | `/specs/{specId}/files/{filePath}` | Update spec file | `modifySpecFile()` | ✅ | ✅ Passing |
 | DELETE | `/specs/{specId}/files/{filePath}` | Delete spec file | `deleteSpecFile()` | ✅ | ✅ Passing |
 | POST | `/specs/{specId}/generations/{elementType}` | Generate collection from spec | `createSpecGeneration()` | ✅ | ✅ Passing |
-| GET | `/specs/{specId}/generations/{elementType}` | Get generated collection | - | ❌ | ❌ None |
-| PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | - | ❌ | ❌ None |
+| GET | `/specs/{specId}/generations/{elementType}` | Get generated collections | `getSpecGenerations()` | ✅ | ✅ Passing |
+| GET | `/specs/{specId}/tasks/{taskId}` | Get async task status | `getSpecTaskStatus()` | ✅ | ✅ Passing |
+| PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | `syncSpecWithCollection()` | ✅ | ✅ Passing |
 
 ---
 
-## Collections Module (18/64 completed - 28.1%)
+## Collections Module (22/64 completed - 34.4%)
 
 ### Core Collection Operations
 
@@ -162,7 +163,15 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | POST | `/collections/{collectionId}/duplicates` | Duplicate a collection | - | ❌ | ❌ None |
 | GET | `/collections/{collectionId}/source-status` | Get source collection status | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionUid}/synchronizations` | Sync collection with spec | - | ❌ | ❌ None |
+| PUT | `/collections/{collectionUid}/synchronizations` | Sync collection with spec | `syncCollectionWithSpec()` | ✅ | ✅ Passing |
+
+### Collection Generations
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionUid}/generations/{elementType}` | Generate spec from collection | `createCollectionGeneration()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionUid}/generations/{elementType}` | Get generated specs | `getCollectionGenerations()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionUid}/tasks/{taskId}` | Get collection task status | `getCollectionTaskStatus()` | ✅ | ✅ Passing |
 
 ### Collection Transfer & Tasks
 

@@ -34,6 +34,12 @@ function getContentFS(filePath) {
  * @returns {string} The UID in format: userId-objectId
  */
 function buildUid(userId, objectId) {
+  if (typeof objectId === 'string' && objectId.length === 45) {
+    return objectId;
+  }
+  if (typeof objectId !== 'string' || objectId.length !== 36) {
+    throw new Error('Invalid object ID');
+  }
   return `${userId}-${objectId}`;
 }
 
