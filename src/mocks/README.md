@@ -34,7 +34,7 @@ Creates a mock server in a collection.
 
 **Parameters:**
 - `mockData` (object) - The mock object containing:
-  - `collection` (string, required) - The unique ID of the mock's associated collection
+  - `collection` (string, required) - The collection UID (not just ID). Use `buildUid(userId, collectionId)` from `core/utils`
   - `name` (string, optional) - The mock server's name
   - `environment` (string, optional) - The unique ID of the mock's associated environment
   - `private` (boolean, optional) - If true, the mock server is set private (default: true)
@@ -44,9 +44,11 @@ Creates a mock server in a collection.
 
 **Example:**
 ```javascript
+const { buildUid } = require('./core/utils');
+
 const mockData = {
   name: 'My Mock Server',
-  collection: 'collection-id',
+  collection: buildUid(userId, collectionId), // Must use UID format
   private: true
 };
 
@@ -317,23 +319,29 @@ console.log(result.data);
 ## Complete Example
 
 ```javascript
-const { mocks } = require('@bidnessforb/postman-sdk');
+const { mocks, users } = require('@bidnessforb/postman-sdk');
+const { buildUid } = require('@bidnessforb/postman-sdk/src/core/utils');
 
 async function manageMockServers() {
   try {
-    // Create a mock server
+    // Get authenticated user ID (needed for UID construction)
+    const userResult = await users.getAuthenticatedUser();
+    const userId = userResult.data.user.id;
+
+    // Create a mock server (collection must be in UID format)
     const mockData = {
       name: 'My API Mock',
-      collection: 'collection-id',
-      private: true
+      collection: buildUid(userId, 'collection-id'), // Use UID format
+      private: false
     };
     const createResult = await mocks.createMock(mockData, 'workspace-id');
     const mockId = createResult.data.mock.id;
     console.log('Created mock:', mockId);
+    console.log('Mock URL:', createResult.data.mock.mockUrl);
 
     // Get mock details
     const mockDetails = await mocks.getMock(mockId);
-    console.log('Mock URL:', mockDetails.data.mock.mockUrl);
+    console.log('Mock details:', mockDetails.data.mock);
 
     // Create a server response
     const serverResponse = {
@@ -350,16 +358,15 @@ async function manageMockServers() {
     const logs = await mocks.getMockCallLogs(mockId, 10);
     console.log('Call logs:', logs.data['call-logs'].length);
 
-    // Publish the mock
-    await mocks.createMockPublish(mockId);
-    console.log('Mock published');
-
     // Clean up
     await mocks.deleteMockServerResponse(mockId, serverResponseId);
     await mocks.deleteMock(mockId);
     console.log('Cleaned up');
   } catch (error) {
     console.error('Error:', error.message);
+    if (error.response) {
+      console.error('API Response:', error.response.data);
+    }
   }
 }
 
@@ -369,9 +376,11 @@ manageMockServers();
 ## Notes
 
 - Mock servers can be created for collections
+- **Important**: When creating a mock, the `collection` parameter must be in UID format (userId-collectionId), not just the collection ID. Use the `buildUid()` utility function from `core/utils`
 - You cannot create mocks for collections added to an API definition
 - Server responses simulate 5xx server-level responses (500-599)
 - Call logs have a retention period based on your Postman plan
 - Publishing a mock sets its Access Control to public
 - Unpublishing sets it back to private
+- Some features (like publishing/unpublishing) may require specific Postman plan features or permissions
 
