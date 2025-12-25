@@ -7,8 +7,8 @@
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-4-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-48%2F191%20(25.13%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-7-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-55%2F191%20(28.80%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -16,7 +16,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (48/191, 25.13%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (55/191, 28.80%)
 
 ## Installation
    
@@ -70,7 +70,7 @@ process.env.POSTMAN_API_KEY = 'your_api_key_here';
 ### Basic Example
 
 ```javascript
-const { collections, workspaces, specs } = require('@bidnessforb/postman-sdk');
+const { collections, workspaces, specs, requests } = require('@bidnessforb/postman-sdk');
 
 // Make sure your API key is set
 process.env.POSTMAN_API_KEY = 'your_api_key_here';
@@ -87,6 +87,15 @@ async function example() {
   // Get all specs
   const specsResponse = await specs.getSpecs();
   console.log('Specs:', specsResponse.data);
+
+  // Create a request in a collection
+  const collectionId = collectionsResponse.data.collections[0].id;
+  const requestResponse = await requests.createRequest(collectionId, {
+    name: 'New Request',
+    method: 'GET',
+    url: 'https://api.example.com/endpoint'
+  });
+  console.log('Created Request:', requestResponse.data);
 }
 
 example().catch(console.error);
@@ -143,6 +152,8 @@ postman-sdk/
 │   │   └── utils.js             # Shared utilities (query param building, etc.)
 │   ├── collections/
 │   │   └── index.js             # Collection endpoints
+│   ├── requests/
+│   │   └── index.js             # Request endpoints
 │   ├── workspaces/
 │   │   └── index.js             # Workspace endpoints
 │   └── specs/
@@ -157,8 +168,12 @@ postman-sdk/
 The SDK is organized by resource groups:
 
 - **collections**: Endpoints for managing Postman Collections, folders, and comments
+- **requests**: Endpoints for managing requests within collections
 - **workspaces**: Endpoints for managing Postman Workspaces
 - **specs**: Endpoints for managing Postman API Specifications
+- **environments**: Endpoints for managing Postman Environments
+- **tags**: Endpoints for tagging and retrieving tagged entities
+- **transformations**: Endpoints for bi-directional sync between specs and collections
 - **users**: Endpoints for user information and authentication
 
 
@@ -182,12 +197,15 @@ npm run test:all-up
 
 This orchestrates all functional tests in sequence:
 1. Workspaces (create/test workspace)
-2. Collections (create/test collection in workspace)
-3. Collection Comments (create/test comments on collection)
-4. Folders (create/test folder in collection)
-5. Folder Comments (create/test comments on folder)
-6. Specs (create/test API specs in workspace)
-7. Transformations (test bidirectional sync between specs and collections)
+2. Environments (create/test environments in workspace)
+3. Collections (create/test collection in workspace)
+4. Collection Comments (create/test comments on collection)
+5. Folders (create/test folder in collection)
+6. Folder Comments (create/test comments on folder)
+7. Requests (create/test requests in collections and folders)
+8. Specs (create/test API specs in workspace)
+9. Transformations (test bidirectional sync between specs and collections)
+10. Tags (test tagging and entity retrieval)
 
 **Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
 
