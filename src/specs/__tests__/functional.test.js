@@ -415,7 +415,72 @@ describe('specs functional tests', () => {
     console.log(`Task status: ${statusResult.data.status}`);
   });
 
-  test('14. getSpecGenerations - should retrieve generated collections list', async () => {
+  test('14. getSpecTaskStatus - Poll until complete', async () => {
+    const specId = persistedIds.spec.id;
+    const taskId = persistedIds.spec.generatedCollection.taskId;
+    
+    console.log(`Polling task ${taskId} until completion...`);
+    
+    const POLL_INTERVAL_MS = 5000; // 5 seconds
+    const TIMEOUT_MS = 30000; // 30 seconds
+    const MAX_ATTEMPTS = Math.ceil(TIMEOUT_MS / POLL_INTERVAL_MS);
+    
+    let attempts = 0;
+    let taskStatus;
+    let lastStatusResult;
+    
+    while (attempts < MAX_ATTEMPTS) {
+      attempts++;
+      console.log(`Polling attempt ${attempts}/${MAX_ATTEMPTS}...`);
+      
+      lastStatusResult = await getSpecTaskStatus(specId, taskId);
+      expect(lastStatusResult.status).toBe(200);
+      expect(lastStatusResult.data).toHaveProperty('status');
+      
+      taskStatus = lastStatusResult.data.status;
+      console.log(`Task status: ${taskStatus}`);
+      
+      if (taskStatus === 'completed') {
+        // Task completed successfully
+        expect(lastStatusResult.data.meta).toBeDefined();
+        expect(lastStatusResult.data.meta.model).toBe('collection');
+        expect(lastStatusResult.data.meta.action).toBe('generation');
+        
+        console.log(`✓ Task completed successfully!`);
+        
+        
+        const generatedCollectionId = lastStatusResult.data.details.resources[0].id;
+        
+        
+        // Persist the generated collection ID
+        persistedIds.spec.generatedCollection = {
+          ...persistedIds.spec.generatedCollection,
+          id: generatedCollectionId
+        };
+        saveTestIds(persistedIds);
+        
+        console.log(`Generated collection ID: ${generatedCollectionId}`);
+        return; // Test passes
+      }
+      
+      if (taskStatus === 'failed') {
+        // Task failed
+        const errorMessage = lastStatusResult.data.error || 'Unknown error';
+        throw new Error(`Task failed: ${errorMessage}`);
+      }
+      
+      // Task is still pending, wait before next poll
+      if (attempts < MAX_ATTEMPTS) {
+        console.log(`Waiting ${POLL_INTERVAL_MS / 1000} seconds before next poll...`);
+        await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+      }
+    }
+    
+    // If we get here, we've timed out
+    throw new Error(`Timeout: Task did not complete within ${TIMEOUT_MS / 1000} seconds. Last status: ${taskStatus}`);
+  }, 35000); // Set Jest timeout slightly higher than our polling timeout
+
+  test('15. getSpecGenerations - should retrieve generated collections list', async () => {
     const specId = persistedIds.spec.id;
     const elementType = 'collection';
     
@@ -468,7 +533,7 @@ describe('specs functional tests', () => {
     expect(result.data.meta).toHaveProperty('nextCursor');
   });
 
-  test('15. getSpecGenerations - should support pagination with limit', async () => {
+  test('16. getSpecGenerations - should support pagination with limit', async () => {
     const specId = persistedIds.spec.id;
     const elementType = 'collection';
     const limit = 5;
