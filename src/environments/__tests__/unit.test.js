@@ -1,0 +1,362 @@
+const axios = require('axios');
+const {
+  getEnvironments,
+  createEnvironment,
+  getEnvironment,
+  modifyEnvironment,
+  deleteEnvironment
+} = require('../index');
+
+jest.mock('axios');
+jest.mock('../../core/config', () => ({
+  apiKey: 'test-api-key',
+  baseUrl: 'https://api.getpostman.com'
+}));
+
+describe('environments unit tests', () => {
+  const DEFAULT_ENVIRONMENT_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+  const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('getEnvironments', () => {
+    test('should call GET /environments without query params', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environments: [
+            {
+              id: DEFAULT_ENVIRONMENT_ID,
+              name: 'Test Environment',
+              owner: '12345678',
+              uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+            }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getEnvironments();
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/environments'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include workspace query param when provided', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environments: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getEnvironments(DEFAULT_WORKSPACE_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_WORKSPACE_ID}`
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environments: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getEnvironments();
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('createEnvironment', () => {
+    test('should call POST /environments with environment data', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            name: 'Test Environment',
+            uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const environmentData = {
+        name: 'Test Environment',
+        values: [
+          {
+            key: 'API_KEY',
+            value: 'secret123',
+            type: 'secret',
+            enabled: true
+          }
+        ]
+      };
+
+      const result = await createEnvironment(environmentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: 'https://api.getpostman.com/environments',
+          data: {
+            environment: environmentData
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include workspace query param when provided', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            name: 'Test Environment'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const environmentData = { name: 'Test Environment' };
+
+      await createEnvironment(environmentData, DEFAULT_WORKSPACE_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_WORKSPACE_ID}`
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environment: {} }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await createEnvironment({ name: 'Test' });
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('getEnvironment', () => {
+    test('should call GET /environments/{environmentId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            name: 'Test Environment',
+            owner: '12345678',
+            values: [
+              {
+                key: 'API_KEY',
+                value: 'secret123',
+                type: 'secret',
+                enabled: true
+              }
+            ]
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getEnvironment(DEFAULT_ENVIRONMENT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.environment.id).toBe(DEFAULT_ENVIRONMENT_ID);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environment: {} }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getEnvironment(DEFAULT_ENVIRONMENT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('modifyEnvironment', () => {
+    test('should call PATCH /environments/{environmentId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            name: 'Updated Environment',
+            owner: '12345678'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const environmentData = {
+        name: 'Updated Environment'
+      };
+
+      const result = await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, environmentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'patch',
+          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`,
+          data: {
+            environment: environmentData
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should update environment values', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            values: [
+              {
+                key: 'NEW_KEY',
+                value: 'new_value',
+                type: 'default',
+                enabled: true
+              }
+            ]
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const environmentData = {
+        values: [
+          {
+            key: 'NEW_KEY',
+            value: 'new_value',
+            type: 'default',
+            enabled: true
+          }
+        ]
+      };
+
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, environmentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            environment: environmentData
+          }
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environment: {} }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, { name: 'Updated' });
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('deleteEnvironment', () => {
+    test('should call DELETE /environments/{environmentId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await deleteEnvironment(DEFAULT_ENVIRONMENT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'delete',
+          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { environment: {} }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await deleteEnvironment(DEFAULT_ENVIRONMENT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+});
+

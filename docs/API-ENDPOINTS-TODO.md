@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 43 operations (22.51%)
-- **Not Implemented**: 148 operations (77.49%)
+- **Implemented**: 48 operations (25.13%)
+- **Not Implemented**: 143 operations (74.87%)
 
 ### Legend
 
@@ -301,18 +301,18 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-## Environments Module (0/10 completed - 0%)
+## Environments Module (5/10 completed - 50%)
 
 ### Core Environment Operations
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/environments` | Get all environments | - | ❌ | ❌ None |
-| POST | `/environments` | Create an environment | - | ❌ | ❌ None |
-| GET | `/environments/{environmentId}` | Get an environment | - | ❌ | ❌ None |
-| PATCH | `/environments/{environmentId}` | Update an environment | - | ❌ | ❌ None |
+| GET | `/environments` | Get all environments | `getEnvironments()` | ✅ | ✅ Passing |
+| POST | `/environments` | Create an environment | `createEnvironment()` | ✅ | ✅ Passing |
+| GET | `/environments/{environmentId}` | Get an environment | `getEnvironment()` | ✅ | ✅ Passing |
+| PATCH | `/environments/{environmentId}` | Update an environment | `modifyEnvironment()` | ✅ | ✅ Passing |
 | PUT | `/environments/{environmentId}` | Replace environment data | - | ❌ | ❌ None |
-| DELETE | `/environments/{environmentId}` | Delete an environment | - | ❌ | ❌ None |
+| DELETE | `/environments/{environmentId}` | Delete an environment | `deleteEnvironment()` | ✅ | ✅ Passing |
 
 ### Environment Fork & Merge Operations
 

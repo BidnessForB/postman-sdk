@@ -13,35 +13,41 @@ The tests run in the following sequence to respect resource dependencies:
    - Tests workspace CRUD operations
    - Persists workspace ID for downstream tests
 
-2. **Collections** (`collections/__tests__/01-collections-functional.test.js`)
+2. **Environments** (`environments/__tests__/functional.test.js`)
+   - Creates a test environment in the workspace
+   - Tests environment CRUD operations
+   - Tests environment variable management
+   - Persists environment ID for downstream tests
+
+3. **Collections** (`collections/__tests__/01-collections-functional.test.js`)
    - Creates a collection in the workspace
    - Tests collection CRUD operations
    - Persists collection ID for downstream tests
 
-3. **Collection Comments** (`collections/__tests__/04-collection-comments-functional.test.js`)
+4. **Collection Comments** (`collections/__tests__/04-collection-comments-functional.test.js`)
    - Creates comments on the collection
    - Tests comment CRUD operations including replies
    - Tests thread management
    - Persists comment/thread IDs
 
-4. **Folders** (`collections/__tests__/02-folders-functional.test.js`)
+5. **Folders** (`collections/__tests__/02-folders-functional.test.js`)
    - Creates a folder in the collection
    - Tests folder CRUD operations
    - Persists folder ID for downstream tests
 
-5. **Folder Comments** (`collections/__tests__/03-folder-comments-functional.test.js`)
+6. **Folder Comments** (`collections/__tests__/03-folder-comments-functional.test.js`)
    - Creates comments on the folder
    - Tests comment CRUD operations including replies
    - Tests thread management
    - Persists comment/thread IDs
 
-6. **Specs** (`specs/__tests__/functional.test.js`)
+7. **Specs** (`specs/__tests__/functional.test.js`)
    - Creates API specs in the workspace
    - Tests spec CRUD operations
    - Tests spec file operations
    - Persists spec IDs
 
-7. **Transformations** (`transformations/__tests__/functional.test.js`)
+8. **Transformations** (`transformations/__tests__/functional.test.js`)
    - Creates dedicated test collection and spec for transformations
    - Tests bi-directional synchronization between specs and collections
    - Syncs generated specs with source collections (spec-to-collection)
