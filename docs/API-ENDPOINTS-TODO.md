@@ -49,7 +49,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Collections Module (18/60 completed - 30.0%)</strong></summary>
+<summary><strong>Collections Module (24/64 completed - 37.5%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -139,8 +139,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/collections/{collectionId}/roles` | Get collection roles | - | ❌ | ❌ None |
 | PATCH | `/collections/{collectionId}/roles` | Update collection roles | - | ❌ | ❌ None |
-| GET | `/collections/{collectionId}/tags` | Get collection tags | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/tags` | Update collection tags | - | ❌ | ❌ None |
+| GET | `/collections/{collectionUid}/tags` | Get collection tags | `getCollectionTags()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionUid}/tags` | Update collection tags | `updateCollectionTags()` | ✅ | ✅ Passing |
 
 ### Collection Documentation & Generation
 

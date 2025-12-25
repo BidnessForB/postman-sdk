@@ -18,6 +18,8 @@ const {
   createFolderComment,
   updateFolderComment,
   deleteFolderComment,
+  getCollectionTags,
+  updateCollectionTags,
   syncCollectionWithSpec,
   createCollectionGeneration,
   getCollectionGenerations,
@@ -905,6 +907,205 @@ describe('collections unit tests', () => {
       const commentId = 1;
 
       await deleteCollectionComment(userId, collectionId, commentId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('getCollectionTags', () => {
+    test('should call GET /collections/{collectionUid}/tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: []
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      const result = await getCollectionTags(userId, collectionId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tags'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should return tags when present', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'production' },
+            { slug: 'test-api' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      const result = await getCollectionTags(userId, collectionId);
+
+      expect(result.data.tags).toHaveLength(2);
+      expect(result.data.tags[0].slug).toBe('production');
+      expect(result.data.tags[1].slug).toBe('test-api');
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { tags: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      await getCollectionTags(userId, collectionId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('updateCollectionTags', () => {
+    test('should call PUT /collections/{collectionUid}/tags with empty tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: []
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const tags = [];
+
+      const result = await updateCollectionTags(userId, collectionId, tags);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tags',
+          data: { tags: [] }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should call PUT /collections/{collectionUid}/tags with single tag', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [{ slug: 'production' }]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const tags = [{ slug: 'production' }];
+
+      const result = await updateCollectionTags(userId, collectionId, tags);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tags',
+          data: { tags: [{ slug: 'production' }] }
+        })
+      );
+      expect(result.data.tags).toHaveLength(1);
+    });
+
+    test('should call PUT /collections/{collectionUid}/tags with multiple tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'production' },
+            { slug: 'test-api' },
+            { slug: 'sdk-test' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const tags = [
+        { slug: 'production' },
+        { slug: 'test-api' },
+        { slug: 'sdk-test' }
+      ];
+
+      const result = await updateCollectionTags(userId, collectionId, tags);
+
+      expect(result.data.tags).toHaveLength(3);
+    });
+
+    test('should call PUT /collections/{collectionUid}/tags with max 5 tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'tag1' },
+            { slug: 'tag2' },
+            { slug: 'tag3' },
+            { slug: 'tag4' },
+            { slug: 'tag5' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const tags = [
+        { slug: 'tag1' },
+        { slug: 'tag2' },
+        { slug: 'tag3' },
+        { slug: 'tag4' },
+        { slug: 'tag5' }
+      ];
+
+      const result = await updateCollectionTags(userId, collectionId, tags);
+
+      expect(result.data.tags).toHaveLength(5);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { tags: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      await updateCollectionTags(userId, collectionId, []);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
