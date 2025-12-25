@@ -10,6 +10,10 @@ const {
   getFolder,
   updateFolder,
   deleteFolder,
+  getCollectionComments,
+  createCollectionComment,
+  updateCollectionComment,
+  deleteCollectionComment,
   getFolderComments,
   createFolderComment,
   updateFolderComment,
@@ -689,6 +693,227 @@ describe('collections unit tests', () => {
         })
       );
       expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('getCollectionComments', () => {
+    test('should call GET /collections/{collectionUid}/comments', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          comments: [
+            {
+              id: 1,
+              content: 'Test comment',
+              createdAt: '2025-01-01T00:00:00Z'
+            }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      const result = await getCollectionComments(userId, collectionId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/comments'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data).toHaveProperty('comments');
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { comments: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+
+      await getCollectionComments(userId, collectionId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('createCollectionComment', () => {
+    test('should call POST /collections/{collectionUid}/comments', async () => {
+      const mockResponse = {
+        status: 201,
+        data: {
+          comment: {
+            id: 1,
+            content: 'New comment',
+            createdAt: '2025-01-01T00:00:00Z'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentData = {
+        content: 'New comment'
+      };
+
+      const result = await createCollectionComment(userId, collectionId, commentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'post',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/comments',
+          data: commentData
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should support reply with threadId', async () => {
+      const mockResponse = {
+        status: 201,
+        data: {
+          comment: {
+            id: 2,
+            content: 'Reply comment',
+            threadId: 1
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentData = {
+        content: 'Reply comment',
+        threadId: 1
+      };
+
+      await createCollectionComment(userId, collectionId, commentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            threadId: 1
+          })
+        })
+      );
+    });
+  });
+
+  describe('updateCollectionComment', () => {
+    test('should call PUT /collections/{collectionUid}/comments/{commentId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          comment: {
+            id: 1,
+            content: 'Updated comment'
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentId = 1;
+      const commentData = {
+        content: 'Updated comment'
+      };
+
+      const result = await updateCollectionComment(userId, collectionId, commentId, commentData);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/comments/1',
+          data: commentData
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { comment: {} }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentId = 1;
+
+      await updateCollectionComment(userId, collectionId, commentId, { content: 'test' });
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('deleteCollectionComment', () => {
+    test('should call DELETE /collections/{collectionUid}/comments/{commentId}', async () => {
+      const mockResponse = {
+        status: 204,
+        data: ''
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentId = 1;
+
+      const result = await deleteCollectionComment(userId, collectionId, commentId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'delete',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/comments/1'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 204,
+        data: ''
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const commentId = 1;
+
+      await deleteCollectionComment(userId, collectionId, commentId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
     });
   });
 
