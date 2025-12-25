@@ -28,28 +28,7 @@ describe('Mocks Functional Tests', () => {
     userId = userResult.data.user.id;
   }, 10000);
 
-  test('1. getMocks - should get all mocks', async () => {
-    const result = await getMocks();
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('mocks');
-    expect(Array.isArray(result.data.mocks)).toBe(true);
-
-    console.log(`Retrieved ${result.data.mocks.length} mocks`);
-  }, 10000);
-
-  test('2. getMocks - should get mocks in workspace', async () => {
-    const workspaceId = persistedIds.workspace.id;
-    const result = await getMocks(null, workspaceId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('mocks');
-    expect(Array.isArray(result.data.mocks)).toBe(true);
-
-    console.log(`Retrieved ${result.data.mocks.length} mocks in workspace ${workspaceId}`);
-  }, 10000);
-
-  test('3. createMock - should create a new mock server', async () => {
+  test('1. createMock - should create a new mock server', async () => {
     const mockName = `Test Mock ${Date.now()}`;
     const mockData = {
       name: mockName,
@@ -84,6 +63,27 @@ describe('Mocks Functional Tests', () => {
     console.log(`Mock URL: ${result.data.mock.mockUrl}`);
   }, 10000);
 
+  test('2. getMocks - should get all mocks', async () => {
+    const result = await getMocks();
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('mocks');
+    expect(Array.isArray(result.data.mocks)).toBe(true);
+
+    console.log(`Retrieved ${result.data.mocks.length} mocks`);
+  }, 10000);
+
+  test('3. getMocks - should get mocks in workspace', async () => {
+    const workspaceId = persistedIds.workspace.id;
+    const result = await getMocks(null, workspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('mocks');
+    expect(Array.isArray(result.data.mocks)).toBe(true);
+
+    console.log(`Retrieved ${result.data.mocks.length} mocks in workspace ${workspaceId}`);
+  }, 10000);
+
   test('4. getMock - should get a single mock server', async () => {
     const result = await getMock(mockId);
 
@@ -98,23 +98,7 @@ describe('Mocks Functional Tests', () => {
     console.log(`Mock URL: ${result.data.mock.mockUrl}`);
   }, 10000);
 
-  test('5. getMock - should error on non-existent mock', async () => {
-    const nonExistentMockId = 'non-existent-mock-id';
-    let result;
-    try {
-      result = await getMock(nonExistentMockId);
-    } catch (error) {
-      result = error;
-      expect(result.status).toBe(404);
-      expect(result.response.data).toHaveProperty('error');
-      console.log(`Error on non-existent mock: ${result.response.data.error.message}`);
-      return;
-    }
-
-    fail('Expected getMock to throw 404, but it did not');
-  }, 10000);
-
-  test('6. updateMock - should update mock server name', async () => {
+  test('5. updateMock - should update mock server name', async () => {
     const updatedName = `Updated Mock ${Date.now()}`;
     const mockData = {
       name: updatedName,
@@ -133,6 +117,22 @@ describe('Mocks Functional Tests', () => {
     saveTestIds(persistedIds);
 
     console.log(`Updated mock name to: ${updatedName}`);
+  }, 10000);
+
+  test('6. getMock - should error on non-existent mock', async () => {
+    const nonExistentMockId = 'non-existent-mock-id';
+    let result;
+    try {
+      result = await getMock(nonExistentMockId);
+    } catch (error) {
+      result = error;
+      expect(result.status).toBe(404);
+      expect(result.response.data).toHaveProperty('error');
+      console.log(`Error on non-existent mock: ${result.response.data.error.message}`);
+      return;
+    }
+
+    fail('Expected getMock to throw 404, but it did not');
   }, 10000);
 
   test('7. getMockServerResponses - should get all server responses (initially empty)', async () => {
