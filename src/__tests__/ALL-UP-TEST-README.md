@@ -42,10 +42,12 @@ The tests run in the following sequence to respect resource dependencies:
    - Persists spec IDs
 
 7. **Transformations** (`__tests__/transformations-functional.test.js`)
+   - Creates dedicated test collection and spec for transformations
    - Tests bi-directional synchronization between specs and collections
-   - Syncs generated specs with source collections
-   - Syncs collections with generated specs
-   - Uses resources created in previous phases
+   - Syncs generated specs with source collections (spec-to-collection)
+   - Syncs collections with generated specs (collection-to-spec)
+   - Persists transformation resource IDs under `transformations` key
+   - Uses resources created in previous phases for sync operations
 
 ## Running the Test
 
@@ -147,7 +149,27 @@ After running the all-up test, your `test-ids.json` will contain:
     "id": "jkl-012-spec-id",
     "name": "SDK Functional Test Spec",
     "createdAt": "2025-12-23T10:30:00.000Z",
-    "updatedAt": "2025-12-23T10:31:00.000Z"
+    "generatedCollection": {
+      "id": "userId-collectionId",
+      "name": "Generated Collection 1234567890",
+      "taskId": "task-id-123"
+    }
+  },
+  "transformations": {
+    "sourceCollection": {
+      "id": "mno-345-collection-id",
+      "uid": "userId-mno-345-collection-id",
+      "name": "Transformations Test Collection 1234567890",
+      "workspaceId": "abc-123-workspace-id",
+      "createdAt": "2025-12-23T10:32:00.000Z"
+    },
+    "sourceSpec": {
+      "id": "pqr-678-spec-id",
+      "name": "Transformations Test Spec 1234567890",
+      "workspaceId": "abc-123-workspace-id",
+      "type": "OPENAPI:3.0",
+      "createdAt": "2025-12-23T10:32:01.000Z"
+    }
   }
 }
 ```

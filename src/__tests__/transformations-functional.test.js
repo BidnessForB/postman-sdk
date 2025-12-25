@@ -1,5 +1,5 @@
-const { syncSpecWithCollection } = require('../specs/index');
-const { syncCollectionWithSpec } = require('../collections/index');
+const { syncSpecWithCollection, createSpec } = require('../specs/index');
+const { syncCollectionWithSpec, createCollection } = require('../collections/index');
 const { loadTestIds, saveTestIds } = require('./test-helpers');
 const { buildUid } = require('../core/utils');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../core/config');
@@ -18,7 +18,139 @@ describe('transformations functional tests', () => {
     console.log('Loaded persisted test IDs for transformations tests');
   });
 
-  describe('syncSpecWithCollection', () => {
+  test('CreateSourceCollection - should create a new collection for transformations', async () => {
+    const workspaceId = persistedIds.workspace?.id;
+
+    if (!workspaceId) {
+      console.log('Skipping CreateSourceCollection - missing workspaceId');
+      return;
+    }
+
+    const timestamp = Date.now();
+    const collectionName = `Transformations Test Collection ${timestamp}`;
+    const collectionData = {
+      info: {
+        name: collectionName,
+        description: 'A collection created for transformations testing',
+        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      },
+      item: [
+        {
+          name: 'Sample Request',
+          request: {
+            method: 'GET',
+            header: [],
+            url: {
+              raw: 'https://api.example.com/data',
+              protocol: 'https',
+              host: ['api', 'example', 'com'],
+              path: ['data']
+            }
+          }
+        }
+      ]
+    };
+
+    const result = await createCollection(collectionData, workspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('collection');
+    expect(result.data.collection).toHaveProperty('id');
+    expect(result.data.collection.name).toBe(collectionName);
+
+    // Initialize transformations object if it doesn't exist
+    if (!persistedIds.transformations) {
+      persistedIds.transformations = {};
+    }
+
+    persistedIds.transformations.sourceCollection = {
+      id: result.data.collection.id,
+      uid: result.data.collection.uid,
+      name: result.data.collection.name,
+      workspaceId: workspaceId,
+      createdAt: new Date().toISOString()
+    };
+    saveTestIds(persistedIds);
+
+    console.log(`Created source collection for transformations: ${result.data.collection.name}`);
+    console.log(`Collection ID: ${result.data.collection.id}`);
+  });
+
+  test('CreateSourceSpec - should create a new spec for transformations', async () => {
+    const workspaceId = persistedIds.workspace?.id;
+
+    if (!workspaceId) {
+      console.log('Skipping CreateSourceSpec - missing workspaceId');
+      return;
+    }
+
+    const timestamp = Date.now();
+    const specName = `Transformations Test Spec ${timestamp}`;
+    const specDefinition = {
+      openapi: '3.0.0',
+      info: {
+        title: specName,
+        version: '1.0.0',
+        description: 'A spec created for transformations testing'
+      },
+      paths: {
+        '/data': {
+          get: {
+            summary: 'Get data',
+            responses: {
+              '200': {
+                description: 'Successful response',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        status: { type: 'string' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    const files = [
+      {
+        path: 'index.yaml',
+        content: JSON.stringify(specDefinition, null, 2)
+      }
+    ];
+
+    const result = await createSpec(workspaceId, specName, 'OPENAPI:3.0', files);
+
+    expect(result.status).toBe(201);
+    expect(result.data).toHaveProperty('id');
+    expect(result.data.name).toBe(specName);
+    expect(result.data.type).toBe('OPENAPI:3.0');
+
+    // Initialize transformations object if it doesn't exist
+    if (!persistedIds.transformations) {
+      persistedIds.transformations = {};
+    }
+
+    persistedIds.transformations.sourceSpec = {
+      id: result.data.id,
+      name: result.data.name,
+      workspaceId: workspaceId,
+      type: result.data.type,
+      createdAt: new Date().toISOString()
+    };
+    saveTestIds(persistedIds);
+
+    console.log(`Created source spec for transformations: ${result.data.name}`);
+    console.log(`Spec ID: ${result.data.id}`);
+  });
+
+  describe('spec-to-collection', () => {
+    describe('syncSpecWithCollection', () => {
     test('1. should sync generated spec with source collection', async () => {
       const genSpecId = persistedIds?.collection?.generatedSpec?.id;
       const srcCollectionId = persistedIds?.collection?.id;
@@ -104,9 +236,11 @@ describe('transformations functional tests', () => {
         syncSpecWithCollection(fakeSpecId, collectionUid)
       ).rejects.toThrow();
     });
+    });
   });
 
-  describe('syncCollectionWithSpec', () => {
+  describe('collection-to-spec', () => {
+    describe('syncCollectionWithSpec', () => {
     test('1. should sync collection with generated spec', async () => {
       const genSpecId = persistedIds?.collection?.generatedSpec?.id;
       const srcCollectionId = persistedIds?.collection?.id;
@@ -211,6 +345,7 @@ describe('transformations functional tests', () => {
       await expect(
         syncCollectionWithSpec(userId, srcCollectionId, fakeSpecId)
       ).rejects.toThrow();
+    });
     });
   });
 });

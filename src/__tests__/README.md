@@ -6,13 +6,29 @@ This directory contains shared test utilities and resources used across all func
 
 The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
 
-1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs
+1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs → 7. Transformations
 
 Run with: `npm run test:all-up`
 
 **Note**: Test IDs are persisted in `test-ids.json` and reused across test runs. To start fresh, manually delete the file before running tests.
 
 See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
+
+## Transformations Functional Test
+
+The `transformations-functional.test.js` file tests bi-directional synchronization between specs and collections, organized by transformation direction:
+
+**spec-to-collection:**
+- **syncSpecWithCollection**: Syncs a generated spec back to its source collection
+
+**collection-to-spec:**
+- **syncCollectionWithSpec**: Syncs a collection with a generated spec
+
+Run with: `npm test -- src/__tests__/transformations-functional.test.js`
+
+**Prerequisites**: Requires a collection and a spec generated from it (see collections test 11b).
+
+See [TRANSFORMATIONS-TEST-README.md](./TRANSFORMATIONS-TEST-README.md) for detailed documentation.
 
 ## Test Helpers (`test-helpers.js`)
 
