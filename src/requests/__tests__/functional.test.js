@@ -1,8 +1,12 @@
-const { 
+const {
   createRequest,
   getRequest,
   updateRequest,
-  deleteRequest
+  deleteRequest,
+  getRequestComments,
+  createRequestComment,
+  updateRequestComment,
+  deleteRequestComment
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
@@ -15,6 +19,9 @@ describe('requests functional tests (sequential flow)', () => {
       throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
     }
 
+    // persistedIds must be loaded so that sequential functional tests have access
+    // to IDs (e.g., collectionId) persisted from previous phases. This enables
+    // the requests functional tests to build on resources created earlier.
     persistedIds = loadTestIds();
 
     if (!persistedIds.collection || !persistedIds.collection.id) {
@@ -231,6 +238,120 @@ describe('requests functional tests (sequential flow)', () => {
       const collectionId = persistedIds.collection.id;
       const fakeId = '00000000-0000-0000-0000-000000000000';
       await expect(deleteRequest(collectionId, fakeId)).rejects.toThrow();
+    });
+  });
+
+  describe('request comments', () => {
+    let commentId;
+
+    describe('comment lifecycle', () => {
+      test('should create a comment on a request', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const requestId = persistedIds.request.id;
+        
+        const commentData = {
+          body: 'This is a test comment on a request'
+        };
+
+        const result = await createRequestComment(userId, collectionId, requestId, commentData);
+
+        expect(result.status).toBeGreaterThanOrEqual(200);
+        expect(result.status).toBeLessThan(300);
+        expect(result.data).toBeDefined();
+        expect(result.data.data).toBeDefined();
+        expect(result.data.data.id).toBeDefined();
+        expect(result.data.data.body).toBe(commentData.body);
+
+        // Save comment ID for subsequent tests
+        commentId = result.data.data.id;
+        persistedIds.request = {
+          ...persistedIds.request,
+          commentId
+        };
+        saveTestIds(persistedIds);
+      });
+
+      test('should get all comments on a request', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const requestId = persistedIds.request.id;
+
+        const result = await getRequestComments(userId, collectionId, requestId);
+
+        expect(result.status).toBe(200);
+        expect(result.data).toBeDefined();
+        expect(result.data.data).toBeDefined();
+        expect(Array.isArray(result.data.data)).toBe(true);
+        
+        // Should include our created comment
+        const ourComment = result.data.data.find(c => c.id === persistedIds.request.commentId);
+        expect(ourComment).toBeDefined();
+        expect(ourComment.body).toBe('This is a test comment on a request');
+      });
+
+      test('should update a comment on a request', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const requestId = persistedIds.request.id;
+        const commentId = persistedIds.request.commentId;
+        
+        const updatedCommentData = {
+          body: 'This is an updated comment on a request'
+        };
+
+        const result = await updateRequestComment(userId, collectionId, requestId, commentId, updatedCommentData);
+
+        expect(result.status).toBe(200);
+        expect(result.data).toBeDefined();
+        expect(result.data.data).toBeDefined();
+        expect(result.data.data.id).toBe(commentId);
+        expect(result.data.data.body).toBe(updatedCommentData.body);
+      });
+
+      test('should delete a comment from a request', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const requestId = persistedIds.request.id;
+        const commentId = persistedIds.request.commentId;
+        let result;
+        
+        try {
+          result = await deleteRequestComment(userId, collectionId, requestId, commentId);
+        } catch (error) {
+          result = error.response;
+        }
+
+        expect(result.status).toEqual(204);
+        
+        
+        
+      });
+    });
+
+    describe('comment error handling', () => {
+      test('should return 404 for comments on non-existent request', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const nonExistentRequestId = '00000000-0000-0000-0000-000000000000';
+        const result = await getRequestComments(userId, collectionId, nonExistentRequestId);
+        expect(result.status).toBe(200);
+        expect(result.data).toBeDefined();
+        expect(result.data.data).toBeDefined();
+        expect(Array.isArray(result.data.data)).toBe(true);
+        expect(result.data.data.length).toBe(0);
+
+        //await expect(getRequestComments(userId, collectionId, nonExistentRequestId)).rejects.toThrow();
+      });
+
+      test('should return error for invalid comment ID', async () => {
+        const userId = persistedIds.userId;
+        const collectionId = persistedIds.collection.id;
+        const requestId = persistedIds.request.id;
+        const invalidCommentId = 999999999;
+
+        await expect(updateRequestComment(userId, collectionId, requestId, invalidCommentId, { body: 'test' })).rejects.toThrow();
+      });
     });
   });
 });

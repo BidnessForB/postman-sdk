@@ -54,6 +54,7 @@ async function functionName(data = null, param1, param2) {
   - collectionUid: 34829850-d4dd588d-111f-4651-b64d-463e4b093f4b
  - Code should identify whether an endpoint requires an ID or a UID 
  - Initialization code should call the /me endpoint, retrieve the currently authenticated userId from the 'id' property of the response, and persist that to test-ids.json.  
+ - In unit tests always use a 36 character value for mock objectIds.  
 
 
 

@@ -165,7 +165,8 @@ After running the all-up test, your `test-ids.json` will contain:
   "request": {
     "id": "xyz-890-request-id",
     "name": "Test Request 1234567890",
-    "createdAt": "2025-12-25T10:31:00.000Z"
+    "createdAt": "2025-12-25T10:31:00.000Z",
+    "commentId": 2411532
   },
   "folderRequest": {
     "id": "abc-234-folder-request-id",

@@ -192,7 +192,8 @@ The file uses a nested structure where each Postman object type is an object con
   "request": {
     "id": "xyz890-request-id",
     "name": "My Request",
-    "createdAt": "2025-12-25T10:31:00.000Z"
+    "createdAt": "2025-12-25T10:31:00.000Z",
+    "commentId": 2411532
   },
   "folderRequest": {
     "id": "abc234-folder-request-id",

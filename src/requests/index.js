@@ -1,5 +1,5 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, buildUid } = require('../core/utils');
 
 /**
  * Creates a request in a collection
@@ -68,10 +68,82 @@ async function deleteRequest(collectionId, requestId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets all comments left by users in a request
+ * Postman API endpoint and method: GET /collections/{collectionUid}/requests/{requestUid}/comments
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} requestId - The request's ID
+ * @returns {Promise} Axios response
+ */
+async function getRequestComments(userId, collectionId, requestId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const requestUid = buildUid(userId, requestId);
+  const endpoint = `/collections/${collectionUid}/requests/${requestUid}/comments`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a comment on a request
+ * Postman API endpoint and method: POST /collections/{collectionUid}/requests/{requestUid}/comments
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} requestId - The request's ID
+ * @param {Object} commentData - The comment data (body, threadId, tags)
+ * @returns {Promise} Axios response
+ */
+async function createRequestComment(userId, collectionId, requestId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const requestUid = buildUid(userId, requestId);
+  const endpoint = `/collections/${collectionUid}/requests/${requestUid}/comments`;
+  const config = buildAxiosConfig('post', endpoint, commentData);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates a comment on a request
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} requestId - The request's ID
+ * @param {string} commentId - The comment's ID
+ * @param {Object} commentData - The comment data (body, tags)
+ * @returns {Promise} Axios response
+ */
+async function updateRequestComment(userId, collectionId, requestId, commentId, commentData) {
+  const collectionUid = buildUid(userId, collectionId);
+  const requestUid = buildUid(userId, requestId);
+  const endpoint = `/collections/${collectionUid}/requests/${requestUid}/comments/${commentId}`;
+  const config = buildAxiosConfig('put', endpoint, commentData);
+  return await executeRequest(config);
+}
+
+/**
+ * Deletes a comment from a request
+ * Postman API endpoint and method: DELETE /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} requestId - The request's ID
+ * @param {string} commentId - The comment's ID
+ * @returns {Promise} Axios response
+ */
+async function deleteRequestComment(userId, collectionId, requestId, commentId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const requestUid = buildUid(userId, requestId);
+  const endpoint = `/collections/${collectionUid}/requests/${requestUid}/comments/${commentId}`;
+  const config = buildAxiosConfig('delete', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   createRequest,
   getRequest,
   updateRequest,
-  deleteRequest
+  deleteRequest,
+  getRequestComments,
+  createRequestComment,
+  updateRequestComment,
+  deleteRequestComment
 };
 
