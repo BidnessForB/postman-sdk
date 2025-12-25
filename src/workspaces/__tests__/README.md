@@ -134,6 +134,32 @@ The workspace tests are organized into three separate files:
 
 When you run all workspace tests with `npx jest src/workspaces/__tests__/`, the manual cleanup tests are skipped automatically. This prevents accidental deletion of test resources.
 
+#### Unit Tests Coverage
+
+The `unit.test.js` file provides comprehensive test coverage for all workspace API functions:
+
+**Functions Tested:**
+- ✅ `getWorkspaces()` - Get all workspaces with query parameters
+- ✅ `createWorkspace()` - Create workspace with required and optional fields
+- ✅ `getWorkspace()` - Get single workspace by ID
+- ✅ `updateWorkspace()` - Update workspace (GET-then-PUT pattern)
+- ✅ `deleteWorkspace()` - Delete workspace
+- ✅ `getWorkspaceTags()` - Get workspace tags
+- ✅ `updateWorkspaceTags()` - Update workspace tags
+
+**Coverage:**
+- Query parameter handling (type, createdBy, include)
+- Optional field handling (description, about)
+- Conditional field inclusion (only include when not null)
+- Tag management (empty arrays, single tags, multiple tags, max 5 tags)
+- GET-then-PUT merge logic for updates
+- 100% branch coverage for all workspace functions
+
+Run unit tests:
+```bash
+npm test -- src/workspaces/__tests__/unit.test.js
+```
+
 ### Shared Utility Functions
 
 All test modules use shared utility functions from `src/__tests__/test-helpers.js`:
