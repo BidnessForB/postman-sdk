@@ -25,9 +25,10 @@ Created to exclude:
 - Documentation except README
 - API spec files
 
-**Note:** Workspace utilities support both pattern-based and ID-based deletion:
+**Note:** Utilities included for workspace and object management:
 - `util/get-test-workspaces.js` - Find workspaces by pattern
-- `util/delete-test-workspaces.js` - Delete by pattern or `--workspaceId`
+- `util/delete-test-workspaces.js` - Delete workspaces by pattern or `--workspaceId`
+- `util/delete-test-objects.js` - Delete collections/specs/environments from workspace
 
 ### 3. **LICENSE** ✅
 Created ISC license file as specified in package.json
@@ -70,6 +71,7 @@ Comprehensive publishing guide covering:
 **Utilities:**
 - `util/get-test-workspaces.js` - Find workspaces by pattern
 - `util/delete-test-workspaces.js` - Delete workspaces by pattern or ID (`--workspaceId`)
+- `util/delete-test-objects.js` - Delete collections/specs/environments from workspace
 
 **Examples:**
 - `examples/create-populate-workspace.js` - Complete workflow example
