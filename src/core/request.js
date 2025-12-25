@@ -28,16 +28,8 @@ function buildAxiosConfig(method, endpoint, data = undefined, extra = {}) {
  * @returns {Promise} Axios response
  */
 async function executeRequest(config) {
-  let response;
-  try {
-    response = await axios.request(config);
-  } catch (error) {
-    throw error;
-  }
-  if (response.status < 200 || response.status >= 300) {
-    throw new Error(`API call failed with status ${response.status}: ${JSON.stringify(response.data)}`);
-  }
-  return response;
+  return await axios.request(config);
+  
 }
 
 module.exports = {

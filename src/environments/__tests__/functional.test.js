@@ -95,6 +95,29 @@ describe('Environments Functional Tests', () => {
     console.log(`Environment has ${result.data.environment.values.length} values`);
   }, 10000);
 
+  test('4. getEnvironment - should error on non-existent environment', async () => {
+    const environmentId = 'foo';
+    let result;
+    try {
+      result = await getEnvironment(environmentId);
+    }
+    catch (error) {
+      result = error;
+      expect(result.status).toBe(404);
+      expect(result.response.data).toHaveProperty('error');
+      expect(result.response.data.error.name).toBe('instanceNotFoundError');
+      console.log(`Error on non-existent environment: ${result.response.data.error.message}`);
+      return;
+    }
+    
+  // Fail the test if we did not get expected 404
+  fail('Expected getEnvironment to throw 404, but it did not');
+
+    
+
+    
+  }, 10000);
+
   test('5. modifyEnvironment - should update environment name', async () => {
     const environmentId = persistedIds.environment.id;
     const updatedName = `Updated Environment ${Date.now()}`;
