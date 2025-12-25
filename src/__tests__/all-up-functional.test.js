@@ -73,7 +73,7 @@ describe('All-Up Functional Test Suite', () => {
   });
 
   describe('Phase 7: Requests', () => {
-    const requestTests = require('../collections/__tests__/05-requests-functional.test');
+    const requestTests = require('../requests/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
 
