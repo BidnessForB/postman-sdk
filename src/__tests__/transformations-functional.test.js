@@ -1,5 +1,11 @@
 const { syncSpecWithCollection, createSpec } = require('../specs/index');
-const { syncCollectionWithSpec, createCollection } = require('../collections/index');
+const { 
+  syncCollectionWithSpec, 
+  createCollection,
+  createCollectionGeneration,
+  getCollectionTaskStatus,
+  getCollectionGenerations
+} = require('../collections/index');
 const { loadTestIds, saveTestIds } = require('./test-helpers');
 const { buildUid } = require('../core/utils');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../core/config');
@@ -240,8 +246,271 @@ describe('transformations functional tests', () => {
   });
 
   describe('collection-to-spec', () => {
+    test('1. createCollectionGeneration - should generate spec from collection', async () => {
+      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const userId = persistedIds?.userId;
+
+      // Skip test if no collection is available
+      if (!collectionId) {
+        console.log('Skipping createCollectionGeneration test - no transformations source collection ID available');
+        console.log('Run CreateSourceCollection test first');
+        return;
+      }
+
+      if (!userId) {
+        console.log('Skipping createCollectionGeneration test - no userId available');
+        return;
+      }
+
+      expect(collectionId).toBeDefined();
+      expect(userId).toBeDefined();
+
+      const elementType = 'spec';
+      const name = `Generated Spec from Collection ${Date.now()}`;
+      const type = 'OPENAPI:3.0';
+      const format = 'JSON';
+
+      try {
+        const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+
+        expect(result.status).toBe(202);
+        expect(result.data).toHaveProperty('taskId');
+        expect(result.data).toHaveProperty('url');
+        expect(typeof result.data.taskId).toBe('string');
+        expect(typeof result.data.url).toBe('string');
+
+        // Persist the generated spec info under transformations.sourceCollection
+        if (!persistedIds.transformations.sourceCollection.generatedSpec) {
+          persistedIds.transformations.sourceCollection.generatedSpec = {};
+        }
+        persistedIds.transformations.sourceCollection.generatedSpec = {
+          name: name,
+          taskId: result.data.taskId,
+          url: result.data.url,
+          type: type,
+          format: format,
+          createdAt: new Date().toISOString()
+        };
+        saveTestIds(persistedIds);
+
+        console.log(`Spec generation started with taskId: ${result.data.taskId}`);
+        console.log(`Poll status at: ${result.data.url}`);
+        console.log(`Generated spec info saved to transformations.sourceCollection.generatedSpec`);
+      } catch (error) {
+        // Handle 404 or 403 errors gracefully - collection might not support spec generation
+        if (error.response && (error.response.status === 404 || error.response.status === 403)) {
+          console.log(`Skipping: Collection ${collectionId} does not support spec generation (${error.response.status})`);
+          console.log('Note: Spec generation may only be available for certain collection types or require specific permissions');
+          return;
+        }
+        throw error;
+      }
+    });
+
+    test('2. getCollectionTaskStatus - should get status of generation task', async () => {
+      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
+      const userId = persistedIds?.userId;
+
+      // Skip test if no collection or taskId is available
+      if (!collectionId || !taskId) {
+        console.log('Skipping getCollectionTaskStatus test - no collection ID or taskId available');
+        console.log('Run test 1 (createCollectionGeneration) first to create a generation task');
+        return;
+      }
+
+      if (!userId) {
+        console.log('Skipping getCollectionTaskStatus test - no userId available');
+        return;
+      }
+
+      expect(collectionId).toBeDefined();
+      expect(taskId).toBeDefined();
+      expect(userId).toBeDefined();
+
+      try {
+        const result = await getCollectionTaskStatus(userId, collectionId, taskId);
+
+        expect(result.status).toBe(200);
+        expect(result.data).toHaveProperty('status');
+        expect(['pending', 'completed', 'failed']).toContain(result.data.status);
+
+        console.log(`Task status: ${result.data.status}`);
+
+        if (result.data.status === 'completed') {
+          expect(result.data).toHaveProperty('meta');
+          console.log(`✓ Task completed successfully!`);
+        }
+      } catch (error) {
+        // Handle 404 errors gracefully - task might no longer exist or endpoint not available
+        if (error.response && error.response.status === 404) {
+          console.log(`Skipping: Task ${taskId} not found or endpoint not available (404)`);
+          console.log('Note: The task may have expired or the collection may not support task status queries');
+          return;
+        }
+        throw error;
+      }
+    });
+
+    test('3. getCollectionTaskStatus - Poll until complete', async () => {
+      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
+      const userId = persistedIds?.userId;
+
+      // Skip test if no collection or taskId is available
+      if (!collectionId || !taskId) {
+        console.log('Skipping polling test - no collection ID or taskId available');
+        return;
+      }
+
+      if (!userId) {
+        console.log('Skipping polling test - no userId available');
+        return;
+      }
+
+      expect(collectionId).toBeDefined();
+      expect(taskId).toBeDefined();
+      expect(userId).toBeDefined();
+
+      console.log(`Polling task ${taskId} until completion...`);
+
+      const POLL_INTERVAL_MS = 5000; // 5 seconds
+      const TIMEOUT_MS = 30000; // 30 seconds
+      const MAX_ATTEMPTS = Math.ceil(TIMEOUT_MS / POLL_INTERVAL_MS);
+
+      let attempts = 0;
+      let taskStatus;
+      let lastStatusResult;
+
+      try {
+        while (attempts < MAX_ATTEMPTS) {
+          attempts++;
+          console.log(`Polling attempt ${attempts}/${MAX_ATTEMPTS}...`);
+
+          lastStatusResult = await getCollectionTaskStatus(userId, collectionId, taskId);
+          expect(lastStatusResult.status).toBe(200);
+          expect(lastStatusResult.data).toHaveProperty('status');
+
+          taskStatus = lastStatusResult.data.status;
+          console.log(`Task status: ${taskStatus}`);
+
+          if (taskStatus === 'completed') {
+            // Task completed successfully
+            expect(lastStatusResult.data.meta).toBeDefined();
+            expect(lastStatusResult.data.meta.model).toBe('spec');
+            expect(lastStatusResult.data.meta.action).toBe('generation');
+
+            console.log(`✓ Task completed successfully!`);
+
+            // Extract the generated spec ID from the response
+            const generatedSpecId = lastStatusResult.data.details.resources[0].id;
+
+            // Persist the generated spec ID
+            persistedIds.transformations.sourceCollection.generatedSpec = {
+              ...persistedIds.transformations.sourceCollection.generatedSpec,
+              id: generatedSpecId
+            };
+            saveTestIds(persistedIds);
+
+            console.log(`Generated spec ID: ${generatedSpecId}`);
+            console.log(`Persisted to transformations.sourceCollection.generatedSpec.id`);
+            return; // Test passes
+          }
+
+          if (taskStatus === 'failed') {
+            // Task failed
+            const errorMessage = lastStatusResult.data.error || 'Unknown error';
+            throw new Error(`Task failed: ${errorMessage}`);
+          }
+
+          // Task is still pending, wait before next poll
+          if (attempts < MAX_ATTEMPTS) {
+            console.log(`Waiting ${POLL_INTERVAL_MS / 1000} seconds before next poll...`);
+            await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+          }
+        }
+
+        // If we get here, we've timed out
+        throw new Error(`Timeout: Task did not complete within ${TIMEOUT_MS / 1000} seconds. Last status: ${taskStatus}`);
+      } catch (error) {
+        // Handle 404 errors gracefully - endpoint might not be available
+        if (error.response && error.response.status === 404) {
+          console.log(`Skipping: Task ${taskId} not found or endpoint not available (404)`);
+          console.log('Note: The collection task status endpoint may not be available for all collection types');
+          return;
+        }
+        throw error;
+      }
+    }, 35000); // Set Jest timeout slightly higher than our polling timeout
+
+    test('4. getCollectionGenerations - should retrieve generated specs list', async () => {
+      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const userId = persistedIds?.userId;
+
+      // Skip test if no collection is available
+      if (!collectionId) {
+        console.log('Skipping getCollectionGenerations test - no transformations source collection ID available');
+        return;
+      }
+
+      if (!userId) {
+        console.log('Skipping getCollectionGenerations test - no userId available');
+        return;
+      }
+
+      expect(collectionId).toBeDefined();
+      expect(userId).toBeDefined();
+
+      const elementType = 'spec';
+
+      try {
+        const result = await getCollectionGenerations(userId, collectionId, elementType);
+
+        expect(result.status).toBe(200);
+        expect(result.data).toHaveProperty('specs');
+        expect(result.data).toHaveProperty('meta');
+        expect(Array.isArray(result.data.specs)).toBe(true);
+
+        // If there are specs, verify their structure
+        if (result.data.specs.length > 0) {
+          const spec = result.data.specs[0];
+          expect(spec).toHaveProperty('id');
+          expect(spec).toHaveProperty('name');
+          expect(spec).toHaveProperty('state');
+          expect(spec).toHaveProperty('createdAt');
+          expect(spec).toHaveProperty('updatedAt');
+          expect(spec).toHaveProperty('createdBy');
+
+          console.log(`Found ${result.data.specs.length} generated spec(s)`);
+          console.log(`First spec: ${spec.name} (${spec.state})`);
+          
+          // Optionally persist the first spec ID if we don't have one yet
+          if (!persistedIds.transformations.sourceCollection.generatedSpec || !persistedIds.transformations.sourceCollection.generatedSpec.id) {
+            if (!persistedIds.transformations.sourceCollection.generatedSpec) {
+              persistedIds.transformations.sourceCollection.generatedSpec = {};
+            }
+            persistedIds.transformations.sourceCollection.generatedSpec.id = spec.id;
+            persistedIds.transformations.sourceCollection.generatedSpec.name = spec.name;
+            persistedIds.transformations.sourceCollection.generatedSpec.state = spec.state;
+            saveTestIds(persistedIds);
+            console.log(`Persisted generated spec ID: ${spec.id} to transformations.sourceCollection.generatedSpec`);
+          }
+        } else {
+          console.log('No generated specs found yet (generation may still be pending)');
+        }
+      } catch (error) {
+        // Handle 403 or 404 errors gracefully
+        if (error.response && (error.response.status === 403 || error.response.status === 404)) {
+          console.log(`Skipping: Cannot access generations for collection ${collectionId} (${error.response.status})`);
+          console.log('Note: This endpoint may require specific permissions or may not be available for all collection types');
+          return;
+        }
+        throw error;
+      }
+    });
+
     describe('syncCollectionWithSpec', () => {
-    test('1. should sync collection with generated spec', async () => {
+    test('5. should sync collection with generated spec', async () => {
       const genSpecId = persistedIds?.collection?.generatedSpec?.id;
       const srcCollectionId = persistedIds?.collection?.id;
       const userId = persistedIds?.userId;
@@ -317,7 +586,7 @@ describe('transformations functional tests', () => {
       }
     });
 
-    test('2. should handle error for non-existent collection', async () => {
+    test('6. should handle error for non-existent collection', async () => {
       const genSpecId = persistedIds?.collection?.generatedSpec?.id;
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
       const userId = persistedIds?.userId;
@@ -332,7 +601,7 @@ describe('transformations functional tests', () => {
       ).rejects.toThrow();
     });
 
-    test('3. should handle error for non-existent spec', async () => {
+    test('7. should handle error for non-existent spec', async () => {
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
       const srcCollectionId = persistedIds?.collection?.id;
       const userId = persistedIds?.userId;

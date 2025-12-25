@@ -70,14 +70,64 @@ Tests the synchronization of a generated spec back to its source collection.
 
 Tests transformations that sync collections to specs.
 
+#### Test 1: createCollectionGeneration
+
+Creates a spec from the transformations source collection.
+
+**Test Cases:**
+- `1. createCollectionGeneration - should generate spec from collection` - Generates an OpenAPI 3.0 spec from the transformations source collection
+
+**Prerequisites:**
+- Transformations source collection must exist (created by `CreateSourceCollection` test)
+- User ID must be available
+
+**Persists:**
+- `transformations.sourceCollection.generatedSpec` - Contains taskId, url, name, type, format
+
+#### Test 2: getCollectionTaskStatus
+
+Gets the status of the spec generation task once.
+
+**Test Cases:**
+- `2. getCollectionTaskStatus - should get status of generation task` - Retrieves the current status of the generation task
+
+**Prerequisites:**
+- Transformations source collection must exist
+- Generation task must have been created (test 1)
+
+#### Test 3: getCollectionTaskStatus - Poll until complete
+
+Polls the generation task status until completion and extracts the generated spec ID.
+
+**Test Cases:**
+- `3. getCollectionTaskStatus - Poll until complete` - Polls every 5 seconds for up to 30 seconds until the task completes
+
+**Prerequisites:**
+- Transformations source collection must exist
+- Generation task must have been created (test 1)
+
+**Persists:**
+- `transformations.sourceCollection.generatedSpec.id` - The ID of the generated spec
+
+#### Test 4: getCollectionGenerations
+
+Retrieves the list of all specs generated from the transformations source collection.
+
+**Test Cases:**
+- `4. getCollectionGenerations - should retrieve generated specs list` - Gets all generated specs and verifies their structure
+
+**Prerequisites:**
+- Transformations source collection must exist
+- At least one spec should have been generated (test 3)
+
 #### syncCollectionWithSpec
 
 Tests the synchronization of a collection with its generated spec.
 
 **Test Cases:**
-- `1. should sync collection with generated spec` - Tests syncing a collection with a spec generated from it
-- `2. should handle error for non-existent collection` - Validates error handling for invalid collection IDs
-- `3. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
+- `5. should sync collection with generated spec` - Tests syncing a collection with a spec generated from it
+- `6. should handle error for non-existent collection` - Validates error handling for invalid collection IDs
+- `7. should handle error for non-existent spec` - Validates error handling for invalid spec IDs
 
 **Prerequisites:**
 - Collection must exist (created in collections functional tests)
