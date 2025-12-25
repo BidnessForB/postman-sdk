@@ -5,12 +5,13 @@
  * It ensures that resources are created and tested in the correct sequence:
  * 
  * 1. Workspaces - Create/test the workspace that will contain all other resources
- * 2. Collections - Create/test a collection within the workspace
- * 3. Collection Comments - Create/test comments on the collection
- * 4. Folders - Create/test a folder within the collection
- * 5. Folder Comments - Create/test comments on the folder
- * 6. Specs - Create/test API specs within the workspace
- * 7. Transformations - Test bi-directional sync between specs and collections
+ * 2. Environments - Create/test environments within the workspace
+ * 3. Collections - Create/test a collection within the workspace
+ * 4. Collection Comments - Create/test comments on the collection
+ * 5. Folders - Create/test a folder within the collection
+ * 6. Folder Comments - Create/test comments on the folder
+ * 7. Specs - Create/test API specs within the workspace
+ * 8. Transformations - Test bi-directional sync between specs and collections
  * 
  * Run this test with:
  *   npx jest src/__tests__/all-up-functional.test.js
@@ -44,32 +45,37 @@ describe('All-Up Functional Test Suite', () => {
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 2: Collections', () => {
+  describe('Phase 2: Environments', () => {
+    const environmentTests = require('../environments/__tests__/functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 3: Collections', () => {
     const collectionTests = require('../collections/__tests__/01-collections-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 3: Collection Comments', () => {
+  describe('Phase 4: Collection Comments', () => {
     const collectionCommentTests = require('../collections/__tests__/04-collection-comments-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 4: Folders', () => {
+  describe('Phase 5: Folders', () => {
     const folderTests = require('../collections/__tests__/02-folders-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 5: Folder Comments', () => {
+  describe('Phase 6: Folder Comments', () => {
     const folderCommentTests = require('../collections/__tests__/03-folder-comments-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 6: Specs', () => {
+  describe('Phase 7: Specs', () => {
     const specTests = require('../specs/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 7: Transformations', () => {
+  describe('Phase 8: Transformations', () => {
     const transformationTests = require('../transformations/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });

@@ -6,6 +6,7 @@
 module.exports = {
   collections: require('./collections'),
   workspaces: require('./workspaces'),
-  specs: require('./specs')
+  specs: require('./specs'),
+  environments: require('./environments')
 }; 
 

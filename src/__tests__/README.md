@@ -6,7 +6,7 @@ This directory contains shared test utilities and resources used across all func
 
 The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
 
-1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs → 7. Transformations
+1. Workspaces → 2. Environments → 3. Collections → 4. Collection Comments → 5. Folders → 6. Folder Comments → 7. Specs → 8. Transformations
 
 Run with: `npm run test:all-up`
 
