@@ -6,13 +6,41 @@ This directory contains shared test utilities and resources used across all func
 
 The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
 
-1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs
+1. Workspaces → 2. Collections → 3. Collection Comments → 4. Folders → 5. Folder Comments → 6. Specs → 7. Transformations
 
 Run with: `npm run test:all-up`
 
 **Note**: Test IDs are persisted in `test-ids.json` and reused across test runs. To start fresh, manually delete the file before running tests.
 
 See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
+
+## Transformations Functional Test Suite
+
+The `transformations/__tests__/functional.test.js` file tests bi-directional transformations and synchronization between specs and collections. The suite creates its own dedicated test resources and is organized by transformation direction:
+
+### Structure
+
+**Setup Tests:**
+- **CreateSourceCollection**: Creates a dedicated collection for transformations testing
+- **CreateSourceSpec**: Creates a dedicated spec for transformations testing
+
+**spec-to-collection:** Tests generating collections from specs and syncing collections with specs
+- `createSpecGeneration` - Generate collection from spec
+- `getSpecTaskStatus` - Poll generation task status
+- `getSpecGenerations` - List generated collections
+- `syncCollectionWithSpec` - Sync collection with spec (update collection based on spec)
+
+**collection-to-spec:** Tests generating specs from collections and syncing specs with collections
+- `createCollectionGeneration` - Generate spec from collection
+- `getCollectionTaskStatus` - Poll generation task status
+- `getCollectionGenerations` - List generated specs
+- `syncSpecWithCollection` - Sync spec with collection (update spec based on collection)
+
+Run with: `npm test -- src/transformations/__tests__/functional.test.js`
+
+**Note**: This suite is self-contained and creates its own test resources under the `transformations` property in `test-ids.json`.
+
+See [transformations test README](../transformations/__tests__/README.md) for detailed documentation.
 
 ## Test Helpers (`test-helpers.js`)
 

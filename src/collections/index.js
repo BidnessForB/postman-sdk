@@ -294,6 +294,77 @@ async function deleteFolderComment(userId, collectionId, folderId, commentId) {
   return await executeRequest(config);
 }
 
+/**
+ * Sync collection with spec
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/synchronizations
+ * @param {string} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {string} specId - The spec's ID
+ * @returns {Promise} Axios response
+ */
+async function syncCollectionWithSpec(userId, collectionId, specId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/synchronizations`;
+  const queryParams = {
+    specId
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('put', fullEndpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Generates a spec from a collection
+ * Postman API endpoint and method: POST /collections/{collectionUid}/generations/{elementType}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} elementType - The element type (e.g., 'spec')
+ * @param {string} name - The API specification's name
+ * @param {string} type - The specification's type (e.g., 'OPENAPI:3.0')
+ * @param {string} format - The format of the API specification (e.g., 'JSON', 'YAML')
+ * @returns {Promise} Axios response with taskId and url
+ */
+async function createCollectionGeneration(userId, collectionId, elementType, name, type, format) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
+  const config = buildAxiosConfig('post', endpoint, {
+    name,
+    type,
+    format
+  });
+  return await executeRequest(config);
+}
+
+/**
+ * Gets the list of specs generated from a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/generations/{elementType}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} elementType - The element type (e.g., 'spec')
+ * @returns {Promise} Axios response with specs array and pagination metadata
+ */
+async function getCollectionGenerations(userId, collectionId, elementType) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Gets the status of a collection generation task
+ * Postman API endpoint and method: GET /collections/{collectionUid}/tasks/{taskId}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} taskId - The task ID
+ * @returns {Promise} Axios response with task status
+ */
+async function getCollectionTaskStatus(userId, collectionId, taskId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/tasks/${taskId}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -312,5 +383,9 @@ module.exports = {
   getFolderComments,
   createFolderComment,
   updateFolderComment,
-  deleteFolderComment
+  deleteFolderComment,
+  syncCollectionWithSpec,
+  createCollectionGeneration,
+  getCollectionGenerations,
+  getCollectionTaskStatus
 };

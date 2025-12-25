@@ -13,7 +13,11 @@ const {
   getFolderComments,
   createFolderComment,
   updateFolderComment,
-  deleteFolderComment
+  deleteFolderComment,
+  syncCollectionWithSpec,
+  createCollectionGeneration,
+  getCollectionGenerations,
+  getCollectionTaskStatus
 } = require('../index');
 
 jest.mock('axios');
@@ -121,7 +125,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
@@ -154,7 +158,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
@@ -185,7 +189,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
@@ -215,19 +219,19 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getCollection('col-123');
+      const result = await getCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: 'https://api.getpostman.com/collections/col-123'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -238,18 +242,18 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getCollection('col-123', 'PMAT-XXXX');
+      await getCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'PMAT-XXXX');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: 'https://api.getpostman.com/collections/col-123?access_key=PMAT-XXXX'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6?access_key=PMAT-XXXX'
         })
       );
     });
@@ -259,18 +263,18 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Test Collection'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getCollection('col-123', null, 'minimal');
+      await getCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6', null, 'minimal');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: 'https://api.getpostman.com/collections/col-123?model=minimal'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6?model=minimal'
         })
       );
     });
@@ -282,7 +286,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Updated Collection'
           }
         }
@@ -296,12 +300,12 @@ describe('collections unit tests', () => {
         }
       };
 
-      const result = await updateCollection('col-123', collectionData);
+      const result = await updateCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6', collectionData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: 'https://api.getpostman.com/collections/col-123',
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6',
           data: {
             collection: collectionData
           }
@@ -315,7 +319,7 @@ describe('collections unit tests', () => {
         status: 202,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Updated Collection'
           }
         }
@@ -329,12 +333,12 @@ describe('collections unit tests', () => {
         }
       };
 
-      await updateCollection('col-123', collectionData, 'respond-async');
+      await updateCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6', collectionData, 'respond-async');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: 'https://api.getpostman.com/collections/col-123',
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6',
           headers: expect.objectContaining({
             'Prefer': 'respond-async'
           })
@@ -349,7 +353,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             name: 'Modified Collection'
           }
         }
@@ -362,12 +366,12 @@ describe('collections unit tests', () => {
         }
       };
 
-      const result = await modifyCollection('col-123', partialData);
+      const result = await modifyCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6', partialData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'patch',
-          url: 'https://api.getpostman.com/collections/col-123',
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6',
           data: {
             collection: partialData
           }
@@ -383,19 +387,19 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           collection: {
-            id: 'col-123',
+            id: 'c6d2471c-3664-47b5-adc8-35d52484f2f6',
             uid: '12345-col-123'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteCollection('col-123');
+      const result = await deleteCollection('c6d2471c-3664-47b5-adc8-35d52484f2f6');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: 'https://api.getpostman.com/collections/col-123'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -408,7 +412,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           data: {
-            id: 'folder-123',
+            id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
             name: 'Test Folder'
           }
         }
@@ -420,12 +424,12 @@ describe('collections unit tests', () => {
         description: 'Test folder description'
       };
 
-      const result = await createFolder('col-123', folderData);
+      const result = await createFolder('c6d2471c-3664-47b5-adc8-35d52484f2f6', folderData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: 'https://api.getpostman.com/collections/col-123/folders',
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6/folders',
           data: folderData
         })
       );
@@ -439,19 +443,19 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           data: {
-            id: 'folder-123',
+            id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
             name: 'Test Folder'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getFolder('col-123', 'folder-123');
+      const result = await getFolder('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'a1b2c3d4-5678-90ab-cdef-1234567890ab');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/a1b2c3d4-5678-90ab-cdef-1234567890ab'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -462,14 +466,14 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           data: {
-            id: 'folder-123',
+            id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
             name: 'Test Folder'
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getFolder('col-123', 'folder-123', 'true', 'true', 'true');
+      await getFolder('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'a1b2c3d4-5678-90ab-cdef-1234567890ab', 'true', 'true', 'true');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -487,7 +491,7 @@ describe('collections unit tests', () => {
         status: 200,
         data: {
           data: {
-            id: 'folder-123',
+            id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
             name: 'Updated Folder'
           }
         }
@@ -499,12 +503,12 @@ describe('collections unit tests', () => {
         description: 'Updated description'
       };
 
-      const result = await updateFolder('col-123', 'folder-123', folderData);
+      const result = await updateFolder('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'a1b2c3d4-5678-90ab-cdef-1234567890ab', folderData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123',
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/a1b2c3d4-5678-90ab-cdef-1234567890ab',
           data: folderData
         })
       );
@@ -524,12 +528,12 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteFolder('col-123', 'folder-123');
+      const result = await deleteFolder('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'a1b2c3d4-5678-90ab-cdef-1234567890ab');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: 'https://api.getpostman.com/collections/col-123/folders/folder-123'
+          url: 'https://api.getpostman.com/collections/c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/a1b2c3d4-5678-90ab-cdef-1234567890ab'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -552,14 +556,14 @@ describe('collections unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = 12345678;
-      const collectionId = 'col-123';
-      const folderId = 'folder-123';
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const folderId = 'a1b2c3d4-5678-90ab-cdef-1234567890ab';
       const result = await getFolderComments(userId, collectionId, folderId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments'
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/12345678-a1b2c3d4-5678-90ab-cdef-1234567890ab/comments'
         })
       );
       expect(result).toEqual(mockResponse);
@@ -580,8 +584,8 @@ describe('collections unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = 12345678;
-      const collectionId = 'col-123';
-      const folderId = 'folder-123';
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const folderId = 'a1b2c3d4-5678-90ab-cdef-1234567890ab';
       const commentData = {
         body: 'Test comment'
       };
@@ -591,7 +595,7 @@ describe('collections unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/12345678-a1b2c3d4-5678-90ab-cdef-1234567890ab/comments',
           data: commentData
         })
       );
@@ -617,7 +621,7 @@ describe('collections unit tests', () => {
         threadId: 1
       };
 
-      await createFolderComment(userId, 'col-123', 'folder-123', commentData);
+      await createFolderComment(userId, 'c6d2471c-3664-47b5-adc8-35d52484f2f6', 'a1b2c3d4-5678-90ab-cdef-1234567890ab', commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -643,9 +647,9 @@ describe('collections unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = 12345678;
-      const collectionId = 'col-123';
-      const folderId = 'folder-123';
-      const commentId = '1';
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const folderId = 'a1b2c3d4-5678-90ab-cdef-1234567890ab';
+      const commentId = 1;
       const commentData = {
         body: 'Updated comment'
       };
@@ -655,7 +659,7 @@ describe('collections unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments/1',
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/12345678-a1b2c3d4-5678-90ab-cdef-1234567890ab/comments/1',
           data: commentData
         })
       );
@@ -672,20 +676,21 @@ describe('collections unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = 12345678;
-      const collectionId = 'col-123';
-      const folderId = 'folder-123';
-      const commentId = '1';
+      const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+      const folderId = 'a1b2c3d4-5678-90ab-cdef-1234567890ab';
+      const commentId = 1;
 
       const result = await deleteFolderComment(userId, collectionId, folderId, commentId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: 'https://api.getpostman.com/collections/12345678-col-123/folders/12345678-folder-123/comments/1'
+          url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/folders/12345678-a1b2c3d4-5678-90ab-cdef-1234567890ab/comments/1'
         })
       );
       expect(result).toEqual(mockResponse);
     });
   });
+
 });
 

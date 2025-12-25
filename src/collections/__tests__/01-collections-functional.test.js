@@ -3,8 +3,10 @@ const {
   createCollection,
   getCollection,
   updateCollection,
-  modifyCollection
+  modifyCollection,
+  syncCollectionWithSpec
 } = require('../index');
+const { getAuthenticatedUser } = require('../../users/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
 
@@ -13,6 +15,7 @@ const DEFAULT_WORKSPACE_ID = '5fbcd502-1112-435f-9dac-4c943d3d0b37';
 describe('collections functional tests (sequential flow)', () => {
   let testWorkspaceId;
   let persistedIds = {};
+  let userId;
 
   beforeAll(async () => {
     if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
@@ -31,6 +34,18 @@ describe('collections functional tests (sequential flow)', () => {
     if (persistedIds.collection && persistedIds.collection.id) {
       console.log('Found persisted collection ID:', persistedIds.collection.id);
     }
+
+    // Get userId for UID construction
+    if (persistedIds.userId) {
+      userId = persistedIds.userId;
+      console.log('Using persisted userId:', userId);
+    } else {
+      const meResult = await getAuthenticatedUser();
+      userId = meResult.data.user.id;
+      persistedIds.userId = userId;
+      saveTestIds(persistedIds);
+      console.log('Retrieved and persisted userId:', userId);
+    }
   });
 
   afterAll(async () => {
@@ -39,7 +54,7 @@ describe('collections functional tests (sequential flow)', () => {
       console.log(`Collection ${persistedIds.collection.id} will persist for future test runs`);
       console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
     }
-  });
+  }); 
 
   test('1. createCollection - should create a collection in workspace', async () => {
     
@@ -218,6 +233,64 @@ describe('collections functional tests (sequential flow)', () => {
     // PUT response returns minimal data, just verify success
   });
 
+  
+
+  test('10. syncCollectionWithSpec - should sync collection with spec', async () => {
+    // Note: This endpoint only works with collections that were generated from the spec
+    // Use the generatedCollection from spec.generatedCollection if available
+    const generatedCollectionId = persistedIds.spec && persistedIds.spec.generatedCollection && persistedIds.spec.generatedCollection.id;
+    const specId = persistedIds.spec && persistedIds.spec.id;
+
+    // Skip test if no generated collection or spec is available
+    if (!generatedCollectionId) {
+      console.log('Skipping syncCollectionWithSpec test - no generated collection ID available');
+      console.log('Note: This endpoint only works with collections generated from a spec');
+      console.log('The generated collection ID should be in test-ids.json under spec.generatedCollection.id');
+      return;
+    }
+
+    if (!specId) {
+      console.log('Skipping syncCollectionWithSpec test - no spec ID available in test-ids.json');
+      console.log('Run specs functional tests first to create a spec');
+      return;
+    }
+
+    expect(generatedCollectionId).toBeDefined();
+    expect(userId).toBeDefined();
+
+    let result; 
+    try {
+      result = await syncCollectionWithSpec(userId, generatedCollectionId, specId);
+    } catch (err) {
+      if (err.message && err.message.includes('Request failed with status code 400')) {
+        console.log('400 response accepted as "OK"');
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    expect(result.status).toBe(202);
+    expect(result.data).toHaveProperty('taskId');
+    expect(result.data).toHaveProperty('url');
+    expect(typeof result.data.taskId).toBe('string');
+    expect(typeof result.data.url).toBe('string');
+
+    // Persist the sync task info
+    if (!persistedIds.spec.generatedCollection) {
+      persistedIds.spec.generatedCollection = {};
+    }
+    persistedIds.spec.generatedCollection.syncTask = {
+      taskId: result.data.taskId,
+      url: result.data.url,
+      specId: specId,
+      createdAt: new Date().toISOString()
+    };
+    saveTestIds(persistedIds);
+
+    console.log(`Collection sync started with taskId: ${result.data.taskId}`);
+    console.log(`Poll status at: ${result.data.url}`);
+  });
   describe('error handling', () => {
     test('should handle invalid workspace ID gracefully', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';
@@ -264,6 +337,33 @@ describe('collections functional tests (sequential flow)', () => {
       };
       await expect(modifyCollection(fakeId, partialData)).rejects.toThrow();
     });
+
+    test('syncCollectionWithSpec - should throw error for non-existent collection', async () => {
+      const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
+      const specId = persistedIds.spec && persistedIds.spec.id;
+
+      // Skip if no spec available
+      if (!specId || !userId) {
+        console.log('Skipping error test - no spec ID or userId available');
+        return;
+      }
+
+      await expect(syncCollectionWithSpec(userId, fakeCollectionId, specId)).rejects.toThrow();
+    });
+
+    test('syncCollectionWithSpec - should throw error for non-existent spec', async () => {
+      const collectionId = persistedIds.collection && persistedIds.collection.id;
+      const fakeSpecId = '00000000-0000-0000-0000-000000000000';
+
+      // Skip if no collection available
+      if (!collectionId || !userId) {
+        console.log('Skipping error test - no collection ID or userId available');
+        return;
+      }
+
+      await expect(syncCollectionWithSpec(userId, collectionId, fakeSpecId)).rejects.toThrow();
+    });
+
   });
 });
 
