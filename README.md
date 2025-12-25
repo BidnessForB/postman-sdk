@@ -5,8 +5,6 @@
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
-[![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
-[![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-8-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-69%2F161%20(42.86%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
