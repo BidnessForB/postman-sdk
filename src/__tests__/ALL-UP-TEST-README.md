@@ -41,19 +41,30 @@ The tests run in the following sequence to respect resource dependencies:
    - Tests thread management
    - Persists comment/thread IDs
 
-7. **Specs** (`specs/__tests__/functional.test.js`)
+7. **Requests** (`requests/__tests__/functional.test.js`)
+   - Creates requests in the collection and folder
+   - Tests request CRUD operations
+   - Tests requests in both collection root and folder contexts
+   - Persists request IDs
+
+8. **Specs** (`specs/__tests__/functional.test.js`)
    - Creates API specs in the workspace
    - Tests spec CRUD operations
    - Tests spec file operations
    - Persists spec IDs
 
-8. **Transformations** (`transformations/__tests__/functional.test.js`)
+9. **Transformations** (`transformations/__tests__/functional.test.js`)
    - Creates dedicated test collection and spec for transformations
    - Tests bi-directional synchronization between specs and collections
    - Syncs generated specs with source collections (spec-to-collection)
    - Syncs collections with generated specs (collection-to-spec)
    - Persists transformation resource IDs under `transformations` key
    - Uses resources created in previous phases for sync operations
+
+10. **Tags** (`tags/__tests__/functional.test.js`)
+    - Tests tagging operations on workspaces
+    - Tests entity retrieval by tag
+    - Validates tag-based resource discovery
 
 ## Running the Test
 
@@ -151,6 +162,15 @@ After running the all-up test, your `test-ids.json` will contain:
       "clearedAt": null
     }
   },
+  "request": {
+    "id": "xyz-890-request-id",
+    "name": "Test Request 1234567890",
+    "createdAt": "2025-12-25T10:31:00.000Z"
+  },
+  "folderRequest": {
+    "id": "abc-234-folder-request-id",
+    "name": "Folder Request 1234567890"
+  },
   "spec": {
     "id": "jkl-012-spec-id",
     "name": "SDK Functional Test Spec",
@@ -204,11 +224,13 @@ All-Up Functional Test Suite
   Phase 3: Collection Comments
   Phase 4: Folders
   Phase 5: Folder Comments
-  Phase 6: Specs
-  Phase 7: Transformations
+  Phase 6: Requests
+  Phase 7: Specs
+  Phase 8: Transformations
+  Phase 9: Tags
 
 Test Suites: 1 passed, 1 total
-Tests:       106 passed, 106 total
+Tests:       116 passed, 116 total
 ```
 c6d2471c-3664-47b5-adc8-35d52484f2f6
 
