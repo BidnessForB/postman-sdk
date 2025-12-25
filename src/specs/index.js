@@ -222,6 +222,24 @@ async function getSpecGenerations(specId, elementType, limit = null, cursor = nu
   return await executeRequest(config);
 }
 
+/**
+ * Syncs a spec with a collection
+ * Postman API endpoint and method: PUT /specs/{specId}/synchronizations
+ * @param {string} specId - The spec ID
+ * @param {string} collectionUid - The collection's unique ID (userId-collectionId)
+ * @returns {Promise} Axios response with taskId and url
+ */
+async function syncSpecWithCollection(specId, collectionUid) {
+  const endpoint = `/specs/${specId}/synchronizations`;
+  const queryParams = {
+    collectionUid
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('put', fullEndpoint);
+  const results = await executeRequest(config);
+  return results;
+}
+
 module.exports = {
   getSpecs,
   getSpec,
@@ -236,6 +254,7 @@ module.exports = {
   deleteSpecFile,
   createSpecGeneration,
   getSpecTaskStatus,
-  getSpecGenerations
+  getSpecGenerations,
+  syncSpecWithCollection
 };
 

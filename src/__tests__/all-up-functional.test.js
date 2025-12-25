@@ -10,6 +10,7 @@
  * 4. Folders - Create/test a folder within the collection
  * 5. Folder Comments - Create/test comments on the folder
  * 6. Specs - Create/test API specs within the workspace
+ * 7. Transformations - Test bi-directional sync between specs and collections
  * 
  * Run this test with:
  *   npx jest src/__tests__/all-up-functional.test.js
@@ -65,6 +66,11 @@ describe('All-Up Functional Test Suite', () => {
 
   describe('Phase 6: Specs', () => {
     const specTests = require('../specs/__tests__/functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 7: Transformations', () => {
+    const transformationTests = require('./transformations-functional.test');
     // Tests are automatically executed when the module is required
   });
 });

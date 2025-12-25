@@ -16,7 +16,8 @@ const {
   deleteFolderComment,
   syncCollectionWithSpec,
   createCollectionGeneration,
-  getCollectionGenerations
+  getCollectionGenerations,
+  getCollectionTaskStatus
 } = require('../index');
 
 jest.mock('axios');
@@ -865,6 +866,70 @@ describe('collections unit tests', () => {
       const elementType = 'spec';
 
       await getCollectionGenerations(userId, collectionId, elementType);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('getCollectionTaskStatus', () => {
+    test('should call GET /collections/{collectionUid}/tasks/{taskId}', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'completed',
+          meta: {
+            model: 'spec',
+            action: 'generation'
+          },
+          details: {
+            resources: [
+              {
+                id: 'spec-id-123',
+                name: 'Generated Spec'
+              }
+            ]
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const taskId = 'task-456';
+
+      const result = await getCollectionTaskStatus(userId, collectionId, taskId);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: 'https://api.getpostman.com/collections/12345678-col-123/tasks/task-456'
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data.status).toBeDefined();
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          status: 'pending'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const userId = 12345678;
+      const collectionId = 'col-123';
+      const taskId = 'task-456';
+
+      await getCollectionTaskStatus(userId, collectionId, taskId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

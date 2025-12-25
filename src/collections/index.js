@@ -350,6 +350,21 @@ async function getCollectionGenerations(userId, collectionId, elementType) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets the status of a collection generation task
+ * Postman API endpoint and method: GET /collections/{collectionUid}/tasks/{taskId}
+ * @param {string} userId - The user ID
+ * @param {string} collectionId - The collection ID
+ * @param {string} taskId - The task ID
+ * @returns {Promise} Axios response with task status
+ */
+async function getCollectionTaskStatus(userId, collectionId, taskId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/tasks/${taskId}`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -371,5 +386,6 @@ module.exports = {
   deleteFolderComment,
   syncCollectionWithSpec,
   createCollectionGeneration,
-  getCollectionGenerations
+  getCollectionGenerations,
+  getCollectionTaskStatus
 };

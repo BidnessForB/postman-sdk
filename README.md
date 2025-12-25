@@ -16,7 +16,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (41/191, 21.47%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (43/191, 22.51%)
 
 ## Installation
    

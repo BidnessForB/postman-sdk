@@ -13,7 +13,8 @@ const {
   deleteSpecFile,
   createSpecGeneration,
   getSpecTaskStatus,
-  getSpecGenerations
+  getSpecGenerations,
+  syncSpecWithCollection
 } = require('../index');
 
 jest.mock('axios');
@@ -908,6 +909,57 @@ describe('specs unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       await getSpecGenerations(DEFAULT_SPEC_ID, 'collection');
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'X-API-Key': expect.any(String),
+            'Content-Type': 'application/json'
+          })
+        })
+      );
+    });
+  });
+
+  describe('syncSpecWithCollection', () => {
+    test('should call PUT /specs/{specId}/synchronizations with collectionUid query param', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: '66ae9950-0869-4e65-96b0-1e0e47e771af',
+          url: '/specs/73e15000-bc7a-4802-b80e-05fff18fd7f8/tasks/66ae9950-0869-4e65-96b0-1e0e47e771af'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const collectionUid = '12345678-col-123';
+
+      const result = await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/synchronizations?collectionUid=12345678-col-123`,
+        })
+      );
+      expect(result.status).toBe(202);
+      expect(result.data).toHaveProperty('taskId');
+      expect(result.data).toHaveProperty('url');
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 202,
+        data: {
+          taskId: 'test-task-id',
+          url: '/specs/test-spec/tasks/test-task-id'
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const collectionUid = '12345678-col-123';
+
+      await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

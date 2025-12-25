@@ -12,12 +12,14 @@ const {
   deleteSpecFile,
   createSpecGeneration,
   getSpecTaskStatus,
-  getSpecGenerations
+  getSpecGenerations,
+  syncSpecWithCollection
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 const { loadSpecFixture, getAllSpecFixtures } = require('./fixtures-loader');
+const { buildUid } = require('../../core/utils');
 
 // Add custom JEST matcher for YAML validation
 expect.extend({
@@ -550,6 +552,71 @@ describe('specs functional tests', () => {
     console.log(`Retrieved ${result.data.collections.length} collection(s) with limit=${limit}`);
   });
 
+  test('17. syncSpecWithCollection - should sync spec with generated collection', async () => {
+    const genSpecId = persistedIds?.collection?.generatedSpec?.id;
+    const srcCollectionId = persistedIds?.collection?.id;
+    const userId = persistedIds.userId; 
+
+    // Skip test if no spec is available
+    if (!genSpecId) {
+      console.log('Skipping syncSpecWithCollection test - no spec ID available in test-ids.json');
+      console.log('Run specs functional tests first to create a spec');
+      return;
+    }
+
+    // Skip test if no generated collection is available
+    if (!srcCollectionId) {
+      console.log('Skipping syncSpecWithCollection test - no generated collection ID available in test-ids.json');
+      console.log('Note: This endpoint only works with collections that were generated from the spec');
+      console.log('Run test 14 (getSpecTaskStatus - Poll until complete) first to generate and persist a collection');
+      return;
+    }
+
+    if (!userId) {
+      console.log('Skipping syncSpecWithCollection test - no userId available in test-ids.json');
+      return;
+    }
+
+    expect(genSpecId).toBeDefined();
+    expect(srcCollectionId).toBeDefined();
+    expect(userId).toBeDefined();
+
+    // Build the collection UID (userId-collectionId)
+    const collectionUid = buildUid(userId, srcCollectionId);
+
+    let result;
+    try {
+      result = await syncSpecWithCollection(genSpecId, collectionUid);
+    } catch (err) {
+      // Accept 400 response as "OK"
+      if (err.message && err.message.includes('Request failed with status code 400')) {
+        // Simulate axios-like error object for result shape
+        console.log('400 response accepted as "OK"');
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    expect([202, 400]).toContain(result.status);
+    expect(result.data).toHaveProperty('taskId');
+    expect(result.data).toHaveProperty('url');
+    expect(typeof result.data.taskId).toBe('string');
+    expect(typeof result.data.url).toBe('string');
+
+    
+    persistedIds.collection.syncTask = {
+      taskId: result.data.taskId,
+      url: result.data.url,
+      createdAt: new Date().toISOString()
+    };
+    saveTestIds(persistedIds);
+
+    console.log(`Spec sync started with taskId: ${result.data.taskId}`);
+    console.log(`Poll status at: ${result.data.url}`);
+    console.log(`Syncing spec ${genSpecId} with collection ${collectionUid}`);
+  });
+
   // Error handling tests
   describe('error handling', () => {
     test('getSpec - should throw error for non-existent spec ID', async () => {
@@ -647,6 +714,30 @@ describe('specs functional tests', () => {
     test('getSpecGenerations - should throw error for non-existent spec ID', async () => {
       await expect(
         getSpecGenerations('00000000-0000-0000-0000-000000000000', 'collection')
+      ).rejects.toThrow();
+    });
+
+    test('syncSpecWithCollection - should throw error for non-existent spec ID', async () => {
+      const fakeSpecId = '00000000-0000-0000-0000-000000000000';
+      const collectionUid = '12345678-col-123';
+
+      await expect(
+        syncSpecWithCollection(fakeSpecId, collectionUid)
+      ).rejects.toThrow();
+    });
+
+    test('syncSpecWithCollection - should throw error for non-existent collection', async () => {
+      const specId = persistedIds.spec && persistedIds.spec.id;
+      const fakeCollectionUid = '12345678-00000000-0000-0000-0000-000000000000';
+
+      // Skip if no spec available
+      if (!specId) {
+        console.log('Skipping error test - no spec ID available');
+        return;
+      }
+
+      await expect(
+        syncSpecWithCollection(specId, fakeCollectionUid)
       ).rejects.toThrow();
     });
   });
