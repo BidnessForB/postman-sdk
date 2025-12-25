@@ -47,21 +47,27 @@ The tests run in the following sequence to respect resource dependencies:
    - Tests requests in both collection root and folder contexts
    - Persists request IDs
 
-8. **Specs** (`specs/__tests__/functional.test.js`)
+8. **Responses** (`responses/__tests__/functional.test.js`)
+   - Creates responses for the test requests
+   - Tests response CRUD operations
+   - Tests response comments and comment operations
+   - Persists response IDs
+
+9. **Specs** (`specs/__tests__/functional.test.js`)
    - Creates API specs in the workspace
    - Tests spec CRUD operations
    - Tests spec file operations
    - Persists spec IDs
 
-9. **Transformations** (`transformations/__tests__/functional.test.js`)
-   - Creates dedicated test collection and spec for transformations
-   - Tests bi-directional synchronization between specs and collections
-   - Syncs generated specs with source collections (spec-to-collection)
-   - Syncs collections with generated specs (collection-to-spec)
-   - Persists transformation resource IDs under `transformations` key
-   - Uses resources created in previous phases for sync operations
+10. **Transformations** (`transformations/__tests__/functional.test.js`)
+    - Creates dedicated test collection and spec for transformations
+    - Tests bi-directional synchronization between specs and collections
+    - Syncs generated specs with source collections (spec-to-collection)
+    - Syncs collections with generated specs (collection-to-spec)
+    - Persists transformation resource IDs under `transformations` key
+    - Uses resources created in previous phases for sync operations
 
-10. **Tags** (`tags/__tests__/functional.test.js`)
+11. **Tags** (`tags/__tests__/functional.test.js`)
     - Tests tagging operations on workspaces
     - Tests entity retrieval by tag
     - Validates tag-based resource discovery
