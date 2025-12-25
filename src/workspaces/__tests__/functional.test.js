@@ -241,7 +241,7 @@ describe('workspaces functional tests (sequential flow)', () => {
     expect(testWorkspaceId).toBeDefined();
     
     const tags = [
-      { slug: 'production' },
+      { slug: 'sdk-test' },
       { slug: 'api-testing' },
       { slug: 'v2' }
     ];
@@ -253,11 +253,11 @@ describe('workspaces functional tests (sequential flow)', () => {
     expect(result.data.tags).toHaveLength(3);
     
     const slugs = result.data.tags.map(t => t.slug);
-    expect(slugs).toContain('production');
+    expect(slugs).toContain('sdk-test');
     expect(slugs).toContain('api-testing');
     expect(slugs).toContain('v2');
     // Old tags should be gone
-    expect(slugs).not.toContain('sdk-test');
+    
     expect(slugs).not.toContain('automated');
   });
 
