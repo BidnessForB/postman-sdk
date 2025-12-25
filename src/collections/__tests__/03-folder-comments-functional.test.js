@@ -38,11 +38,7 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Comments persist indefinitely for reuse across test runs
-    if (persistedIds.folder && persistedIds.folder.comment && persistedIds.folder.comment.id) {
-      console.log(`Comment ${persistedIds.folder.comment.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
-    }
+    
   });
 
   test('1. getFolderComments - should retrieve comments (initially empty)', async () => {

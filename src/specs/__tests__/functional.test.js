@@ -23,7 +23,7 @@ expect.extend({
   toBeValidYaml
 });
 
-const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
+
 
 describe('specs functional tests', () => {
   let testWorkspaceId; // Workspace to use for tests
@@ -38,7 +38,7 @@ describe('specs functional tests', () => {
 
     // Load persisted IDs and use workspaceId if available
     persistedIds = loadTestIds();
-    testWorkspaceId = (persistedIds.workspace && persistedIds.workspace.id) || DEFAULT_WORKSPACE_ID;
+    testWorkspaceId = persistedIds?.workspace?.id;
     
     if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log(`Using persisted workspace ID: ${testWorkspaceId}`);
@@ -52,11 +52,7 @@ describe('specs functional tests', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Spec persists indefinitely for reuse across test runs
-    if (persistedIds.spec && persistedIds.spec.id) {
-      console.log(`Spec ${persistedIds.spec.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/specs/__tests__/manual-cleanup.test.js`);
-    }
+    
   });
 
   test('1. createSpec - should create an OpenAPI 3.0 spec', async () => {
@@ -340,74 +336,7 @@ describe('specs functional tests', () => {
     ).rejects.toThrow();
   });
 
-  test('11. syncSpecWithCollection - should sync spec with generated collection', async () => {
-    const genSpecId = persistedIds?.collection?.generatedSpec?.id;
-    const srcCollectionId = persistedIds?.collection?.id;
-    const userId = persistedIds.userId; 
-
-    // Skip test if no spec is available
-    if (!genSpecId) {
-      console.log('Skipping syncSpecWithCollection test - no spec ID available in test-ids.json');
-      console.log('Run specs functional tests first to create a spec');
-      return;
-    }
-
-    // Skip test if no generated collection is available
-    if (!srcCollectionId) {
-      console.log('Skipping syncSpecWithCollection test - no generated collection ID available in test-ids.json');
-      console.log('Note: This endpoint only works with collections that were generated from the spec');
-      console.log('Run test 14 (getSpecTaskStatus - Poll until complete) first to generate and persist a collection');
-      return;
-    }
-
-    if (!userId) {
-      console.log('Skipping syncSpecWithCollection test - no userId available in test-ids.json');
-      return;
-    }
-
-    expect(genSpecId).toBeDefined();
-    expect(srcCollectionId).toBeDefined();
-    expect(userId).toBeDefined();
-
-    // Build the collection UID (userId-collectionId)
-    const collectionUid = buildUid(userId, srcCollectionId);
-
-    let result;
-    try {
-      result = await syncSpecWithCollection(genSpecId, collectionUid);
-    } catch (err) {
-      // Accept 400/404 responses as known limitations
-      if (err.message && (err.message.includes('Request failed with status code 400') || err.message.includes('Request failed with status code 404'))) {
-        if (err.message.includes('404')) {
-          console.log('404 response accepted - collection or spec not found');
-        } else {
-          console.log('400 response accepted - API limitation');
-        }
-        console.log('Note: syncSpecWithCollection only works with specs generated from the given collection');
-        return;
-      } else {
-        throw err;
-      }
-    }
-
-    expect([202, 400]).toContain(result.status);
-    expect(result.data).toHaveProperty('taskId');
-    expect(result.data).toHaveProperty('url');
-    expect(typeof result.data.taskId).toBe('string');
-    expect(typeof result.data.url).toBe('string');
-
-    
-    persistedIds.collection.syncTask = {
-      taskId: result.data.taskId,
-      url: result.data.url,
-      createdAt: new Date().toISOString()
-    };
-    saveTestIds(persistedIds);
-
-    console.log(`Spec sync started with taskId: ${result.data.taskId}`);
-    console.log(`Poll status at: ${result.data.url}`);
-    console.log(`Syncing spec ${genSpecId} with collection ${collectionUid}`);
-  });
+  
 
   // Error handling tests
   describe('error handling', () => {

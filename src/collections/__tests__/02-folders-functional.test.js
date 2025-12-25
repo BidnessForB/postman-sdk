@@ -29,11 +29,7 @@ describe('folders functional tests (sequential flow)', () => {
   });
 
   afterAll(async () => {
-    // NO CLEANUP - Folder persists indefinitely for reuse across test runs
-    if (persistedIds.folder && persistedIds.folder.id) {
-      console.log(`Folder ${persistedIds.folder.id} will persist for future test runs`);
-      console.log(`To delete manually, run: npx jest src/collections/__tests__/manual-cleanup.test.js`);
-    }
+    
   });
 
   test('1. createFolder - should create a folder in the collection', async () => {
