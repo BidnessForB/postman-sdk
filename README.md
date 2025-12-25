@@ -7,8 +7,8 @@
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Unit Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=unit)](https://codecov.io/gh/bidnessforb/postman-sdk)
 [![Functional Coverage](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4&flag=functional)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-7-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-61%2F191%20(31.94%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-8-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-69%2F191%20(36.13%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -16,7 +16,7 @@ A barebones SDK for the Postman API, built following minimal patterns for easy e
 
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
-📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (61/191, 31.94%)
+📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (69/191, 36.13%)
 
 ## Installation
    
@@ -70,7 +70,7 @@ process.env.POSTMAN_API_KEY = 'your_api_key_here';
 ### Basic Example
 
 ```javascript
-const { collections, workspaces, specs, requests } = require('@bidnessforb/postman-sdk');
+const { collections, workspaces, specs, requests, responses } = require('@bidnessforb/postman-sdk');
 
 // Make sure your API key is set
 process.env.POSTMAN_API_KEY = 'your_api_key_here';
@@ -96,6 +96,15 @@ async function example() {
     url: 'https://api.example.com/endpoint'
   });
   console.log('Created Request:', requestResponse.data);
+
+  // Create a response for the request
+  const requestId = requestResponse.data.data.id;
+  const responseResponse = await responses.createResponse(collectionId, requestId, {
+    name: 'Success Response',
+    code: 200,
+    body: '{"status": "success"}'
+  });
+  console.log('Created Response:', responseResponse.data);
 }
 
 example().catch(console.error);
@@ -169,6 +178,7 @@ The SDK is organized by resource groups:
 
 - **collections**: Endpoints for managing Postman Collections, folders, and comments
 - **requests**: Endpoints for managing requests within collections
+- **responses**: Endpoints for managing responses within collections
 - **workspaces**: Endpoints for managing Postman Workspaces
 - **specs**: Endpoints for managing Postman API Specifications
 - **environments**: Endpoints for managing Postman Environments
@@ -203,9 +213,10 @@ This orchestrates all functional tests in sequence:
 5. Folders (create/test folder in collection)
 6. Folder Comments (create/test comments on folder)
 7. Requests (create/test requests in collections and folders)
-8. Specs (create/test API specs in workspace)
-9. Transformations (test bidirectional sync between specs and collections)
-10. Tags (test tagging and entity retrieval)
+8. Responses (create/test responses on requests)
+9. Specs (create/test API specs in workspace)
+10. Transformations (test bidirectional sync between specs and collections)
+11. Tags (test tagging and entity retrieval)
 
 **Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
 

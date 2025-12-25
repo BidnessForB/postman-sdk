@@ -11,9 +11,10 @@
  * 5. Folders - Create/test a folder within the collection
  * 6. Folder Comments - Create/test comments on the folder
  * 7. Requests - Create/test requests within the collection and folders
- * 8. Specs - Create/test API specs within the workspace
- * 9. Transformations - Test bi-directional sync between specs and collections
- * 10. Tags - Test tagging and entity retrieval by tag
+ * 8. Responses - Create/test responses on the requests
+ * 9. Specs - Create/test API specs within the workspace
+ * 10. Transformations - Test bi-directional sync between specs and collections
+ * 11. Tags - Test tagging and entity retrieval by tag
  * 
  * Run this test with:
  *   npx jest src/__tests__/all-up-functional.test.js
@@ -77,17 +78,22 @@ describe('All-Up Functional Test Suite', () => {
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 8: Specs', () => {
+  describe('Phase 8: Responses', () => {
+    const responseTests = require('../responses/__tests__/functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 9: Specs', () => {
     const specTests = require('../specs/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 9: Transformations', () => {
+  describe('Phase 10: Transformations', () => {
     const transformationTests = require('../transformations/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 10: Tags', () => {
+  describe('Phase 11: Tags', () => {
     const tagsTests = require('../tags/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });

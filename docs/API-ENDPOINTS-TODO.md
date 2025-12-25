@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 61 operations (31.94%)
-- **Not Implemented**: 130 operations (68.06%)
+- **Implemented**: 69 operations (36.13%)
+- **Not Implemented**: 122 operations (63.87%)
 
 ### Legend
 
@@ -49,7 +49,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Collections Module (24/64 completed - 37.5%)</strong></summary>
+<summary><strong>Collections Module (32/64 completed - 50%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -93,19 +93,19 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| POST | `/collections/{collectionId}/responses` | Create a response | - | ❌ | ❌ None |
-| GET | `/collections/{collectionId}/responses/{responseId}` | Get a response | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/responses/{responseId}` | Update a response | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/responses/{responseId}` | Delete a response | - | ❌ | ❌ None |
+| POST | `/collections/{collectionId}/responses` | Create a response | `createResponse()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionId}/responses/{responseId}` | Get a response | `getResponse()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/responses/{responseId}` | Update a response | `updateResponse()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/responses/{responseId}` | Delete a response | `deleteResponse()` | ✅ | ✅ Passing |
 
 ### Response Comments
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/responses/{responseId}/comments` | Get response comments | - | ❌ | ❌ None |
-| POST | `/collections/{collectionId}/responses/{responseId}/comments` | Create response comment | - | ❌ | ❌ None |
-| PUT | `/collections/{collectionId}/responses/{responseId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
-| DELETE | `/collections/{collectionId}/responses/{responseId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
+| GET | `/collections/{collectionUid}/responses/{responseUid}/comments` | Get response comments | `getResponseComments()` | ✅ | ✅ Passing |
+| POST | `/collections/{collectionUid}/responses/{responseUid}/comments` | Create response comment | `createResponseComment()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Update comment | `updateResponseComment()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Delete comment | `deleteResponseComment()` | ✅ | ✅ Passing |
 
 ### Collection Fork & Merge Operations
 
@@ -202,6 +202,31 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/collections/{collectionUid}/requests/{requestUid}/comments` | Create request comment | `createRequestComment()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionUid}/requests/{requestUid}/comments/{commentId}` | Update comment | `updateRequestComment()` | ✅ | ✅ Passing |
 | DELETE | `/collections/{collectionUid}/requests/{requestUid}/comments/{commentId}` | Delete comment | `deleteRequestComment()` | ✅ | ✅ Passing |
+
+</details>
+
+---
+
+<details open>
+<summary><strong>Responses Module (8/8 completed - 100%) ✅</strong></summary>
+
+### Collection Responses
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| POST | `/collections/{collectionId}/responses` | Create a response | `createResponse()` | ✅ | ✅ Passing |
+| GET | `/collections/{collectionId}/responses/{responseId}` | Get a response | `getResponse()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionId}/responses/{responseId}` | Update a response | `updateResponse()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionId}/responses/{responseId}` | Delete a response | `deleteResponse()` | ✅ | ✅ Passing |
+
+### Response Comments
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/collections/{collectionUid}/responses/{responseUid}/comments` | Get response comments | `getResponseComments()` | ✅ | ✅ Passing |
+| POST | `/collections/{collectionUid}/responses/{responseUid}/comments` | Create response comment | `createResponseComment()` | ✅ | ✅ Passing |
+| PUT | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Update comment | `updateResponseComment()` | ✅ | ✅ Passing |
+| DELETE | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Delete comment | `deleteResponseComment()` | ✅ | ✅ Passing |
 
 </details>
 

@@ -6,7 +6,7 @@ This directory contains shared test utilities and resources used across all func
 
 The `all-up-functional.test.js` file orchestrates all functional tests in the proper dependency order:
 
-1. Workspaces → 2. Environments → 3. Collections → 4. Collection Comments → 5. Folders → 6. Folder Comments → 7. Requests → 8. Specs → 9. Transformations → 10. Tags
+1. Workspaces → 2. Environments → 3. Collections → 4. Collection Comments → 5. Folders → 6. Folder Comments → 7. Requests → 8. Responses → 9. Specs → 10. Transformations → 11. Tags
 
 Run with: `npm run test:all-up`
 
@@ -198,6 +198,12 @@ The file uses a nested structure where each Postman object type is an object con
   "folderRequest": {
     "id": "abc234-folder-request-id",
     "name": "My Folder Request"
+  },
+  "response": {
+    "id": "rsp345-response-id",
+    "name": "Success Response",
+    "createdAt": "2025-12-25T10:32:00.000Z",
+    "commentId": 2411533
   }
 }
 ```
