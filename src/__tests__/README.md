@@ -16,7 +16,7 @@ See [ALL-UP-TEST-README.md](./ALL-UP-TEST-README.md) for detailed documentation.
 
 ## Transformations Functional Test Suite
 
-The `transformations-functional.test.js` file tests bi-directional transformations and synchronization between specs and collections. The suite creates its own dedicated test resources and is organized by transformation direction:
+The `transformations/__tests__/functional.test.js` file tests bi-directional transformations and synchronization between specs and collections. The suite creates its own dedicated test resources and is organized by transformation direction:
 
 ### Structure
 
@@ -36,11 +36,11 @@ The `transformations-functional.test.js` file tests bi-directional transformatio
 - `getCollectionGenerations` - List generated specs
 - `syncSpecWithCollection` - Sync spec with collection (update spec based on collection)
 
-Run with: `npm test -- src/__tests__/transformations-functional.test.js`
+Run with: `npm test -- src/transformations/__tests__/functional.test.js`
 
 **Note**: This suite is self-contained and creates its own test resources under the `transformations` property in `test-ids.json`.
 
-See [TRANSFORMATIONS-TEST-README.md](./TRANSFORMATIONS-TEST-README.md) for detailed documentation.
+See [transformations test README](../transformations/__tests__/README.md) for detailed documentation.
 
 ## Test Helpers (`test-helpers.js`)
 

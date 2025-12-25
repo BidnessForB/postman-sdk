@@ -4,17 +4,17 @@ const {
   createSpecGeneration,
   getSpecTaskStatus,
   getSpecGenerations
-} = require('../specs/index');
+} = require('../../specs');
 const { 
   syncCollectionWithSpec, 
   createCollection,
   createCollectionGeneration,
   getCollectionTaskStatus,
   getCollectionGenerations
-} = require('../collections/index');
-const { loadTestIds, saveTestIds } = require('./test-helpers');
-const { buildUid } = require('../core/utils');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../core/config');
+} = require('../../collections');
+const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+const { buildUid } = require('../../core/utils');
+const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
 describe('transformations functional tests', () => {
   let persistedIds;

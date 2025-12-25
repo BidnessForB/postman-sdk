@@ -41,7 +41,7 @@ The tests run in the following sequence to respect resource dependencies:
    - Tests spec file operations
    - Persists spec IDs
 
-7. **Transformations** (`__tests__/transformations-functional.test.js`)
+7. **Transformations** (`transformations/__tests__/functional.test.js`)
    - Creates dedicated test collection and spec for transformations
    - Tests bi-directional synchronization between specs and collections
    - Syncs generated specs with source collections (spec-to-collection)

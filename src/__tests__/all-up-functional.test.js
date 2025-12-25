@@ -70,7 +70,7 @@ describe('All-Up Functional Test Suite', () => {
   });
 
   describe('Phase 7: Transformations', () => {
-    const transformationTests = require('./transformations-functional.test');
+    const transformationTests = require('../transformations/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
 });
