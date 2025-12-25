@@ -4,7 +4,9 @@ const {
   createWorkspace, 
   getWorkspace, 
   updateWorkspace, 
-  deleteWorkspace
+  deleteWorkspace,
+  getWorkspaceTags,
+  updateWorkspaceTags
 } = require('../index');
 
 jest.mock('axios');
@@ -501,6 +503,176 @@ describe('workspaces unit tests', () => {
           url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
         })
       );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('getWorkspaceTags', () => {
+    test('should call GET /workspaces/{workspaceId}/tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'needs-review' },
+            { slug: 'test-api' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getWorkspaceTags(DEFAULT_WORKSPACE_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should handle empty tags array', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: []
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getWorkspaceTags(DEFAULT_WORKSPACE_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('updateWorkspaceTags', () => {
+    test('should call PUT /workspaces/{workspaceId}/tags with tags array', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'needs-review' },
+            { slug: 'test-api' }
+          ]
+        }
+      };
+      const tags = [
+        { slug: 'needs-review' },
+        { slug: 'test-api' }
+      ];
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, tags);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`,
+          data: {
+            tags: [
+              { slug: 'needs-review' },
+              { slug: 'test-api' }
+            ]
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should handle empty tags array to clear all tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: []
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, []);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`,
+          data: {
+            tags: []
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should handle single tag', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'production' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, [{ slug: 'production' }]);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'put',
+          data: {
+            tags: [
+              { slug: 'production' }
+            ]
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    test('should handle maximum of 5 tags', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          tags: [
+            { slug: 'tag1' },
+            { slug: 'tag2' },
+            { slug: 'tag3' },
+            { slug: 'tag4' },
+            { slug: 'tag5' }
+          ]
+        }
+      };
+      const tags = [
+        { slug: 'tag1' },
+        { slug: 'tag2' },
+        { slug: 'tag3' },
+        { slug: 'tag4' },
+        { slug: 'tag5' }
+      ];
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, tags);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            tags: expect.arrayContaining([
+              { slug: 'tag1' },
+              { slug: 'tag2' },
+              { slug: 'tag3' },
+              { slug: 'tag4' },
+              { slug: 'tag5' }
+            ])
+          }
+        })
+      );
+      expect(result.data.tags).toHaveLength(5);
       expect(result).toEqual(mockResponse);
     });
   });
