@@ -14,6 +14,8 @@
 
 A barebones SDK for the Postman API, built following minimal patterns for easy extension and evolution. Based on published [Postman API spec](https://www.postman.com/postman/postman-public-workspace/specification/3001f4e4-5f9d-4bac-9f57-b2c4d483508f/file/1f4ad1bf-697f-4be6-a167-dc1f3cf2abf2?ctx=preview).
 
+Project was undertaken as a vehicle for learning how to use Cursor more effectively.  Feedback on rules, etc., welcome.  
+
 > ⚠️ **Alpha Release**: This SDK is under active development. The API may change between minor versions until 1.0.0 is released.
   
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** - Track which endpoints are implemented (69/161, 42.86%)
@@ -285,6 +287,53 @@ npm run test:createSpec [workspaceId] [specType]
 ## Development
 
 This SDK is built incrementally, starting with a small subset of endpoints to establish patterns before expanding to cover the full Postman API.
+
+## Contributing
+
+We welcome contributions! Whether you're fixing bugs, adding new endpoints, improving documentation, or suggesting features, your help is appreciated.
+
+### Quick Links
+
+- 📖 **[Contributing Guide](CONTRIBUTING.md)** - Comprehensive guide for contributors
+- 🔒 **[Security Policy](SECURITY.md)** - How to report security vulnerabilities
+
+### How to Contribute
+
+1. **Fork and clone** the repository
+2. **Create a branch** for your feature or fix
+3. **Follow coding standards** - See [CONTRIBUTING.md](CONTRIBUTING.md)
+4. **Add tests** - Unit and functional tests required
+5. **Update documentation** - Keep docs in sync with code
+6. **Submit a PR** - Use conventional commit format
+
+### What to Contribute
+
+- **New Endpoints** - Check [API-ENDPOINTS-TODO.md](docs/API-ENDPOINTS-TODO.md) for unimplemented endpoints
+- **Bug Fixes** - Found a bug? Submit a fix!
+- **Tests** - Improve coverage, add edge cases
+- **Documentation** - Clarify, expand, or fix docs
+- **Examples** - Real-world usage examples
+- **Performance** - Optimize existing code
+
+### Development Setup
+
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/postman-sdk.git
+cd postman-sdk
+
+# Install dependencies
+npm install
+
+# Set up API key
+export POSTMAN_API_KEY=your_api_key_here
+
+# Run tests
+npm run test:unit          # Fast unit tests
+npm run test:all-up        # Functional tests
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
 
 ## CI/CD
 
