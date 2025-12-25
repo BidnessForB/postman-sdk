@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 59 operations (30.89%)
-- **Not Implemented**: 132 operations (69.11%)
+- **Implemented**: 61 operations (31.94%)
+- **Not Implemented**: 130 operations (68.06%)
 
 ### Legend
 

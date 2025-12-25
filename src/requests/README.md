@@ -350,12 +350,14 @@ Request Management (10 tests):
 - ✅ Error handling for non-existent resources
 
 Request Comments (6 tests):
-- ✅ Creating comments on requests
+- ✅ Creating comments on requests (persisted to `test-ids.json`)
 - ✅ Getting all comments on a request
-- ✅ Updating comments
-- ✅ Deleting comments
+- ✅ Updating comments (uses persisted comment ID)
+- ✅ Deleting comments (uses persisted comment ID)
 - ✅ Error handling for comments on non-existent requests
 - ✅ Error handling for invalid comment IDs
+
+**Note:** Comment IDs are persisted to `test-ids.json` under `request.commentId` for reuse across test runs.
 
 ## Integration with All-Up Tests
 
@@ -390,8 +392,13 @@ For complete API documentation, see:
 
 ### Request Comments
 - Collection UID and Request UID must be used for comment endpoints (format: `{userId}-{id}`)
+- The SDK's `buildUid()` utility validates ID formats:
+  - Accepts 36-character UUIDs (e.g., `abc123-def456-...`) and builds UID by prepending userId
+  - Accepts 45-character UIDs (e.g., `12345678-abc123-def456-...`) and returns unchanged
+  - Returns `null` for invalid formats
 - Comments support tagging users with the `tags` property
 - Comments have a maximum length of 10,000 characters
 - Comment IDs are simple integers (not UIDs)
 - Thread IDs allow creating threaded comment conversations
+- Comment IDs are persisted in `test-ids.json` for reuse in functional tests
 
