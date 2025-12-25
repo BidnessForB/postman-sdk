@@ -12,7 +12,7 @@ const {
   getCollectionTaskStatus,
   getCollectionGenerations
 } = require('../../collections');
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
 const { buildUid } = require('../../core/utils');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
@@ -170,7 +170,24 @@ describe('transformations functional tests', () => {
         includeAuthInfoInExample: true
       };
 
-      const result = await createSpecGeneration(specId, 'collection', collectionName, options);
+      // Retry the creation in case of transient failures
+      const result = await retryWithBackoff(
+        async () => await createSpecGeneration(specId, 'collection', collectionName, options),
+        {
+          maxAttempts: 3,
+          initialDelay: 2000,
+          shouldRetry: (error) => {
+            // Retry on 500s and 429 (rate limiting), but not on 400s (bad request)
+            const status = error?.response?.status;
+            return status >= 500 || status === 429;
+          },
+          onRetry: (attempt, max, delay, error) => {
+            console.log(`Collection generation failed (attempt ${attempt}/${max})`);
+            console.log(`Error: ${error.message}`);
+            console.log(`Retrying in ${delay}ms...`);
+          }
+        }
+      );
 
       expect(result.status).toBe(202);
       expect(result.data).toHaveProperty('taskId');
@@ -254,64 +271,34 @@ describe('transformations functional tests', () => {
 
       console.log(`Polling task ${taskId} until completion...`);
       
-      const POLL_INTERVAL_MS = 5000; // 5 seconds
-      const TIMEOUT_MS = 30000; // 30 seconds
-      const MAX_ATTEMPTS = Math.ceil(TIMEOUT_MS / POLL_INTERVAL_MS);
-      
-      let attempts = 0;
-      let taskStatus;
-      let lastStatusResult;
-      
-      while (attempts < MAX_ATTEMPTS) {
-        attempts++;
-        console.log(`Polling attempt ${attempts}/${MAX_ATTEMPTS}...`);
-        
-        lastStatusResult = await getSpecTaskStatus(specId, taskId);
-        expect(lastStatusResult.status).toBe(200);
-        expect(lastStatusResult.data).toHaveProperty('status');
-        
-        taskStatus = lastStatusResult.data.status;
-        console.log(`Task status: ${taskStatus}`);
-        
-        if (taskStatus === 'completed') {
-          // Task completed successfully
-          expect(lastStatusResult.data.meta).toBeDefined();
-          expect(lastStatusResult.data.meta.model).toBe('collection');
-          expect(lastStatusResult.data.meta.action).toBe('generation');
-          
-          console.log(`✓ Task completed successfully!`);
-          
-          // Get the generated collection ID
-          const generatedCollectionId = lastStatusResult.data.details.resources[0].id;
-          
-          // Persist the generated collection ID
-          persistedIds.transformations.sourceSpec.generatedCollection = {
-            ...persistedIds.transformations.sourceSpec.generatedCollection,
-            id: generatedCollectionId
-          };
-          saveTestIds(persistedIds);
-          
-          console.log(`Generated collection ID: ${generatedCollectionId}`);
-          console.log(`Persisted to transformations.sourceSpec.generatedCollection.id`);
-          return; // Test passes
+      // Use the polling helper with retry logic
+      const result = await pollUntilComplete(
+        async () => await getSpecTaskStatus(specId, taskId),
+        {
+          pollInterval: 5000,
+          timeout: 60000, // Increased to 60 seconds
+          taskName: 'Spec Generation',
+          maxRetries: 3 // Retry each status check up to 3 times
         }
-        
-        if (taskStatus === 'failed') {
-          // Task failed
-          const errorMessage = lastStatusResult.data.error || 'Unknown error';
-          throw new Error(`Task failed: ${errorMessage}`);
-        }
-        
-        // Task is still pending, wait before next poll
-        if (attempts < MAX_ATTEMPTS) {
-          console.log(`Waiting ${POLL_INTERVAL_MS / 1000} seconds before next poll...`);
-          await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
-        }
-      }
+      );
       
-      // If we get here, we've timed out
-      throw new Error(`Timeout: Task did not complete within ${TIMEOUT_MS / 1000} seconds. Last status: ${taskStatus}`);
-    }, 35000); // Set Jest timeout slightly higher than our polling timeout
+      // Verify completion
+      expect(result.status).toBe(200);
+      expect(result.data.meta).toBeDefined();
+      expect(result.data.meta.model).toBe('collection');
+      expect(result.data.meta.action).toBe('generation');
+      
+      // Get and persist the generated collection ID
+      const generatedCollectionId = result.data.details.resources[0].id;
+      persistedIds.transformations.sourceSpec.generatedCollection = {
+        ...persistedIds.transformations.sourceSpec.generatedCollection,
+        id: generatedCollectionId
+      };
+      saveTestIds(persistedIds);
+      
+      console.log(`Generated collection ID: ${generatedCollectionId}`);
+      console.log(`Persisted to transformations.sourceSpec.generatedCollection.id`);
+    }, 70000); // Set Jest timeout to 70s (higher than our 60s polling timeout)
 
     test('5. getSpecGenerations - should retrieve generated collections list', async () => {
       const specId = persistedIds?.transformations?.sourceSpec?.id;
@@ -467,7 +454,24 @@ describe('transformations functional tests', () => {
       const format = 'JSON';
       
       try {
-        const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+        // Retry the creation in case of transient failures
+        const result = await retryWithBackoff(
+          async () => await createCollectionGeneration(userId, collectionId, elementType, name, type, format),
+          {
+            maxAttempts: 3,
+            initialDelay: 2000,
+            shouldRetry: (error) => {
+              // Retry on 500s and 429 (rate limiting), but not on 400s (bad request)
+              const status = error?.response?.status;
+              return status >= 500 || status === 429;
+            },
+            onRetry: (attempt, max, delay, error) => {
+              console.log(`Spec generation failed (attempt ${attempt}/${max})`);
+              console.log(`Error: ${error.message}`);
+              console.log(`Retrying in ${delay}ms...`);
+            }
+          }
+        );
 
         expect(result.status).toBe(202);
         expect(result.data).toHaveProperty('taskId');
@@ -549,70 +553,40 @@ describe('transformations functional tests', () => {
 
       console.log(`Polling task ${taskId} until completion...`);
 
-      const POLL_INTERVAL_MS = 5000; // 5 seconds
-      const TIMEOUT_MS = 30000; // 30 seconds
-      const MAX_ATTEMPTS = Math.ceil(TIMEOUT_MS / POLL_INTERVAL_MS);
-
-      let attempts = 0;
-      let taskStatus;
-      let lastStatusResult;
-
       try {
-        while (attempts < MAX_ATTEMPTS) {
-          attempts++;
-          console.log(`Polling attempt ${attempts}/${MAX_ATTEMPTS}...`);
-
-          lastStatusResult = await getCollectionTaskStatus(userId, collectionId, taskId);
-          expect(lastStatusResult.status).toBe(200);
-          expect(lastStatusResult.data).toHaveProperty('status');
-
-          taskStatus = lastStatusResult.data.status;
-          console.log(`Task status: ${taskStatus}`);
-
-          if (taskStatus === 'completed') {
-            // Task completed successfully
-            expect(lastStatusResult.data.meta).toBeDefined();
-            expect(lastStatusResult.data.meta.model).toBe('spec');
-            expect(lastStatusResult.data.meta.action).toBe('generation');
-
-            console.log(`✓ Task completed successfully!`);
-
-            // Extract the generated spec ID from the response
-            const generatedSpecId = lastStatusResult.data.details.resources[0].id;
-
-            // Persist the generated spec ID
-            persistedIds.transformations.sourceCollection.generatedSpec = {
-              ...persistedIds.transformations.sourceCollection.generatedSpec,
-              id: generatedSpecId
-            };
-            saveTestIds(persistedIds);
-
-            console.log(`Generated spec ID: ${generatedSpecId}`);
-            console.log(`Persisted to transformations.sourceCollection.generatedSpec.id`);
-            return; // Test passes
+        // Use the polling helper with retry logic
+        const result = await pollUntilComplete(
+          async () => await getCollectionTaskStatus(userId, collectionId, taskId),
+          {
+            pollInterval: 5000,
+            timeout: 60000, // Increased to 60 seconds
+            taskName: 'Collection Generation',
+            maxRetries: 3 // Retry each status check up to 3 times
           }
+        );
 
-          if (taskStatus === 'failed') {
-            // Task failed
-            const errorMessage = lastStatusResult.data.error || 'Unknown error';
-            throw new Error(`Task failed: ${errorMessage}`);
-          }
+        // Verify completion
+        expect(result.status).toBe(200);
+        expect(result.data.meta).toBeDefined();
+        expect(result.data.meta.model).toBe('spec');
+        expect(result.data.meta.action).toBe('generation');
 
-          // Task is still pending, wait before next poll
-          if (attempts < MAX_ATTEMPTS) {
-            console.log(`Waiting ${POLL_INTERVAL_MS / 1000} seconds before next poll...`);
-            await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
-          }
-        }
+        // Extract and persist the generated spec ID
+        const generatedSpecId = result.data.details.resources[0].id;
+        persistedIds.transformations.sourceCollection.generatedSpec = {
+          ...persistedIds.transformations.sourceCollection.generatedSpec,
+          id: generatedSpecId
+        };
+        saveTestIds(persistedIds);
 
-        // If we get here, we've timed out
-        throw new Error(`Timeout: Task did not complete within ${TIMEOUT_MS / 1000} seconds. Last status: ${taskStatus}`);
+        console.log(`Generated spec ID: ${generatedSpecId}`);
+        console.log(`Persisted to transformations.sourceCollection.generatedSpec.id`);
       } catch (error) {
         // Handle 404 errors gracefully - endpoint might not be available
         console.log(error);
         fail('Unexpected error: ' + (error && error.message ? error.message : JSON.stringify(error)));
       }
-    }, 35000); // Set Jest timeout slightly higher than our polling timeout
+    }, 70000); // Set Jest timeout to 70s (higher than our 60s polling timeout)
 
     test('4. getCollectionGenerations - should retrieve generated specs list', async () => {
       const collectionId = persistedIds?.transformations?.sourceCollection?.id;
