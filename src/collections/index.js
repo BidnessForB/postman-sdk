@@ -314,6 +314,36 @@ async function syncCollectionWithSpec(userId, collectionId, specId) {
 }
 
 /**
+ * Gets all tags associated with a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/tags
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @returns {Promise} Axios response
+ */
+async function getCollectionTags(userId, collectionId) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/tags`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates all tags associated with a collection (replaces existing tags)
+ * Postman API endpoint and method: PUT /collections/{collectionUid}/tags
+ * @param {string|number} userId - The user's ID
+ * @param {string} collectionId - The collection's ID
+ * @param {Array} tags - Array of tag objects with 'slug' property (max 5 tags)
+ * @returns {Promise} Axios response
+ */
+async function updateCollectionTags(userId, collectionId, tags) {
+  const collectionUid = buildUid(userId, collectionId);
+  const endpoint = `/collections/${collectionUid}/tags`;
+  const data = { tags };
+  const config = buildAxiosConfig('put', endpoint, data);
+  return await executeRequest(config);
+}
+
+/**
  * Generates a spec from a collection
  * Postman API endpoint and method: POST /collections/{collectionUid}/generations/{elementType}
  * @param {string} userId - The user ID
@@ -384,6 +414,8 @@ module.exports = {
   createFolderComment,
   updateFolderComment,
   deleteFolderComment,
+  getCollectionTags,
+  updateCollectionTags,
   syncCollectionWithSpec,
   createCollectionGeneration,
   getCollectionGenerations,
