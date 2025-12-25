@@ -223,7 +223,7 @@ describe('environments unit tests', () => {
   });
 
   describe('modifyEnvironment', () => {
-    test('should call PATCH /environments/{environmentId}', async () => {
+    test('should call PATCH /environments/{environmentId} with JSON Patch operations', async () => {
       const mockResponse = {
         status: 200,
         data: {
@@ -236,25 +236,27 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const environmentData = {
-        name: 'Updated Environment'
-      };
+      const patchOperations = [
+        {
+          op: 'replace',
+          path: '/name',
+          value: 'Updated Environment'
+        }
+      ];
 
-      const result = await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, environmentData);
+      const result = await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'patch',
           url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`,
-          data: {
-            environment: environmentData
-          }
+          data: patchOperations
         })
       );
       expect(result).toEqual(mockResponse);
     });
 
-    test('should update environment values', async () => {
+    test('should add environment variable with JSON Patch add operation', async () => {
       const mockResponse = {
         status: 200,
         data: {
@@ -273,24 +275,88 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const environmentData = {
-        values: [
-          {
+      const patchOperations = [
+        {
+          op: 'add',
+          path: '/values/0',
+          value: {
             key: 'NEW_KEY',
             value: 'new_value',
             type: 'default',
             enabled: true
           }
-        ]
-      };
+        }
+      ];
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, environmentData);
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: {
-            environment: environmentData
+          data: patchOperations
+        })
+      );
+    });
+
+    test('should replace variable value with JSON Patch replace operation', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            values: [
+              {
+                key: 'EXISTING_KEY',
+                value: 'updated_value',
+                type: 'default',
+                enabled: true
+              }
+            ]
           }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const patchOperations = [
+        {
+          op: 'replace',
+          path: '/values/0/value',
+          value: 'updated_value'
+        }
+      ];
+
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: patchOperations
+        })
+      );
+    });
+
+    test('should remove variable with JSON Patch remove operation', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          environment: {
+            id: DEFAULT_ENVIRONMENT_ID,
+            values: []
+          }
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const patchOperations = [
+        {
+          op: 'remove',
+          path: '/values/0'
+        }
+      ];
+
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: patchOperations
         })
       );
     });
@@ -302,7 +368,15 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, { name: 'Updated' });
+      const patchOperations = [
+        {
+          op: 'replace',
+          path: '/name',
+          value: 'Updated'
+        }
+      ];
+
+      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

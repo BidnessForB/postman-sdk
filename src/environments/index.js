@@ -47,15 +47,36 @@ async function getEnvironment(environmentId) {
 }
 
 /**
- * Updates an environment (partial update using PATCH)
+ * Updates an environment using JSON Patch operations (RFC 6902)
  * Postman API endpoint and method: PATCH /environments/{environmentId}
  * @param {string} environmentId - The environment's ID
- * @param {Object} environmentData - The environment update data
+ * @param {Array} patchOperations - Array of JSON Patch operations
  * @returns {Promise} Axios response
+ * 
+ * @example
+ * // Update environment name
+ * await modifyEnvironment(envId, [
+ *   { op: 'replace', path: '/name', value: 'New Name' }
+ * ]);
+ * 
+ * // Add a new variable
+ * await modifyEnvironment(envId, [
+ *   { op: 'add', path: '/values/0', value: { key: 'api_key', value: 'secret', type: 'secret', enabled: true } }
+ * ]);
+ * 
+ * // Replace a variable's value
+ * await modifyEnvironment(envId, [
+ *   { op: 'replace', path: '/values/0/value', value: 'new_value' }
+ * ]);
+ * 
+ * // Remove a variable
+ * await modifyEnvironment(envId, [
+ *   { op: 'remove', path: '/values/2' }
+ * ]);
  */
-async function modifyEnvironment(environmentId, environmentData) {
+async function modifyEnvironment(environmentId, patchOperations) {
   const endpoint = `/environments/${environmentId}`;
-  const config = buildAxiosConfig('patch', endpoint, { environment: environmentData });
+  const config = buildAxiosConfig('patch', endpoint, patchOperations);
   return await executeRequest(config);
 }
 

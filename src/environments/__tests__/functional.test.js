@@ -98,11 +98,15 @@ describe('Environments Functional Tests', () => {
   test('5. modifyEnvironment - should update environment name', async () => {
     const environmentId = persistedIds.environment.id;
     const updatedName = `Updated Environment ${Date.now()}`;
-    const environmentData = {
-      name: updatedName
-    };
+    const patchOperations = [
+      {
+        op: 'replace',
+        path: '/name',
+        value: updatedName
+      }
+    ];
 
-    const result = await modifyEnvironment(environmentId, environmentData);
+    const result = await modifyEnvironment(environmentId, patchOperations);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('environment');
@@ -116,47 +120,104 @@ describe('Environments Functional Tests', () => {
     console.log(`Updated environment name to: ${updatedName}`);
   }, 10000);
 
-  test('6. modifyEnvironment - should update environment values', async () => {
+  test('6. modifyEnvironment - should add a new environment variable', async () => {
     const environmentId = persistedIds.environment.id;
-    const environmentData = {
-      values: [
-        {
-          key: 'base_url',
-          value: 'https://api.updated.com',
-          type: 'default',
-          enabled: true
-        },
-        {
-          key: 'api_key',
-          value: 'updated_secret_key',
-          type: 'secret',
-          enabled: true
-        },
-        {
-          key: 'new_variable',
-          value: 'new_value',
+    
+    // First, get the current environment to know how many variables exist
+    const currentEnv = await getEnvironment(environmentId);
+    const currentValueCount = currentEnv.data.environment.values.length;
+    
+    // Add a new variable at the end
+    const patchOperations = [
+      {
+        op: 'add',
+        path: `/values/${currentValueCount}`,
+        value: {
+          key: 'test_variable',
+          value: 'test_value',
           type: 'default',
           enabled: true
         }
-      ]
-    };
+      }
+    ];
 
-    const result = await modifyEnvironment(environmentId, environmentData);
+    const result = await modifyEnvironment(environmentId, patchOperations);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('environment');
     expect(result.data.environment.values).toEqual(expect.arrayContaining([
       expect.objectContaining({
-        key: 'base_url',
-        value: 'https://api.updated.com'
-      }),
-      expect.objectContaining({
-        key: 'new_variable',
-        value: 'new_value'
+        key: 'test_variable',
+        value: 'test_value'
       })
     ]));
 
-    console.log(`Updated environment values, now has ${result.data.environment.values.length} values`);
+    console.log(`Added new variable, environment now has ${result.data.environment.values.length} values`);
+  }, 10000);
+
+  test('6a. modifyEnvironment - should replace an environment variable value', async () => {
+    const environmentId = persistedIds.environment.id;
+    
+    // Get current environment to find the variable we just added
+    const currentEnv = await getEnvironment(environmentId);
+    const testVarIndex = currentEnv.data.environment.values.findIndex(v => v.key === 'test_variable');
+    
+    if (testVarIndex === -1) {
+      console.log('Skipping test - test_variable not found');
+      return;
+    }
+    
+    // Replace the variable's value
+    const patchOperations = [
+      {
+        op: 'replace',
+        path: `/values/${testVarIndex}/value`,
+        value: 'updated_test_value'
+      }
+    ];
+
+    const result = await modifyEnvironment(environmentId, patchOperations);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('environment');
+    expect(result.data.environment.values[testVarIndex].value).toBe('updated_test_value');
+
+    console.log(`Updated variable value at index ${testVarIndex}`);
+  }, 10000);
+
+  test('6b. modifyEnvironment - should remove an environment variable', async () => {
+    const environmentId = persistedIds.environment.id;
+    
+    // Get current environment to find the variable we added
+    const currentEnv = await getEnvironment(environmentId);
+    const testVarIndex = currentEnv.data.environment.values.findIndex(v => v.key === 'test_variable');
+    
+    if (testVarIndex === -1) {
+      console.log('Skipping test - test_variable not found');
+      return;
+    }
+    
+    const initialCount = currentEnv.data.environment.values.length;
+    
+    // Remove the variable
+    const patchOperations = [
+      {
+        op: 'remove',
+        path: `/values/${testVarIndex}`
+      }
+    ];
+
+    const result = await modifyEnvironment(environmentId, patchOperations);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('environment');
+    expect(result.data.environment.values.length).toBe(initialCount - 1);
+    
+    // Verify the variable is gone
+    const hasTestVar = result.data.environment.values.some(v => v.key === 'test_variable');
+    expect(hasTestVar).toBe(false);
+
+    console.log(`Removed variable, environment now has ${result.data.environment.values.length} values`);
   }, 10000);
 
   test('7. deleteEnvironment - should delete an environment', async () => {

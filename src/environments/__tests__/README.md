@@ -34,9 +34,9 @@ npm run test:unit -- src/environments/__tests__/unit.test.js
 ```
 
 **Coverage:**
-- 13 unit tests covering all 5 implemented functions
+- 15 unit tests covering all 5 implemented functions
 - Tests for query parameter handling
-- Tests for request body structure
+- Tests for JSON Patch request body structure (add, replace, remove operations)
 - Tests for header configuration
 - Tests for environment variable management
 
@@ -55,11 +55,12 @@ npm test -- src/environments/__tests__/functional.test.js
 ```
 
 **Coverage:**
-- 7 functional tests covering all implemented operations
+- 9 functional tests covering all implemented operations
 - Tests use persisted environment IDs from `test-ids.json`
 - Tests create and clean up temporary resources
 - Tests verify workspace-scoped environment creation
-- Tests verify environment variable CRUD operations
+- Tests verify environment variable management using JSON Patch operations
+- Tests cover add, replace, and remove operations for variables
 
 **Prerequisites:**
 - `POSTMAN_API_KEY_POSTMAN` environment variable must be set
@@ -104,9 +105,11 @@ The functional tests run in this order:
 2. `getEnvironments` (workspace-scoped) - Verify workspace filtering
 3. `createEnvironment` - Create a test environment with variables
 4. `getEnvironment` - Retrieve the created environment
-5. `modifyEnvironment` (name) - Update the environment name
-6. `modifyEnvironment` (values) - Update environment variables
-7. `deleteEnvironment` - Create and delete a temporary environment
+5. `modifyEnvironment` (name) - Update the environment name using JSON Patch replace
+6. `modifyEnvironment` (add variable) - Add a new variable using JSON Patch add
+7. `modifyEnvironment` (replace variable value) - Update a variable value using JSON Patch replace
+8. `modifyEnvironment` (remove variable) - Remove a variable using JSON Patch remove
+9. `deleteEnvironment` - Create and delete a temporary environment
 
 ## Implementation Notes
 
@@ -144,16 +147,47 @@ Environments can be created in specific workspaces using the `workspace` query p
 await createEnvironment(environmentData, workspaceId);
 ```
 
-### Partial Updates
+### JSON Patch Operations
 
-The `modifyEnvironment()` function uses PATCH, allowing partial updates:
+The `modifyEnvironment()` function uses **JSON Patch (RFC 6902)** format for updates:
+
 ```javascript
-// Update only the name
-await modifyEnvironment(envId, { name: 'New Name' });
+// Update environment name
+await modifyEnvironment(envId, [
+  { op: 'replace', path: '/name', value: 'New Name' }
+]);
 
-// Update only the values
-await modifyEnvironment(envId, { values: [...] });
+// Add a new variable
+await modifyEnvironment(envId, [
+  { 
+    op: 'add', 
+    path: '/values/0', 
+    value: {
+      key: 'api_key',
+      value: 'secret123',
+      type: 'secret',
+      enabled: true
+    }
+  }
+]);
+
+// Replace a variable's value
+await modifyEnvironment(envId, [
+  { op: 'replace', path: '/values/0/value', value: 'new_value' }
+]);
+
+// Remove a variable
+await modifyEnvironment(envId, [
+  { op: 'remove', path: '/values/2' }
+]);
 ```
+
+**Important Notes:**
+- The request body must be an **array** of patch operations
+- Supported operations: `add`, `replace`, `remove`
+- You can only perform **one type of operation at a time**
+- Path uses JSON Pointer syntax (RFC 6901)
+- Variable indices start at 0
 
 ## Related Documentation
 
