@@ -3,7 +3,9 @@ const {
   createWorkspace, 
   getWorkspace, 
   updateWorkspace, 
-  deleteWorkspace
+  deleteWorkspace,
+  getWorkspaceTags,
+  updateWorkspaceTags
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
@@ -182,6 +184,105 @@ describe('workspaces functional tests (sequential flow)', () => {
     console.log(`Workspace ${testWorkspaceId} updated and will persist for future test runs`);
   });
 
+  test('8. getWorkspaceTags - should get workspace tags (initially empty)', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const result = await getWorkspaceTags(testWorkspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(Array.isArray(result.data.tags)).toBe(true);
+    // Tags may or may not exist depending on previous test runs
+    console.log(`Current tags: ${result.data.tags.length} tags`);
+  });
+
+  test('9. updateWorkspaceTags - should add tags to workspace', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const tags = [
+      { slug: 'sdk-test' },
+      { slug: 'automated' }
+    ];
+    
+    const result = await updateWorkspaceTags(testWorkspaceId, tags);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(Array.isArray(result.data.tags)).toBe(true);
+    expect(result.data.tags).toHaveLength(2);
+    expect(result.data.tags[0]).toHaveProperty('slug');
+    expect(result.data.tags[1]).toHaveProperty('slug');
+    
+    // Verify the tags match what we sent
+    const slugs = result.data.tags.map(t => t.slug);
+    expect(slugs).toContain('sdk-test');
+    expect(slugs).toContain('automated');
+  });
+
+  test('10. getWorkspaceTags - should verify tags were added', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const result = await getWorkspaceTags(testWorkspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(result.data.tags).toHaveLength(2);
+    
+    const slugs = result.data.tags.map(t => t.slug);
+    expect(slugs).toContain('sdk-test');
+    expect(slugs).toContain('automated');
+  });
+
+  test('11. updateWorkspaceTags - should replace existing tags', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const tags = [
+      { slug: 'production' },
+      { slug: 'api-testing' },
+      { slug: 'v2' }
+    ];
+    
+    const result = await updateWorkspaceTags(testWorkspaceId, tags);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(result.data.tags).toHaveLength(3);
+    
+    const slugs = result.data.tags.map(t => t.slug);
+    expect(slugs).toContain('production');
+    expect(slugs).toContain('api-testing');
+    expect(slugs).toContain('v2');
+    // Old tags should be gone
+    expect(slugs).not.toContain('sdk-test');
+    expect(slugs).not.toContain('automated');
+  });
+
+  test('12. updateWorkspaceTags - should clear all tags with empty array', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const result = await updateWorkspaceTags(testWorkspaceId, []);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(result.data.tags).toHaveLength(0);
+  });
+
+  test('13. getWorkspaceTags - should verify tags were cleared', async () => {
+    // USE PERSISTED ID from test 1
+    expect(testWorkspaceId).toBeDefined();
+    
+    const result = await getWorkspaceTags(testWorkspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('tags');
+    expect(result.data.tags).toHaveLength(0);
+  });
+
   describe('error handling', () => {
     test('should handle getting non-existent workspace', async () => {
       const fakeId = '00000000-0000-0000-0000-000000000000';
@@ -204,6 +305,20 @@ describe('workspaces functional tests (sequential flow)', () => {
     test('should handle creating workspace with invalid type', async () => {
       await expect(
         createWorkspace('Invalid Workspace', 'invalid-type')
+      ).rejects.toThrow();
+    });
+
+    test('should handle getting tags for non-existent workspace', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      
+      await expect(getWorkspaceTags(fakeId)).rejects.toThrow();
+    });
+
+    test('should handle updating tags for non-existent workspace', async () => {
+      const fakeId = '00000000-0000-0000-0000-000000000000';
+      
+      await expect(
+        updateWorkspaceTags(fakeId, [{ slug: 'test' }])
       ).rejects.toThrow();
     });
   });

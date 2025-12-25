@@ -105,11 +105,49 @@ async function deleteWorkspace(workspaceId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets all tags associated with a workspace
+ * Postman API endpoint and method: GET /workspaces/{workspaceId}/tags
+ * @param {string} workspaceId - The workspace's ID
+ * @returns {Promise} Axios response
+ */
+async function getWorkspaceTags(workspaceId) {
+  const endpoint = `/workspaces/${workspaceId}/tags`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates a workspace's associated tags
+ * Postman API endpoint and method: PUT /workspaces/{workspaceId}/tags
+ * Note: This replaces all existing tags with the provided tags array
+ * @param {string} workspaceId - The workspace's ID
+ * @param {Array<Object>} tags - Array of tag objects with slug property (max 5 tags)
+ * @returns {Promise} Axios response
+ * 
+ * @example
+ * // Add tags to workspace
+ * await updateWorkspaceTags(workspaceId, [
+ *   { slug: 'needs-review' },
+ *   { slug: 'test-api' }
+ * ]);
+ * 
+ * // Clear all tags (pass empty array)
+ * await updateWorkspaceTags(workspaceId, []);
+ */
+async function updateWorkspaceTags(workspaceId, tags) {
+  const endpoint = `/workspaces/${workspaceId}/tags`;
+  const config = buildAxiosConfig('put', endpoint, { tags });
+  return await executeRequest(config);
+}
+
 module.exports = {
   getWorkspaces,
   createWorkspace,
   getWorkspace,
   updateWorkspace,
-  deleteWorkspace
+  deleteWorkspace,
+  getWorkspaceTags,
+  updateWorkspaceTags
 };
 

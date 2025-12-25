@@ -1,6 +1,6 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**SDK Version**: 0.3.0  
+**SDK Version**: 0.4.0  
 **Last Updated**: December 25, 2025  
 **Jest Version**: 30.2.0
 
@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 118 unique paths
 - **Total Operations**: 191 HTTP method operations
-- **Implemented**: 48 operations (25.13%)
-- **Not Implemented**: 143 operations (74.87%)
+- **Implemented**: 50 operations (26.18%)
+- **Not Implemented**: 141 operations (73.82%)
 
 ### Legend
 
@@ -273,7 +273,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Workspaces Module (5/14 completed - 35.7%)</strong></summary>
+<summary><strong>Workspaces Module (7/14 completed - 50%)</strong></summary>
 
 ### Core Workspace Operations
 
@@ -300,8 +300,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/workspaces/{workspaceId}/global-variables` | Get global variables | - | ❌ | ❌ None |
 | PUT | `/workspaces/{workspaceId}/global-variables` | Update global variables | - | ❌ | ❌ None |
-| GET | `/workspaces/{workspaceId}/tags` | Get workspace tags | - | ❌ | ❌ None |
-| PUT | `/workspaces/{workspaceId}/tags` | Update workspace tags | - | ❌ | ❌ None |
+| GET | `/workspaces/{workspaceId}/tags` | Get workspace tags | `getWorkspaceTags()` | ✅ | ✅ Passing |
+| PUT | `/workspaces/{workspaceId}/tags` | Update workspace tags | `updateWorkspaceTags()` | ✅ | ✅ Passing |
 
 ### Workspace Transfers
 
