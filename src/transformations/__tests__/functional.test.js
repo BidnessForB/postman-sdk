@@ -494,12 +494,9 @@ describe('transformations functional tests', () => {
         console.log(`Generated spec info saved to transformations.sourceCollection.generatedSpec`);
       } catch (error) {
         // Handle 404 or 403 errors gracefully - collection might not support spec generation
-        if (error.response && (error.response.status === 404 || error.response.status === 403)) {
-          console.log(`Skipping: Collection ${collectionId} does not support spec generation (${error.response.status})`);
-          console.log('Note: Spec generation may only be available for certain collection types or require specific permissions');
-          return;
-        }
+        
         console.log(error);
+      fail('Unexpected error: ' + (error && error.message ? error.message : JSON.stringify(error)));
         
       }
     });
@@ -532,12 +529,8 @@ describe('transformations functional tests', () => {
         }
       } catch (error) {
         // Handle 404 errors gracefully - task might no longer exist or endpoint not available
-        if (error.response && error.response.status === 404) {
-          console.log(`Skipping: Task ${taskId} not found or endpoint not available (404)`);
-          console.log('Note: The task may have expired or the collection may not support task status queries');
-          return;
-        }
-        throw error;
+        console.log(error);
+        fail('Unexpected error: ' + (error && error.message ? error.message : JSON.stringify(error)));
       }
     });
 
@@ -616,12 +609,8 @@ describe('transformations functional tests', () => {
         throw new Error(`Timeout: Task did not complete within ${TIMEOUT_MS / 1000} seconds. Last status: ${taskStatus}`);
       } catch (error) {
         // Handle 404 errors gracefully - endpoint might not be available
-        if (error.response && error.response.status === 404) {
-          console.log(`Skipping: Task ${taskId} not found or endpoint not available (404)`);
-          console.log('Note: The collection task status endpoint may not be available for all collection types');
-          return;
-        }
-        throw error;
+        console.log(error);
+        fail('Unexpected error: ' + (error && error.message ? error.message : JSON.stringify(error)));
       }
     }, 35000); // Set Jest timeout slightly higher than our polling timeout
 
@@ -674,12 +663,8 @@ describe('transformations functional tests', () => {
         }
       } catch (error) {
         // Handle 403 or 404 errors gracefully
-        if (error.response && (error.response.status === 403 || error.response.status === 404)) {
-          console.log(`Skipping: Cannot access generations for collection ${collectionId} (${error.response.status})`);
-          console.log('Note: This endpoint may require specific permissions or may not be available for all collection types');
-          return;
-        }
-        throw error;
+        console.log(error);
+        fail('Unexpected error: ' + (error && error.message ? error.message : JSON.stringify(error)));
       }
     });
 
