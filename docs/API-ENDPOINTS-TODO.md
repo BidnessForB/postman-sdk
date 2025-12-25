@@ -10,10 +10,10 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ### Statistics
 
-- **Total Endpoints**: 118 unique paths
-- **Total Operations**: 191 HTTP method operations
-- **Implemented**: 69 operations (36.13%)
-- **Not Implemented**: 122 operations (63.87%)
+- **Total Endpoints**: 88 unique paths
+- **Total Operations**: 161 HTTP method operations
+- **Implemented**: 69 operations (42.86%)
+- **Not Implemented**: 92 operations (57.14%)
 
 ### Legend
 
@@ -227,78 +227,6 @@ This document tracks the implementation status of all Postman API endpoints in t
 | POST | `/collections/{collectionUid}/responses/{responseUid}/comments` | Create response comment | `createResponseComment()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Update comment | `updateResponseComment()` | ✅ | ✅ Passing |
 | DELETE | `/collections/{collectionUid}/responses/{responseUid}/comments/{commentId}` | Delete comment | `deleteResponseComment()` | ✅ | ✅ Passing |
-
-</details>
-
----
-
-<details>
-<summary><strong>APIs Module (0/30 completed - 0%)</strong></summary>
-
-### Core API Operations
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/apis` | Get all APIs | - | ❌ | ❌ None |
-| POST | `/apis` | Create an API | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}` | Get an API | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}` | Update an API | - | ❌ | ❌ None |
-| DELETE | `/apis/{apiId}` | Delete an API | - | ❌ | ❌ None |
-
-### API Collections
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| POST | `/apis/{apiId}/collections` | Add a collection to API | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/collections/{collectionId}` | Get API collection | - | ❌ | ❌ None |
-
-### API Collection Comments
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/apis/{apiId}/collections/{collectionId}/comments` | Get collection comments | - | ❌ | ❌ None |
-| POST | `/apis/{apiId}/collections/{collectionId}/comments` | Create collection comment | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/collections/{collectionId}/comments/{commentId}` | Update comment | - | ❌ | ❌ None |
-| DELETE | `/apis/{apiId}/collections/{collectionId}/comments/{commentId}` | Delete comment | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/collections/{collectionId}/sync-with-schema-tasks` | Sync collection with schema | - | ❌ | ❌ None |
-
-### API Comments
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/apis/{apiId}/comments` | Get API comments | - | ❌ | ❌ None |
-| POST | `/apis/{apiId}/comments` | Create API comment | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/comments/{commentId}` | Update API comment | - | ❌ | ❌ None |
-| DELETE | `/apis/{apiId}/comments/{commentId}` | Delete API comment | - | ❌ | ❌ None |
-
-### API Schemas
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| POST | `/apis/{apiId}/schemas` | Create a schema | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/schemas/{schemaId}` | Get a schema | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/schemas/{schemaId}/files` | Get schema files | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Get schema file contents | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Create/update schema file | - | ❌ | ❌ None |
-| DELETE | `/apis/{apiId}/schemas/{schemaId}/files/{file-path}` | Delete schema file | - | ❌ | ❌ None |
-
-### API Tags & Tasks
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/apis/{apiId}/tags` | Get API tags | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/tags` | Update API tags | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/tasks/{taskId}` | Get async task status | - | ❌ | ❌ None |
-
-### API Versions
-
-| Method | Endpoint | Description | Function | Implemented | Tests |
-|--------|----------|-------------|----------|-------------|-------|
-| GET | `/apis/{apiId}/versions` | Get all versions | - | ❌ | ❌ None |
-| POST | `/apis/{apiId}/versions` | Create a version | - | ❌ | ❌ None |
-| GET | `/apis/{apiId}/versions/{versionId}` | Get a version | - | ❌ | ❌ None |
-| PUT | `/apis/{apiId}/versions/{versionId}` | Update a version | - | ❌ | ❌ None |
-| DELETE | `/apis/{apiId}/versions/{versionId}` | Delete a version | - | ❌ | ❌ None |
 
 </details>
 
@@ -614,16 +542,13 @@ This document tracks the implementation status of all Postman API endpoints in t
 1. **Monitors** (6 endpoints) - Collection running and monitoring
 2. **Mocks** (13 endpoints) - Mock server functionality
 
-### Phase 4 - API Management
-1. **APIs** (30 endpoints) - API versioning and management
-
-### Phase 5 - Advanced Features
+### Phase 4 - Advanced Features
 1. **SCIM** (12 endpoints) - User provisioning
 2. **Network** (6 endpoints) - Private API Network
 3. **Pull Requests** (3 endpoints) - Collaboration
 4. **Security & Secrets** (5 endpoints) - Security features
 
-### Phase 6 - Administrative & Misc
+### Phase 5 - Administrative & Misc
 1. **Users & Groups** (4 endpoints)
 2. **Billing** (2 endpoints)
 3. **Audit** (1 endpoint)
