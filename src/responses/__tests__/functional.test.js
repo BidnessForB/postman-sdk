@@ -20,7 +20,7 @@ describe('responses functional tests (sequential flow)', () => {
     }
 
     // persistedIds must be loaded so that sequential functional tests have access
-    // to IDs (e.g., collectionId, requestId) persisted from previous phases. This enables
+    // to IDs (e.g., collectionUid, requestId) persisted from previous phases. This enables
     // the responses functional tests to build on resources created earlier.
     persistedIds = loadTestIds();
 
@@ -79,6 +79,7 @@ describe('responses functional tests (sequential flow)', () => {
     persistedIds.response = {
       ...persistedIds.response,
       id: result.data.data.id,
+      uid: result.data.data.owner + '-' + result.data.data.id,
       name: responseName,
       createdAt: new Date().toISOString()
     };
@@ -157,14 +158,14 @@ describe('responses functional tests (sequential flow)', () => {
 
   test('5. getResponseComments - should retrieve comments on the response', async () => {
     const userId = persistedIds.userId;
-    const collectionId = persistedIds.collection.id;
-    const responseId = persistedIds.response.id;
+    const collectionUid = persistedIds.collection.uid;
+    const responseUid = persistedIds.response.uid;
     
     expect(userId).toBeDefined();
-    expect(collectionId).toBeDefined();
-    expect(responseId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(responseUid).toBeDefined();
 
-    const result = await getResponseComments(userId, collectionId, responseId);
+    const result = await getResponseComments(collectionUid, responseUid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -175,19 +176,19 @@ describe('responses functional tests (sequential flow)', () => {
 
   test('6. createResponseComment - should create a comment on the response', async () => {
     const userId = persistedIds.userId;
-    const collectionId = persistedIds.collection.id;
-    const responseId = persistedIds.response.id;
+    const collectionUid = persistedIds.collection.uid;
+    const responseUid = persistedIds.response.uid;
     
     expect(userId).toBeDefined();
-    expect(collectionId).toBeDefined();
-    expect(responseId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(responseUid).toBeDefined();
 
     const commentBody = `Test comment on response - ${Date.now()}`;
     const commentData = {
       body: commentBody
     };
 
-    const result = await createResponseComment(userId, collectionId, responseId, commentData);
+    const result = await createResponseComment(collectionUid, responseUid, commentData);
 
     expect(result.status).toBeGreaterThanOrEqual(200);
     expect(result.status).toBeLessThan(300);
@@ -205,13 +206,13 @@ describe('responses functional tests (sequential flow)', () => {
 
   test('7. updateResponseComment - should update the comment on the response', async () => {
     const userId = persistedIds.userId;
-    const collectionId = persistedIds.collection.id;
-    const responseId = persistedIds.response.id;
+    const collectionUid = persistedIds.collection.uid;
+    const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;
     
     expect(userId).toBeDefined();
-    expect(collectionId).toBeDefined();
-    expect(responseId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(responseUid).toBeDefined();
     expect(commentId).toBeDefined();
 
     const updatedBody = `Updated comment on response - ${Date.now()}`;
@@ -219,7 +220,7 @@ describe('responses functional tests (sequential flow)', () => {
       body: updatedBody
     };
 
-    const result = await updateResponseComment(userId, collectionId, responseId, commentId, commentData);
+    const result = await updateResponseComment(collectionUid, responseUid, commentId, commentData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -233,16 +234,16 @@ describe('responses functional tests (sequential flow)', () => {
 
   test('8. deleteResponseComment - should delete the comment from the response', async () => {
     const userId = persistedIds.userId;
-    const collectionId = persistedIds.collection.id;
-    const responseId = persistedIds.response.id;
+    const collectionUid = persistedIds.collection.uid;
+    const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;
     
     expect(userId).toBeDefined();
-    expect(collectionId).toBeDefined();
-    expect(responseId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(responseUid).toBeDefined();
     expect(commentId).toBeDefined();
 
-    const result = await deleteResponseComment(userId, collectionId, responseId, commentId);
+    const result = await deleteResponseComment(collectionUid, responseUid, commentId);
 
     expect(result.status).toBeGreaterThanOrEqual(200);
     expect(result.status).toBeLessThan(300);
