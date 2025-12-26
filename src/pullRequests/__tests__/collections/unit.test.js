@@ -121,10 +121,10 @@ describe('unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const title = 'New PR';
-      const destinationId = DEFAULT_ID;
+      const destinationUid = DEFAULT_UID;
       const reviewers = ['12345678', '87654321'];
       const description = 'PR description';
-
+const destinationId = destinationUid;
       const result = await createCollectionPullRequest(
         DEFAULT_UID,
         title,
@@ -155,12 +155,13 @@ describe('unit tests', () => {
     test('should not include description when null', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_ID }
+        data: { id: DEFAULT_ID, destinationId: DEFAULT_UID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
       const title = 'PR Title';
-      const destinationId = DEFAULT_ID;
+      const destinationUid = DEFAULT_UID;
+      const destinationId = destinationUid;
       const reviewers = ['12345678'];
 
       await createCollectionPullRequest(
@@ -184,14 +185,14 @@ describe('unit tests', () => {
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_ID }
+        data: { id: DEFAULT_UID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
       await createCollectionPullRequest(
         DEFAULT_UID,
         'Title',
-        DEFAULT_ID,
+        DEFAULT_UID,
         ['12345678']
       );
 
@@ -208,7 +209,7 @@ describe('unit tests', () => {
     test('should handle multiple reviewers', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_ID }
+        data: { id: DEFAULT_UID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
@@ -217,7 +218,7 @@ describe('unit tests', () => {
       await createCollectionPullRequest(
         DEFAULT_UID,
         'Title',
-        DEFAULT_ID,
+        DEFAULT_UID,
         reviewers,
         'Description'
       );
@@ -233,7 +234,7 @@ describe('unit tests', () => {
 
     test('should throw error for invalid collection UID format', async () => {
       await expect(
-        createCollectionPullRequest('invalid-uid', 'Title', DEFAULT_ID, ['12345678'])
+        createCollectionPullRequest('invalid-uid', 'Title', DEFAULT_UID, ['12345678'])
       ).rejects.toThrow();
       expect(axios.request).not.toHaveBeenCalled();
     });
@@ -282,21 +283,21 @@ describe('unit tests', () => {
       axios.request.mockRejectedValue(mockError);
 
       await expect(
-        createCollectionPullRequest(DEFAULT_UID, 'Title', DEFAULT_ID, ['12345678'])
+        createCollectionPullRequest(DEFAULT_UID, 'Title', DEFAULT_UID, ['12345678'])
       ).rejects.toThrow('API Error');
     });
 
     test('should handle empty reviewers array', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_ID }
+        data: { id: DEFAULT_UID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
       await createCollectionPullRequest(
         DEFAULT_UID,
         'Title',
-        DEFAULT_ID,
+        DEFAULT_UID,
         []
       );
 

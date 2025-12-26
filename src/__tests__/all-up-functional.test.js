@@ -53,7 +53,8 @@ describe('All-Up Functional Test Suite', () => {
     const environmentTests = require('../environments/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
-
+  
+  
   describe('Phase 3: Collections', () => {
     const collectionTests = require('../collections/__tests__/01-collections-functional.test');
     // Tests are automatically executed when the module is required

@@ -3,22 +3,15 @@ const {
   createCollectionFork,
   createCollectionPullRequest
 } = require('../../../collections/index');
-const {
-  getPullRequest,
-  updatePullRequest,
-  reviewPullRequest
-} = require('../../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../../core/config');
+
 const { loadTestIds, saveTestIds } = require('../../../__tests__/test-helpers');
 
-describe('functional tests', () => {
+describe('Collection Pull Request Functional Tests', () => {
   let persistedIds = loadTestIds();
   let userId;
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     userId = persistedIds?.userId;
 
@@ -37,7 +30,10 @@ describe('functional tests', () => {
       console.log('\n⚠️  No fork configured. Run fork functional tests first to create a fork.');
     }
   });
+
   test('1. createCollectionPullRequest - should create a pull request from fork', async () => {
+    //this one
+    persistedIds = loadTestIds();
     if (!persistedIds.fork?.collection?.uid) {
       // Create a fork of the collection and persist the fork ids
       const label = `SDK Test Fork - ${Date.now()}`;
@@ -60,6 +56,9 @@ describe('functional tests', () => {
       expect(result.data.collection.fork).toHaveProperty('from');
 
       // Save the fork details
+      if (!persistedIds.fork) {
+        persistedIds.fork = {};
+      }
       persistedIds.fork.collection = {
         id: result.data.collection.id,
         uid: result.data.collection.uid,
@@ -78,7 +77,6 @@ describe('functional tests', () => {
       const title = `SDK Test PR - ${Date.now()}`;
       const description = 'Pull request created by SDK functional test';
       const reviewers = [userId.toString()];
-      const destinationUid = persistedIds.collection.uid;
 
       const result = await createCollectionPullRequest(
         persistedIds.fork.collection.uid,
@@ -102,6 +100,8 @@ describe('functional tests', () => {
         persistedIds.pullRequest = {};
       }
       persistedIds.pullRequest.id = result.data.id;
+      persistedIds.pullRequest.destinationId = result.data.destinationId;
+      persistedIds.pullRequest.sourceId = result.data.sourceId;
       saveTestIds(persistedIds);
 
       console.log('Successfully created pull request');
@@ -115,15 +115,12 @@ describe('functional tests', () => {
       console.log('Create PR failed (may be expected):', error.message);
       if (error.response?.data) {
         console.log('API Response:', JSON.stringify(error.response.data, null, 2));
-        fail(error.response.data);
-      } else {
-        fail(error.message);
       }
+      throw error;
     }
   });
-  test('2. getCollectionPullRequests - should retrieve pull requests for collection', async () => {
-   
 
+  test('2. getCollectionPullRequests - should retrieve pull requests for collection', async () => {
     const result = await getCollectionPullRequests(persistedIds.collection.uid);
 
     expect(result.status).toBe(200);
@@ -144,11 +141,7 @@ describe('functional tests', () => {
     }
   });
 
-  
-
   test('3. createCollectionPullRequest - should handle duplicate PR error', async () => {
-  
-
     try {
       // Try to create another PR with same source/destination
       await createCollectionPullRequest(
@@ -183,8 +176,6 @@ describe('functional tests', () => {
   });
 
   test('5. createCollectionPullRequest - should handle invalid destination ID', async () => {
-    
-
     const fakeDestId = '00000000-0000-0000-0000-000000000000';
 
     await expect(
@@ -198,189 +189,5 @@ describe('functional tests', () => {
     ).rejects.toThrow();
 
     console.log('Successfully handled invalid destination ID');
-  });
-
-  // Pull Request Management Tests (from ../functional.test.js)
-  test('6. getPullRequest - should retrieve pull request details', async () => {
-    const result = await getPullRequest(persistedIds.pullRequest.id);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('id');
-    expect(result.data.id).toBe(persistedIds.pullRequest.id);
-    expect(result.data).toHaveProperty('title');
-    expect(result.data).toHaveProperty('status');
-    expect(result.data).toHaveProperty('source');
-    expect(result.data).toHaveProperty('destination.id');
-    expect(result.data).toHaveProperty('reviewers');
-    expect(Array.isArray(result.data.reviewers)).toBe(true);
-
-    console.log('Successfully retrieved pull request');
-    console.log('PR ID:', result.data.id);
-    console.log('Title:', result.data.title);
-    console.log('Status:', result.data.status);
-    console.log('Source:', result.data.sourceId);
-    console.log('Destination:', result.data.destinationId);
-    console.log('Reviewers:', result.data.reviewers);
-  });
-
-  test('7. updatePullRequest - should update pull request title and reviewers', async () => {
-    const newTitle = `Updated SDKK Test PR - ${Date.now()}`;
-    const newReviewers = [userId.toString()];
-    const newDescription = 'Updated by SDK functional test';
-
-    try {
-      const result = await updatePullRequest(
-        persistedIds.pullRequest.id,
-        newTitle,
-        newReviewers,
-        newDescription
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('id');
-      expect(result.data.id).toBe(persistedIds.pullRequest.id);
-      expect(result.data).toHaveProperty('title');
-      expect(result.data.title).toBe(newTitle);
-      //expect(result.data).toHaveProperty('reviewers');
-      //expect(Array.isArray(result.data.reviewers)).toBe(true);
-
-      console.log('Successfully updated pull request');
-      console.log('PR ID:', result.data.id);
-      console.log('New Title:', result.data.title);
-      console.log('Reviewers:', result.data.reviewers);
-    } catch (error) {
-      if (error.response?.data) {
-        fail(error.response.data);
-      } else {
-        fail(error.message);
-      }
-    }
-  });
-
-  test('8. updatePullRequest - should update without description', async () => {
-    const newTitle = `SDK Test PR No Desc - ${Date.now()}`;
-    const newReviewers = [userId.toString()];
-
-    try {
-      const result = await updatePullRequest(
-        persistedIds.pullRequest.id,
-        newTitle,
-        newReviewers
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data.id).toBe(persistedIds.pullRequest.id);
-
-      console.log('Successfully updated PR without description');
-      console.log('New Title:', result.data.title);
-    } catch (error) {
-      if (error.response?.data) {
-        fail(error.response.data);
-      } else {
-        fail(error.message);
-      }
-    }
-  });
-
-  test('9. reviewPullRequest - should approve pull request', async () => {
-    try {
-      const result = await reviewPullRequest(
-        persistedIds.pullRequest.id,
-        'approve'
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('id');
-      expect(result.data).toHaveProperty('status');
-      expect(result.data).toHaveProperty('reviewedBy');
-
-      console.log('Successfully reviewed pull request');
-      console.log('Action: approve');
-      console.log('Status:', result.data.status);
-      console.log('Reviewed by:', result.data.reviewedBy);
-    } catch (error) {
-      if (error.response?.data) {
-        fail(error.response.data);
-      } else {
-        fail(error.message);
-      }
-    }
-  });
-
-  test('10. reviewPullRequest - should unapprove pull request', async () => {
-    try {
-      const result = await reviewPullRequest(
-        persistedIds.pullRequest.id,
-        'unapprove'
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('id');
-      expect(result.data).toHaveProperty('status');
-
-      console.log('Successfully unapproved pull request');
-      console.log('Status:', result.data.status);
-    } catch (error) {
-      if (error.response?.data) {
-        fail(error.response.data);
-      } else {
-        fail(error.message);
-      }
-    }
-  });
-
-  test('11. reviewPullRequest - should decline pull request with comment', async () => {
-    try {
-      const comment = 'Declining for SDK test purposes';
-      const result = await reviewPullRequest(
-        persistedIds.pullRequest.id,
-        'decline',
-        comment
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('id');
-      expect(result.data).toHaveProperty('status');
-
-      console.log('Successfully declined pull request');
-      console.log('Status:', result.data.status);
-      console.log('Comment:', comment);
-    } catch (error) {
-      if (error.response?.data) {
-        fail(error.response.data);
-      } else {
-        fail(error.message);
-      }
-    }
-  });
-
-  test('12. getPullRequest - should handle invalid PR ID', async () => {
-    const fakeId = '00000000-0000-0000-0000-000000000000';
-
-    await expect(
-      getPullRequest(fakeId)
-    ).rejects.toThrow();
-
-    console.log('Successfully handled invalid pull request ID');
-  });
-
-  test('13. updatePullRequest - should handle invalid PR ID', async () => {
-    const fakeId = '00000000-0000-0000-0000-000000000000';
-
-    const results = await updatePullRequest(fakeId, 'Test Title', [userId.toString()]);
-    expect([400, 401, 403, 404, 409, 422, 500, 501, 502, 503, 504]).toContain(results.status);
-    expect(results.code).toBe('ERR_BAD_REQUEST');
-
-    console.log('Successfully handled invalid PR ID for update');
-  });
-
-  test('14. reviewPullRequest - should handle invalid PR ID', async () => {
-    const fakeId = '00000000-0000-0000-0000-000000000000';
-
-    await expect(
-      reviewPullRequest(fakeId, 'approve')
-    ).rejects.toThrow();
-
-    console.log('Successfully handled invalid PR ID for review');
   });
 });

@@ -1043,8 +1043,9 @@ async function createCollectionPullRequest(collectionUid, title, destinationUid,
   if (description !== null) {
     data.description = description;
   }
-
+  
   const config = buildAxiosConfig('post', endpoint, data);
+  console.log('COnfig', config);
   return await executeRequest(config);
 }
 
