@@ -109,12 +109,12 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 | Function | Description |
 |----------|-------------|
 | [createWorkspace][121] | Creates a new workspace |
-| [deleteWorkspace][123] | Deletes an existing workspace |
-| [getWorkspace][125] | Gets information about a workspace |
-| [getWorkspaces][127] | Gets all workspaces |
-| [getWorkspaceTags][129] | Gets all tags associated with a workspace |
-| [updateWorkspace][131] | Updates a workspace |
-| [updateWorkspaceTags][133] | Updates a workspace's associated tags |
+| [deleteWorkspace][124] | Deletes an existing workspace |
+| [getWorkspace][127] | Gets information about a workspace |
+| [getWorkspaces][130] | Gets all workspaces |
+| [getWorkspaceTags][133] | Gets all tags associated with a workspace |
+| [updateWorkspace][136] | Updates a workspace |
+| [updateWorkspaceTags][139] | Updates a workspace's associated tags |
 
 </details>
 
@@ -123,21 +123,21 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [createSpec][136] | Creates an API specification in Postman's Spec Hub |
-| [createSpecFile][138] | Creates an API specification file |
-| [createSpecGeneration][140] | Generates a collection from an API specification |
-| [deleteSpec][142] | Deletes an API specification |
-| [deleteSpecFile][144] | Deletes a file in an API specification |
-| [getSpec][146] | Gets information about a specific API specification |
-| [getSpecDefinition][148] | Gets the complete contents of an API specification's definition |
-| [getSpecFile][150] | Gets the contents of an API specification's file |
-| [getSpecFiles][152] | Gets all the files in an API specification |
-| [getSpecGenerations][154] | Gets a list of collections generated from a spec |
-| [getSpecs][156] | Gets all API specifications in a workspace |
-| [getSpecTaskStatus][158] | Gets the status of an asynchronous API specification task |
-| [modifySpec][160] | Updates an API specification's properties |
-| [modifySpecFile][162] | Updates an API specification's file |
-| [syncSpecWithCollection][164] | Syncs a spec with a collection |
+| [createSpec][142] | Creates an API specification in Postman's Spec Hub |
+| [createSpecFile][145] | Creates an API specification file |
+| [createSpecGeneration][148] | Generates a collection from an API specification |
+| [deleteSpec][151] | Deletes an API specification |
+| [deleteSpecFile][154] | Deletes a file in an API specification |
+| [getSpec][157] | Gets information about a specific API specification |
+| [getSpecDefinition][160] | Gets the complete contents of an API specification's definition |
+| [getSpecFile][163] | Gets the contents of an API specification's file |
+| [getSpecFiles][166] | Gets all the files in an API specification |
+| [getSpecGenerations][169] | Gets a list of collections generated from a spec |
+| [getSpecs][172] | Gets all API specifications in a workspace |
+| [getSpecTaskStatus][175] | Gets the status of an asynchronous API specification task |
+| [modifySpec][178] | Updates an API specification's properties |
+| [modifySpecFile][181] | Updates an API specification's file |
+| [syncSpecWithCollection][184] | Syncs a spec with a collection |
 
 </details>
 
@@ -146,11 +146,11 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [createEnvironment][166] | Creates a new environment |
-| [deleteEnvironment][168] | Deletes an environment |
-| [getEnvironment][170] | Gets information about an environment |
-| [getEnvironments][172] | Gets all environments |
-| [modifyEnvironment][174] | Updates an environment using JSON Patch operations (RFC 6902) |
+| [createEnvironment][187] | Creates a new environment |
+| [deleteEnvironment][190] | Deletes an environment |
+| [getEnvironment][193] | Gets information about an environment |
+| [getEnvironments][196] | Gets all environments |
+| [modifyEnvironment][199] | Updates an environment using JSON Patch operations (RFC 6902) |
 
 </details>
 
@@ -159,19 +159,19 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [createMock][177] | Creates a mock server in a collection |
-| [createMockPublish][179] | Publishes a mock server (sets Access Control to public) |
-| [createMockServerResponse][181] | Creates a server response for a mock server |
-| [deleteMock][183] | Deletes a mock server |
-| [deleteMockServerResponse][185] | Deletes a mock server's server response |
-| [deleteMockUnpublish][187] | Unpublishes a mock server (sets Access Control to private) |
-| [getMock][189] | Gets information about a mock server |
-| [getMockCallLogs][191] | Gets a mock server's call logs |
-| [getMocks][193] | Gets all mock servers |
-| [getMockServerResponse][195] | Gets information about a server response |
-| [getMockServerResponses][197] | Gets all of a mock server's server responses |
-| [updateMock][199] | Updates a mock server |
-| [updateMockServerResponse][201] | Updates a mock server's server response |
+| [createMock][202] | Creates a mock server in a collection |
+| [createMockPublish][205] | Publishes a mock server (sets Access Control to public) |
+| [createMockServerResponse][208] | Creates a server response for a mock server |
+| [deleteMock][211] | Deletes a mock server |
+| [deleteMockServerResponse][214] | Deletes a mock server's server response |
+| [deleteMockUnpublish][217] | Unpublishes a mock server (sets Access Control to private) |
+| [getMock][220] | Gets information about a mock server |
+| [getMockCallLogs][223] | Gets a mock server's call logs |
+| [getMocks][226] | Gets all mock servers |
+| [getMockServerResponse][229] | Gets information about a server response |
+| [getMockServerResponses][232] | Gets all of a mock server's server responses |
+| [updateMock][235] | Updates a mock server |
+| [updateMockServerResponse][238] | Updates a mock server's server response |
 
 </details>
 
@@ -180,7 +180,7 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [getTagEntities][203] | Gets Postman elements (entities) by a given tag |
+| [getTagEntities][241] | Gets Postman elements (entities) by a given tag |
 
 </details>
 
@@ -189,7 +189,7 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [getAuthenticatedUser][206] | Gets information about the authenticated user |
+| [getAuthenticatedUser][244] | Gets information about the authenticated user |
 
 </details>
 
@@ -198,13 +198,13 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 | Function | Description |
 |----------|-------------|
-| [buildAxiosConfig][207] | Builds an Axios config for Postman API requests |
-| [buildQueryString][209] | Builds a query string from parameters object |
-| [executeRequest][211] | Executes an axios request and throws an error for non-2xx responses. |
-| [getContentFS][213] | Reads file content from the filesystem and returns it in the format expected by Postman API |
-| [utils][215] | Builds a UID from a user ID and an object ID |
-| [validateId][217] | Validates a standard ID (UUID format) |
-| [validateUid][219] | Validates a UID (userId-UUID format) |
+| [buildAxiosConfig][246] | Builds an Axios config for Postman API requests |
+| [buildQueryString][248] | Builds a query string from parameters object |
+| [executeRequest][250] | Executes an axios request and throws an error for non-2xx responses. |
+| [getContentFS][252] | Reads file content from the filesystem and returns it in the format expected by Postman API |
+| [utils][254] | Builds a UID from a user ID and an object ID |
+| [validateId][256] | Validates a standard ID (UUID format) |
+| [validateUid][258] | Validates a UID (userId-UUID format) |
 
 </details>
 
@@ -216,10 +216,10 @@ Postman API endpoint and method: GET /collections
 
 ### Parameters
 
-*   `workspaceId` **[string][222]?** The workspace's ID (optional, default `null`)
-*   `name` **[string][222]?** Filter results by collections that match the given name (optional, default `null`)
-*   `limit` **[number][223]?** The maximum number of rows to return in the response (optional, default `null`)
-*   `offset` **[number][223]?** The zero-based offset of the first item to return (optional, default `null`)
+*   `workspaceId` **[string][261]?** The workspace's ID (optional, default `null`)
+*   `name` **[string][261]?** Filter results by collections that match the given name (optional, default `null`)
+*   `limit` **[number][262]?** The maximum number of rows to return in the response (optional, default `null`)
+*   `offset` **[number][262]?** The zero-based offset of the first item to return (optional, default `null`)
 
 ### Examples
 
@@ -240,7 +240,7 @@ console.log(response.data.meta.total);
 const response = await getCollections('abc123def-456-789', 'My API');
 ```
 
-Returns **[Promise][224]** Axios response with collections array and meta information
+Returns **[Promise][263]** Axios response with collections array and meta information
 
 ## createCollection
 
@@ -249,15 +249,15 @@ Postman API endpoint and method: POST /collections
 
 ### Parameters
 
-*   `collection` **[Object][225]** The collection object following Postman Collection v2.1.0 schema
+*   `collection` **[Object][264]** The collection object following Postman Collection v2.1.0 schema
 
-    *   `collection.info` **[string][222]** Information about the collection
+    *   `collection.info` **[string][261]** Information about the collection
 
-        *   `collection.info.name` **[string][222]** The collection's name
-        *   `collection.info.description` **[string][222]?** The collection's description
-        *   `collection.info.schema` **[string][222]?** Schema version (e.g., '[https://schema.getpostman.com/json/collection/v2.1.0/collection.json][226]')
-    *   `collection.item` **[Array][227]?** Array of folders and requests in the collection
-*   `workspaceId` **[string][222]?** The workspace ID in which to create the collection. If not provided, creates in default workspace. (optional, default `null`)
+        *   `collection.info.name` **[string][261]** The collection's name
+        *   `collection.info.description` **[string][261]?** The collection's description
+        *   `collection.info.schema` **[string][261]?** Schema version (e.g., '[https://schema.getpostman.com/json/collection/v2.1.0/collection.json][265]')
+    *   `collection.item` **[Array][266]?** Array of folders and requests in the collection
+*   `workspaceId` **[string][261]?** The workspace ID in which to create the collection. If not provided, creates in default workspace. (optional, default `null`)
 
 ### Examples
 
@@ -281,7 +281,7 @@ const response = await createCollection(
 );
 ```
 
-Returns **[Promise][224]** Axios response with collection id and uid
+Returns **[Promise][263]** Axios response with collection id and uid
 
 ## getCollection
 
@@ -290,9 +290,9 @@ Postman API endpoint and method: GET /collections/{collectionId}
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `access_key` **[string][222]?** A collection's read-only access key for public collections (optional, default `null`)
-*   `model` **[string][222]?** Return minimal model ('minimal' returns only root-level IDs) (optional, default `null`)
+*   `collectionId` **[string][261]** The collection's ID
+*   `access_key` **[string][261]?** A collection's read-only access key for public collections (optional, default `null`)
+*   `model` **[string][261]?** Return minimal model ('minimal' returns only root-level IDs) (optional, default `null`)
 
 ### Examples
 
@@ -312,7 +312,7 @@ const response = await getCollection('collection-id', 'PMAK-123abc');
 const response = await getCollection('collection-id', null, 'minimal');
 ```
 
-Returns **[Promise][224]** Axios response with full collection data
+Returns **[Promise][263]** Axios response with full collection data
 
 ## updateCollection
 
@@ -321,15 +321,15 @@ Postman API endpoint and method: PUT /collections/{collectionId}
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `collection` **[Object][225]** The complete collection object following Postman Collection v2.1.0 schema
+*   `collectionId` **[string][261]** The collection's ID
+*   `collection` **[Object][264]** The complete collection object following Postman Collection v2.1.0 schema
 
-    *   `collection.info` **[Object][225]** Information about the collection
+    *   `collection.info` **[Object][264]** Information about the collection
 
-        *   `collection.info.name` **[string][222]** The collection's name
-        *   `collection.info.description` **[string][222]?** The collection's description
-    *   `collection.item` **[Array][227]?** Array of folders and requests in the collection
-*   `prefer` **[string][222]?** Set to 'respond-async' for asynchronous update (returns immediately) (optional, default `null`)
+        *   `collection.info.name` **[string][261]** The collection's name
+        *   `collection.info.description` **[string][261]?** The collection's description
+    *   `collection.item` **[Array][266]?** Array of folders and requests in the collection
+*   `prefer` **[string][261]?** Set to 'respond-async' for asynchronous update (returns immediately) (optional, default `null`)
 
 ### Examples
 
@@ -354,7 +354,7 @@ const response = await updateCollection(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated collection
+Returns **[Promise][263]** Axios response with updated collection
 
 ## modifyCollection
 
@@ -363,13 +363,13 @@ Postman API endpoint and method: PATCH /collections/{collectionId}
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `collection` **[Object][225]** Partial collection object with only the fields to update
+*   `collectionId` **[string][261]** The collection's ID
+*   `collection` **[Object][264]** Partial collection object with only the fields to update
 
-    *   `collection.info` **[Object][225]?** Collection info to update
+    *   `collection.info` **[Object][264]?** Collection info to update
 
-        *   `collection.info.name` **[string][222]?** Update the collection's name
-        *   `collection.info.description` **[string][222]?** Update the collection's description
+        *   `collection.info.name` **[string][261]?** Update the collection's name
+        *   `collection.info.description` **[string][261]?** Update the collection's description
 
 ### Examples
 
@@ -391,7 +391,7 @@ const response = await modifyCollection('collection-id-123', {
 });
 ```
 
-Returns **[Promise][224]** Axios response with updated collection
+Returns **[Promise][263]** Axios response with updated collection
 
 ## deleteCollection
 
@@ -400,7 +400,7 @@ Postman API endpoint and method: DELETE /collections/{collectionId}
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
+*   `collectionId` **[string][261]** The collection's ID
 
 ### Examples
 
@@ -410,7 +410,7 @@ const response = await deleteCollection('collection-id-123');
 console.log(response.data.collection);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## createFolder
 
@@ -419,12 +419,12 @@ Postman API endpoint and method: POST /collections/{collectionId}/folders
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `folderData` **[Object][225]** The folder data
+*   `collectionId` **[string][261]** The collection's ID
+*   `folderData` **[Object][264]** The folder data
 
-    *   `folderData.name` **[string][222]** (Required) The folder's name
-    *   `folderData.description` **[string][222]?** The folder's description
-    *   `folderData.parentFolderId` **[string][222]?** The ID of the parent folder to nest this folder in
+    *   `folderData.name` **[string][261]** (Required) The folder's name
+    *   `folderData.description` **[string][261]?** The folder's description
+    *   `folderData.parentFolderId` **[string][261]?** The ID of the parent folder to nest this folder in
 
 ### Examples
 
@@ -451,7 +451,7 @@ const response = await createFolder('collection-id-123', {
 });
 ```
 
-Returns **[Promise][224]** Axios response with created folder data
+Returns **[Promise][263]** Axios response with created folder data
 
 ## getFolder
 
@@ -460,11 +460,11 @@ Postman API endpoint and method: GET /collections/{collectionId}/folders/{folder
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `folderId` **[string][222]** The folder's ID
-*   `ids` **[string][222]?** Set to 'true' to return only folder item IDs (optional, default `null`)
-*   `uid` **[string][222]?** Set to 'true' to return full UIDs for folder items (optional, default `null`)
-*   `populate` **[string][222]?** Set to 'true' to return full folder items with details (optional, default `null`)
+*   `collectionId` **[string][261]** The collection's ID
+*   `folderId` **[string][261]** The folder's ID
+*   `ids` **[string][261]?** Set to 'true' to return only folder item IDs (optional, default `null`)
+*   `uid` **[string][261]?** Set to 'true' to return full UIDs for folder items (optional, default `null`)
+*   `populate` **[string][261]?** Set to 'true' to return full folder items with details (optional, default `null`)
 
 ### Examples
 
@@ -490,7 +490,7 @@ const response = await getFolder(
 );
 ```
 
-Returns **[Promise][224]** Axios response with folder data
+Returns **[Promise][263]** Axios response with folder data
 
 ## updateFolder
 
@@ -499,12 +499,12 @@ Postman API endpoint and method: PUT /collections/{collectionId}/folders/{folder
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `folderId` **[string][222]** The folder's ID
-*   `folderData` **[Object][225]** The folder data to update
+*   `collectionId` **[string][261]** The collection's ID
+*   `folderId` **[string][261]** The folder's ID
+*   `folderData` **[Object][264]** The folder data to update
 
-    *   `folderData.name` **[string][222]?** The folder's new name
-    *   `folderData.description` **[string][222]?** The folder's new description
+    *   `folderData.name` **[string][261]?** The folder's new name
+    *   `folderData.description` **[string][261]?** The folder's new description
 
 ### Examples
 
@@ -529,7 +529,7 @@ const response = await updateFolder(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated folder data
+Returns **[Promise][263]** Axios response with updated folder data
 
 ## deleteFolder
 
@@ -538,8 +538,8 @@ Postman API endpoint and method: DELETE /collections/{collectionId}/folders/{fol
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `folderId` **[string][222]** The folder's ID
+*   `collectionId` **[string][261]** The collection's ID
+*   `folderId` **[string][261]** The folder's ID
 
 ### Examples
 
@@ -549,7 +549,7 @@ const response = await deleteFolder('collection-id-123', 'folder-id-456');
 console.log(response.data.folder);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getCollectionComments
 
@@ -558,7 +558,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/comments
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
 
 ### Examples
 
@@ -568,7 +568,7 @@ const response = await getCollectionComments('12345678-abc-def-123');
 console.log(response.data.data);
 ```
 
-Returns **[Promise][224]** Axios response with array of comments
+Returns **[Promise][263]** Axios response with array of comments
 
 ## createCollectionComment
 
@@ -577,17 +577,17 @@ Postman API endpoint and method: POST /collections/{collectionUid}/comments
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `commentData` **[Object][225]** The comment data
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `commentData` **[Object][264]** The comment data
 
-    *   `commentData.body` **[string][222]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][223]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][225]?** Information about users tagged in the body comment
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -628,7 +628,7 @@ const response = await createCollectionComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with created comment data
+Returns **[Promise][263]** Axios response with created comment data
 
 ## updateCollectionComment
 
@@ -637,17 +637,17 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/comments/{comm
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `commentId` **[string][222]** The comment's ID
-*   `commentData` **[Object][225]** The comment data to update
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
 
-    *   `commentData.body` **[string][222]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][225]?** Updated information about users tagged in the body comment
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -679,7 +679,7 @@ const response = await updateCollectionComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated comment data
+Returns **[Promise][263]** Axios response with updated comment data
 
 ## deleteCollectionComment
 
@@ -688,8 +688,8 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/comments/{c
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `commentId` **[string][222]** The comment's ID
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `commentId` **[string][261]** The comment's ID
 
 ### Examples
 
@@ -702,7 +702,7 @@ const response = await deleteCollectionComment(
 console.log(response.data.comment);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getFolderComments
 
@@ -711,8 +711,8 @@ Postman API endpoint and method: GET /collections/{collectionUid}/folders/{folde
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `folderUid` **[string][222]** The folder's UID (format: userId-folderId)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `folderUid` **[string][261]** The folder's UID (format: userId-folderId)
 
 ### Examples
 
@@ -725,7 +725,7 @@ const response = await getFolderComments(
 console.log(response.data.data);
 ```
 
-Returns **[Promise][224]** Axios response with array of comments
+Returns **[Promise][263]** Axios response with array of comments
 
 ## createFolderComment
 
@@ -734,18 +734,18 @@ Postman API endpoint and method: POST /collections/{collectionUid}/folders/{fold
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `folderUid` **[string][222]** The folder's UID (format: userId-folderId)
-*   `commentData` **[Object][225]** The comment data
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `folderUid` **[string][261]** The folder's UID (format: userId-folderId)
+*   `commentData` **[Object][264]** The comment data
 
-    *   `commentData.body` **[string][222]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][223]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][225]?** Information about users tagged in the body comment
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -789,7 +789,7 @@ const response = await createFolderComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response
+Returns **[Promise][263]** Axios response
 
 ## updateFolderComment
 
@@ -798,18 +798,18 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/folders/{folde
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `folderUid` **[string][222]** The folder's UID (format: userId-folderId)
-*   `commentId` **[string][222]** The comment's ID
-*   `commentData` **[Object][225]** The comment data to update
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `folderUid` **[string][261]** The folder's UID (format: userId-folderId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
 
-    *   `commentData.body` **[string][222]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][225]?** Updated information about users tagged in the body comment
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -843,7 +843,7 @@ const response = await updateFolderComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated comment data
+Returns **[Promise][263]** Axios response with updated comment data
 
 ## deleteFolderComment
 
@@ -852,9 +852,9 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/folders/{fo
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `folderUid` **[string][222]** The folder's UID (format: userId-folderId)
-*   `commentId` **[string][222]** The comment's ID
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `folderUid` **[string][261]** The folder's UID (format: userId-folderId)
+*   `commentId` **[string][261]** The comment's ID
 
 ### Examples
 
@@ -868,7 +868,7 @@ const response = await deleteFolderComment(
 console.log(response.data.comment);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## syncCollectionWithSpec
 
@@ -877,8 +877,8 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/synchronizatio
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `specId` **[string][222]** The spec's ID to sync with
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `specId` **[string][261]** The spec's ID to sync with
 
 ### Examples
 
@@ -891,7 +891,7 @@ const response = await syncCollectionWithSpec(
 console.log(response.data);
 ```
 
-Returns **[Promise][224]** Axios response with sync status
+Returns **[Promise][263]** Axios response with sync status
 
 ## getCollectionTags
 
@@ -900,7 +900,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/tags
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
 
 ### Examples
 
@@ -910,7 +910,7 @@ const response = await getCollectionTags('12345678-abc-def-123');
 console.log(response.data.tags);
 ```
 
-Returns **[Promise][224]** Axios response with array of tags
+Returns **[Promise][263]** Axios response with array of tags
 
 ## updateCollectionTags
 
@@ -919,10 +919,10 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/tags
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `tags` **[Array][227]** Array of tag objects with 'slug' property (maximum 5 tags)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `tags` **[Array][266]** Array of tag objects with 'slug' property (maximum 5 tags)
 
-    *   `tags[].slug` **[string][222]** The tag's slug/name
+    *   `tags[].slug` **[string][261]** The tag's slug/name
 
 ### Examples
 
@@ -946,7 +946,7 @@ const response = await updateCollectionTags(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated tags
+Returns **[Promise][263]** Axios response with updated tags
 
 ## createCollectionGeneration
 
@@ -955,11 +955,11 @@ Postman API endpoint and method: POST /collections/{collectionUid}/generations/{
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `elementType` **[string][222]** The element type (typically 'spec')
-*   `name` **[string][222]** The API specification's name
-*   `type` **[string][222]** The specification's type (e.g., 'OPENAPI:3.0', 'OPENAPI:3.1', 'ASYNCAPI:2.6.0')
-*   `format` **[string][222]** The format of the API specification ('JSON' or 'YAML')
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `elementType` **[string][261]** The element type (typically 'spec')
+*   `name` **[string][261]** The API specification's name
+*   `type` **[string][261]** The specification's type (e.g., 'OPENAPI:3.0', 'OPENAPI:3.1', 'ASYNCAPI:2.6.0')
+*   `format` **[string][261]** The format of the API specification ('JSON' or 'YAML')
 
 ### Examples
 
@@ -986,7 +986,7 @@ const response = await createCollectionGeneration(
 );
 ```
 
-Returns **[Promise][224]** Axios response with taskId and url for the async generation task
+Returns **[Promise][263]** Axios response with taskId and url for the async generation task
 
 ## getCollectionGenerations
 
@@ -995,8 +995,8 @@ Postman API endpoint and method: GET /collections/{collectionUid}/generations/{e
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `elementType` **[string][222]** The element type (typically 'spec')
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `elementType` **[string][261]** The element type (typically 'spec')
 
 ### Examples
 
@@ -1010,7 +1010,7 @@ console.log(response.data.data);
 console.log(response.data.meta);
 ```
 
-Returns **[Promise][224]** Axios response with array of generated specs and pagination metadata
+Returns **[Promise][263]** Axios response with array of generated specs and pagination metadata
 
 ## getCollectionTaskStatus
 
@@ -1019,8 +1019,8 @@ Postman API endpoint and method: GET /collections/{collectionUid}/tasks/{taskId}
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `taskId` **[string][222]** The task ID returned from createCollectionGeneration
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `taskId` **[string][261]** The task ID returned from createCollectionGeneration
 
 ### Examples
 
@@ -1049,64 +1049,7 @@ const checkStatus = async () => {
 };
 ```
 
-Returns **[Promise][224]** Axios response with task status and progress information
-
-## validateId
-
-Validates a standard ID (UUID format)
-
-### Parameters
-
-*   `id` **[string][222]** The ID to validate
-*   `paramName` **[string][222]** The parameter name for error messages
-
-<!---->
-
-*   Throws **[Error][228]** If the ID is invalid
-
-## validateUid
-
-Validates a UID (userId-UUID format)
-
-### Parameters
-
-*   `uid` **[string][222]** The UID to validate
-*   `paramName` **[string][222]** The parameter name for error messages
-
-<!---->
-
-*   Throws **[Error][228]** If the UID is invalid
-
-## buildQueryString
-
-Builds a query string from parameters object
-
-### Parameters
-
-*   `params` **[Object][225]** Object with query parameters
-
-Returns **[string][222]** Query string (e.g., '?key1=value1\&key2=value2')
-
-## getContentFS
-
-Reads file content from the filesystem and returns it in the format expected by Postman API
-
-### Parameters
-
-*   `filePath` **[string][222]** The path to the file
-
-Returns **[Object][225]** Object with content property containing the file content
-
-## utils
-
-Builds a UID from a user ID and an object ID
-
-### Parameters
-
-*   `userId` **([string][222] | [number][223])** The user's ID
-*   `objectId` **[string][222]** The object's ID (e.g., collection ID, workspace ID)
-
-Returns **[string][222]** The UID in format: userId-objectId
+Returns **[Promise][263]** Axios response with task status and progress information
 
 ## getEnvironments
 
@@ -1115,9 +1058,22 @@ Postman API endpoint and method: GET /environments
 
 ### Parameters
 
-*   `workspaceId` **[string][222]?** Return only results found in the given workspace ID (optional, default `null`)
+*   `workspaceId` **[string][261]?** Return only results found in the given workspace ID (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all environments
+const response = await getEnvironments();
+console.log(response.data.environments);
+```
+
+```javascript
+// Get environments in a specific workspace
+const response = await getEnvironments('workspace-id-123');
+```
+
+Returns **[Promise][263]** Axios response with environments array
 
 ## createEnvironment
 
@@ -1126,10 +1082,50 @@ Postman API endpoint and method: POST /environments
 
 ### Parameters
 
-*   `environmentData` **[Object][225]** The environment object containing name and optional values
-*   `workspaceId` **[string][222]?** A workspace ID in which to create the environment (optional, default `null`)
+*   `environmentData` **[Object][264]** The environment object containing name and optional values
 
-Returns **[Promise][224]** Axios response
+    *   `environmentData.name` **[string][261]** (Required) The environment's name
+    *   `environmentData.values` **[Array][266]?** Array of environment variable objects
+*   `workspaceId` **[string][261]?** A workspace ID in which to create the environment (optional, default `null`)
+*   `string` **[string][261]** \[].key] - The variable's key name
+*   `string` **[string][261]** \[].value] - The variable's value
+*   `string` **[string][261]** \[].type] - The variable type ('default' or 'secret')
+*   `boolean` **[boolean][267]** \[].enabled] - Whether the variable is enabled
+
+### Examples
+
+```javascript
+// Create a simple environment
+const response = await createEnvironment({
+  name: 'Production'
+});
+```
+
+```javascript
+// Create an environment with variables
+const response = await createEnvironment({
+  name: 'Development',
+  values: [
+    { key: 'base_url', value: 'https://api.dev.example.com', type: 'default', enabled: true },
+    { key: 'api_key', value: 'dev_key_123', type: 'secret', enabled: true }
+  ]
+});
+```
+
+```javascript
+// Create environment in specific workspace
+const response = await createEnvironment(
+  {
+    name: 'Staging',
+    values: [
+      { key: 'base_url', value: 'https://api.staging.example.com', enabled: true }
+    ]
+  },
+  'workspace-id-123'
+);
+```
+
+Returns **[Promise][263]** Axios response with created environment data
 
 ## getEnvironment
 
@@ -1138,9 +1134,18 @@ Postman API endpoint and method: GET /environments/{environmentId}
 
 ### Parameters
 
-*   `environmentId` **[string][222]** The environment's ID
+*   `environmentId` **[string][261]** The environment's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get environment by ID
+const response = await getEnvironment('environment-id-123');
+console.log(response.data.environment);
+console.log(response.data.environment.values);
+```
+
+Returns **[Promise][263]** Axios response with environment data including all variables
 
 ## modifyEnvironment
 
@@ -1149,34 +1154,57 @@ Postman API endpoint and method: PATCH /environments/{environmentId}
 
 ### Parameters
 
-*   `environmentId` **[string][222]** The environment's ID
-*   `patchOperations` **[Array][227]** Array of JSON Patch operations
+*   `environmentId` **[string][261]** The environment's ID
+*   `patchOperations` **[Array][266]** Array of JSON Patch operations
+
+    *   `patchOperations[].op` **[string][261]** The operation ('add', 'remove', 'replace', 'copy', 'move', 'test')
+    *   `patchOperations[].path` **[string][261]** The JSON path to modify
+    *   `patchOperations[].value` **any?** The value for add/replace operations
 
 ### Examples
 
 ```javascript
 // Update environment name
-await modifyEnvironment(envId, [
-  { op: 'replace', path: '/name', value: 'New Name' }
+const response = await modifyEnvironment('env-id-123', [
+  { op: 'replace', path: '/name', value: 'Production Environment' }
 ]);
+```
 
+```javascript
 // Add a new variable
-await modifyEnvironment(envId, [
-  { op: 'add', path: '/values/0', value: { key: 'api_key', value: 'secret', type: 'secret', enabled: true } }
+const response = await modifyEnvironment('env-id-123', [
+  { 
+    op: 'add', 
+    path: '/values/0', 
+    value: { key: 'api_key', value: 'secret_key', type: 'secret', enabled: true } 
+  }
 ]);
+```
 
+```javascript
 // Replace a variable's value
-await modifyEnvironment(envId, [
-  { op: 'replace', path: '/values/0/value', value: 'new_value' }
+const response = await modifyEnvironment('env-id-123', [
+  { op: 'replace', path: '/values/0/value', value: 'new_api_key' }
 ]);
+```
 
+```javascript
 // Remove a variable
-await modifyEnvironment(envId, [
+const response = await modifyEnvironment('env-id-123', [
   { op: 'remove', path: '/values/2' }
 ]);
 ```
 
-Returns **[Promise][224]** Axios response
+```javascript
+// Multiple operations at once
+const response = await modifyEnvironment('env-id-123', [
+  { op: 'replace', path: '/name', value: 'Updated Name' },
+  { op: 'replace', path: '/values/0/value', value: 'updated_value' },
+  { op: 'add', path: '/values/-', value: { key: 'new_var', value: 'value', enabled: true } }
+]);
+```
+
+Returns **[Promise][263]** Axios response with updated environment data
 
 ## deleteEnvironment
 
@@ -1185,9 +1213,17 @@ Postman API endpoint and method: DELETE /environments/{environmentId}
 
 ### Parameters
 
-*   `environmentId` **[string][222]** The environment's ID
+*   `environmentId` **[string][261]** The environment's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete an environment
+const response = await deleteEnvironment('environment-id-123');
+console.log(response.data.environment);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getMocks
 
@@ -1196,10 +1232,28 @@ Postman API endpoint and method: GET /mocks
 
 ### Parameters
 
-*   `teamId` **[string][222]?** Return only mock servers that belong to the given team ID (optional, default `null`)
-*   `workspaceId` **[string][222]?** Return only mock servers in the given workspace (optional, default `null`)
+*   `teamId` **[string][261]?** Return only mock servers that belong to the given team ID (optional, default `null`)
+*   `workspaceId` **[string][261]?** Return only mock servers in the given workspace (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all mocks
+const response = await getMocks();
+console.log(response.data.mocks);
+```
+
+```javascript
+// Get mocks in a workspace
+const response = await getMocks(null, 'workspace-id-123');
+```
+
+```javascript
+// Get mocks for a team
+const response = await getMocks('team-id-456');
+```
+
+Returns **[Promise][263]** Axios response with mocks array
 
 ## createMock
 
@@ -1208,10 +1262,42 @@ Postman API endpoint and method: POST /mocks
 
 ### Parameters
 
-*   `mockData` **[Object][225]** The mock object containing collection and optional configuration
-*   `workspaceId` **[string][222]** A workspace ID in which to create the mock server (required)
+*   `mockData` **[Object][264]** The mock object containing collection and optional configuration
 
-Returns **[Promise][224]** Axios response
+    *   `mockData.collection` **[string][261]** (Required) The collection ID or UID
+    *   `mockData.name` **[string][261]?** The mock server's name
+    *   `mockData.environment` **[string][261]?** The environment ID to use with the mock server
+    *   `mockData.private` **[boolean][267]?** Whether the mock server is private (default: false)
+*   `workspaceId` **[string][261]** A workspace ID in which to create the mock server (required)
+
+### Examples
+
+```javascript
+// Create a simple mock server
+const response = await createMock(
+  {
+    collection: 'collection-id-123',
+    name: 'My Mock Server'
+  },
+  'workspace-id-456'
+);
+console.log(response.data.mock.mockUrl);
+```
+
+```javascript
+// Create a private mock with environment
+const response = await createMock(
+  {
+    collection: 'collection-id-123',
+    name: 'Private Mock',
+    environment: 'env-id-789',
+    private: true
+  },
+  'workspace-id-456'
+);
+```
+
+Returns **[Promise][263]** Axios response with created mock server data including mockUrl
 
 ## getMock
 
@@ -1220,9 +1306,18 @@ Postman API endpoint and method: GET /mocks/{mockId}
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
+*   `mockId` **[string][261]** The mock's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get mock server information
+const response = await getMock('mock-id-123');
+console.log(response.data.mock);
+console.log(response.data.mock.mockUrl);
+```
+
+Returns **[Promise][263]** Axios response with mock server details including mockUrl
 
 ## updateMock
 
@@ -1231,10 +1326,33 @@ Postman API endpoint and method: PUT /mocks/{mockId}
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `mockData` **[Object][225]** The mock object containing collection (required) and optional fields
+*   `mockId` **[string][261]** The mock's ID
+*   `mockData` **[Object][264]** The mock object with fields to update
 
-Returns **[Promise][224]** Axios response
+    *   `mockData.name` **[string][261]?** The mock server's new name
+    *   `mockData.environment` **[string][261]?** The environment ID to use
+    *   `mockData.private` **[boolean][267]?** Whether the mock server is private
+    *   `mockData.collection` **[string][261]?** The collection ID (required by API)
+
+### Examples
+
+```javascript
+// Update mock server name
+const response = await updateMock('mock-id-123', {
+  collection: 'collection-id-456',
+  name: 'Updated Mock Name'
+});
+```
+
+```javascript
+// Make mock server private
+const response = await updateMock('mock-id-123', {
+  collection: 'collection-id-456',
+  private: true
+});
+```
+
+Returns **[Promise][263]** Axios response with updated mock server data
 
 ## deleteMock
 
@@ -1243,9 +1361,17 @@ Postman API endpoint and method: DELETE /mocks/{mockId}
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
+*   `mockId` **[string][261]** The mock's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete a mock server
+const response = await deleteMock('mock-id-123');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getMockCallLogs
 
@@ -1254,20 +1380,60 @@ Postman API endpoint and method: GET /mocks/{mockId}/call-logs
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `limit` **[number][223]?** The maximum number of rows to return (defaults to 100) (optional, default `null`)
-*   `cursor` **[string][222]?** The pointer to the first record of the set of paginated results (optional, default `null`)
-*   `until` **[string][222]?** Return only results created until this given time (ISO 8601 format) (optional, default `null`)
-*   `since` **[string][222]?** Return only results created since the given time (ISO 8601 format) (optional, default `null`)
-*   `responseStatusCode` **[number][223]?** Return only call logs that match the given HTTP response status code (optional, default `null`)
-*   `responseType` **[string][222]?** Return only call logs that match the given response type (optional, default `null`)
-*   `requestMethod` **[string][222]?** Return only call logs that match the given HTTP method (optional, default `null`)
-*   `requestPath` **[string][222]?** Return only call logs that match the given request path (optional, default `null`)
-*   `sort` **[string][222]?** Sort the results by the given value (e.g., 'servedAt') (optional, default `null`)
-*   `direction` **[string][222]?** Sort in ascending ('asc') or descending ('desc') order (optional, default `null`)
-*   `include` **[string][222]?** Include call log records with header and body data (comma-separated values) (optional, default `null`)
+*   `mockId` **[string][261]** The mock's ID
+*   `limit` **[number][262]?** The maximum number of rows to return (defaults to 100) (optional, default `null`)
+*   `cursor` **[string][261]?** The pointer to the first record of the set of paginated results (optional, default `null`)
+*   `until` **[string][261]?** Return only results created until this given time (ISO 8601 format) (optional, default `null`)
+*   `since` **[string][261]?** Return only results created since the given time (ISO 8601 format) (optional, default `null`)
+*   `responseStatusCode` **[number][262]?** Return only call logs that match the given HTTP response status code (e.g., 200, 404) (optional, default `null`)
+*   `responseType` **[string][261]?** Return only call logs that match the given response type (optional, default `null`)
+*   `requestMethod` **[string][261]?** Return only call logs that match the given HTTP method (e.g., 'GET', 'POST') (optional, default `null`)
+*   `requestPath` **[string][261]?** Return only call logs that match the given request path (optional, default `null`)
+*   `sort` **[string][261]?** Sort the results by the given value (e.g., 'servedAt') (optional, default `null`)
+*   `direction` **[string][261]?** Sort in ascending ('asc') or descending ('desc') order (optional, default `null`)
+*   `include` **[string][261]?** Include call log records with header and body data (comma-separated: 'request.headers,request.body,response.headers,response.body') (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get call logs for a mock
+const response = await getMockCallLogs('mock-id-123');
+console.log(response.data.logs);
+```
+
+```javascript
+// Get filtered call logs
+const response = await getMockCallLogs(
+  'mock-id-123',
+  50,
+  null,
+  null,
+  null,
+  404,
+  null,
+  'GET'
+);
+```
+
+```javascript
+// Get call logs with headers and body
+const response = await getMockCallLogs(
+  'mock-id-123',
+  10,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  'servedAt',
+  'desc',
+  'request.headers,response.body'
+);
+```
+
+Returns **[Promise][263]** Axios response with call logs array and pagination metadata
 
 ## createMockPublish
 
@@ -1276,9 +1442,17 @@ Postman API endpoint and method: POST /mocks/{mockId}/publish
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
+*   `mockId` **[string][261]** The mock's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Publish a mock server (make it public)
+const response = await createMockPublish('mock-id-123');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with published mock data
 
 ## getMockServerResponses
 
@@ -1287,9 +1461,17 @@ Postman API endpoint and method: GET /mocks/{mockId}/server-responses
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
+*   `mockId` **[string][261]** The mock's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all server responses for a mock
+const response = await getMockServerResponses('mock-id-123');
+console.log(response.data.serverResponses);
+```
+
+Returns **[Promise][263]** Axios response with server responses array
 
 ## createMockServerResponse
 
@@ -1298,10 +1480,37 @@ Postman API endpoint and method: POST /mocks/{mockId}/server-responses
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `serverResponseData` **[Object][225]** The server response object containing name and statusCode (required)
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseData` **[Object][264]** The server response object
 
-Returns **[Promise][224]** Axios response
+    *   `serverResponseData.name` **[string][261]** (Required) The server response's name
+    *   `serverResponseData.statusCode` **[number][262]** (Required) The HTTP status code (e.g., 200, 404, 500)
+    *   `serverResponseData.body` **[string][261]?** The response body content
+    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
+    *   `serverResponseData.language` **[string][261]?** The response language (e.g., 'json', 'xml', 'text')
+
+### Examples
+
+```javascript
+// Create a server response
+const response = await createMockServerResponse('mock-id-123', {
+  name: '200 Success Response',
+  statusCode: 200,
+  body: JSON.stringify({ message: 'Success' }),
+  language: 'json'
+});
+```
+
+```javascript
+// Create an error response
+const response = await createMockServerResponse('mock-id-123', {
+  name: '404 Not Found',
+  statusCode: 404,
+  body: JSON.stringify({ error: 'Not found' })
+});
+```
+
+Returns **[Promise][263]** Axios response with created server response data
 
 ## getMockServerResponse
 
@@ -1310,10 +1519,18 @@ Postman API endpoint and method: GET /mocks/{mockId}/server-responses/{serverRes
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `serverResponseId` **[string][222]** The server response's ID
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get a server response
+const response = await getMockServerResponse('mock-id-123', 'response-id-456');
+console.log(response.data.serverResponse);
+```
+
+Returns **[Promise][263]** Axios response with server response data
 
 ## updateMockServerResponse
 
@@ -1322,11 +1539,31 @@ Postman API endpoint and method: PUT /mocks/{mockId}/server-responses/{serverRes
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `serverResponseId` **[string][222]** The server response's ID
-*   `serverResponseData` **[Object][225]** The server response object with fields to update
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
+*   `serverResponseData` **[Object][264]** The server response object with fields to update
 
-Returns **[Promise][224]** Axios response
+    *   `serverResponseData.name` **[string][261]?** The server response's name
+    *   `serverResponseData.statusCode` **[number][262]?** The HTTP status code
+    *   `serverResponseData.body` **[string][261]?** The response body content
+    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
+
+### Examples
+
+```javascript
+// Update a server response
+const response = await updateMockServerResponse(
+  'mock-id-123',
+  'response-id-456',
+  {
+    name: 'Updated Response',
+    statusCode: 201,
+    body: JSON.stringify({ message: 'Created' })
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated server response data
 
 ## deleteMockServerResponse
 
@@ -1335,10 +1572,18 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/server-responses/{server
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
-*   `serverResponseId` **[string][222]** The server response's ID
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete a server response
+const response = await deleteMockServerResponse('mock-id-123', 'response-id-456');
+console.log(response.data.serverResponse);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## deleteMockUnpublish
 
@@ -1347,9 +1592,17 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish
 
 ### Parameters
 
-*   `mockId` **[string][222]** The mock's ID
+*   `mockId` **[string][261]** The mock's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Unpublish a mock server (make it private)
+const response = await deleteMockUnpublish('mock-id-123');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with unpublished mock data
 
 ## createRequest
 
@@ -1358,18 +1611,18 @@ Postman API endpoint and method: POST /collections/{collectionId}/requests
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `requestData` **[Object][225]** The request data
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestData` **[Object][264]** The request data
 
-    *   `requestData.name` **[string][222]** (Required) The request's name
-    *   `requestData.method` **[string][222]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
-    *   `requestData.url` **[Object][225]?** The request URL object
+    *   `requestData.name` **[string][261]** (Required) The request's name
+    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
+    *   `requestData.url` **[Object][264]?** The request URL object
 
-        *   `requestData.url.raw` **[string][222]?** The complete URL string
-    *   `requestData.header` **[Array][227]?** Array of header objects
-    *   `requestData.body` **[Object][225]?** The request body object
-    *   `requestData.description` **[string][222]?** The request description
-*   `folderId` **[string][222]?** The folder ID in which to create the request. If not provided, creates at collection root. (optional, default `null`)
+        *   `requestData.url.raw` **[string][261]?** The complete URL string
+    *   `requestData.header` **[Array][266]?** Array of header objects
+    *   `requestData.body` **[Object][264]?** The request body object
+    *   `requestData.description` **[string][261]?** The request description
+*   `folderId` **[string][261]?** The folder ID in which to create the request. If not provided, creates at collection root. (optional, default `null`)
 
 ### Examples
 
@@ -1414,7 +1667,7 @@ const response = await createRequest('collection-id-123', {
 });
 ```
 
-Returns **[Promise][224]** Axios response with created request data
+Returns **[Promise][263]** Axios response with created request data
 
 ## getRequest
 
@@ -1423,11 +1676,11 @@ Postman API endpoint and method: GET /collections/{collectionId}/requests/{reque
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `requestId` **[string][222]** The request's ID
-*   `ids` **[boolean][229]?** If true, returns only the request properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][229]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][229]?** If true, returns all of a request's contents including full details (optional, default `null`)
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
+*   `ids` **[boolean][267]?** If true, returns only the request properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][267]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][267]?** If true, returns all of a request's contents including full details (optional, default `null`)
 
 ### Examples
 
@@ -1453,7 +1706,7 @@ const response = await getRequest(
 );
 ```
 
-Returns **[Promise][224]** Axios response with request data
+Returns **[Promise][263]** Axios response with request data
 
 ## updateRequest
 
@@ -1462,18 +1715,18 @@ Postman API endpoint and method: PUT /collections/{collectionId}/requests/{reque
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `requestId` **[string][222]** The request's ID
-*   `requestData` **[Object][225]** The request data to update
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
+*   `requestData` **[Object][264]** The request data to update
 
-    *   `requestData.name` **[string][222]?** The request's name
-    *   `requestData.method` **[string][222]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
-    *   `requestData.url` **[Object][225]?** The request URL object
+    *   `requestData.name` **[string][261]?** The request's name
+    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
+    *   `requestData.url` **[Object][264]?** The request URL object
 
-        *   `requestData.url.raw` **[string][222]?** The complete URL string
-    *   `requestData.header` **[Array][227]?** Array of header objects
-    *   `requestData.body` **[Object][225]?** The request body object
-    *   `requestData.description` **[string][222]?** The request description
+        *   `requestData.url.raw` **[string][261]?** The complete URL string
+    *   `requestData.header` **[Array][266]?** Array of header objects
+    *   `requestData.body` **[Object][264]?** The request body object
+    *   `requestData.description` **[string][261]?** The request description
 
 ### Examples
 
@@ -1521,7 +1774,7 @@ const response = await updateRequest(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated request data
+Returns **[Promise][263]** Axios response with updated request data
 
 ## deleteRequest
 
@@ -1530,8 +1783,8 @@ Postman API endpoint and method: DELETE /collections/{collectionId}/requests/{re
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `requestId` **[string][222]** The request's ID
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
 
 ### Examples
 
@@ -1541,7 +1794,7 @@ const response = await deleteRequest('collection-id-123', 'request-id-456');
 console.log(response.data.request);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getRequestComments
 
@@ -1550,8 +1803,8 @@ Postman API endpoint and method: GET /collections/{collectionUid}/requests/{requ
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][222]** The request's UID (format: userId-requestId)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
 
 ### Examples
 
@@ -1564,7 +1817,7 @@ const response = await getRequestComments(
 console.log(response.data.data);
 ```
 
-Returns **[Promise][224]** Axios response with array of comments
+Returns **[Promise][263]** Axios response with array of comments
 
 ## createRequestComment
 
@@ -1573,18 +1826,18 @@ Postman API endpoint and method: POST /collections/{collectionUid}/requests/{req
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][222]** The request's UID (format: userId-requestId)
-*   `commentData` **[Object][225]** The comment data
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentData` **[Object][264]** The comment data
 
-    *   `commentData.body` **[string][222]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][223]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][225]?** Information about users tagged in the body comment
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -1628,7 +1881,7 @@ const response = await createRequestComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with created comment data
+Returns **[Promise][263]** Axios response with created comment data
 
 ## updateRequestComment
 
@@ -1637,18 +1890,18 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/requests/{requ
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][222]** The request's UID (format: userId-requestId)
-*   `commentId` **[string][222]** The comment's ID
-*   `commentData` **[Object][225]** The comment data to update
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
 
-    *   `commentData.body` **[string][222]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][225]?** Updated information about users tagged in the body comment
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -1682,7 +1935,7 @@ const response = await updateRequestComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated comment data
+Returns **[Promise][263]** Axios response with updated comment data
 
 ## deleteRequestComment
 
@@ -1691,9 +1944,9 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/requests/{r
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][222]** The request's UID (format: userId-requestId)
-*   `commentId` **[string][222]** The comment's ID
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentId` **[string][261]** The comment's ID
 
 ### Examples
 
@@ -1707,7 +1960,7 @@ const response = await deleteRequestComment(
 console.log(response.data.comment);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## createResponse
 
@@ -1716,16 +1969,16 @@ Postman API endpoint and method: POST /collections/{collectionId}/responses
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `requestId` **[string][222]** The parent request's ID that this response belongs to
-*   `responseData` **[Object][225]** The response data
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The parent request's ID that this response belongs to
+*   `responseData` **[Object][264]** The response data
 
-    *   `responseData.name` **[string][222]** (Required) The response's name
-    *   `responseData.code` **[number][223]?** The HTTP response status code (e.g., 200, 404, 500)
-    *   `responseData.status` **[string][222]?** The HTTP status text (e.g., 'OK', 'Not Found')
-    *   `responseData.header` **[Array][227]?** Array of response header objects
-    *   `responseData.body` **[string][222]?** The response body content
-    *   `responseData.originalRequest` **[Object][225]?** The original request that generated this response
+    *   `responseData.name` **[string][261]** (Required) The response's name
+    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
+    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
+    *   `responseData.header` **[Array][266]?** Array of response header objects
+    *   `responseData.body` **[string][261]?** The response body content
+    *   `responseData.originalRequest` **[Object][264]?** The original request that generated this response
 
 ### Examples
 
@@ -1778,7 +2031,7 @@ const response = await createResponse(
 );
 ```
 
-Returns **[Promise][224]** Axios response with created response data
+Returns **[Promise][263]** Axios response with created response data
 
 ## getResponse
 
@@ -1787,11 +2040,11 @@ Postman API endpoint and method: GET /collections/{collectionId}/responses/{resp
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `responseId` **[string][222]** The response's ID
-*   `ids` **[boolean][229]?** If true, returns only the response properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][229]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][229]?** If true, returns all of a response's contents including full details (optional, default `null`)
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
+*   `ids` **[boolean][267]?** If true, returns only the response properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][267]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][267]?** If true, returns all of a response's contents including full details (optional, default `null`)
 
 ### Examples
 
@@ -1817,7 +2070,7 @@ const response = await getResponse(
 );
 ```
 
-Returns **[Promise][224]** Axios response with response data
+Returns **[Promise][263]** Axios response with response data
 
 ## updateResponse
 
@@ -1826,15 +2079,15 @@ Postman API endpoint and method: PUT /collections/{collectionId}/responses/{resp
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `responseId` **[string][222]** The response's ID
-*   `responseData` **[Object][225]** The response data to update
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
+*   `responseData` **[Object][264]** The response data to update
 
-    *   `responseData.name` **[string][222]?** The response's name
-    *   `responseData.code` **[number][223]?** The HTTP response status code (e.g., 200, 404, 500)
-    *   `responseData.status` **[string][222]?** The HTTP status text (e.g., 'OK', 'Not Found')
-    *   `responseData.header` **[Array][227]?** Array of response header objects
-    *   `responseData.body` **[string][222]?** The response body content
+    *   `responseData.name` **[string][261]?** The response's name
+    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
+    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
+    *   `responseData.header` **[Array][266]?** Array of response header objects
+    *   `responseData.body` **[string][261]?** The response body content
 
 ### Examples
 
@@ -1879,7 +2132,7 @@ const response = await updateResponse(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated response data
+Returns **[Promise][263]** Axios response with updated response data
 
 ## deleteResponse
 
@@ -1888,8 +2141,8 @@ Postman API endpoint and method: DELETE /collections/{collectionId}/responses/{r
 
 ### Parameters
 
-*   `collectionId` **[string][222]** The collection's ID
-*   `responseId` **[string][222]** The response's ID
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
 
 ### Examples
 
@@ -1899,7 +2152,7 @@ const response = await deleteResponse('collection-id-123', 'response-id-789');
 console.log(response.data.response);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getResponseComments
 
@@ -1908,8 +2161,8 @@ Postman API endpoint and method: GET /collections/{collectionUid}/responses/{res
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][222]** The response's UID (format: userId-responseId)
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
 
 ### Examples
 
@@ -1922,7 +2175,7 @@ const response = await getResponseComments(
 console.log(response.data.data);
 ```
 
-Returns **[Promise][224]** Axios response with array of comments
+Returns **[Promise][263]** Axios response with array of comments
 
 ## createResponseComment
 
@@ -1931,18 +2184,18 @@ Postman API endpoint and method: POST /collections/{collectionUid}/responses/{re
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][222]** The response's UID (format: userId-responseId)
-*   `commentData` **[Object][225]** The comment data
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentData` **[Object][264]** The comment data
 
-    *   `commentData.body` **[string][222]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][223]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][225]?** Information about users tagged in the body comment
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -1986,7 +2239,7 @@ const response = await createResponseComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with created comment data
+Returns **[Promise][263]** Axios response with created comment data
 
 ## updateResponseComment
 
@@ -1995,18 +2248,18 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/responses/{res
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][222]** The response's UID (format: userId-responseId)
-*   `commentId` **[string][222]** The comment's ID
-*   `commentData` **[Object][225]** The comment data to update
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
 
-    *   `commentData.body` **[string][222]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][225]?** Updated information about users tagged in the body comment
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
 
-        *   `commentData.tags.userName` **[Object][225]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
 
-            *   `commentData.tags.userName.type` **[string][222]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][222]** The user's ID
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
 
 ### Examples
 
@@ -2040,7 +2293,7 @@ const response = await updateResponseComment(
 );
 ```
 
-Returns **[Promise][224]** Axios response with updated comment data
+Returns **[Promise][263]** Axios response with updated comment data
 
 ## deleteResponseComment
 
@@ -2049,9 +2302,9 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/responses/{
 
 ### Parameters
 
-*   `collectionUid` **[string][222]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][222]** The response's UID (format: userId-responseId)
-*   `commentId` **[string][222]** The comment's ID
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentId` **[string][261]** The comment's ID
 
 ### Examples
 
@@ -2065,7 +2318,7 @@ const response = await deleteResponseComment(
 console.log(response.data.comment);
 ```
 
-Returns **[Promise][224]** Axios response with deletion confirmation
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## buildAxiosConfig
 
@@ -2073,12 +2326,12 @@ Builds an Axios config for Postman API requests
 
 ### Parameters
 
-*   `method` **[string][222]** HTTP method (e.g., 'get', 'post', 'patch')
-*   `endpoint` **[string][222]** The API endpoint path (e.g., '/specs/{specId}')
-*   `data` **[Object][225]?** The request body data (optional, default `undefined`)
-*   `extra` **[Object][225]?** Extra Axios config (e.g. maxBodyLength, etc) (optional, default `{}`)
+*   `method` **[string][261]** HTTP method (e.g., 'get', 'post', 'patch')
+*   `endpoint` **[string][261]** The API endpoint path (e.g., '/specs/{specId}')
+*   `data` **[Object][264]?** The request body data (optional, default `undefined`)
+*   `extra` **[Object][264]?** Extra Axios config (e.g. maxBodyLength, etc) (optional, default `{}`)
 
-Returns **[Object][225]** Axios request config
+Returns **[Object][264]** Axios request config
 
 ## executeRequest
 
@@ -2086,16 +2339,73 @@ Executes an axios request and throws an error for non-2xx responses.
 
 ### Parameters
 
-*   `config` **[Object][225]** Axios request configuration
+*   `config` **[Object][264]** Axios request configuration
 
-Returns **[Promise][224]** Axios response
+Returns **[Promise][263]** Axios response
 
 ## POSTMAN\_API\_KEY\_ENV\_VAR
 
 Configuration module for Postman SDK
 Reads API key from environment and sets base URL
 
-Type: [string][222]
+Type: [string][261]
+
+## validateId
+
+Validates a standard ID (UUID format)
+
+### Parameters
+
+*   `id` **[string][261]** The ID to validate
+*   `paramName` **[string][261]** The parameter name for error messages
+
+<!---->
+
+*   Throws **[Error][268]** If the ID is invalid
+
+## validateUid
+
+Validates a UID (userId-UUID format)
+
+### Parameters
+
+*   `uid` **[string][261]** The UID to validate
+*   `paramName` **[string][261]** The parameter name for error messages
+
+<!---->
+
+*   Throws **[Error][268]** If the UID is invalid
+
+## buildQueryString
+
+Builds a query string from parameters object
+
+### Parameters
+
+*   `params` **[Object][264]** Object with query parameters
+
+Returns **[string][261]** Query string (e.g., '?key1=value1\&key2=value2')
+
+## getContentFS
+
+Reads file content from the filesystem and returns it in the format expected by Postman API
+
+### Parameters
+
+*   `filePath` **[string][261]** The path to the file
+
+Returns **[Object][264]** Object with content property containing the file content
+
+## utils
+
+Builds a UID from a user ID and an object ID
+
+### Parameters
+
+*   `userId` **([string][261] | [number][262])** The user's ID
+*   `objectId` **[string][261]** The object's ID (e.g., collection ID, workspace ID)
+
+Returns **[string][261]** The UID in format: userId-objectId
 
 ## getSpecs
 
@@ -2104,11 +2414,25 @@ Postman API endpoint and method: GET /specs
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace ID
-*   `cursor` **[string][222]?** The pointer to the first record of the set of paginated results (optional, default `null`)
-*   `limit` **[number][223]?** The maximum number of rows to return in the response (optional, default `null`)
+*   `workspaceId` **[string][261]** The workspace ID
+*   `cursor` **[string][261]?** The pointer to the first record of the set of paginated results (optional, default `null`)
+*   `limit` **[number][262]?** The maximum number of rows to return in the response (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all specs in a workspace
+const response = await getSpecs('workspace-id-123');
+console.log(response.data.specs);
+```
+
+```javascript
+// Get specs with pagination
+const response = await getSpecs('workspace-id-123', null, 10);
+const nextCursor = response.data.meta.nextCursor;
+```
+
+Returns **[Promise][263]** Axios response with specs array and pagination metadata
 
 ## getSpec
 
@@ -2117,9 +2441,17 @@ Postman API endpoint and method: GET /specs/{specId}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
+*   `specId` **[string][261]** The spec ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get spec information
+const response = await getSpec('spec-id-123');
+console.log(response.data.spec);
+```
+
+Returns **[Promise][263]** Axios response with spec details including name, type, and files
 
 ## createSpec
 
@@ -2128,12 +2460,43 @@ Postman API endpoint and method: POST /specs
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace ID
-*   `name` **[string][222]** The specification's name
-*   `type` **[string][222]** The specification's type (e.g., 'OPENAPI:3.0', 'ASYNCAPI:2.0')
-*   `files` **[Array][227]** A list of the specification's files and their contents
+*   `workspaceId` **[string][261]** The workspace ID
+*   `name` **[string][261]** The specification's name
+*   `type` **[string][261]** The specification's type (e.g., 'OPENAPI:3.0', 'OPENAPI:3.1', 'ASYNCAPI:2.0', 'ASYNCAPI:2.6.0')
+*   `files` **[Array][266]** A list of the specification's files and their contents
 
-Returns **[Promise][224]** Axios response
+    *   `files[].path` **[string][261]** The file path (e.g., 'index.yaml', 'openapi.json')
+    *   `files[].content` **[string][261]** The stringified file contents
+
+### Examples
+
+```javascript
+// Create an OpenAPI 3.0 spec
+const response = await createSpec(
+  'workspace-id-123',
+  'My API Spec',
+  'OPENAPI:3.0',
+  [{
+    path: 'index.yaml',
+    content: 'openapi: 3.0.0\ninfo:\n  title: My API\n  version: 1.0.0'
+  }]
+);
+```
+
+```javascript
+// Create an AsyncAPI spec
+const response = await createSpec(
+  'workspace-id-123',
+  'Event API',
+  'ASYNCAPI:2.6.0',
+  [{
+    path: 'asyncapi.json',
+    content: JSON.stringify({ asyncapi: '2.6.0', info: { title: 'Events' } })
+  }]
+);
+```
+
+Returns **[Promise][263]** Axios response with created spec data
 
 ## modifySpec
 
@@ -2142,10 +2505,17 @@ Postman API endpoint and method: PATCH /specs/{specId}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `name` **[string][222]** The specification's name
+*   `specId` **[string][261]** The spec ID
+*   `name` **[string][261]** The specification's new name
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Update spec name
+const response = await modifySpec('spec-id-123', 'Updated API Spec Name');
+```
+
+Returns **[Promise][263]** Axios response with updated spec data
 
 ## deleteSpec
 
@@ -2154,9 +2524,16 @@ Postman API endpoint and method: DELETE /specs/{specId}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
+*   `specId` **[string][261]** The spec ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete a spec
+const response = await deleteSpec('spec-id-123');
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getSpecDefinition
 
@@ -2165,9 +2542,17 @@ Postman API endpoint and method: GET /specs/{specId}/definitions
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
+*   `specId` **[string][261]** The spec ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get spec definition
+const response = await getSpecDefinition('spec-id-123');
+console.log(response.data.definition);
+```
+
+Returns **[Promise][263]** Axios response with spec definition as JSON or YAML
 
 ## getSpecFiles
 
@@ -2176,9 +2561,17 @@ Postman API endpoint and method: GET /specs/{specId}/files
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
+*   `specId` **[string][261]** The spec ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all files in a spec
+const response = await getSpecFiles('spec-id-123');
+console.log(response.data.files);
+```
+
+Returns **[Promise][263]** Axios response with array of file objects
 
 ## createSpecFile
 
@@ -2187,11 +2580,31 @@ Postman API endpoint and method: POST /specs/{specId}/files
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `path` **[string][222]** The file's path (accepts JSON or YAML files)
-*   `content` **[string][222]** The file's stringified contents
+*   `specId` **[string][261]** The spec ID
+*   `path` **[string][261]** The file's path (e.g., 'index.yaml', 'schemas/user.json')
+*   `content` **[string][261]** The file's stringified contents (JSON or YAML)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Create a YAML spec file
+const response = await createSpecFile(
+  'spec-id-123',
+  'index.yaml',
+  'openapi: 3.0.0\ninfo:\n  title: My API\n  version: 1.0.0'
+);
+```
+
+```javascript
+// Create a JSON schema file
+const response = await createSpecFile(
+  'spec-id-123',
+  'schemas/user.json',
+  JSON.stringify({ type: 'object', properties: { name: { type: 'string' } } })
+);
+```
+
+Returns **[Promise][263]** Axios response with created file data
 
 ## getSpecFile
 
@@ -2200,10 +2613,18 @@ Postman API endpoint and method: GET /specs/{specId}/files/{filePath}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `filePath` **[string][222]** The path to the file
+*   `specId` **[string][261]** The spec ID
+*   `filePath` **[string][261]** The path to the file (e.g., 'index.yaml', 'schemas/user.json')
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get a spec file
+const response = await getSpecFile('spec-id-123', 'index.yaml');
+console.log(response.data.content);
+```
+
+Returns **[Promise][263]** Axios response with file content
 
 ## modifySpecFile
 
@@ -2212,11 +2633,35 @@ Postman API endpoint and method: PATCH /specs/{specId}/files/{filePath}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `filePath` **[string][222]** The path to the file
-*   `data` **[Object][225]** Update data (name, content, or type - only one property at a time)
+*   `specId` **[string][261]** The spec ID
+*   `filePath` **[string][261]** The path to the file
+*   `data` **[Object][264]** Update data (can update name, content, or type - only one property at a time)
 
-Returns **[Promise][224]** Axios response
+    *   `data.name` **[string][261]?** New file name
+    *   `data.content` **[string][261]?** New file content
+    *   `data.type` **[string][261]?** New file type
+
+### Examples
+
+```javascript
+// Update file content
+const response = await modifySpecFile(
+  'spec-id-123',
+  'index.yaml',
+  { content: 'openapi: 3.0.0\ninfo:\n  title: Updated API\n  version: 2.0.0' }
+);
+```
+
+```javascript
+// Rename a file
+const response = await modifySpecFile(
+  'spec-id-123',
+  'old-name.yaml',
+  { name: 'new-name.yaml' }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated file data
 
 ## deleteSpecFile
 
@@ -2225,10 +2670,17 @@ Postman API endpoint and method: DELETE /specs/{specId}/files/{filePath}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `filePath` **[string][222]** The path to the file
+*   `specId` **[string][261]** The spec ID
+*   `filePath` **[string][261]** The path to the file to delete
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete a spec file
+const response = await deleteSpecFile('spec-id-123', 'schemas/user.json');
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## createSpecGeneration
 
@@ -2237,12 +2689,30 @@ Postman API endpoint and method: POST /specs/{specId}/generations/{elementType}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `elementType` **[string][222]** The element type (typically 'collection')
-*   `name` **[string][222]?** The name for the generated collection (optional, default `null`)
-*   `options` **[Object][225]?** Generation options (optional, default `null`)
+*   `specId` **[string][261]** The spec ID
+*   `elementType` **[string][261]** The element type (typically 'collection')
+*   `name` **[string][261]?** The name for the generated collection (optional, default `null`)
+*   `options` **[Object][264]?** Generation options for customizing collection generation (optional, default `null`)
 
-Returns **[Promise][224]** Axios response with taskId and url for polling
+### Examples
+
+```javascript
+// Generate a collection from spec
+const response = await createSpecGeneration('spec-id-123', 'collection', 'My API Collection');
+const taskId = response.data.taskId;
+```
+
+```javascript
+// Generate with options
+const response = await createSpecGeneration(
+  'spec-id-123',
+  'collection',
+  'API Collection',
+  { folderStrategy: 'tags' }
+);
+```
+
+Returns **[Promise][263]** Axios response with taskId and url for async task polling
 
 ## getSpecTaskStatus
 
@@ -2251,10 +2721,28 @@ Postman API endpoint and method: GET /specs/{specId}/tasks/{taskId}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `taskId` **[string][222]** The task ID (returned from async operations like createSpecGeneration)
+*   `specId` **[string][261]** The spec ID
+*   `taskId` **[string][261]** The task ID (returned from async operations like createSpecGeneration)
 
-Returns **[Promise][224]** Axios response with status and meta information
+### Examples
+
+```javascript
+// Check generation task status
+const response = await getSpecTaskStatus('spec-id-123', 'task-id-789');
+console.log(response.data.status); // 'pending', 'completed', or 'failed'
+```
+
+```javascript
+// Poll for task completion
+const checkStatus = async () => {
+  const response = await getSpecTaskStatus('spec-id-123', taskId);
+  if (response.data.status === 'completed') {
+    console.log('Generation complete!', response.data.result);
+  }
+};
+```
+
+Returns **[Promise][263]** Axios response with task status, progress, and result data
 
 ## getSpecGenerations
 
@@ -2263,12 +2751,25 @@ Postman API endpoint and method: GET /specs/{specId}/generations/{elementType}
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `elementType` **[string][222]** The element type (e.g., 'collection')
-*   `limit` **[number][223]** The maximum number of rows to return (default 10) (optional, default `null`)
-*   `cursor` **[string][222]** Pagination cursor for next set of results (optional, default `null`)
+*   `specId` **[string][261]** The spec ID
+*   `elementType` **[string][261]** The element type (typically 'collection')
+*   `limit` **[number][262]?** The maximum number of rows to return (default 10) (optional, default `null`)
+*   `cursor` **[string][261]?** Pagination cursor for next set of results (optional, default `null`)
 
-Returns **[Promise][224]** Axios response with collections array and pagination metadata
+### Examples
+
+```javascript
+// Get all collections generated from a spec
+const response = await getSpecGenerations('spec-id-123', 'collection');
+console.log(response.data.data);
+```
+
+```javascript
+// Get with pagination
+const response = await getSpecGenerations('spec-id-123', 'collection', 20, nextCursor);
+```
+
+Returns **[Promise][263]** Axios response with generated collections array and pagination metadata
 
 ## syncSpecWithCollection
 
@@ -2277,10 +2778,21 @@ Postman API endpoint and method: PUT /specs/{specId}/synchronizations
 
 ### Parameters
 
-*   `specId` **[string][222]** The spec ID
-*   `collectionUid` **[string][222]** The collection's unique ID (userId-collectionId)
+*   `specId` **[string][261]** The spec ID
+*   `collectionUid` **[string][261]** The collection's unique ID (format: userId-collectionId)
 
-Returns **[Promise][224]** Axios response with taskId and url
+### Examples
+
+```javascript
+// Sync spec with collection
+const response = await syncSpecWithCollection(
+  'spec-id-123',
+  '12345678-abc-def-456'
+);
+console.log(response.data.taskId);
+```
+
+Returns **[Promise][263]** Axios response with taskId and url for async sync task
 
 ## getTagEntities
 
@@ -2289,37 +2801,49 @@ Postman API endpoint and method: GET /tags/{slugId}/entities
 
 ### Parameters
 
-*   `slugId` **[string][222]** The tag's ID/slug (e.g., 'needs-review', 'production')
-*   `limit` **[number][223]?** Maximum number of tagged elements to return (max 50, default 10) (optional, default `null`)
-*   `direction` **[string][222]?** Sort order: 'asc' or 'desc' based on tagging time (optional, default `null`)
-*   `cursor` **[string][222]?** Pagination cursor from previous response's meta.nextCursor (optional, default `null`)
-*   `entityType` **[string][222]?** Filter by element type: 'api', 'collection', or 'workspace' (optional, default `null`)
+*   `slugId` **[string][261]** The tag's ID/slug (e.g., 'needs-review', 'production')
+*   `limit` **[number][262]?** Maximum number of tagged elements to return (max 50, default 10) (optional, default `null`)
+*   `direction` **[string][261]?** Sort order: 'asc' or 'desc' based on tagging time (optional, default `null`)
+*   `cursor` **[string][261]?** Pagination cursor from previous response's meta.nextCursor (optional, default `null`)
+*   `entityType` **[string][261]?** Filter by element type: 'api', 'collection', or 'workspace' (optional, default `null`)
 
 ### Examples
 
 ```javascript
 // Get all entities with 'production' tag
-const result = await getTagEntities('production');
+const response = await getTagEntities('production');
+console.log(response.data.entities);
 ```
 
 ```javascript
 // Get only collections with 'needs-review' tag
-const result = await getTagEntities('needs-review', null, null, null, 'collection');
+const response = await getTagEntities('needs-review', null, null, null, 'collection');
 ```
 
 ```javascript
 // Get entities with pagination
-const result = await getTagEntities('api-v2', 20, 'desc', nextCursor);
+const response = await getTagEntities('api-v2', 20, 'desc', nextCursor);
+console.log(response.data.meta.nextCursor);
 ```
 
-Returns **[Promise][224]** Axios response with data.entities array and meta.count
+Returns **[Promise][263]** Axios response with entities array, meta.count, and meta.nextCursor for pagination
 
 ## getAuthenticatedUser
 
 Gets information about the authenticated user
 Postman API endpoint and method: GET /me
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get current user information
+const response = await getAuthenticatedUser();
+console.log(response.data.user);
+console.log(response.data.user.id);
+console.log(response.data.user.username);
+```
+
+Returns **[Promise][263]** Axios response with authenticated user information including id, username, email, and team details
 
 ## getWorkspaces
 
@@ -2328,11 +2852,34 @@ Postman API endpoint and method: GET /workspaces
 
 ### Parameters
 
-*   `type` **[string][222]?** Filter by workspace type (personal, team, private, public, partner) (optional, default `null`)
-*   `createdByUserId` **[number][223]?** Return only workspaces created by a specific user ID (optional, default `null`)
-*   `include` **[string][222]?** Include additional information (mocks:deactivated, scim) (optional, default `null`)
+*   `type` **[string][261]?** Filter by workspace type ('personal', 'team', 'private', 'public', 'partner') (optional, default `null`)
+*   `createdByUserId` **[number][262]?** Return only workspaces created by a specific user ID (optional, default `null`)
+*   `include` **[string][261]?** Include additional information ('mocks:deactivated', 'scim') (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all workspaces
+const response = await getWorkspaces();
+console.log(response.data.workspaces);
+```
+
+```javascript
+// Get only team workspaces
+const response = await getWorkspaces('team');
+```
+
+```javascript
+// Get workspaces created by a specific user
+const response = await getWorkspaces(null, 12345678);
+```
+
+```javascript
+// Get workspaces with additional mock information
+const response = await getWorkspaces(null, null, 'mocks:deactivated');
+```
+
+Returns **[Promise][263]** Axios response with workspaces array
 
 ## createWorkspace
 
@@ -2341,12 +2888,39 @@ Postman API endpoint and method: POST /workspaces
 
 ### Parameters
 
-*   `name` **[string][222]** The workspace's name
-*   `type` **[string][222]** The type of workspace (personal, private, public, team, partner)
-*   `description` **[string][222]?** The workspace's description (optional, default `null`)
-*   `about` **[string][222]?** A brief summary about the workspace (optional, default `null`)
+*   `name` **[string][261]** The workspace's name
+*   `type` **[string][261]** The type of workspace ('personal', 'private', 'public', 'team', 'partner')
+*   `description` **[string][261]?** The workspace's description (optional, default `null`)
+*   `about` **[string][261]?** A brief summary about the workspace (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Create a simple team workspace
+const response = await createWorkspace('My Team Workspace', 'team');
+console.log(response.data.workspace.id);
+```
+
+```javascript
+// Create a workspace with description
+const response = await createWorkspace(
+  'API Development',
+  'team',
+  'Workspace for API development and testing'
+);
+```
+
+```javascript
+// Create a workspace with description and about
+const response = await createWorkspace(
+  'Public APIs',
+  'public',
+  'Collection of public API examples',
+  'A workspace showcasing popular public APIs'
+);
+```
+
+Returns **[Promise][263]** Axios response with created workspace data including ID
 
 ## getWorkspace
 
@@ -2355,10 +2929,23 @@ Postman API endpoint and method: GET /workspaces/{workspaceId}
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace's ID
-*   `include` **[string][222]?** Include additional information (mocks:deactivated, scim) (optional, default `null`)
+*   `workspaceId` **[string][261]** The workspace's ID
+*   `include` **[string][261]?** Include additional information ('mocks:deactivated', 'scim') (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get workspace information
+const response = await getWorkspace('workspace-id-123');
+console.log(response.data.workspace);
+```
+
+```javascript
+// Get workspace with SCIM information
+const response = await getWorkspace('workspace-id-123', 'scim');
+```
+
+Returns **[Promise][263]** Axios response with workspace details including collections, environments, and mocks
 
 ## updateWorkspace
 
@@ -2369,13 +2956,36 @@ then merges updates, because the Postman API requires 'type' to be present in PU
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace's ID
-*   `name` **[string][222]?** The workspace's new name (optional, default `null`)
-*   `type` **[string][222]?** The new workspace visibility type (private, personal, team, public) (optional, default `null`)
-*   `description` **[string][222]?** The new workspace description (optional, default `null`)
-*   `about` **[string][222]?** A brief summary about the workspace (optional, default `null`)
+*   `workspaceId` **[string][261]** The workspace's ID
+*   `name` **[string][261]?** The workspace's new name (optional, default `null`)
+*   `type` **[string][261]?** The new workspace visibility type ('private', 'personal', 'team', 'public', 'partner') (optional, default `null`)
+*   `description` **[string][261]?** The new workspace description (optional, default `null`)
+*   `about` **[string][261]?** A brief summary about the workspace (optional, default `null`)
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Update workspace name
+const response = await updateWorkspace('workspace-id-123', 'New Workspace Name');
+```
+
+```javascript
+// Update workspace type to team
+const response = await updateWorkspace('workspace-id-123', null, 'team');
+```
+
+```javascript
+// Update multiple properties
+const response = await updateWorkspace(
+  'workspace-id-123',
+  'Updated Name',
+  'private',
+  'Updated description',
+  'Updated about section'
+);
+```
+
+Returns **[Promise][263]** Axios response with updated workspace data
 
 ## deleteWorkspace
 
@@ -2384,9 +2994,17 @@ Postman API endpoint and method: DELETE /workspaces/{workspaceId}
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace's ID
+*   `workspaceId` **[string][261]** The workspace's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Delete a workspace
+const response = await deleteWorkspace('workspace-id-123');
+console.log(response.data.workspace);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## getWorkspaceTags
 
@@ -2395,9 +3013,17 @@ Postman API endpoint and method: GET /workspaces/{workspaceId}/tags
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace's ID
+*   `workspaceId` **[string][261]** The workspace's ID
 
-Returns **[Promise][224]** Axios response
+### Examples
+
+```javascript
+// Get all tags for a workspace
+const response = await getWorkspaceTags('workspace-id-123');
+console.log(response.data.tags);
+```
+
+Returns **[Promise][263]** Axios response with array of tags
 
 ## updateWorkspaceTags
 
@@ -2407,23 +3033,28 @@ Note: This replaces all existing tags with the provided tags array
 
 ### Parameters
 
-*   `workspaceId` **[string][222]** The workspace's ID
-*   `tags` **[Array][227]<[Object][225]>** Array of tag objects with slug property (max 5 tags)
+*   `workspaceId` **[string][261]** The workspace's ID
+*   `tags` **[Array][266]<[Object][264]>** Array of tag objects with slug property (maximum 5 tags)
+
+    *   `tags[].slug` **[string][261]** The tag's slug/name
 
 ### Examples
 
 ```javascript
-// Add tags to workspace
-await updateWorkspaceTags(workspaceId, [
-  { slug: 'needs-review' },
-  { slug: 'test-api' }
+// Replace workspace tags
+const response = await updateWorkspaceTags('workspace-id-123', [
+  { slug: 'production' },
+  { slug: 'api-v2' },
+  { slug: 'needs-review' }
 ]);
-
-// Clear all tags (pass empty array)
-await updateWorkspaceTags(workspaceId, []);
 ```
 
-Returns **[Promise][224]** Axios response
+```javascript
+// Remove all tags (pass empty array)
+const response = await updateWorkspaceTags('workspace-id-123', []);
+```
+
+Returns **[Promise][263]** Axios response with updated tags
 
 [37]: #getcollections
 
@@ -2569,316 +3200,394 @@ Returns **[Promise][224]** Axios response
 
 [45]: #examples-23
 
-[217]: #validateid
+[196]: #getenvironments
 
-[218]: #parameters-24
+[197]: #parameters-24
 
-[219]: #validateuid
+[198]: #examples-24
 
-[220]: #parameters-25
+[187]: #createenvironment
 
-[209]: #buildquerystring
+[188]: #parameters-25
 
-[210]: #parameters-26
+[189]: #examples-25
 
-[213]: #getcontentfs
+[193]: #getenvironment
 
-[214]: #parameters-27
+[194]: #parameters-26
 
-[215]: #utils
+[195]: #examples-26
 
-[216]: #parameters-28
+[199]: #modifyenvironment
 
-[172]: #getenvironments
+[200]: #parameters-27
 
-[173]: #parameters-29
+[201]: #examples-27
 
-[166]: #createenvironment
+[190]: #deleteenvironment
 
-[167]: #parameters-30
+[191]: #parameters-28
 
-[170]: #getenvironment
+[192]: #examples-28
 
-[171]: #parameters-31
+[226]: #getmocks
 
-[174]: #modifyenvironment
+[227]: #parameters-29
 
-[175]: #parameters-32
+[228]: #examples-29
 
-[176]: #examples-24
+[202]: #createmock
 
-[168]: #deleteenvironment
+[203]: #parameters-30
 
-[169]: #parameters-33
+[204]: #examples-30
 
-[193]: #getmocks
+[220]: #getmock
 
-[194]: #parameters-34
+[221]: #parameters-31
 
-[177]: #createmock
+[222]: #examples-31
 
-[178]: #parameters-35
+[235]: #updatemock
 
-[189]: #getmock
+[236]: #parameters-32
 
-[190]: #parameters-36
+[237]: #examples-32
 
-[199]: #updatemock
+[211]: #deletemock
 
-[200]: #parameters-37
+[212]: #parameters-33
 
-[183]: #deletemock
+[213]: #examples-33
 
-[184]: #parameters-38
+[223]: #getmockcalllogs
 
-[191]: #getmockcalllogs
+[224]: #parameters-34
 
-[192]: #parameters-39
+[225]: #examples-34
 
-[179]: #createmockpublish
+[205]: #createmockpublish
 
-[180]: #parameters-40
+[206]: #parameters-35
 
-[197]: #getmockserverresponses
+[207]: #examples-35
 
-[198]: #parameters-41
+[232]: #getmockserverresponses
 
-[181]: #createmockserverresponse
+[233]: #parameters-36
 
-[182]: #parameters-42
+[234]: #examples-36
 
-[195]: #getmockserverresponse
+[208]: #createmockserverresponse
 
-[196]: #parameters-43
+[209]: #parameters-37
 
-[201]: #updatemockserverresponse
+[210]: #examples-37
 
-[202]: #parameters-44
+[229]: #getmockserverresponse
 
-[185]: #deletemockserverresponse
+[230]: #parameters-38
 
-[186]: #parameters-45
+[231]: #examples-38
 
-[187]: #deletemockunpublish
+[238]: #updatemockserverresponse
 
-[188]: #parameters-46
+[239]: #parameters-39
+
+[240]: #examples-39
+
+[214]: #deletemockserverresponse
+
+[215]: #parameters-40
+
+[216]: #examples-40
+
+[217]: #deletemockunpublish
+
+[218]: #parameters-41
+
+[219]: #examples-41
 
 [73]: #createrequest
 
-[74]: #parameters-47
+[74]: #parameters-42
 
-[75]: #examples-25
+[75]: #examples-42
 
 [85]: #getrequest
 
-[86]: #parameters-48
+[86]: #parameters-43
 
-[87]: #examples-26
+[87]: #examples-43
 
 [91]: #updaterequest
 
-[92]: #parameters-49
+[92]: #parameters-44
 
-[93]: #examples-27
+[93]: #examples-44
 
 [79]: #deleterequest
 
-[80]: #parameters-50
+[80]: #parameters-45
 
-[81]: #examples-28
+[81]: #examples-45
 
 [88]: #getrequestcomments
 
-[89]: #parameters-51
+[89]: #parameters-46
 
-[90]: #examples-29
+[90]: #examples-46
 
 [76]: #createrequestcomment
 
-[77]: #parameters-52
+[77]: #parameters-47
 
-[78]: #examples-30
+[78]: #examples-47
 
 [94]: #updaterequestcomment
 
-[95]: #parameters-53
+[95]: #parameters-48
 
-[96]: #examples-31
+[96]: #examples-48
 
 [82]: #deleterequestcomment
 
-[83]: #parameters-54
+[83]: #parameters-49
 
-[84]: #examples-32
+[84]: #examples-49
 
 [97]: #createresponse
 
-[98]: #parameters-55
+[98]: #parameters-50
 
-[99]: #examples-33
+[99]: #examples-50
 
 [109]: #getresponse
 
-[110]: #parameters-56
+[110]: #parameters-51
 
-[111]: #examples-34
+[111]: #examples-51
 
 [115]: #updateresponse
 
-[116]: #parameters-57
+[116]: #parameters-52
 
-[117]: #examples-35
+[117]: #examples-52
 
 [103]: #deleteresponse
 
-[104]: #parameters-58
+[104]: #parameters-53
 
-[105]: #examples-36
+[105]: #examples-53
 
 [112]: #getresponsecomments
 
-[113]: #parameters-59
+[113]: #parameters-54
 
-[114]: #examples-37
+[114]: #examples-54
 
 [100]: #createresponsecomment
 
-[101]: #parameters-60
+[101]: #parameters-55
 
-[102]: #examples-38
+[102]: #examples-55
 
 [118]: #updateresponsecomment
 
-[119]: #parameters-61
+[119]: #parameters-56
 
-[120]: #examples-39
+[120]: #examples-56
 
 [106]: #deleteresponsecomment
 
-[107]: #parameters-62
+[107]: #parameters-57
 
-[108]: #examples-40
+[108]: #examples-57
 
-[207]: #buildaxiosconfig
+[246]: #buildaxiosconfig
 
-[208]: #parameters-63
+[247]: #parameters-58
 
-[211]: #executerequest
+[250]: #executerequest
 
-[212]: #parameters-64
+[251]: #parameters-59
 
-[172]: #postman_api_key_env_var
+[179]: #postman_api_key_env_var
 
-[156]: #getspecs
+[256]: #validateid
 
-[157]: #parameters-65
+[257]: #parameters-60
 
-[146]: #getspec
+[258]: #validateuid
 
-[147]: #parameters-66
+[259]: #parameters-61
 
-[136]: #createspec
+[248]: #buildquerystring
 
-[137]: #parameters-67
+[249]: #parameters-62
 
-[160]: #modifyspec
+[252]: #getcontentfs
 
-[161]: #parameters-68
+[253]: #parameters-63
 
-[142]: #deletespec
+[254]: #utils
 
-[143]: #parameters-69
+[255]: #parameters-64
 
-[148]: #getspecdefinition
+[172]: #getspecs
 
-[149]: #parameters-70
+[173]: #parameters-65
 
-[152]: #getspecfiles
+[174]: #examples-58
 
-[153]: #parameters-71
+[157]: #getspec
 
-[138]: #createspecfile
+[158]: #parameters-66
 
-[139]: #parameters-72
+[159]: #examples-59
 
-[150]: #getspecfile
+[142]: #createspec
 
-[151]: #parameters-73
+[143]: #parameters-67
 
-[162]: #modifyspecfile
+[144]: #examples-60
 
-[163]: #parameters-74
+[178]: #modifyspec
 
-[144]: #deletespecfile
+[179]: #parameters-68
 
-[145]: #parameters-75
+[180]: #examples-61
 
-[140]: #createspecgeneration
+[151]: #deletespec
 
-[141]: #parameters-76
+[152]: #parameters-69
 
-[158]: #getspectaskstatus
+[153]: #examples-62
 
-[159]: #parameters-77
+[160]: #getspecdefinition
 
-[154]: #getspecgenerations
+[161]: #parameters-70
 
-[155]: #parameters-78
+[162]: #examples-63
 
-[164]: #syncspecwithcollection
+[166]: #getspecfiles
 
-[165]: #parameters-79
+[167]: #parameters-71
 
-[203]: #gettagentities
+[168]: #examples-64
 
-[204]: #parameters-80
+[145]: #createspecfile
 
-[205]: #examples-41
+[146]: #parameters-72
 
-[206]: #getauthenticateduser
+[147]: #examples-65
 
-[127]: #getworkspaces
+[163]: #getspecfile
 
-[128]: #parameters-81
+[164]: #parameters-73
+
+[165]: #examples-66
+
+[181]: #modifyspecfile
+
+[182]: #parameters-74
+
+[183]: #examples-67
+
+[154]: #deletespecfile
+
+[155]: #parameters-75
+
+[156]: #examples-68
+
+[148]: #createspecgeneration
+
+[149]: #parameters-76
+
+[150]: #examples-69
+
+[175]: #getspectaskstatus
+
+[176]: #parameters-77
+
+[177]: #examples-70
+
+[169]: #getspecgenerations
+
+[170]: #parameters-78
+
+[171]: #examples-71
+
+[184]: #syncspecwithcollection
+
+[185]: #parameters-79
+
+[186]: #examples-72
+
+[241]: #gettagentities
+
+[242]: #parameters-80
+
+[243]: #examples-73
+
+[244]: #getauthenticateduser
+
+[245]: #examples-74
+
+[130]: #getworkspaces
+
+[131]: #parameters-81
+
+[132]: #examples-75
 
 [121]: #createworkspace
 
 [122]: #parameters-82
 
-[125]: #getworkspace
+[123]: #examples-76
 
-[126]: #parameters-83
+[127]: #getworkspace
 
-[131]: #updateworkspace
+[128]: #parameters-83
 
-[132]: #parameters-84
+[129]: #examples-77
 
-[123]: #deleteworkspace
+[136]: #updateworkspace
 
-[124]: #parameters-85
+[137]: #parameters-84
 
-[129]: #getworkspacetags
+[138]: #examples-78
 
-[130]: #parameters-86
+[124]: #deleteworkspace
 
-[133]: #updateworkspacetags
+[125]: #parameters-85
 
-[134]: #parameters-87
+[126]: #examples-79
 
-[135]: #examples-42
+[133]: #getworkspacetags
 
-[222]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[134]: #parameters-86
 
-[223]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[135]: #examples-80
 
-[224]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[139]: #updateworkspacetags
 
-[225]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[140]: #parameters-87
 
-[226]: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+[141]: #examples-81
 
-[227]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[261]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[228]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+[262]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[229]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[263]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+[264]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[265]: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
+[266]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[267]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[268]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error

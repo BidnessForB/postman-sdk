@@ -9,19 +9,20 @@ const { buildQueryString, validateId } = require('../core/utils');
  * @param {string} [direction] - Sort order: 'asc' or 'desc' based on tagging time
  * @param {string} [cursor] - Pagination cursor from previous response's meta.nextCursor
  * @param {string} [entityType] - Filter by element type: 'api', 'collection', or 'workspace'
- * @returns {Promise} Axios response with data.entities array and meta.count
- * 
+ * @returns {Promise} Axios response with entities array, meta.count, and meta.nextCursor for pagination
  * @example
  * // Get all entities with 'production' tag
- * const result = await getTagEntities('production');
+ * const response = await getTagEntities('production');
+ * console.log(response.data.entities);
  * 
  * @example
  * // Get only collections with 'needs-review' tag
- * const result = await getTagEntities('needs-review', null, null, null, 'collection');
+ * const response = await getTagEntities('needs-review', null, null, null, 'collection');
  * 
  * @example
  * // Get entities with pagination
- * const result = await getTagEntities('api-v2', 20, 'desc', nextCursor);
+ * const response = await getTagEntities('api-v2', 20, 'desc', nextCursor);
+ * console.log(response.data.meta.nextCursor);
  */
 async function getTagEntities(slugId, limit = null, direction = null, cursor = null, entityType = null) {
   
