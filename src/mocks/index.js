@@ -8,7 +8,6 @@ const { buildQueryString, validateId } = require('../core/utils');
  * @param {string} [workspaceId] - Return only mock servers in the given workspace
  * @returns {Promise} Axios response
  */
- (teamId and workspaceId use ID)
 async function getMocks(teamId = null, workspaceId = null) {
   
   if (workspaceId !== null) {
@@ -32,7 +31,6 @@ async function getMocks(teamId = null, workspaceId = null) {
  * @param {string} workspaceId - A workspace ID in which to create the mock server (required)
  * @returns {Promise} Axios response
  */
- (workspaceId uses ID)
 async function createMock(mockData, workspaceId) {
   validateId(workspaceId, 'workspaceId');
 
@@ -51,7 +49,6 @@ async function createMock(mockData, workspaceId) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function getMock(mockId) {
   validateId(mockId, 'mockId');
 
@@ -67,7 +64,6 @@ async function getMock(mockId) {
  * @param {Object} mockData - The mock object containing collection (required) and optional fields
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function updateMock(mockId, mockData) {
   validateId(mockId, 'mockId');
 
@@ -82,7 +78,6 @@ async function updateMock(mockId, mockData) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function deleteMock(mockId) {
   validateId(mockId, 'mockId');
 
@@ -108,7 +103,6 @@ async function deleteMock(mockId) {
  * @param {string} [include] - Include call log records with header and body data (comma-separated values)
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function getMockCallLogs(
   mockId,
   limit = null,
@@ -150,7 +144,6 @@ async function getMockCallLogs(
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function createMockPublish(mockId) {
   validateId(mockId, 'mockId');
 
@@ -165,7 +158,6 @@ async function createMockPublish(mockId) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function getMockServerResponses(mockId) {
   validateId(mockId, 'mockId');
 
@@ -181,7 +173,6 @@ async function getMockServerResponses(mockId) {
  * @param {Object} serverResponseData - The server response object containing name and statusCode (required)
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function createMockServerResponse(mockId, serverResponseData) {
   validateId(mockId, 'mockId');
 
@@ -197,7 +188,6 @@ async function createMockServerResponse(mockId, serverResponseData) {
  * @param {string} serverResponseId - The server response's ID
  * @returns {Promise} Axios response
  */
- (mockId and serverResponseId use ID)
 async function getMockServerResponse(mockId, serverResponseId) {
   validateId(mockId, 'mockId');
   validateId(serverResponseId, 'serverResponseId');
@@ -215,7 +205,6 @@ async function getMockServerResponse(mockId, serverResponseId) {
  * @param {Object} serverResponseData - The server response object with fields to update
  * @returns {Promise} Axios response
  */
- (mockId and serverResponseId use ID)
 async function updateMockServerResponse(mockId, serverResponseId, serverResponseData) {
   validateId(mockId, 'mockId');
   validateId(serverResponseId, 'serverResponseId');
@@ -232,7 +221,6 @@ async function updateMockServerResponse(mockId, serverResponseId, serverResponse
  * @param {string} serverResponseId - The server response's ID
  * @returns {Promise} Axios response
  */
- (mockId and serverResponseId use ID)
 async function deleteMockServerResponse(mockId, serverResponseId) {
   validateId(mockId, 'mockId');
   validateId(serverResponseId, 'serverResponseId');
@@ -248,7 +236,6 @@ async function deleteMockServerResponse(mockId, serverResponseId) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
- (mockId uses ID)
 async function deleteMockUnpublish(mockId) {
   validateId(mockId, 'mockId');
 

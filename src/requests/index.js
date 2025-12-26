@@ -9,7 +9,6 @@ const { buildQueryString, validateId, validateUid } = require('../core/utils');
  * @param {string} [folderId] - The folder ID in which to create the request
  * @returns {Promise} Axios response
  */
- (collectionId and folderId use ID)
 async function createRequest(collectionId, requestData, folderId = null) {
   validateId(collectionId, 'collectionId');
   if (folderId !== null) {
@@ -35,7 +34,6 @@ async function createRequest(collectionId, requestData, folderId = null) {
  * @param {boolean} [populate] - If true, returns all of a request's contents
  * @returns {Promise} Axios response
  */
- (collectionId and requestId use ID)
 async function getRequest(collectionId, requestId, ids = null, uid = null, populate = null) {
   validateId(collectionId, 'collectionId');
   validateId(requestId, 'requestId');
@@ -59,7 +57,6 @@ async function getRequest(collectionId, requestId, ids = null, uid = null, popul
  * @param {Object} requestData - The request data to update (name, method, url, etc.)
  * @returns {Promise} Axios response
  */
- (collectionId and requestId use ID)
 async function updateRequest(collectionId, requestId, requestData) {
   validateId(collectionId, 'collectionId');
   validateId(requestId, 'requestId');
@@ -76,7 +73,6 @@ async function updateRequest(collectionId, requestId, requestData) {
  * @param {string} requestId - The request's ID
  * @returns {Promise} Axios response
  */
- (collectionId and requestId use ID)
 async function deleteRequest(collectionId, requestId) {
   validateId(collectionId, 'collectionId');
   validateId(requestId, 'requestId');
@@ -93,7 +89,6 @@ async function deleteRequest(collectionId, requestId) {
  * @param {string} requestUid - The request's UID (format: userId-requestId)
  * @returns {Promise} Axios response
  */
- (collectionUid and requestUid parameters)
 async function getRequestComments(collectionUid, requestUid) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(requestUid, 'requestUid');
@@ -111,7 +106,6 @@ async function getRequestComments(collectionUid, requestUid) {
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
- (collectionUid and requestUid parameters)
 async function createRequestComment(collectionUid, requestUid, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(requestUid, 'requestUid');
@@ -130,7 +124,6 @@ async function createRequestComment(collectionUid, requestUid, commentData) {
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
- (collectionUid and requestUid parameters), ID (commentId parameter)
 async function updateRequestComment(collectionUid, requestUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(requestUid, 'requestUid');
@@ -149,7 +142,6 @@ async function updateRequestComment(collectionUid, requestUid, commentId, commen
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
- (collectionUid and requestUid parameters), ID (commentId parameter)
 async function deleteRequestComment(collectionUid, requestUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(requestUid, 'requestUid');

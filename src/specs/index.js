@@ -9,7 +9,6 @@ const { buildQueryString, validateId, validateUid } = require('../core/utils');
  * @param {number} [limit] - The maximum number of rows to return in the response
  * @returns {Promise} Axios response
  */
- (workspaceId uses ID)
 async function getSpecs(workspaceId, cursor = null, limit = null) {
   validateId(workspaceId, 'workspaceId');
 
@@ -30,7 +29,6 @@ async function getSpecs(workspaceId, cursor = null, limit = null) {
  * @param {string} specId - The spec ID
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function getSpec(specId) {
   validateId(specId, 'specId');
 
@@ -48,7 +46,6 @@ async function getSpec(specId) {
  * @param {Array} files - A list of the specification's files and their contents
  * @returns {Promise} Axios response
  */
- (workspaceId uses ID)
 async function createSpec(workspaceId, name, type, files) {
   validateId(workspaceId, 'workspaceId');
 
@@ -72,7 +69,6 @@ async function createSpec(workspaceId, name, type, files) {
  * @param {string} name - The specification's name
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function modifySpec(specId, name) {
   validateId(specId, 'specId');
 
@@ -89,7 +85,6 @@ async function modifySpec(specId, name) {
  * @param {string} specId - The spec ID
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function deleteSpec(specId) {
   validateId(specId, 'specId');
 
@@ -104,7 +99,6 @@ async function deleteSpec(specId) {
  * @param {string} specId - The spec ID
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function getSpecDefinition(specId) {
   validateId(specId, 'specId');
 
@@ -119,7 +113,6 @@ async function getSpecDefinition(specId) {
  * @param {string} specId - The spec ID
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function getSpecFiles(specId) {
   validateId(specId, 'specId');
 
@@ -136,7 +129,6 @@ async function getSpecFiles(specId) {
  * @param {string} content - The file's stringified contents
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function createSpecFile(specId, path, content) {
   validateId(specId, 'specId');
 
@@ -155,7 +147,6 @@ async function createSpecFile(specId, path, content) {
  * @param {string} filePath - The path to the file
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function getSpecFile(specId, filePath) {
   validateId(specId, 'specId');
 
@@ -172,7 +163,6 @@ async function getSpecFile(specId, filePath) {
  * @param {Object} data - Update data (name, content, or type - only one property at a time)
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function modifySpecFile(specId, filePath, data) {
   validateId(specId, 'specId');
 
@@ -188,7 +178,6 @@ async function modifySpecFile(specId, filePath, data) {
  * @param {string} filePath - The path to the file
  * @returns {Promise} Axios response
  */
- (specId uses ID)
 async function deleteSpecFile(specId, filePath) {
   validateId(specId, 'specId');
 
@@ -206,7 +195,6 @@ async function deleteSpecFile(specId, filePath) {
  * @param {Object} [options] - Generation options
  * @returns {Promise} Axios response with taskId and url for polling
  */
- (specId uses ID)
 async function createSpecGeneration(specId, elementType, name = null, options = null) {
   validateId(specId, 'specId');
 
@@ -232,7 +220,6 @@ async function createSpecGeneration(specId, elementType, name = null, options = 
  * @param {string} taskId - The task ID (returned from async operations like createSpecGeneration)
  * @returns {Promise} Axios response with status and meta information
  */
- (specId and taskId use ID)
 async function getSpecTaskStatus(specId, taskId) {
   validateId(specId, 'specId');
   validateId(taskId, 'taskId');
@@ -251,7 +238,6 @@ async function getSpecTaskStatus(specId, taskId) {
  * @param {string} cursor - Pagination cursor for next set of results
  * @returns {Promise} Axios response with collections array and pagination metadata
  */
- (specId uses ID)
 async function getSpecGenerations(specId, elementType, limit = null, cursor = null) {
   validateId(specId, 'specId');
 
@@ -272,7 +258,6 @@ async function getSpecGenerations(specId, elementType, limit = null, cursor = nu
  * @param {string} collectionUid - The collection's unique ID (userId-collectionId)
  * @returns {Promise} Axios response with taskId and url
  */
- (specId uses ID), UID (collectionUid uses UID)
 async function syncSpecWithCollection(specId, collectionUid) {
   validateId(specId, 'specId');
   validateUid(collectionUid, 'collectionUid');
