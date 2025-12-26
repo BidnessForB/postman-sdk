@@ -10,9 +10,7 @@ const { buildQueryString, validateId } = require('../core/utils');
  */
 // REQUIRES: ID (teamId and workspaceId use ID)
 async function getMocks(teamId = null, workspaceId = null) {
-  if (teamId !== null) {
-    validateId(teamId, 'teamId');
-  }
+  
   if (workspaceId !== null) {
     validateId(workspaceId, 'workspaceId');
   }

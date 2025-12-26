@@ -16,7 +16,7 @@ function validateId(id, paramName) {
     throw new Error(`${paramName} is required`);
   }
   if (!idRegex.test(id)) {
-    throw new Error(`${paramName} must be a valid UUID format (e.g., '12345678-1234-1234-1234-123456789abc')`);
+    throw new Error(`${paramName} must be a valid ID format (e.g., 'cd5cb6e7-0a1e-4b82-a577-b2068a70f830')`);
   }
 }
 
@@ -31,7 +31,7 @@ function validateUid(uid, paramName) {
     throw new Error(`${paramName} is required`);
   }
   if (!uidRegex.test(uid)) {
-    throw new Error(`${paramName} must be a valid UID format (e.g., '12345678-12345678-1234-1234-1234-123456789abc')`);
+    throw new Error(`${paramName} must be a valid UID format (e.g., '11111122-cd5cb6e7-0a1e-4b82-a577-b2068a70f830')`);
   }
 }
 

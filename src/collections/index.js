@@ -245,7 +245,7 @@ async function createCollectionComment(collectionUid, commentData) {
 // REQUIRES: UID (collectionUid parameter), ID (commentId parameter)
 async function updateCollectionComment(collectionUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
-  validateId(commentId, 'commentId');
+  
   
   const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
@@ -262,7 +262,7 @@ async function updateCollectionComment(collectionUid, commentId, commentData) {
 // REQUIRES: UID (collectionUid parameter), ID (commentId parameter)
 async function deleteCollectionComment(collectionUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
-  validateId(commentId, 'commentId');
+  
   
   const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);
@@ -317,7 +317,7 @@ async function createFolderComment(collectionUid, folderUid, commentData) {
 async function updateFolderComment(collectionUid, folderUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
-  validateId(commentId, 'commentId');
+  //
   
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
@@ -336,7 +336,7 @@ async function updateFolderComment(collectionUid, folderUid, commentId, commentD
 async function deleteFolderComment(collectionUid, folderUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
-  validateId(commentId, 'commentId');
+  
   
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);

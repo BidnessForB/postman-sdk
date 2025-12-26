@@ -1,4 +1,10 @@
 const axios = require('axios');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
+
+// Test constants
+const DEFAULT_COLLECTION_UID = DEFAULT_UID;
+const DEFAULT_REQUEST_UID = '12345678-abcdef12-1234-1234-1234-123456789abc';
+const DEFAULT_COMMENT_ID = DEFAULT_ID;
 const {
   createRequest,
   getRequest,
@@ -679,35 +685,21 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
 
-      const result = await getRequestComments(userId, collectionId, requestId);
+      const result = await getRequestComments(collectionId, requestId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/collections/${userId}-${collectionId}/requests/${userId}-${requestId}/comments`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/requests/${DEFAULT_UID}/comments`
         })
       );
       expect(result).toEqual(mockResponse);
     });
 
-    test('should build UID correctly', async () => {
-      const mockResponse = {
-        status: 200,
-        data: { data: [] }
-      };
-      axios.request.mockResolvedValue(mockResponse);
-
-      await getRequestComments('34829850', 'd4dd588d-111f-4651-b64d-463e4b093f4b', 'a1b2c3d4-1234-5678-9abc-def012345678');
-
-      expect(axios.request).toHaveBeenCalledWith(
-        expect.objectContaining({
-          url: 'https://api.getpostman.com/collections/34829850-d4dd588d-111f-4651-b64d-463e4b093f4b/requests/34829850-a1b2c3d4-1234-5678-9abc-def012345678/comments'
-        })
-      );
-    });
+    
 
     test('should include correct headers', async () => {
       const mockResponse = {
@@ -716,7 +708,7 @@ describe('requests unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getRequestComments(`${DEFAULT_USER_ID}`, `${DEFAULT_COLLECTION_ID}`, `${DEFAULT_REQUEST_ID}`);
+      await getRequestComments(`${DEFAULT_UID}`, `${DEFAULT_UID}`);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -747,18 +739,18 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentData = {
         body: 'Test comment'
       };
 
-      const result = await createRequestComment(userId, collectionId, requestId, commentData);
+      const result = await createRequestComment(collectionId, requestId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/collections/${userId}-${collectionId}/requests/${userId}-${requestId}/comments`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/requests/${DEFAULT_UID}/comments`,
           data: commentData
         })
       );
@@ -773,8 +765,8 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentData = {
         body: 'Test comment with @username',
         tags: {
@@ -785,7 +777,7 @@ describe('requests unit tests', () => {
         }
       };
 
-      await createRequestComment(userId, collectionId, requestId, commentData);
+      await createRequestComment(collectionId, requestId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -805,14 +797,14 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentData = {
         body: 'Reply comment',
         threadId: 999
       };
 
-      await createRequestComment(userId, collectionId, requestId, commentData);
+      await createRequestComment(collectionId, requestId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -834,9 +826,8 @@ describe('requests unit tests', () => {
       const commentData = { body: 'Test' };
 
       await createRequestComment(
-        `${DEFAULT_USER_ID}`,
-        `${DEFAULT_COLLECTION_ID}`,
-        `${DEFAULT_REQUEST_ID}`,
+        `${DEFAULT_UID}`,
+        `${DEFAULT_UID}`,
         commentData
       );
 
@@ -869,19 +860,19 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentId = '1';
       const commentData = {
         body: 'Updated comment'
       };
 
-      const result = await updateRequestComment(userId, collectionId, requestId, commentId, commentData);
+      const result = await updateRequestComment(collectionId, requestId, commentId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/collections/${userId}-${collectionId}/requests/${userId}-${requestId}/comments/${commentId}`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/requests/${DEFAULT_UID}/comments/${commentId}`,
           data: commentData
         })
       );
@@ -896,8 +887,8 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentId = '1';
       const commentData = {
         body: 'Updated with @newuser',
@@ -909,7 +900,7 @@ describe('requests unit tests', () => {
         }
       };
 
-      await updateRequestComment(userId, collectionId, requestId, commentId, commentData);
+      await updateRequestComment(collectionId, requestId, commentId, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -932,7 +923,7 @@ describe('requests unit tests', () => {
 
       const commentData = { body: 'Updated' };
 
-      await updateRequestComment(`${DEFAULT_USER_ID}`, `${DEFAULT_COLLECTION_ID}`, `${DEFAULT_REQUEST_ID}`, '1', commentData);
+      await updateRequestComment(`${DEFAULT_UID}`, `${DEFAULT_UID}`, '1', commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -954,16 +945,16 @@ describe('requests unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const userId = DEFAULT_USER_ID;
-      const collectionId = DEFAULT_COLLECTION_ID;
-      const requestId = DEFAULT_REQUEST_ID;
+      const collectionId = DEFAULT_UID;
+      const requestId = DEFAULT_UID;
       const commentId = '1';
 
-      const result = await deleteRequestComment(userId, collectionId, requestId, commentId);
+      const result = await deleteRequestComment(collectionId, requestId, commentId);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/collections/${DEFAULT_USER_ID}-${DEFAULT_COLLECTION_ID}/requests/${DEFAULT_USER_ID}-${DEFAULT_REQUEST_ID}/comments/${commentId}`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/requests/${DEFAULT_UID}/comments/${commentId}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -978,7 +969,7 @@ describe('requests unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteRequestComment(`${DEFAULT_USER_ID}`, `${DEFAULT_COLLECTION_ID}`, `${DEFAULT_REQUEST_ID}`, '1');
+      await deleteRequestComment(`${DEFAULT_UID}`, `${DEFAULT_UID}`, '1');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

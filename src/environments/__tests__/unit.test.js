@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 const {
   getEnvironments,
   createEnvironment,
@@ -14,9 +15,7 @@ jest.mock('../../core/config', () => ({
 }));
 
 describe('environments unit tests', () => {
-  const DEFAULT_ENVIRONMENT_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
-  const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
-
+  
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -28,10 +27,10 @@ describe('environments unit tests', () => {
         data: {
           environments: [
             {
-              id: DEFAULT_ENVIRONMENT_ID,
+              id: DEFAULT_ID,
               name: 'Test Environment',
               owner: '12345678',
-              uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+              uid: `12345678-${DEFAULT_ID}`
             }
           ]
         }
@@ -56,11 +55,11 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getEnvironments(DEFAULT_WORKSPACE_ID);
+      await getEnvironments(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_ID}`
         })
       );
     });
@@ -91,9 +90,9 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             name: 'Test Environment',
-            uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+            uid: `12345678-${DEFAULT_ID}`
           }
         }
       };
@@ -130,7 +129,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             name: 'Test Environment'
           }
         }
@@ -139,11 +138,11 @@ describe('environments unit tests', () => {
 
       const environmentData = { name: 'Test Environment' };
 
-      await createEnvironment(environmentData, DEFAULT_WORKSPACE_ID);
+      await createEnvironment(environmentData, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/environments?workspace=${DEFAULT_ID}`
         })
       );
     });
@@ -174,7 +173,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             name: 'Test Environment',
             owner: '12345678',
             values: [
@@ -190,16 +189,16 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getEnvironment(DEFAULT_ENVIRONMENT_ID);
+      const result = await getEnvironment(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`
+          url: `https://api.getpostman.com/environments/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
-      expect(result.data.environment.id).toBe(DEFAULT_ENVIRONMENT_ID);
+      expect(result.data.environment.id).toBe(DEFAULT_ID);
     });
 
     test('should include correct headers', async () => {
@@ -209,7 +208,7 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getEnvironment(DEFAULT_ENVIRONMENT_ID);
+      await getEnvironment(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -228,7 +227,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             name: 'Updated Environment',
             owner: '12345678'
           }
@@ -244,12 +243,12 @@ describe('environments unit tests', () => {
         }
       ];
 
-      const result = await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+      const result = await modifyEnvironment(DEFAULT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'patch',
-          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`,
+          url: `https://api.getpostman.com/environments/${DEFAULT_ID}`,
           data: patchOperations
         })
       );
@@ -261,7 +260,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             values: [
               {
                 key: 'NEW_KEY',
@@ -288,7 +287,7 @@ describe('environments unit tests', () => {
         }
       ];
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+      await modifyEnvironment(DEFAULT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -302,7 +301,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             values: [
               {
                 key: 'EXISTING_KEY',
@@ -324,7 +323,7 @@ describe('environments unit tests', () => {
         }
       ];
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+      await modifyEnvironment(DEFAULT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -338,7 +337,7 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
+            id: DEFAULT_ID,
             values: []
           }
         }
@@ -352,7 +351,7 @@ describe('environments unit tests', () => {
         }
       ];
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+      await modifyEnvironment(DEFAULT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -376,7 +375,7 @@ describe('environments unit tests', () => {
         }
       ];
 
-      await modifyEnvironment(DEFAULT_ENVIRONMENT_ID, patchOperations);
+      await modifyEnvironment(DEFAULT_ID, patchOperations);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -395,19 +394,19 @@ describe('environments unit tests', () => {
         status: 200,
         data: {
           environment: {
-            id: DEFAULT_ENVIRONMENT_ID,
-            uid: `12345678-${DEFAULT_ENVIRONMENT_ID}`
+            id: DEFAULT_ID,
+            uid: `12345678-${DEFAULT_ID}`
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteEnvironment(DEFAULT_ENVIRONMENT_ID);
+      const result = await deleteEnvironment(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/environments/${DEFAULT_ENVIRONMENT_ID}`
+          url: `https://api.getpostman.com/environments/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -420,7 +419,7 @@ describe('environments unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteEnvironment(DEFAULT_ENVIRONMENT_ID);
+      await deleteEnvironment(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

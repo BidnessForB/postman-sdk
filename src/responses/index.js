@@ -132,7 +132,7 @@ async function createResponseComment(collectionUid, responseUid, commentData) {
 async function updateResponseComment(collectionUid, responseUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');
-  validateId(commentId, 'commentId');
+  
   
   const endpoint = `/collections/${collectionUid}/responses/${responseUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
@@ -151,7 +151,7 @@ async function updateResponseComment(collectionUid, responseUid, commentId, comm
 async function deleteResponseComment(collectionUid, responseUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');
-  validateId(commentId, 'commentId');
+  
   
   const endpoint = `/collections/${collectionUid}/responses/${responseUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);

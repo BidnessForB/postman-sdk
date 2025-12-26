@@ -25,7 +25,7 @@ const { buildQueryString, validateId } = require('../core/utils');
  */
 // REQUIRES: ID (slugId uses ID)
 async function getTagEntities(slugId, limit = null, direction = null, cursor = null, entityType = null) {
-  validateId(slugId, 'slugId');
+  
 
   const endpoint = `/tags/${slugId}/entities`;
   const queryParams = {

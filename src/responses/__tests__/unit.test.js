@@ -1,4 +1,8 @@
 const axios = require('axios');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../core/__tests__/utils.unit.test');
+
+// Test constants
+const DEFAULT_COMMENT_ID = DEFAULT_ID;
 const {
   createResponse,
   getResponse,
@@ -16,9 +20,6 @@ jest.mock('../../core/config', () => ({
   baseUrl: 'https://api.getpostman.com'
 }));
 
-const DEFAULT_COLLECTION_ID = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-const DEFAULT_REQUEST_ID = 'a1b2c3d4-5678-90ab-cdef-1234567890ab';
-const DEFAULT_RESPONSE_ID = 'a1e2c3d4-5678-90ab-cdef-1234567890ab';
 const DEFAULT_USER_ID = '12345';
 
 describe('responses unit tests', () => {
@@ -31,9 +32,9 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: DEFAULT_RESPONSE_ID,
+            id: DEFAULT_UID,
             name: 'Success Response',
             code: 200
           }
@@ -53,13 +54,13 @@ describe('responses unit tests', () => {
         ]
       };
 
-      const result = await createResponse(DEFAULT_COLLECTION_ID, DEFAULT_REQUEST_ID, responseData);
+      const result = await createResponse(DEFAULT_ID, DEFAULT_ID, responseData);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('post');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses?request=${DEFAULT_REQUEST_ID}`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses?request=${DEFAULT_ID}`);
       expect(axiosConfig.data).toEqual(responseData);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ describe('responses unit tests', () => {
         code: 400
       };
 
-      await expect(createResponse(DEFAULT_COLLECTION_ID, DEFAULT_REQUEST_ID, responseData))
+      await expect(createResponse(DEFAULT_ID, DEFAULT_ID, responseData))
         .rejects.toThrow('API Error');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -93,9 +94,9 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: DEFAULT_RESPONSE_ID,
+            id: DEFAULT_UID,
             name: 'Test Response',
             code: 200
           }
@@ -103,13 +104,13 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID);
+      const result = await getResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('get');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}`);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
         'X-API-Key': 'test-api-key'
@@ -121,22 +122,22 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: DEFAULT_RESPONSE_ID,
-            request: DEFAULT_REQUEST_ID
+            id: DEFAULT_UID,
+            request: DEFAULT_ID
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, true);
+      const result = await getResponse(DEFAULT_ID, DEFAULT_ID, true);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('get');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}?ids=true`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}?ids=true`);
       expect(result).toBe(mockResponse);
     });
 
@@ -144,22 +145,22 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: `${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}`,
-            request: `${DEFAULT_USER_ID}-${DEFAULT_REQUEST_ID}`
+            id: `${DEFAULT_UID}`,
+            request: `${DEFAULT_UID}`
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, null, true);
+      const result = await getResponse(DEFAULT_ID, DEFAULT_ID, null, true);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('get');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}?uid=true`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}?uid=true`);
       expect(result).toBe(mockResponse);
     });
 
@@ -167,9 +168,9 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: DEFAULT_RESPONSE_ID,
+            id: DEFAULT_UID,
             name: 'Test Response',
             code: 200,
             body: '{"status": "success"}',
@@ -179,13 +180,13 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, null, null, true);
+      const result = await getResponse(DEFAULT_ID, DEFAULT_ID, null, true);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('get');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}?populate=true`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}?uid=true`);
       expect(result).toBe(mockResponse);
     });
 
@@ -193,9 +194,9 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: `${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}`,
+            id: `${DEFAULT_UID}`,
             name: 'Test Response',
             code: 200
           }
@@ -203,7 +204,7 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, true, true, true);
+      const result = await getResponse(DEFAULT_ID, DEFAULT_ID, true, true, true);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
@@ -223,7 +224,7 @@ describe('responses unit tests', () => {
       };
       axios.request.mockRejectedValue(mockError);
 
-      await expect(getResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID))
+      await expect(getResponse(DEFAULT_ID, DEFAULT_ID))
         .rejects.toThrow('Not Found');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -235,9 +236,9 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           data: {
-            id: DEFAULT_RESPONSE_ID,
+            id: DEFAULT_UID,
             name: 'Updated Response',
             code: 201
           }
@@ -251,13 +252,13 @@ describe('responses unit tests', () => {
         body: '{"status": "created"}'
       };
 
-      const result = await updateResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, responseData);
+      const result = await updateResponse(DEFAULT_ID, DEFAULT_ID, responseData);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('put');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}`);
       expect(axiosConfig.data).toEqual(responseData);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
@@ -278,7 +279,7 @@ describe('responses unit tests', () => {
         name: 'Invalid Response'
       };
 
-      await expect(updateResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, responseData))
+      await expect(updateResponse(DEFAULT_ID,DEFAULT_ID, responseData))
         .rejects.toThrow('Validation Error');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -290,7 +291,7 @@ describe('responses unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          model_id: DEFAULT_RESPONSE_ID,
+          model_id: DEFAULT_UID,
           meta: {
             model: 'response',
             action: 'delete'
@@ -299,13 +300,13 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID);
+      const result = await deleteResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('delete');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_RESPONSE_ID}`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_ID}/responses/${DEFAULT_ID}`);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
         'X-API-Key': 'test-api-key'
@@ -321,7 +322,7 @@ describe('responses unit tests', () => {
       };
       axios.request.mockRejectedValue(mockError);
 
-      await expect(deleteResponse(DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID))
+      await expect(deleteResponse(DEFAULT_ID, DEFAULT_ID))
         .rejects.toThrow('Not Found');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -345,13 +346,13 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getResponseComments(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID);
+      const result = await getResponseComments(DEFAULT_UID, DEFAULT_UID);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('get');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_USER_ID}-${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}/comments`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_UID}/responses/${DEFAULT_UID}/comments`);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
         'X-API-Key': 'test-api-key'
@@ -367,7 +368,7 @@ describe('responses unit tests', () => {
       };
       axios.request.mockRejectedValue(mockError);
 
-      await expect(getResponseComments(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID))
+      await expect(getResponseComments(DEFAULT_UID, DEFAULT_UID))
         .rejects.toThrow('Not Found');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -393,13 +394,13 @@ describe('responses unit tests', () => {
         body: 'New comment on response'
       };
 
-      const result = await createResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, commentData);
+      const result = await createResponseComment(DEFAULT_UID, DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('post');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_USER_ID}-${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}/comments`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_UID}/responses/${DEFAULT_UID}/comments`);
       expect(axiosConfig.data).toEqual(commentData);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
@@ -432,7 +433,7 @@ describe('responses unit tests', () => {
         }
       };
 
-      const result = await createResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, commentData);
+      const result = await createResponseComment(DEFAULT_UID, DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
@@ -453,7 +454,7 @@ describe('responses unit tests', () => {
         body: 'Invalid comment'
       };
 
-      await expect(createResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, commentData))
+      await expect(createResponseComment(DEFAULT_UID, DEFAULT_UID, commentData))
         .rejects.toThrow('Validation Error');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -479,13 +480,13 @@ describe('responses unit tests', () => {
         body: 'Updated comment on response'
       };
 
-      const result = await updateResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, '12345', commentData);
+      const result = await updateResponseComment(DEFAULT_UID, DEFAULT_UID, '12345', commentData);
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('put');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_USER_ID}-${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}/comments/12345`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_UID}/responses/${DEFAULT_UID}/comments/12345`);
       expect(axiosConfig.data).toEqual(commentData);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
@@ -506,7 +507,7 @@ describe('responses unit tests', () => {
         body: 'Updated comment'
       };
 
-      await expect(updateResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, '12345', commentData))
+      await expect(updateResponseComment(DEFAULT_UID, DEFAULT_UID, '12345', commentData))
         .rejects.toThrow('Not Found');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
@@ -521,13 +522,13 @@ describe('responses unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, '12345');
+      const result = await deleteResponseComment(DEFAULT_UID, DEFAULT_UID, '12345');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
       const axiosConfig = axios.request.mock.calls[0][0];
       
       expect(axiosConfig.method).toBe('delete');
-      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_USER_ID}-${DEFAULT_COLLECTION_ID}/responses/${DEFAULT_USER_ID}-${DEFAULT_RESPONSE_ID}/comments/12345`);
+      expect(axiosConfig.url).toBe(`https://api.getpostman.com/collections/${DEFAULT_UID}/responses/${DEFAULT_UID}/comments/12345`);
       expect(axiosConfig.headers).toMatchObject({
         'Content-Type': 'application/json',
         'X-API-Key': 'test-api-key'
@@ -543,7 +544,7 @@ describe('responses unit tests', () => {
       };
       axios.request.mockRejectedValue(mockError);
 
-      await expect(deleteResponseComment(DEFAULT_USER_ID, DEFAULT_COLLECTION_ID, DEFAULT_RESPONSE_ID, '12345'))
+      await expect(deleteResponseComment(DEFAULT_UID, DEFAULT_UID, '12345'))
         .rejects.toThrow('Not Found');
 
       expect(axios.request).toHaveBeenCalledTimes(1);
