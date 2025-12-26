@@ -1,16 +1,21 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, validateId } = require('../core/utils');
 
 /**
  * Gets all environments
  * Postman API endpoint and method: GET /environments
- * @param {string} [workspace] - Return only results found in the given workspace ID
+ * @param {string} [workspaceId] - Return only results found in the given workspace ID
  * @returns {Promise} Axios response
  */
-async function getEnvironments(workspace = null) {
+// REQUIRES: ID (workspaceId uses ID)
+async function getEnvironments(workspaceId = null) {
+  if (workspaceId !== null) {
+    validateId(workspaceId, 'workspaceId');
+  }
+
   const endpoint = '/environments';
   const queryParams = {
-    workspace
+    workspace: workspaceId
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
   const config = buildAxiosConfig('get', fullEndpoint);
@@ -21,13 +26,18 @@ async function getEnvironments(workspace = null) {
  * Creates a new environment
  * Postman API endpoint and method: POST /environments
  * @param {Object} environmentData - The environment object containing name and optional values
- * @param {string} [workspace] - A workspace ID in which to create the environment
+ * @param {string} [workspaceId] - A workspace ID in which to create the environment
  * @returns {Promise} Axios response
  */
-async function createEnvironment(environmentData, workspace = null) {
+// REQUIRES: ID (workspaceId uses ID)
+async function createEnvironment(environmentData, workspaceId = null) {
+  if (workspaceId !== null) {
+    validateId(workspaceId, 'workspaceId');
+  }
+
   const endpoint = '/environments';
   const queryParams = {
-    workspace
+    workspace: workspaceId
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
   const config = buildAxiosConfig('post', fullEndpoint, { environment: environmentData });
@@ -40,7 +50,10 @@ async function createEnvironment(environmentData, workspace = null) {
  * @param {string} environmentId - The environment's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (environmentId uses ID)
 async function getEnvironment(environmentId) {
+  validateId(environmentId, 'environmentId');
+
   const endpoint = `/environments/${environmentId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -74,7 +87,10 @@ async function getEnvironment(environmentId) {
  *   { op: 'remove', path: '/values/2' }
  * ]);
  */
+// REQUIRES: ID (environmentId uses ID)
 async function modifyEnvironment(environmentId, patchOperations) {
+  validateId(environmentId, 'environmentId');
+
   const endpoint = `/environments/${environmentId}`;
   const config = buildAxiosConfig('patch', endpoint, patchOperations);
   return await executeRequest(config);
@@ -86,7 +102,10 @@ async function modifyEnvironment(environmentId, patchOperations) {
  * @param {string} environmentId - The environment's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (environmentId uses ID)
 async function deleteEnvironment(environmentId) {
+  validateId(environmentId, 'environmentId');
+
   const endpoint = `/environments/${environmentId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);

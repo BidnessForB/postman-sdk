@@ -13,7 +13,7 @@ const {
   getCollectionGenerations
 } = require('../../collections');
 const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
-const { buildUid } = require('../../core/utils');
+
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
 describe('transformations functional tests', () => {
@@ -656,13 +656,13 @@ describe('transformations functional tests', () => {
       expect(userId).toBeDefined();
 
       // Build the collection UID (userId-collectionId)
-      const collectionUid = buildUid(userId, srcCollectionId);
+      
 
-      console.log(`Attempting to sync spec ${genSpecId} with collection ${collectionUid}`);
+      console.log(`Attempting to sync spec ${genSpecId} with collection ${srcCollectionId}`);
 
       let result;
       try {
-        result = await syncSpecWithCollection(genSpecId, collectionUid);
+        result = await syncSpecWithCollection(genSpecId, srcCollectionId);
       } catch (err) {
         // Accept 400/404 responses as known limitations
         if (err.message && (err.message.includes('Request failed with status code 400') || err.message.includes('Request failed with status code 404'))) {
@@ -705,10 +705,10 @@ describe('transformations functional tests', () => {
 
       
 
-      const collectionUid = buildUid(userId, srcCollectionId);
+      
 
       await expect(
-        syncSpecWithCollection(fakeSpecId, collectionUid)
+        syncSpecWithCollection(fakeSpecId, srcCollectionId)
       ).rejects.toThrow();
     });
     });

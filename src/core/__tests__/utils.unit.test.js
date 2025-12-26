@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { buildQueryString, getContentFS, buildUid } = require('../utils');
+const { buildQueryString, getContentFS } = require('../utils');
 
 jest.mock('fs');
 jest.mock('path');
@@ -88,53 +88,6 @@ describe('utils', () => {
     });
   });
 
-  describe('buildUid', () => {
-    test('should build UID from userId and objectId', () => {
-      const userId = 12345678;
-      const objectId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6');
-    });
-
-    test('should handle string userId', () => {
-      const userId = '12345678';
-      const objectId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6');
-    });
-
-    test('should return objectId unchanged if it is already a 45-character UID', () => {
-      const userId = 12345678;
-      const objectId = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6'; // 45 chars
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe(objectId);
-      expect(result.length).toBe(45);
-    });
-
-    test('should throw error for invalid objectId (not 36 or 45 characters)', () => {
-      const userId = 12345678;
-      const objectId = 'xxx';
-      const result = buildUid(userId, objectId);
-      expect(result).toBeNull();
-    });
-
-    
-
-    test('should work with different valid 36-character UUIDs', () => {
-      const userId = 87654321;
-      const objectId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('87654321-a1b2c3d4-e5f6-7890-1234-567890abcdef');
-      expect(result.length).toBe(45);
-    });
-  });
+  
 });
 

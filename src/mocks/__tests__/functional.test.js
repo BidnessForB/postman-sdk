@@ -15,7 +15,7 @@ const {
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
-const { buildUid } = require('../../core/utils');
+
 
 describe('Mocks Functional Tests', () => {
   let persistedIds;
@@ -33,7 +33,7 @@ describe('Mocks Functional Tests', () => {
     const mockName = `Test Mock ${Date.now()}`;
     const mockData = {
       name: mockName,
-      collection: buildUid(persistedIds.userId, persistedIds.collection.id),
+      collection: persistedIds.collection.id,
       private: false
     };
 

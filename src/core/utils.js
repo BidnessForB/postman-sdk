@@ -1,6 +1,40 @@
 const fs = require('fs');
 const path = require('path');
 
+// Regex patterns for ID validation
+const idRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uidRegex = /^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Validates a standard ID (UUID format)
+ * @param {string} id - The ID to validate
+ * @param {string} paramName - The parameter name for error messages
+ * @throws {Error} If the ID is invalid
+ */
+function validateId(id, paramName) {
+  if (!id) {
+    throw new Error(`${paramName} is required`);
+  }
+  if (!idRegex.test(id)) {
+    throw new Error(`${paramName} must be a valid UUID format (e.g., '12345678-1234-1234-1234-123456789abc')`);
+  }
+}
+
+/**
+ * Validates a UID (userId-UUID format)
+ * @param {string} uid - The UID to validate
+ * @param {string} paramName - The parameter name for error messages
+ * @throws {Error} If the UID is invalid
+ */
+function validateUid(uid, paramName) {
+  if (!uid) {
+    throw new Error(`${paramName} is required`);
+  }
+  if (!uidRegex.test(uid)) {
+    throw new Error(`${paramName} must be a valid UID format (e.g., '12345678-12345678-1234-1234-1234-123456789abc')`);
+  }
+}
+
 /**
  * Builds a query string from parameters object
  * @param {Object} params - Object with query parameters
@@ -34,23 +68,23 @@ function getContentFS(filePath) {
  * @returns {string} The UID in format: userId-objectId
  */
 function buildUid(userId, objectId) {
-  const idRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const uuidWithPrefixRegex = /^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-// Test it
-if (idRegex.test(objectId)) {
+  // If objectId is already a UID, return it as-is
+  if (uidRegex.test(objectId)) {
+    return objectId;
+  }
+  
+  // Validate the objectId is a valid UUID
+  validateId(objectId, 'objectId');
+  
+  // Build and return the UID
   return `${userId}-${objectId}`;
 }
-else if(uuidWithPrefixRegex.test(objectId)) {
-  return objectId;
-}
-else {
-  return null;
-}
-}
+
 
 module.exports = {
   buildQueryString,
   getContentFS,
-  buildUid
+  buildUid,
+  validateId,
+  validateUid
 };
