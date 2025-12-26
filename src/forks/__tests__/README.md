@@ -1,11 +1,23 @@
-# Forks Functional Tests
+# Forks Tests
 
-This directory contains functional tests for fork operations in the Postman SDK.
+This directory contains unit and functional tests for fork operations in the Postman SDK.
 
 ## Structure
 
+### `/collections/unit.test.js`
+Unit tests for collection fork operations using mocked axios:
+- `getCollectionForks()` - Get all forked collections
+- `createCollectionFork()` - Create a fork from a collection
+- `mergeCollectionFork()` - Merge a fork back to its parent
+
+**Test Coverage:**
+- Query parameter handling (cursor, direction, limit)
+- Request body validation
+- Header validation
+- Strategy parameter handling (default, deleteSource)
+
 ### `/collections/functional.test.js`
-Tests for collection fork operations:
+Functional tests for collection fork operations:
 - `getCollectionForks()` - Get all forked collections
 - `createCollectionFork()` - Create a fork from a collection
 - `mergeCollectionFork()` - Merge a fork back to its parent
@@ -24,14 +36,24 @@ Tests for environment fork operations (to be implemented):
 
 ## Running Tests
 
-Run all fork tests:
+Run all fork tests (unit and functional):
 ```bash
 npm test -- forks
 ```
 
-Run only collection fork tests:
+Run only collection fork tests (unit and functional):
 ```bash
 npm test -- forks/collections
+```
+
+Run only collection fork unit tests:
+```bash
+npm test -- forks/collections/unit
+```
+
+Run only collection fork functional tests:
+```bash
+npm test -- forks/collections/functional
 ```
 
 Run only environment fork tests:

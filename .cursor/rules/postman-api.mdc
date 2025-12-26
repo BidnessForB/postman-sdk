@@ -76,8 +76,7 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 9. DO NOT perform additional work.  
 10. Create unit, functional and end-to-end JEST tests modules for each api module
 11. Functional tests should NOT use mocks, they should use the actual SDK and make actual API calls.  
-12. End-to-end tests should: 
- - Run in the following order: 
+12. Functional tests should run in the following order: 
    - Create
    - get
    - modify
@@ -97,3 +96,4 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 17. Do not update documentation until told to do so
 18. DO NOT CREATE SUMMARY DOCUMENTS UNLESS INSTRUCTED TO SO SO
 19. Exclude all /api endpoints from API-ENDPOINTS-TODO.md
+20. Organize test suites as instructed.  

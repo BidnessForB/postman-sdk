@@ -81,13 +81,13 @@ describe('forks', () => {
       const result = await getCollectionForks();
 
       expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('forks');
-      expect(Array.isArray(result.data.forks)).toBe(true);
+      //expect(result.data).toHaveProperty('data');
+      expect(Array.isArray(result.data.data)).toBe(true);
 
-      console.log(`Found ${result.data.forks.length} fork(s)`);
+      console.log(`Found ${result.data.data.length} fork(s)`);
 
       // Verify our fork is in the list
-      const ourFork = result.data.forks.find(fork => 
+      const ourFork = result.data.data.find(fork => 
         fork.id === persistedIds.fork.collection.id
       );
       if (ourFork) {
@@ -101,21 +101,21 @@ describe('forks', () => {
       const result = await getCollectionForks(null, null, 5);
 
       expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('forks');
-      expect(Array.isArray(result.data.forks)).toBe(true);
-      expect(result.data.forks.length).toBeLessThanOrEqual(5);
+      expect(result.data).toHaveProperty('data');
+      expect(Array.isArray(result.data.data)).toBe(true);
+      expect(result.data.data.length).toBeLessThanOrEqual(5);
 
-      console.log(`Retrieved ${result.data.forks.length} fork(s) with limit of 5`);
+      console.log(`Retrieved ${result.data.data.length} fork(s) with limit of 5`);
     });
 
     test('4. getCollectionForks - should handle descending sort order', async () => {
       const result = await getCollectionForks(null, 'desc', 10);
 
       expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('forks');
-      expect(Array.isArray(result.data.forks)).toBe(true);
+      expect(result.data).toHaveProperty('data');
+      expect(Array.isArray(result.data.data)).toBe(true);
 
-      console.log(`Retrieved ${result.data.forks.length} fork(s) in descending order`);
+      console.log(`Retrieved ${result.data.data.length} fork(s) in descending order`);
     });
 
     test('5. mergeCollectionFork - should merge fork back to parent (default strategy)', async () => {
