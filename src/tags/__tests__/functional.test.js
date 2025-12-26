@@ -26,6 +26,7 @@ describe('tags functional tests', () => {
     
     if (persistedIds.collection && persistedIds.collection.id) {
       testCollectionId = persistedIds.collection.id;
+      testCollectionUid = persistedIds.collection.uid;
       console.log(`Using persisted collection ID: ${testCollectionId}`);
     } else {
       throw new Error('No collection ID found in test-ids.json. Run collection tests first.');
@@ -174,7 +175,7 @@ describe('tags functional tests', () => {
       expect(userId).toBeDefined();
       
       // Add a test tag to the collection
-      const result = await collections.updateCollectionTags(userId, testCollectionId, [
+      const result = await collections.updateCollectionTags(testCollectionUid, [
         { slug: collectionTagSlug }
       ]);
 
@@ -256,7 +257,7 @@ describe('tags functional tests', () => {
       const sharedTag = 'sdk-shared-test';
       
       await workspaces.updateWorkspaceTags(testWorkspaceId, [{ slug: sharedTag }]);
-      await collections.updateCollectionTags(userId, testCollectionId, [{ slug: sharedTag }]);
+      await collections.updateCollectionTags(testCollectionUid, [{ slug: sharedTag }]);
       
       // Wait a moment for tag indexing
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -282,7 +283,7 @@ describe('tags functional tests', () => {
       
       // Cleanup - remove shared tag
       await workspaces.updateWorkspaceTags(testWorkspaceId, []);
-      await collections.updateCollectionTags(userId, testCollectionId, []);
+      await collections.updateCollectionTags(testCollectionUid, []);
     });
 
     test('Cleanup - Remove tag from test collection', async () => {
@@ -290,7 +291,7 @@ describe('tags functional tests', () => {
       expect(userId).toBeDefined();
       
       // Remove all tags from the collection
-      const result = await collections.updateCollectionTags(userId, testCollectionId, []);
+      const result = await collections.updateCollectionTags(testCollectionUid, []);
 
       expect(result.status).toBe(200);
       expect(result.data.tags).toHaveLength(0);

@@ -4,6 +4,10 @@ const path = require('path');
 // Shared test IDs file location - accessible to all test modules
 const TEST_IDS_FILE = path.join(__dirname, 'test-ids.json');
 
+const DEFAULT_ID = 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
+const DEFAULT_UID = '34829850-bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
+
+
 /**
  * Load persisted test IDs from shared file
  * @returns {Object} Test IDs object
@@ -283,6 +287,8 @@ module.exports = {
   initializeUserId,
   retryWithBackoff,
   pollUntilComplete,
-  TEST_IDS_FILE
+  TEST_IDS_FILE, 
+  DEFAULT_ID,
+  DEFAULT_UID
 };
 

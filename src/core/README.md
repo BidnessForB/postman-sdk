@@ -58,51 +58,84 @@ const specContent = getContentFS('./my-api.yaml');
 console.log(specContent.content); // File contents as string
 ```
 
-### `buildUid(userId, objectId)`
+### `validateId(id, paramName)`
 
-Builds a UID (Unique Identifier) from a user ID and an object ID. UIDs are required for certain Postman API endpoints that operate on user-specific resources.
+Validates a standard ID (UUID format). Throws an error if the ID is invalid.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID
-- `objectId` (string) - The object's ID (e.g., collection ID, workspace ID)
+- `id` (string) - The ID to validate
+- `paramName` (string) - The parameter name for error messages
 
-**Returns:** `string|null` - The UID in format `userId-objectId`, or `null` if objectId is invalid
+**Returns:** `void` - No return value (throws error if invalid)
 
-**Behavior:**
-- **36-character UUID** (format: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`): Validates format and builds UID by prepending userId
-- **45-character UID** (format: `nnnnnnnnnn-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`): Already a UID, returns unchanged
-- **Invalid format**: Returns `null`
+**Throws:** `Error` - If the ID is missing or invalid
 
 **Validation:**
-- UUIDs must match regex: `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i`
+- IDs must match regex: `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i`
+
+**Example:**
+```javascript
+const { validateId } = require('./core/utils');
+
+try {
+  validateId('c6d2471c-3664-47b5-adc8-35d52484f2f6', 'collectionId');
+  console.log('Valid ID');
+} catch (error) {
+  console.error(error.message);
+}
+
+// Invalid ID - throws error
+try {
+  validateId('invalid-id', 'collectionId');
+} catch (error) {
+  console.error(error.message);
+  // "collectionId must be a valid ID format (e.g., 'cd5cb6e7-0a1e-4b82-a577-b2068a70f830')"
+}
+```
+
+### `validateUid(uid, paramName)`
+
+Validates a UID (userId-UUID format). Throws an error if the UID is invalid.
+
+**Parameters:**
+- `uid` (string) - The UID to validate
+- `paramName` (string) - The parameter name for error messages
+
+**Returns:** `void` - No return value (throws error if invalid)
+
+**Throws:** `Error` - If the UID is missing or invalid
+
+**Validation:**
 - UIDs must match regex: `/^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i`
 
-**Examples:**
+**Example:**
 ```javascript
-const { buildUid } = require('./core/utils');
+const { validateUid } = require('./core/utils');
 
-// Example 1: Build UID from user ID and collection ID (36-char UUID)
-const uid1 = buildUid(12345678, 'c6d2471c-3664-47b5-adc8-35d52484f2f6');
-console.log(uid1); // '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6'
+try {
+  validateUid('12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6', 'collectionUid');
+  console.log('Valid UID');
+} catch (error) {
+  console.error(error.message);
+}
 
-// Example 2: objectId is already a UID (45 chars) - returns unchanged
-const uid2 = buildUid(12345678, '87654321-c6d2471c-3664-47b5-adc8-35d52484f2f6');
-console.log(uid2); // '87654321-c6d2471c-3664-47b5-adc8-35d52484f2f6'
-
-// Example 3: Invalid objectId format - returns null
-const uid3 = buildUid(12345678, 'invalid-id');
-console.log(uid3); // null
-
-// Example 4: Non-hex characters in UUID - returns null
-const uid4 = buildUid(12345678, 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
-console.log(uid4); // null (x is not a valid hex digit)
+// Invalid UID - throws error
+try {
+  validateUid('invalid-uid', 'collectionUid');
+} catch (error) {
+  console.error(error.message);
+  // "collectionUid must be a valid UID format (e.g., '11111122-cd5cb6e7-0a1e-4b82-a577-b2068a70f830')"
+}
 ```
 
 **Usage in SDK:**
-The `buildUid()` function is used extensively in comment-related endpoints:
-- Collection comments: `/collections/{collectionUid}/comments`
-- Folder comments: `/collections/{collectionUid}/folders/{folderUid}/comments`
-- Request comments: `/collections/{collectionUid}/requests/{requestUid}/comments`
+The validation functions are used throughout the SDK to ensure IDs and UIDs are properly formatted before making API calls:
+- `validateId()` - Used for collection IDs, workspace IDs, spec IDs, etc.
+- `validateUid()` - Used for comment-related endpoints that require UIDs:
+  - Collection comments: `/collections/{collectionUid}/comments`
+  - Folder comments: `/collections/{collectionUid}/folders/{folderUid}/comments`
+  - Request comments: `/collections/{collectionUid}/requests/{requestUid}/comments`
+  - Response comments: `/collections/{collectionUid}/responses/{responseUid}/comments`
 
 ### `fixtures.js`
 Provides utilities for loading test fixture files for specs and API definitions.
@@ -202,12 +235,17 @@ npm test -- src/core/__tests__/fixtures.unit.test.js
   - Reading file content
   - Path resolution
   
-- ✅ `buildUid()` - 5 tests
-  - Building UID from numeric userId
-  - Building UID from string userId
-  - Handling pre-existing UIDs (45 chars)
-  - Rejecting invalid objectId formats
-  - Various valid UUID formats
+- ✅ `validateId()` - 4 tests
+  - Accepting valid UUID format
+  - Rejecting invalid ID formats
+  - Throwing errors with parameter name
+  - Handling missing/null IDs
+  
+- ✅ `validateUid()` - 4 tests
+  - Accepting valid UID format (userId-UUID)
+  - Rejecting invalid UID formats
+  - Throwing errors with parameter name
+  - Handling missing/null UIDs
 
 #### `request.js`
 - ✅ `buildAxiosConfig()` - 8 tests
@@ -273,23 +311,35 @@ These tests run actual file system operations (not mocked) to provide real-world
 
 ## Notes
 
-### UID Format
+### ID and UID Formats
 - **UUID (36 chars)**: Standard object ID format used by Postman API
+  - Format: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+  - Example: `c6d2471c-3664-47b5-adc8-35d52484f2f6`
 - **UID (45 chars)**: User-specific identifier format: `{userId}-{objectId}`
-- The 45-character UID format includes:
-  - 1-10 digit userId
-  - 1 hyphen separator
-  - 36-character UUID (8-4-4-4-12 format with hyphens)
+  - Format: `nnnnnnnnnn-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+  - Example: `12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6`
+  - Includes: 1-10 digit userId + hyphen + 36-character UUID
 
-### Error Handling
-- `buildUid()` returns `null` for invalid formats instead of throwing errors
-- Calling code should check for `null` returns and handle appropriately
-- This allows for graceful degradation when working with mixed ID formats
+### Building UIDs
+The SDK no longer provides a `buildUid()` helper function. You must construct UIDs manually using string concatenation:
+
+```javascript
+const userId = '12345678';
+const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+const collectionUid = `${userId}-${collectionId}`;
+// Result: '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6'
+```
+
+### Validation
+The SDK validates IDs and UIDs before making API calls:
+- `validateId()` - Validates 36-character UUIDs
+- `validateUid()` - Validates 45-character UIDs (userId-UUID format)
+- Both functions throw descriptive errors for invalid formats
 
 ### Validation Benefits
-The validation in `buildUid()` prevents:
-- Building UIDs from invalid IDs
-- Double-prepending user IDs to existing UIDs
+The validation functions prevent:
 - API errors from malformed identifiers
-- Accidental use of placeholder IDs (like 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')
+- Accidental use of placeholder IDs
+- Invalid ID/UID format combinations
+- Improved error messages with parameter names
 

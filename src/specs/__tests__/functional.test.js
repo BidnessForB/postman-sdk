@@ -16,7 +16,7 @@ const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 const { loadSpecFixture, getAllSpecFixtures } = require('./fixtures-loader');
-const { buildUid } = require('../../core/utils');
+
 
 // Add custom JEST matcher for YAML validation
 expect.extend({

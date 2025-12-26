@@ -6,6 +6,7 @@ const {
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('../../__tests__/test-helpers');
+const { DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 describe('collection comments functional tests (sequential flow)', () => {
   let testUserId;
@@ -37,10 +38,10 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('1. getCollectionComments - should retrieve comments (initially empty or with existing comments)', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
 
-    const result = await getCollectionComments(testUserId, collectionId);
+    const result = await getCollectionComments(collectionUid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -48,14 +49,14 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('2. createCollectionComment - should create a comment on the collection', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
 
     const commentData = {
       body: 'This is a test comment on the collection created by SDK functional tests'
     };
 
-    const result = await createCollectionComment(testUserId, collectionId, commentData);
+    const result = await createCollectionComment(collectionUid, commentData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -68,6 +69,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     if (!persistedIds.collection.thread) persistedIds.collection.thread = {};
     
     persistedIds.collection.comment.id = result.data.data.id;
+    persistedIds.collection.comment.uid = result.data.data.owner + '-' + result.data.data.id;
     persistedIds.collection.thread.id = result.data.data.threadId;
     persistedIds.collection.comment.createdAt = new Date().toISOString();
     
@@ -77,12 +79,12 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('3. getCollectionComments - should retrieve comments including the new one', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
     
     
 
-    const result = await getCollectionComments(testUserId, collectionId);
+    const result = await getCollectionComments(collectionUid);
 
     expect(result.status).toBe(200);
     expect(result.data.data.length).toBeGreaterThan(0);
@@ -93,8 +95,8 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('4. createCollectionCommentReply - should create a reply comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
     
     
 
@@ -105,7 +107,7 @@ describe('collection comments functional tests (sequential flow)', () => {
     };
 
     try {
-      const result = await createCollectionComment(testUserId, collectionId, replyData);
+      const result = await createCollectionComment(collectionUid, replyData);
 
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('data');
@@ -125,8 +127,8 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('5. updateCollectionComment - should update the comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
     
     
 
@@ -135,7 +137,7 @@ describe('collection comments functional tests (sequential flow)', () => {
       body: 'This is an updated test comment on the collection'
     };
 
-    const result = await updateCollectionComment(testUserId, collectionId, commentId, updatedData);
+    const result = await updateCollectionComment(collectionUid, commentId, updatedData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -143,13 +145,13 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('6. deleteCollectionComment - should delete the reply comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
     
     
 
     const replyCommentId = persistedIds.collection.comment.replyId;
-    const result = await deleteCollectionComment(testUserId, collectionId, replyCommentId);
+    const result = await deleteCollectionComment(collectionUid, replyCommentId);
 
     expect(result.status).toBe(204);
 
@@ -164,13 +166,13 @@ describe('collection comments functional tests (sequential flow)', () => {
   });
 
   test('7. deleteCollectionComment - should delete the main comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    expect(collectionId).toBeDefined();
+    const collectionUid = persistedIds.collection.uid;
+    expect(collectionUid).toBeDefined();
     
     
 
     const commentId = persistedIds.collection.comment.id;
-    const result = await deleteCollectionComment(testUserId, collectionId, commentId);
+    const result = await deleteCollectionComment(collectionUid, commentId);
 
     expect(result.status).toBe(204);
 
@@ -192,16 +194,16 @@ describe('collection comments functional tests (sequential flow)', () => {
     });
 
     test('should handle updating non-existent comment', async () => {
-      const collectionId = persistedIds.collection.id;
+      const collectionUid = persistedIds.collection.uid;
       const fakeId = '999999';
       const commentData = { body: 'Updated comment' };
-      await expect(updateCollectionComment(testUserId, collectionId, fakeId, commentData)).rejects.toThrow();
+      await expect(updateCollectionComment(collectionUid, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle deleting non-existent comment', async () => {
-      const collectionId = persistedIds.collection.id;
+      const collectionUid = persistedIds.collection.uid;
       const fakeId = '999999';
-      await expect(deleteCollectionComment(testUserId, collectionId, fakeId)).rejects.toThrow();
+      await expect(deleteCollectionComment(collectionUid, fakeId)).rejects.toThrow();
     });
   });
 });

@@ -1,5 +1,5 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, validateId } = require('../core/utils');
 
 /**
  * Gets Postman elements (entities) by a given tag
@@ -24,6 +24,8 @@ const { buildQueryString } = require('../core/utils');
  * const result = await getTagEntities('api-v2', 20, 'desc', nextCursor);
  */
 async function getTagEntities(slugId, limit = null, direction = null, cursor = null, entityType = null) {
+  
+
   const endpoint = `/tags/${slugId}/entities`;
   const queryParams = {
     limit,

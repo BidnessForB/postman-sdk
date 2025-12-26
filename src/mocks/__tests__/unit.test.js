@@ -21,13 +21,11 @@ jest.mock('../../core/config', () => ({
   baseUrl: 'https://api.getpostman.com'
 }));
 
-describe('mocks unit tests', () => {
-  const DEFAULT_MOCK_ID = 'e3d951bf-873f-49ac-a658-b2dcb91d3289';
-  const DEFAULT_COLLECTION_ID = '12ece9e1-2abf-4edc-8e34-de66e74114d2';
-  const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
-  const DEFAULT_TEAM_ID = '12345678';
-  const DEFAULT_SERVER_RESPONSE_ID = '965cdd16-fe22-4d96-a161-3d05490ac421';
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
+describe('mocks unit tests', () => {
+  const DEFAULT_TEAM_ID = '12345678';
+  
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -39,11 +37,11 @@ describe('mocks unit tests', () => {
         data: {
           mocks: [
             {
-              id: DEFAULT_MOCK_ID,
+              id: DEFAULT_ID,
               name: 'Test Mock',
               owner: DEFAULT_TEAM_ID,
-              uid: `${DEFAULT_TEAM_ID}-${DEFAULT_MOCK_ID}`,
-              collection: `${DEFAULT_TEAM_ID}-${DEFAULT_COLLECTION_ID}`
+              uid: `${DEFAULT_TEAM_ID}-${DEFAULT_ID}`,
+              collection: `${DEFAULT_TEAM_ID}-${DEFAULT_ID}`
             }
           ]
         }
@@ -84,11 +82,11 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMocks(null, DEFAULT_WORKSPACE_ID);
+      await getMocks(null, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/mocks?workspace=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/mocks?workspace=${DEFAULT_ID}`
         })
       );
     });
@@ -100,11 +98,11 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMocks(DEFAULT_TEAM_ID, DEFAULT_WORKSPACE_ID);
+      await getMocks(DEFAULT_TEAM_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/mocks?teamId=${DEFAULT_TEAM_ID}&workspace=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/mocks?teamId=${DEFAULT_TEAM_ID}&workspace=${DEFAULT_ID}`
         })
       );
     });
@@ -135,10 +133,10 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID,
+            id: DEFAULT_ID,
             name: 'Test Mock',
-            collection: DEFAULT_COLLECTION_ID,
-            uid: `${DEFAULT_TEAM_ID}-${DEFAULT_MOCK_ID}`
+            collection: DEFAULT_ID,
+            uid: `${DEFAULT_TEAM_ID}-${DEFAULT_ID}`
           }
         }
       };
@@ -146,16 +144,16 @@ describe('mocks unit tests', () => {
 
       const mockData = {
         name: 'Test Mock',
-        collection: DEFAULT_COLLECTION_ID,
+        collection: DEFAULT_ID,
         private: true
       };
 
-      const result = await createMock(mockData, DEFAULT_WORKSPACE_ID);
+      const result = await createMock(mockData, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/mocks?workspace=${DEFAULT_WORKSPACE_ID}`,
+          url: `https://api.getpostman.com/mocks?workspace=${DEFAULT_ID}`,
           data: {
             mock: mockData
           }
@@ -171,7 +169,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createMock({ collection: DEFAULT_COLLECTION_ID }, DEFAULT_WORKSPACE_ID);
+      await createMock({ collection: DEFAULT_ID }, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -190,25 +188,25 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID,
+            id: DEFAULT_ID,
             name: 'Test Mock',
             owner: DEFAULT_TEAM_ID,
-            collection: DEFAULT_COLLECTION_ID
+            collection: DEFAULT_ID
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getMock(DEFAULT_MOCK_ID);
+      const result = await getMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
-      expect(result.data.mock.id).toBe(DEFAULT_MOCK_ID);
+      expect(result.data.mock.id).toBe(DEFAULT_ID);
     });
 
     test('should include correct headers', async () => {
@@ -218,7 +216,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMock(DEFAULT_MOCK_ID);
+      await getMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -237,9 +235,9 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID,
+            id: DEFAULT_ID,
             name: 'Updated Mock',
-            collection: DEFAULT_COLLECTION_ID
+            collection: DEFAULT_ID
           }
         }
       };
@@ -247,16 +245,16 @@ describe('mocks unit tests', () => {
 
       const mockData = {
         name: 'Updated Mock',
-        collection: DEFAULT_COLLECTION_ID,
+        collection: DEFAULT_ID,
         private: false
       };
 
-      const result = await updateMock(DEFAULT_MOCK_ID, mockData);
+      const result = await updateMock(DEFAULT_ID, mockData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}`,
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}`,
           data: {
             mock: mockData
           }
@@ -272,7 +270,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await updateMock(DEFAULT_MOCK_ID, { collection: DEFAULT_COLLECTION_ID });
+      await updateMock(DEFAULT_ID, { collection: DEFAULT_ID });
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -291,19 +289,19 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID,
-            uid: `${DEFAULT_TEAM_ID}-${DEFAULT_MOCK_ID}`
+            id: DEFAULT_ID,
+            uid: `${DEFAULT_TEAM_ID}-${DEFAULT_ID}`
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteMock(DEFAULT_MOCK_ID);
+      const result = await deleteMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -316,7 +314,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteMock(DEFAULT_MOCK_ID);
+      await deleteMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -345,12 +343,12 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getMockCallLogs(DEFAULT_MOCK_ID);
+      const result = await getMockCallLogs(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/call-logs`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/call-logs`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -363,11 +361,11 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMockCallLogs(DEFAULT_MOCK_ID, 50);
+      await getMockCallLogs(DEFAULT_ID, 50);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/call-logs?limit=50`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/call-logs?limit=50`
         })
       );
     });
@@ -380,7 +378,7 @@ describe('mocks unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       await getMockCallLogs(
-        DEFAULT_MOCK_ID,
+        DEFAULT_ID,
         25,
         'cursor123',
         null,
@@ -443,7 +441,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMockCallLogs(DEFAULT_MOCK_ID);
+      await getMockCallLogs(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -462,18 +460,18 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID
+            id: DEFAULT_ID
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await createMockPublish(DEFAULT_MOCK_ID);
+      const result = await createMockPublish(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/publish`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/publish`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -486,7 +484,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createMockPublish(DEFAULT_MOCK_ID);
+      await createMockPublish(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -505,7 +503,7 @@ describe('mocks unit tests', () => {
         status: 200,
         data: [
           {
-            id: DEFAULT_SERVER_RESPONSE_ID,
+            id: DEFAULT_ID,
             name: 'Internal Server Error',
             statusCode: 500
           }
@@ -513,12 +511,12 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getMockServerResponses(DEFAULT_MOCK_ID);
+      const result = await getMockServerResponses(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/server-responses`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/server-responses`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -531,7 +529,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMockServerResponses(DEFAULT_MOCK_ID);
+      await getMockServerResponses(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -549,7 +547,7 @@ describe('mocks unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          id: DEFAULT_SERVER_RESPONSE_ID,
+          id: DEFAULT_ID,
           name: 'Internal Server Error',
           statusCode: 500,
           body: '{"message": "Something went wrong"}'
@@ -563,12 +561,12 @@ describe('mocks unit tests', () => {
         body: '{"message": "Something went wrong"}'
       };
 
-      const result = await createMockServerResponse(DEFAULT_MOCK_ID, serverResponseData);
+      const result = await createMockServerResponse(DEFAULT_ID, serverResponseData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/server-responses`,
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/server-responses`,
           data: {
             serverResponse: serverResponseData
           }
@@ -584,7 +582,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createMockServerResponse(DEFAULT_MOCK_ID, { name: 'Error', statusCode: 500 });
+      await createMockServerResponse(DEFAULT_ID, { name: 'Error', statusCode: 500 });
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -602,23 +600,23 @@ describe('mocks unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          id: DEFAULT_SERVER_RESPONSE_ID,
+          id: DEFAULT_ID,
           name: 'Internal Server Error',
           statusCode: 500
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getMockServerResponse(DEFAULT_MOCK_ID, DEFAULT_SERVER_RESPONSE_ID);
+      const result = await getMockServerResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/server-responses/${DEFAULT_SERVER_RESPONSE_ID}`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/server-responses/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
-      expect(result.data.id).toBe(DEFAULT_SERVER_RESPONSE_ID);
+      expect(result.data.id).toBe(DEFAULT_ID);
     });
 
     test('should include correct headers', async () => {
@@ -628,7 +626,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getMockServerResponse(DEFAULT_MOCK_ID, DEFAULT_SERVER_RESPONSE_ID);
+      await getMockServerResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -646,7 +644,7 @@ describe('mocks unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          id: DEFAULT_SERVER_RESPONSE_ID,
+          id: DEFAULT_ID,
           name: 'Service Unavailable',
           statusCode: 503
         }
@@ -659,15 +657,15 @@ describe('mocks unit tests', () => {
       };
 
       const result = await updateMockServerResponse(
-        DEFAULT_MOCK_ID,
-        DEFAULT_SERVER_RESPONSE_ID,
+        DEFAULT_ID,
+        DEFAULT_ID,
         serverResponseData
       );
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/server-responses/${DEFAULT_SERVER_RESPONSE_ID}`,
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/server-responses/${DEFAULT_ID}`,
           data: {
             serverResponse: serverResponseData
           }
@@ -683,7 +681,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await updateMockServerResponse(DEFAULT_MOCK_ID, DEFAULT_SERVER_RESPONSE_ID, { name: 'Updated' });
+      await updateMockServerResponse(DEFAULT_ID, DEFAULT_ID, { name: 'Updated' });
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -701,19 +699,19 @@ describe('mocks unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          id: DEFAULT_SERVER_RESPONSE_ID,
+          id: DEFAULT_ID,
           name: 'Service Unavailable',
           statusCode: 503
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteMockServerResponse(DEFAULT_MOCK_ID, DEFAULT_SERVER_RESPONSE_ID);
+      const result = await deleteMockServerResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/server-responses/${DEFAULT_SERVER_RESPONSE_ID}`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/server-responses/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -726,7 +724,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteMockServerResponse(DEFAULT_MOCK_ID, DEFAULT_SERVER_RESPONSE_ID);
+      await deleteMockServerResponse(DEFAULT_ID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -745,18 +743,18 @@ describe('mocks unit tests', () => {
         status: 200,
         data: {
           mock: {
-            id: DEFAULT_MOCK_ID
+            id: DEFAULT_ID
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteMockUnpublish(DEFAULT_MOCK_ID);
+      const result = await deleteMockUnpublish(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/mocks/${DEFAULT_MOCK_ID}/unpublish`
+          url: `https://api.getpostman.com/mocks/${DEFAULT_ID}/unpublish`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -769,7 +767,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteMockUnpublish(DEFAULT_MOCK_ID);
+      await deleteMockUnpublish(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

@@ -1,19 +1,19 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, validateId } = require('../core/utils');
 
 /**
  * Gets all workspaces
  * Postman API endpoint and method: GET /workspaces
  * @param {string} [type] - Filter by workspace type (personal, team, private, public, partner)
- * @param {number} [createdBy] - Return only workspaces created by a specific user ID
+ * @param {number} [createdByUserId] - Return only workspaces created by a specific user ID
  * @param {string} [include] - Include additional information (mocks:deactivated, scim)
  * @returns {Promise} Axios response
  */
-async function getWorkspaces(type = null, createdBy = null, include = null) {
+async function getWorkspaces(type = null, createdByUserId = null, include = null) {
   const endpoint = '/workspaces';
   const queryParams = {
     type,
-    createdBy,
+    createdBy: createdByUserId,
     include
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
@@ -30,6 +30,7 @@ async function getWorkspaces(type = null, createdBy = null, include = null) {
  * @param {string} [about] - A brief summary about the workspace
  * @returns {Promise} Axios response
  */
+// REQUIRES: N/A (creates new workspace, returns ID)
 async function createWorkspace(name, type, description = null, about = null) {
   const endpoint = '/workspaces';
   const workspace = {
@@ -54,6 +55,8 @@ async function createWorkspace(name, type, description = null, about = null) {
  * @returns {Promise} Axios response
  */
 async function getWorkspace(workspaceId, include = null) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = `/workspaces/${workspaceId}`;
   const queryParams = {
     include
@@ -76,6 +79,8 @@ async function getWorkspace(workspaceId, include = null) {
  * @returns {Promise} Axios response
  */
 async function updateWorkspace(workspaceId, name = null, type = null, description = null, about = null) {
+  validateId(workspaceId, 'workspaceId');
+
   // Fetch current workspace to get existing values
   const currentWorkspace = await getWorkspace(workspaceId);
   const current = currentWorkspace.data.workspace;
@@ -100,6 +105,8 @@ async function updateWorkspace(workspaceId, name = null, type = null, descriptio
  * @returns {Promise} Axios response
  */
 async function deleteWorkspace(workspaceId) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = `/workspaces/${workspaceId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -112,6 +119,8 @@ async function deleteWorkspace(workspaceId) {
  * @returns {Promise} Axios response
  */
 async function getWorkspaceTags(workspaceId) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = `/workspaces/${workspaceId}/tags`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -136,6 +145,8 @@ async function getWorkspaceTags(workspaceId) {
  * await updateWorkspaceTags(workspaceId, []);
  */
 async function updateWorkspaceTags(workspaceId, tags) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = `/workspaces/${workspaceId}/tags`;
   const config = buildAxiosConfig('put', endpoint, { tags });
   return await executeRequest(config);

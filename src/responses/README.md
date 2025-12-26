@@ -116,14 +116,13 @@ console.log('Deleted response:', response.data);
 
 ## Response Comments
 
-### `getResponseComments(userId, collectionId, responseId)`
+### `getResponseComments(collectionUid, responseUid)`
 
 Gets all comments left by users in a response.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID
-- `collectionId` (string) - The collection's ID
-- `responseId` (string) - The response's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `responseUid` (string) - The response's UID (format: `userId-responseId`)
 
 **Returns:** Promise<AxiosResponse>
 
@@ -131,24 +130,22 @@ Gets all comments left by users in a response.
 ```javascript
 const { responses } = require('@bidnessforb/postman-sdk');
 
-const userId = '12345678';
-const collectionId = 'abc-123-collection-id';
-const responseId = 'def-456-response-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const responseUid = '12345678-def-456-response-id';
 
-const response = await responses.getResponseComments(userId, collectionId, responseId);
+const response = await responses.getResponseComments(collectionUid, responseUid);
 console.log('Comments:', response.data.data);
 ```
 
-**Note:** This endpoint requires UIDs (userId-objectId format) and will automatically construct them.
+**Note:** This endpoint requires UIDs (format: `userId-objectId`). You must construct the UID by prepending the user ID to both the collection ID and response ID.
 
-### `createResponseComment(userId, collectionId, responseId, commentData)`
+### `createResponseComment(collectionUid, responseUid, commentData)`
 
 Creates a comment on a response.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID
-- `collectionId` (string) - The collection's ID
-- `responseId` (string) - The response's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `responseUid` (string) - The response's UID (format: `userId-responseId`)
 - `commentData` (Object) - The comment data (body, tags)
 
 **Returns:** Promise<AxiosResponse>
@@ -157,14 +154,13 @@ Creates a comment on a response.
 ```javascript
 const { responses } = require('@bidnessforb/postman-sdk');
 
-const userId = '12345678';
-const collectionId = 'abc-123-collection-id';
-const responseId = 'def-456-response-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const responseUid = '12345678-def-456-response-id';
 const commentData = {
   body: 'This response looks good!'
 };
 
-const response = await responses.createResponseComment(userId, collectionId, responseId, commentData);
+const response = await responses.createResponseComment(collectionUid, responseUid, commentData);
 console.log('Created comment:', response.data.data);
 ```
 
@@ -180,17 +176,18 @@ const commentData = {
   }
 };
 
-const response = await responses.createResponseComment(userId, collectionId, responseId, commentData);
+const response = await responses.createResponseComment(collectionUid, responseUid, commentData);
 ```
 
-### `updateResponseComment(userId, collectionId, responseId, commentId, commentData)`
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and response ID.
+
+### `updateResponseComment(collectionUid, responseUid, commentId, commentData)`
 
 Updates a comment on a response.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID
-- `collectionId` (string) - The collection's ID
-- `responseId` (string) - The response's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `responseUid` (string) - The response's UID (format: `userId-responseId`)
 - `commentId` (string) - The comment's ID
 - `commentData` (Object) - The updated comment data (body, tags)
 
@@ -200,26 +197,26 @@ Updates a comment on a response.
 ```javascript
 const { responses } = require('@bidnessforb/postman-sdk');
 
-const userId = '12345678';
-const collectionId = 'abc-123-collection-id';
-const responseId = 'def-456-response-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const responseUid = '12345678-def-456-response-id';
 const commentId = '999';
 const updatedData = {
   body: 'Updated: This response looks perfect!'
 };
 
-const response = await responses.updateResponseComment(userId, collectionId, responseId, commentId, updatedData);
+const response = await responses.updateResponseComment(collectionUid, responseUid, commentId, updatedData);
 console.log('Updated comment:', response.data.data);
 ```
 
-### `deleteResponseComment(userId, collectionId, responseId, commentId)`
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and response ID.
+
+### `deleteResponseComment(collectionUid, responseUid, commentId)`
 
 Deletes a comment from a response.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID
-- `collectionId` (string) - The collection's ID
-- `responseId` (string) - The response's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `responseUid` (string) - The response's UID (format: `userId-responseId`)
 - `commentId` (string) - The comment's ID
 
 **Returns:** Promise<AxiosResponse>
@@ -228,14 +225,15 @@ Deletes a comment from a response.
 ```javascript
 const { responses } = require('@bidnessforb/postman-sdk');
 
-const userId = '12345678';
-const collectionId = 'abc-123-collection-id';
-const responseId = 'def-456-response-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const responseUid = '12345678-def-456-response-id';
 const commentId = '999';
 
-const response = await responses.deleteResponseComment(userId, collectionId, responseId, commentId);
+const response = await responses.deleteResponseComment(collectionUid, responseUid, commentId);
 console.log('Deleted comment');
 ```
+
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and response ID.
 
 ## Testing
 

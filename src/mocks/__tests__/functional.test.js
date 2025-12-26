@@ -15,7 +15,8 @@ const {
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
-const { buildUid } = require('../../core/utils');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
+
 
 describe('Mocks Functional Tests', () => {
   let persistedIds;
@@ -33,7 +34,7 @@ describe('Mocks Functional Tests', () => {
     const mockName = `Test Mock ${Date.now()}`;
     const mockData = {
       name: mockName,
-      collection: buildUid(persistedIds.userId, persistedIds.collection.id),
+      collection: persistedIds.collection.uid,
       private: false
     };
 
@@ -129,7 +130,7 @@ describe('Mocks Functional Tests', () => {
   }, 10000);
 
   test('6. getMock - should error on non-existent mock', async () => {
-    const nonExistentMockId = 'non-existent-mock-id';
+    const nonExistentMockId = DEFAULT_ID;
     let result;
     try {
       result = await getMock(nonExistentMockId);

@@ -18,6 +18,7 @@ const {
   getCollectionGenerations,
   syncCollectionWithSpec
 } = require('../../collections');
+const { DEFAULT_USER_ID, DEFAULT_UID, DEFAULT_ID } = require('../../__tests__/test-helpers');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
@@ -26,9 +27,8 @@ jest.mock('../../core/config', () => ({
 }));
 
 describe('transformations unit tests', () => {
-  const DEFAULT_SPEC_ID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
-  const DEFAULT_COLLECTION_ID = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-  const DEFAULT_USER_ID = 12345678;
+  
+  
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -52,12 +52,12 @@ describe('transformations unit tests', () => {
           folderStrategy: 'Paths',
           includeAuthInfoInExample: true
         };
-        const result = await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', name, options);
+        const result = await createSpecGeneration(DEFAULT_ID, 'collection', name, options);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'post',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/generations/collection`,
             data: {
               name,
               options
@@ -79,7 +79,7 @@ describe('transformations unit tests', () => {
         axios.request.mockResolvedValue(mockResponse);
 
         const name = 'My Collection';
-        await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', name, null);
+        await createSpecGeneration(DEFAULT_ID, 'collection', name, null);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -103,7 +103,7 @@ describe('transformations unit tests', () => {
         const options = {
           requestNameSource: 'Fallback'
         };
-        await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', null, options);
+        await createSpecGeneration(DEFAULT_ID, 'collection', null, options);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -126,12 +126,12 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        await createSpecGeneration(DEFAULT_SPEC_ID, 'collection');
+        await createSpecGeneration(DEFAULT_ID, 'collection');
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'post',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/generations/collection`,
             data: null
           })
         );
@@ -147,7 +147,7 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', 'Test', null);
+        await createSpecGeneration(DEFAULT_ID, 'collection', 'Test', null);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -169,7 +169,7 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        await createSpecGeneration(DEFAULT_SPEC_ID, 'collection', 'Test Collection');
+        await createSpecGeneration(DEFAULT_ID, 'collection', 'Test Collection');
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -194,12 +194,12 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const result = await getSpecTaskStatus(DEFAULT_SPEC_ID, taskId);
+        const result = await getSpecTaskStatus(DEFAULT_ID, taskId);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/tasks/${taskId}`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/tasks/${taskId}`,
             headers: expect.objectContaining({
               'Content-Type': 'application/json',
               'X-API-Key': expect.any(String)
@@ -225,7 +225,7 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const result = await getSpecTaskStatus(DEFAULT_SPEC_ID, taskId);
+        const result = await getSpecTaskStatus(DEFAULT_ID, taskId);
 
         expect(result.data.status).toBe('pending');
       });
@@ -244,7 +244,7 @@ describe('transformations unit tests', () => {
         axios.request.mockRejectedValue(error);
 
         await expect(
-          getSpecTaskStatus(DEFAULT_SPEC_ID, 'non-existent-task')
+          getSpecTaskStatus(DEFAULT_ID, 'non-existent-task')
         ).rejects.toThrow();
       });
     });
@@ -272,12 +272,12 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const result = await getSpecGenerations(DEFAULT_SPEC_ID, 'collection');
+        const result = await getSpecGenerations(DEFAULT_ID, 'collection');
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/generations/collection`,
           })
         );
         expect(result.status).toBe(200);
@@ -297,12 +297,12 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const result = await getSpecGenerations(DEFAULT_SPEC_ID, 'collection', 5, 'cursor-123');
+        const result = await getSpecGenerations(DEFAULT_ID, 'collection', 5, 'cursor-123');
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection?limit=5&cursor=cursor-123`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/generations/collection?limit=5&cursor=cursor-123`,
           })
         );
         expect(result.status).toBe(200);
@@ -318,12 +318,12 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        await getSpecGenerations(DEFAULT_SPEC_ID, 'collection', null, null);
+        await getSpecGenerations(DEFAULT_ID, 'collection', null, null);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/generations/collection`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/generations/collection`,
           })
         );
       });
@@ -332,7 +332,7 @@ describe('transformations unit tests', () => {
         const mockResponse = { status: 200, data: { collections: [], meta: {} } };
         axios.request.mockResolvedValue(mockResponse);
 
-        await getSpecGenerations(DEFAULT_SPEC_ID, 'collection');
+        await getSpecGenerations(DEFAULT_ID, 'collection');
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -356,16 +356,13 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-        const specId = 'e5f67890-1234-5678-9abc-def012345678';
-
-        const result = await syncCollectionWithSpec(userId, collectionId, specId);
+        
+        const result = await syncCollectionWithSpec( DEFAULT_UID, DEFAULT_ID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'put',
-            url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/synchronizations?specId=e5f67890-1234-5678-9abc-def012345678'
+            url: `https://api.getpostman.com/collections/${DEFAULT_UID}/synchronizations?specId=${DEFAULT_ID}`
           })
         );
         expect(result).toEqual(mockResponse);
@@ -381,11 +378,11 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-        const specId = 'e5f67890-1234-5678-9abc-def012345678';
+        
+        
+        
 
-        await syncCollectionWithSpec(userId, collectionId, specId);
+        await syncCollectionWithSpec(DEFAULT_UID, DEFAULT_ID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -411,19 +408,19 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
+        
         const elementType = 'spec';
         const name = 'My Generated Spec';
         const type = 'OPENAPI:3.0';
         const format = 'JSON';
 
-        const result = await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+        const result = await createCollectionGeneration(DEFAULT_UID, elementType, name, type, format);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'post',
-            url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/generations/spec',
+            url: `https://api.getpostman.com/collections/${DEFAULT_UID}/generations/spec`,
             data: {
               name: 'My Generated Spec',
               type: 'OPENAPI:3.0',
@@ -446,14 +443,14 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
+        
         const elementType = 'spec';
         const name = 'Test Spec';
         const type = 'OPENAPI:3.0';
         const format = 'YAML';
 
-        await createCollectionGeneration(userId, collectionId, elementType, name, type, format);
+        await createCollectionGeneration(DEFAULT_UID, elementType, name, type, format);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -489,16 +486,16 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
+        
         const elementType = 'spec';
 
-        const result = await getCollectionGenerations(userId, collectionId, elementType);
+        const result = await getCollectionGenerations(DEFAULT_UID, elementType);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/generations/spec'
+            url: `https://api.getpostman.com/collections/${DEFAULT_UID}/generations/spec`
           })
         );
         expect(result).toEqual(mockResponse);
@@ -516,11 +513,11 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
+        
         const elementType = 'spec';
 
-        await getCollectionGenerations(userId, collectionId, elementType);
+        await getCollectionGenerations(DEFAULT_UID, elementType);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -555,16 +552,16 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-        const taskId = '11223344-5566-7788-99aa-bbccddeeff00';
+        
+        
+        
 
-        const result = await getCollectionTaskStatus(userId, collectionId, taskId);
+        const result = await getCollectionTaskStatus(DEFAULT_UID, DEFAULT_ID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'get',
-            url: 'https://api.getpostman.com/collections/12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6/tasks/11223344-5566-7788-99aa-bbccddeeff00'
+            url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tasks/${DEFAULT_ID}`
           })
         );
         expect(result).toEqual(mockResponse);
@@ -580,11 +577,11 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const userId = 12345678;
-        const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-        const taskId = '11223344-5566-7788-99aa-bbccddeeff00';
+        
+        
+        
 
-        await getCollectionTaskStatus(userId, collectionId, taskId);
+        await getCollectionTaskStatus(DEFAULT_UID, DEFAULT_ID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -608,14 +605,14 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const collectionUid = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
 
-        const result = await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
+        const result = await syncSpecWithCollection(DEFAULT_ID, DEFAULT_UID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'put',
-            url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/synchronizations?collectionUid=12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6`,
+            url: `https://api.getpostman.com/specs/${DEFAULT_ID}/synchronizations?collectionUid=${DEFAULT_UID}`
           })
         );
         expect(result.status).toBe(202);
@@ -633,9 +630,9 @@ describe('transformations unit tests', () => {
         };
         axios.request.mockResolvedValue(mockResponse);
 
-        const collectionUid = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6';
+        
 
-        await syncSpecWithCollection(DEFAULT_SPEC_ID, collectionUid);
+        await syncSpecWithCollection(DEFAULT_ID, DEFAULT_UID);
 
         expect(axios.request).toHaveBeenCalledWith(
           expect.objectContaining({

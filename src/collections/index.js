@@ -1,19 +1,23 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString, buildUid } = require('../core/utils');
+const { buildQueryString, validateId, validateUid } = require('../core/utils');
 
 /**
  * Gets all collections
  * Postman API endpoint and method: GET /collections
- * @param {string} [workspace] - The workspace's ID
+ * @param {string} [workspaceId] - The workspace's ID
  * @param {string} [name] - Filter results by collections that match the given name
  * @param {number} [limit] - Limit the number of results returned
  * @param {number} [offset] - Offset for pagination
  * @returns {Promise} Axios response
  */
-async function getCollections(workspace = null, name = null, limit = null, offset = null) {
+async function getCollections(workspaceId = null, name = null, limit = null, offset = null) {
+  if (workspaceId !== null) {
+    validateId(workspaceId, 'workspaceId');
+  }
+  
   const endpoint = '/collections';
   const queryParams = {
-    workspace,
+    workspace: workspaceId,
     name,
     limit,
     offset
@@ -27,13 +31,17 @@ async function getCollections(workspace = null, name = null, limit = null, offse
  * Creates a collection
  * Postman API endpoint and method: POST /collections
  * @param {Object} collection - The collection object following Postman Collection v2.1.0 schema
- * @param {string} [workspace] - The workspace's ID
+ * @param {string} [workspaceId] - The workspace's ID
  * @returns {Promise} Axios response
  */
-async function createCollection(collection, workspace = null) {
+async function createCollection(collection, workspaceId = null) {
+  if (workspaceId !== null) {
+    validateId(workspaceId, 'workspaceId');
+  }
+  
   const endpoint = '/collections';
   const queryParams = {
-    workspace
+    workspace: workspaceId
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
   const config = buildAxiosConfig('post', fullEndpoint, { collection });
@@ -49,6 +57,8 @@ async function createCollection(collection, workspace = null) {
  * @returns {Promise} Axios response
  */
 async function getCollection(collectionId, access_key = null, model = null) {
+  validateId(collectionId, 'collectionId');
+  
   const endpoint = `/collections/${collectionId}`;
   const queryParams = {
     access_key,
@@ -68,6 +78,8 @@ async function getCollection(collectionId, access_key = null, model = null) {
  * @returns {Promise} Axios response
  */
 async function updateCollection(collectionId, collection, prefer = null) {
+  validateId(collectionId, 'collectionId');
+  
   const endpoint = `/collections/${collectionId}`;
   const config = buildAxiosConfig('put', endpoint, { collection });
   
@@ -87,6 +99,8 @@ async function updateCollection(collectionId, collection, prefer = null) {
  * @returns {Promise} Axios response
  */
 async function modifyCollection(collectionId, collection) {
+  validateId(collectionId, 'collectionId');
+  
   const endpoint = `/collections/${collectionId}`;
   const config = buildAxiosConfig('patch', endpoint, { collection });
   return await executeRequest(config);
@@ -99,6 +113,8 @@ async function modifyCollection(collectionId, collection) {
  * @returns {Promise} Axios response
  */
 async function deleteCollection(collectionId) {
+  validateId(collectionId, 'collectionId');
+  
   const endpoint = `/collections/${collectionId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -112,6 +128,8 @@ async function deleteCollection(collectionId) {
  * @returns {Promise} Axios response
  */
 async function createFolder(collectionId, folderData) {
+  validateId(collectionId, 'collectionId');
+  
   const endpoint = `/collections/${collectionId}/folders`;
   const config = buildAxiosConfig('post', endpoint, folderData);
   return await executeRequest(config);
@@ -128,6 +146,9 @@ async function createFolder(collectionId, folderData) {
  * @returns {Promise} Axios response
  */
 async function getFolder(collectionId, folderId, ids = null, uid = null, populate = null) {
+  validateId(collectionId, 'collectionId');
+  validateId(folderId, 'folderId');
+  
   const endpoint = `/collections/${collectionId}/folders/${folderId}`;
   const queryParams = {
     ids,
@@ -148,6 +169,9 @@ async function getFolder(collectionId, folderId, ids = null, uid = null, populat
  * @returns {Promise} Axios response
  */
 async function updateFolder(collectionId, folderId, folderData) {
+  validateId(collectionId, 'collectionId');
+  validateId(folderId, 'folderId');
+  
   const endpoint = `/collections/${collectionId}/folders/${folderId}`;
   const config = buildAxiosConfig('put', endpoint, folderData);
   return await executeRequest(config);
@@ -161,6 +185,9 @@ async function updateFolder(collectionId, folderId, folderData) {
  * @returns {Promise} Axios response
  */
 async function deleteFolder(collectionId, folderId) {
+  validateId(collectionId, 'collectionId');
+  validateId(folderId, 'folderId');
+  
   const endpoint = `/collections/${collectionId}/folders/${folderId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -169,12 +196,12 @@ async function deleteFolder(collectionId, folderId) {
 /**
  * Gets all comments left by users in a collection
  * Postman API endpoint and method: GET /collections/{collectionUid}/comments
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @returns {Promise} Axios response
  */
-async function getCollectionComments(userId, collectionId) {
-  const collectionUid = buildUid(userId, collectionId);
+async function getCollectionComments(collectionUid) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/comments`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -183,13 +210,13 @@ async function getCollectionComments(userId, collectionId) {
 /**
  * Creates a comment on a collection
  * Postman API endpoint and method: POST /collections/{collectionUid}/comments
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-async function createCollectionComment(userId, collectionId, commentData) {
-  const collectionUid = buildUid(userId, collectionId);
+async function createCollectionComment(collectionUid, commentData) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/comments`;
   const config = buildAxiosConfig('post', endpoint, commentData);
   return await executeRequest(config);
@@ -198,14 +225,15 @@ async function createCollectionComment(userId, collectionId, commentData) {
 /**
  * Updates a comment on a collection
  * Postman API endpoint and method: PUT /collections/{collectionUid}/comments/{commentId}
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} commentId - The comment's ID
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-async function updateCollectionComment(userId, collectionId, commentId, commentData) {
-  const collectionUid = buildUid(userId, collectionId);
+async function updateCollectionComment(collectionUid, commentId, commentData) {
+  validateUid(collectionUid, 'collectionUid');
+  
+  
   const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
   return await executeRequest(config);
@@ -214,13 +242,14 @@ async function updateCollectionComment(userId, collectionId, commentId, commentD
 /**
  * Deletes a comment from a collection
  * Postman API endpoint and method: DELETE /collections/{collectionUid}/comments/{commentId}
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-async function deleteCollectionComment(userId, collectionId, commentId) {
-  const collectionUid = buildUid(userId, collectionId);
+async function deleteCollectionComment(collectionUid, commentId) {
+  validateUid(collectionUid, 'collectionUid');
+  
+  
   const endpoint = `/collections/${collectionUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -229,14 +258,14 @@ async function deleteCollectionComment(userId, collectionId, commentId) {
 /**
  * Gets all comments left by users in a folder
  * Postman API endpoint and method: GET /collections/{collectionUid}/folders/{folderUid}/comments
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
- * @param {string} folderId - The folder's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
+ * @param {string} folderUid - The folder's UID (format: userId-folderId)
  * @returns {Promise} Axios response
  */
-async function getFolderComments(userId, collectionId, folderId) {
-  const collectionUid = buildUid(userId, collectionId);
-  const folderUid = buildUid(userId, folderId);
+async function getFolderComments(collectionUid, folderUid) {
+  validateUid(collectionUid, 'collectionUid');
+  validateUid(folderUid, 'folderUid');
+  
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -245,15 +274,15 @@ async function getFolderComments(userId, collectionId, folderId) {
 /**
  * Creates a comment on a folder
  * Postman API endpoint and method: POST /collections/{collectionUid}/folders/{folderUid}/comments
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
- * @param {string} folderId - The folder's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
+ * @param {string} folderUid - The folder's UID (format: userId-folderId)
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-async function createFolderComment(userId, collectionId, folderId, commentData) {
-  const collectionUid = buildUid(userId, collectionId);
-  const folderUid = buildUid(userId, folderId);
+async function createFolderComment(collectionUid, folderUid, commentData) {
+  validateUid(collectionUid, 'collectionUid');
+  validateUid(folderUid, 'folderUid');
+  
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments`;
   const config = buildAxiosConfig('post', endpoint, commentData);
   return await executeRequest(config);
@@ -262,16 +291,17 @@ async function createFolderComment(userId, collectionId, folderId, commentData) 
 /**
  * Updates a comment on a folder
  * Postman API endpoint and method: PUT /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
- * @param {string} folderId - The folder's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
+ * @param {string} folderUid - The folder's UID (format: userId-folderId)
  * @param {string} commentId - The comment's ID
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-async function updateFolderComment(userId, collectionId, folderId, commentId, commentData) {
-  const collectionUid = buildUid(userId, collectionId);
-  const folderUid = buildUid(userId, folderId);
+async function updateFolderComment(collectionUid, folderUid, commentId, commentData) {
+  validateUid(collectionUid, 'collectionUid');
+  validateUid(folderUid, 'folderUid');
+  //
+  
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('put', endpoint, commentData);
   return await executeRequest(config);
@@ -280,15 +310,16 @@ async function updateFolderComment(userId, collectionId, folderId, commentId, co
 /**
  * Deletes a comment from a folder
  * Postman API endpoint and method: DELETE /collections/{collectionUid}/folders/{folderUid}/comments/{commentId}
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
- * @param {string} folderId - The folder's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
+ * @param {string} folderUid - The folder's UID (format: userId-folderId)
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-async function deleteFolderComment(userId, collectionId, folderId, commentId) {
-  const collectionUid = buildUid(userId, collectionId);
-  const folderUid = buildUid(userId, folderId);
+async function deleteFolderComment(collectionUid, folderUid, commentId) {
+  validateUid(collectionUid, 'collectionUid');
+  validateUid(folderUid, 'folderUid');
+  
+  
   const endpoint = `/collections/${collectionUid}/folders/${folderUid}/comments/${commentId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -297,13 +328,14 @@ async function deleteFolderComment(userId, collectionId, folderId, commentId) {
 /**
  * Sync collection with spec
  * Postman API endpoint and method: PUT /collections/{collectionUid}/synchronizations
- * @param {string} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} specId - The spec's ID
  * @returns {Promise} Axios response
  */
-async function syncCollectionWithSpec(userId, collectionId, specId) {
-  const collectionUid = buildUid(userId, collectionId);
+async function syncCollectionWithSpec(collectionUid, specId) {
+  validateUid(collectionUid, 'collectionUid');
+  validateId(specId, 'specId');
+  
   const endpoint = `/collections/${collectionUid}/synchronizations`;
   const queryParams = {
     specId
@@ -316,12 +348,12 @@ async function syncCollectionWithSpec(userId, collectionId, specId) {
 /**
  * Gets all tags associated with a collection
  * Postman API endpoint and method: GET /collections/{collectionUid}/tags
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @returns {Promise} Axios response
  */
-async function getCollectionTags(userId, collectionId) {
-  const collectionUid = buildUid(userId, collectionId);
+async function getCollectionTags(collectionUid) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/tags`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -330,13 +362,13 @@ async function getCollectionTags(userId, collectionId) {
 /**
  * Updates all tags associated with a collection (replaces existing tags)
  * Postman API endpoint and method: PUT /collections/{collectionUid}/tags
- * @param {string|number} userId - The user's ID
- * @param {string} collectionId - The collection's ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {Array} tags - Array of tag objects with 'slug' property (max 5 tags)
  * @returns {Promise} Axios response
  */
-async function updateCollectionTags(userId, collectionId, tags) {
-  const collectionUid = buildUid(userId, collectionId);
+async function updateCollectionTags(collectionUid, tags) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/tags`;
   const data = { tags };
   const config = buildAxiosConfig('put', endpoint, data);
@@ -346,16 +378,16 @@ async function updateCollectionTags(userId, collectionId, tags) {
 /**
  * Generates a spec from a collection
  * Postman API endpoint and method: POST /collections/{collectionUid}/generations/{elementType}
- * @param {string} userId - The user ID
- * @param {string} collectionId - The collection ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} elementType - The element type (e.g., 'spec')
  * @param {string} name - The API specification's name
  * @param {string} type - The specification's type (e.g., 'OPENAPI:3.0')
  * @param {string} format - The format of the API specification (e.g., 'JSON', 'YAML')
  * @returns {Promise} Axios response with taskId and url
  */
-async function createCollectionGeneration(userId, collectionId, elementType, name, type, format) {
-  const collectionUid = buildUid(userId, collectionId);
+async function createCollectionGeneration(collectionUid, elementType, name, type, format) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
   const config = buildAxiosConfig('post', endpoint, {
     name,
@@ -368,13 +400,13 @@ async function createCollectionGeneration(userId, collectionId, elementType, nam
 /**
  * Gets the list of specs generated from a collection
  * Postman API endpoint and method: GET /collections/{collectionUid}/generations/{elementType}
- * @param {string} userId - The user ID
- * @param {string} collectionId - The collection ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} elementType - The element type (e.g., 'spec')
  * @returns {Promise} Axios response with specs array and pagination metadata
  */
-async function getCollectionGenerations(userId, collectionId, elementType) {
-  const collectionUid = buildUid(userId, collectionId);
+async function getCollectionGenerations(collectionUid, elementType) {
+  validateUid(collectionUid, 'collectionUid');
+  
   const endpoint = `/collections/${collectionUid}/generations/${elementType}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -383,13 +415,14 @@ async function getCollectionGenerations(userId, collectionId, elementType) {
 /**
  * Gets the status of a collection generation task
  * Postman API endpoint and method: GET /collections/{collectionUid}/tasks/{taskId}
- * @param {string} userId - The user ID
- * @param {string} collectionId - The collection ID
+ * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @param {string} taskId - The task ID
  * @returns {Promise} Axios response with task status
  */
-async function getCollectionTaskStatus(userId, collectionId, taskId) {
-  const collectionUid = buildUid(userId, collectionId);
+async function getCollectionTaskStatus(collectionUid, taskId) {
+  validateUid(collectionUid, 'collectionUid');
+  validateId(taskId, 'taskId');
+  
   const endpoint = `/collections/${collectionUid}/tasks/${taskId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);

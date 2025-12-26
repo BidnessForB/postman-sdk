@@ -34,7 +34,7 @@ Creates a mock server in a collection.
 
 **Parameters:**
 - `mockData` (object) - The mock object containing:
-  - `collection` (string, required) - The collection UID (not just ID). Use `buildUid(userId, collectionId)` from `core/utils`
+  - `collection` (string, required) - The collection UID (not just ID). Format: `userId-collectionId`
   - `name` (string, optional) - The mock server's name
   - `environment` (string, optional) - The unique ID of the mock's associated environment
   - `private` (boolean, optional) - If true, the mock server is set private (default: true)
@@ -44,11 +44,15 @@ Creates a mock server in a collection.
 
 **Example:**
 ```javascript
-const { buildUid } = require('./core/utils');
+const { mocks } = require('@bidnessforb/postman-sdk');
+
+const userId = '12345678';
+const collectionId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
+const collectionUid = `${userId}-${collectionId}`; // Must use UID format
 
 const mockData = {
   name: 'My Mock Server',
-  collection: buildUid(userId, collectionId), // Must use UID format
+  collection: collectionUid,
   private: true
 };
 
@@ -320,7 +324,6 @@ console.log(result.data);
 
 ```javascript
 const { mocks, users } = require('@bidnessforb/postman-sdk');
-const { buildUid } = require('@bidnessforb/postman-sdk/src/core/utils');
 
 async function manageMockServers() {
   try {
@@ -328,10 +331,14 @@ async function manageMockServers() {
     const userResult = await users.getAuthenticatedUser();
     const userId = userResult.data.user.id;
 
+    // Build collection UID
+    const collectionId = 'collection-id';
+    const collectionUid = `${userId}-${collectionId}`;
+
     // Create a mock server (collection must be in UID format)
     const mockData = {
       name: 'My API Mock',
-      collection: buildUid(userId, 'collection-id'), // Use UID format
+      collection: collectionUid, // Use UID format
       private: false
     };
     const createResult = await mocks.createMock(mockData, 'workspace-id');
@@ -376,7 +383,7 @@ manageMockServers();
 ## Notes
 
 - Mock servers can be created for collections
-- **Important**: When creating a mock, the `collection` parameter must be in UID format (userId-collectionId), not just the collection ID. Use the `buildUid()` utility function from `core/utils`
+- **Important**: When creating a mock, the `collection` parameter must be in UID format (`userId-collectionId`), not just the collection ID. Construct the UID using string concatenation: `${userId}-${collectionId}`
 - You cannot create mocks for collections added to an API definition
 - Server responses simulate 5xx server-level responses (500-599)
 - Call logs have a retention period based on your Postman plan

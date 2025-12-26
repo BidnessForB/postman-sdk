@@ -1,42 +1,44 @@
 const fs = require('fs');
 const path = require('path');
-const { buildQueryString, getContentFS, buildUid } = require('../utils');
+const { buildQueryString, getContentFS, validateId, validateUid } = require('../utils');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 jest.mock('fs');
 jest.mock('path');
 
-const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
+// Standard test constants - valid ID and UID formats
+
 
 describe('utils', () => {
   describe('buildQueryString', () => {
     test('should build query string from params object', () => {
       const params = {
-        workspaceId: DEFAULT_WORKSPACE_ID,
+        workspaceId: DEFAULT_ID,
         limit: 10,
         cursor: 'cursor-value'
       };
       const result = buildQueryString(params);
-      expect(result).toBe(`?workspaceId=${DEFAULT_WORKSPACE_ID}&limit=10&cursor=cursor-value`);
+      expect(result).toBe(`?workspaceId=${DEFAULT_ID}&limit=10&cursor=cursor-value`);
     });
 
     test('should handle undefined values', () => {
       const params = {
-        workspaceId: DEFAULT_WORKSPACE_ID,
+        workspaceId: DEFAULT_ID,
         limit: undefined,
         cursor: 'cursor-value'
       };
       const result = buildQueryString(params);
-      expect(result).toBe(`?workspaceId=${DEFAULT_WORKSPACE_ID}&cursor=cursor-value`);
+      expect(result).toBe(`?workspaceId=${DEFAULT_ID}&cursor=cursor-value`);
     });
 
     test('should handle null values', () => {
       const params = {
-        workspaceId: DEFAULT_WORKSPACE_ID,
+        workspaceId: DEFAULT_ID,
         limit: null,
         cursor: 'cursor-value'
       };
       const result = buildQueryString(params);
-      expect(result).toBe(`?workspaceId=${DEFAULT_WORKSPACE_ID}&cursor=cursor-value`);
+      expect(result).toBe(`?workspaceId=${DEFAULT_ID}&cursor=cursor-value`);
     });
 
     test('should return empty string for empty params', () => {
@@ -88,53 +90,59 @@ describe('utils', () => {
     });
   });
 
-  describe('buildUid', () => {
-    test('should build UID from userId and objectId', () => {
-      const userId = 12345678;
-      const objectId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6');
+  describe('validateId', () => {
+    test('should validate correct ID format', () => {
+      expect(() => validateId(DEFAULT_ID, 'testId')).not.toThrow();
     });
 
-    test('should handle string userId', () => {
-      const userId = '12345678';
-      const objectId = 'c6d2471c-3664-47b5-adc8-35d52484f2f6';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6');
+    test('should throw error for missing ID', () => {
+      expect(() => validateId(null, 'testId')).toThrow('testId is required');
+      expect(() => validateId(undefined, 'testId')).toThrow('testId is required');
+      expect(() => validateId('', 'testId')).toThrow('testId is required');
     });
 
-    test('should return objectId unchanged if it is already a 45-character UID', () => {
-      const userId = 12345678;
-      const objectId = '12345678-c6d2471c-3664-47b5-adc8-35d52484f2f6'; // 45 chars
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe(objectId);
-      expect(result.length).toBe(45);
+    test('should throw error for invalid ID format', () => {
+      expect(() => validateId('invalid-id', 'testId')).toThrow('testId must be a valid ID format');
+      expect(() => validateId('12345', 'testId')).toThrow('testId must be a valid ID format');
+      expect(() => validateId('not-a-UID', 'testId')).toThrow('testId must be a valid ID format');
     });
 
-    test('should throw error for invalid objectId (not 36 or 45 characters)', () => {
-      const userId = 12345678;
-      const objectId = 'xxx';
-      const result = buildUid(userId, objectId);
-      expect(result).toBeNull();
-    });
-
-    
-
-    test('should work with different valid 36-character UUIDs', () => {
-      const userId = 87654321;
-      const objectId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef';
-      
-      const result = buildUid(userId, objectId);
-      
-      expect(result).toBe('87654321-a1b2c3d4-e5f6-7890-1234-567890abcdef');
-      expect(result.length).toBe(45);
+    test('should accept uppercase ID', () => {
+      expect(() => validateId('12345678-1234-1234-1234-123456789ABC', 'testId')).not.toThrow();
     });
   });
+
+  describe('validateUid', () => {
+    test('should validate correct UID format', () => {
+      expect(() => validateUid(DEFAULT_UID, 'testUid')).not.toThrow();
+    });
+
+    test('should throw error for missing UID', () => {
+      expect(() => validateUid(null, 'testUid')).toThrow('testUid is required');
+      expect(() => validateUid(undefined, 'testUid')).toThrow('testUid is required');
+      expect(() => validateUid('', 'testUid')).toThrow('testUid is required');
+    });
+
+    test('should throw error for invalid UID format', () => {
+      expect(() => validateUid('invalid-uid', 'testUid')).toThrow('testUid must be a valid UID format');
+      expect(() => validateUid(DEFAULT_ID, 'testUid')).toThrow('testUid must be a valid UID format');
+      expect(() => validateUid('12345-invalid', 'testUid')).toThrow('testUid must be a valid UID format');
+    });
+
+    test('should accept various userId lengths', () => {
+      expect(() => validateUid('1-12345678-1234-1234-1234-123456789abc', 'testUid')).not.toThrow();
+      expect(() => validateUid('1234567890-12345678-1234-1234-1234-123456789abc', 'testUid')).not.toThrow();
+    });
+  });
+
+  
+
+  
 });
+
+// Export constants for use in other test files
+module.exports = {
+  DEFAULT_ID,
+  DEFAULT_UID
+};
 

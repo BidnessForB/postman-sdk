@@ -1,5 +1,5 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, validateId, validateUid } = require('../core/utils');
 
 /**
  * Gets all API specifications in a workspace
@@ -10,6 +10,8 @@ const { buildQueryString } = require('../core/utils');
  * @returns {Promise} Axios response
  */
 async function getSpecs(workspaceId, cursor = null, limit = null) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = '/specs';
   const queryParams = {
     workspaceId,
@@ -28,6 +30,8 @@ async function getSpecs(workspaceId, cursor = null, limit = null) {
  * @returns {Promise} Axios response
  */
 async function getSpec(specId) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -43,6 +47,8 @@ async function getSpec(specId) {
  * @returns {Promise} Axios response
  */
 async function createSpec(workspaceId, name, type, files) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = '/specs';
   const queryParams = {
     workspaceId
@@ -64,6 +70,8 @@ async function createSpec(workspaceId, name, type, files) {
  * @returns {Promise} Axios response
  */
 async function modifySpec(specId, name) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}`;
   const config = buildAxiosConfig('patch', endpoint, {
     name
@@ -78,6 +86,8 @@ async function modifySpec(specId, name) {
  * @returns {Promise} Axios response
  */
 async function deleteSpec(specId) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -90,6 +100,8 @@ async function deleteSpec(specId) {
  * @returns {Promise} Axios response
  */
 async function getSpecDefinition(specId) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/definitions`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -102,6 +114,8 @@ async function getSpecDefinition(specId) {
  * @returns {Promise} Axios response
  */
 async function getSpecFiles(specId) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/files`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -116,6 +130,8 @@ async function getSpecFiles(specId) {
  * @returns {Promise} Axios response
  */
 async function createSpecFile(specId, path, content) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/files`;
   const config = buildAxiosConfig('post', endpoint, {
     path,
@@ -132,6 +148,8 @@ async function createSpecFile(specId, path, content) {
  * @returns {Promise} Axios response
  */
 async function getSpecFile(specId, filePath) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/files/${filePath}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -146,6 +164,8 @@ async function getSpecFile(specId, filePath) {
  * @returns {Promise} Axios response
  */
 async function modifySpecFile(specId, filePath, data) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/files/${filePath}`;
   const config = buildAxiosConfig('patch', endpoint, data);
   return await executeRequest(config);
@@ -159,6 +179,8 @@ async function modifySpecFile(specId, filePath, data) {
  * @returns {Promise} Axios response
  */
 async function deleteSpecFile(specId, filePath) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/files/${filePath}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -174,6 +196,8 @@ async function deleteSpecFile(specId, filePath) {
  * @returns {Promise} Axios response with taskId and url for polling
  */
 async function createSpecGeneration(specId, elementType, name = null, options = null) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/generations/${elementType}`;
   const data = {};
   
@@ -197,6 +221,9 @@ async function createSpecGeneration(specId, elementType, name = null, options = 
  * @returns {Promise} Axios response with status and meta information
  */
 async function getSpecTaskStatus(specId, taskId) {
+  validateId(specId, 'specId');
+  validateId(taskId, 'taskId');
+
   const endpoint = `/specs/${specId}/tasks/${taskId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -212,6 +239,8 @@ async function getSpecTaskStatus(specId, taskId) {
  * @returns {Promise} Axios response with collections array and pagination metadata
  */
 async function getSpecGenerations(specId, elementType, limit = null, cursor = null) {
+  validateId(specId, 'specId');
+
   const endpoint = `/specs/${specId}/generations/${elementType}`;
   const queryParams = {
     limit,
@@ -230,6 +259,9 @@ async function getSpecGenerations(specId, elementType, limit = null, cursor = nu
  * @returns {Promise} Axios response with taskId and url
  */
 async function syncSpecWithCollection(specId, collectionUid) {
+  validateId(specId, 'specId');
+  validateUid(collectionUid, 'collectionUid');
+
   const endpoint = `/specs/${specId}/synchronizations`;
   const queryParams = {
     collectionUid

@@ -16,15 +16,14 @@ const {
   getSpecGenerations,
   syncSpecWithCollection
 } = require('../index');
-
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
   apiKey: 'test-api-key',
   baseUrl: 'https://api.getpostman.com'
 }));
 
-const DEFAULT_WORKSPACE_ID = '066b3200-1739-4b19-bd52-71700f3a4545';
-const DEFAULT_SPEC_ID = '550f281f-ee6a-4860-aef3-6d9fdd7ca405';
+
 
 describe('specs unit tests', () => {
   beforeEach(() => {
@@ -39,12 +38,12 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getSpecs(DEFAULT_WORKSPACE_ID);
+      const result = await getSpecs(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -57,11 +56,11 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecs(DEFAULT_WORKSPACE_ID, 'cursor-value', 10);
+      await getSpecs(DEFAULT_ID, 'cursor-value', 10);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: expect.stringContaining(`workspaceId=${DEFAULT_WORKSPACE_ID}`),
+          url: expect.stringContaining(`workspaceId=${DEFAULT_ID}`),
           url: expect.stringContaining('cursor=cursor-value'),
           url: expect.stringContaining('limit=10')
         })
@@ -75,11 +74,11 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecs(DEFAULT_WORKSPACE_ID, null, null);
+      await getSpecs(DEFAULT_ID, null, null);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_ID}`
         })
       );
     });
@@ -90,33 +89,33 @@ describe('specs unit tests', () => {
       const mockResponse = {
         status: 200,
         data: {
-          id: DEFAULT_SPEC_ID,
+          id: DEFAULT_ID,
           name: 'My API Spec',
           type: 'OPENAPI:3.0'
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getSpec(DEFAULT_SPEC_ID);
+      const result = await getSpec(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
-      expect(result.data.id).toBe(DEFAULT_SPEC_ID);
+      expect(result.data.id).toBe(DEFAULT_ID);
     });
 
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_SPEC_ID }
+        data: { id: DEFAULT_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpec(DEFAULT_SPEC_ID);
+      await getSpec(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -133,19 +132,19 @@ describe('specs unit tests', () => {
     test('should call POST /specs with workspaceId and body', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: DEFAULT_SPEC_ID, name: 'Test Spec' }
+        data: { id: DEFAULT_ID, name: 'Test Spec' }
       };
       axios.request.mockResolvedValue(mockResponse);
 
       const files = [
         { path: 'openapi.yaml', content: 'openapi: 3.0.0' }
       ];
-      const result = await createSpec(DEFAULT_WORKSPACE_ID, 'Test Spec', 'OPENAPI:3.0', files);
+      const result = await createSpec(DEFAULT_ID, 'Test Spec', 'OPENAPI:3.0', files);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_WORKSPACE_ID}`,
+          url: `https://api.getpostman.com/specs?workspaceId=${DEFAULT_ID}`,
           data: {
             name: 'Test Spec',
             type: 'OPENAPI:3.0',
@@ -159,11 +158,11 @@ describe('specs unit tests', () => {
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: DEFAULT_SPEC_ID }
+        data: { id: DEFAULT_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createSpec(DEFAULT_WORKSPACE_ID, 'Test', 'OPENAPI:3.0', []);
+      await createSpec(DEFAULT_ID, 'Test', 'OPENAPI:3.0', []);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -178,7 +177,7 @@ describe('specs unit tests', () => {
     test('should handle multi-file specs', async () => {
       const mockResponse = {
         status: 201,
-        data: { id: DEFAULT_SPEC_ID }
+        data: { id: DEFAULT_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
@@ -187,7 +186,7 @@ describe('specs unit tests', () => {
         { path: 'components/schemas.json', content: '{}', type: 'DEFAULT' }
       ];
       
-      await createSpec(DEFAULT_WORKSPACE_ID, 'Multi-file Spec', 'OPENAPI:3.0', files);
+      await createSpec(DEFAULT_ID, 'Multi-file Spec', 'OPENAPI:3.0', files);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -203,16 +202,16 @@ describe('specs unit tests', () => {
     test('should call PATCH /specs/{specId} with name', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_SPEC_ID, name: 'Updated Name' }
+        data: { id: DEFAULT_ID, name: 'Updated Name' }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await modifySpec(DEFAULT_SPEC_ID, 'Updated Name');
+      const result = await modifySpec(DEFAULT_ID, 'Updated Name');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'patch',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`,
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}`,
           data: {
             name: 'Updated Name'
           }
@@ -224,11 +223,11 @@ describe('specs unit tests', () => {
     test('should include correct headers', async () => {
       const mockResponse = {
         status: 200,
-        data: { id: DEFAULT_SPEC_ID }
+        data: { id: DEFAULT_ID }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await modifySpec(DEFAULT_SPEC_ID, 'New Name');
+      await modifySpec(DEFAULT_ID, 'New Name');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -248,12 +247,12 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteSpec(DEFAULT_SPEC_ID);
+      const result = await deleteSpec(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -265,7 +264,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteSpec(DEFAULT_SPEC_ID);
+      await deleteSpec(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -288,12 +287,12 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getSpecDefinition(DEFAULT_SPEC_ID);
+      const result = await getSpecDefinition(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/definitions`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/definitions`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -306,7 +305,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecDefinition(DEFAULT_SPEC_ID);
+      await getSpecDefinition(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -332,12 +331,12 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getSpecFiles(DEFAULT_SPEC_ID);
+      const result = await getSpecFiles(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -350,7 +349,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecFiles(DEFAULT_SPEC_ID);
+      await getSpecFiles(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -378,12 +377,12 @@ describe('specs unit tests', () => {
 
       const path = 'schemas.json';
       const content = '{"SpacecraftId": {"type": "string"}}';
-      const result = await createSpecFile(DEFAULT_SPEC_ID, path, content);
+      const result = await createSpecFile(DEFAULT_ID, path, content);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files`,
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files`,
           data: {
             path,
             content
@@ -400,7 +399,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createSpecFile(DEFAULT_SPEC_ID, 'test.json', '{}');
+      await createSpecFile(DEFAULT_ID, 'test.json', '{}');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -427,12 +426,12 @@ describe('specs unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const filePath = 'schemas.json';
-      const result = await getSpecFile(DEFAULT_SPEC_ID, filePath);
+      const result = await getSpecFile(DEFAULT_ID, filePath);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files/${filePath}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files/${filePath}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -446,11 +445,11 @@ describe('specs unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const filePath = 'components/schemas.json';
-      await getSpecFile(DEFAULT_SPEC_ID, filePath);
+      await getSpecFile(DEFAULT_ID, filePath);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files/${filePath}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files/${filePath}`
         })
       );
     });
@@ -462,7 +461,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getSpecFile(DEFAULT_SPEC_ID, 'test.json');
+      await getSpecFile(DEFAULT_ID, 'test.json');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -489,12 +488,12 @@ describe('specs unit tests', () => {
 
       const filePath = 'schemas.json';
       const data = { content: '{"updated": true}' };
-      const result = await modifySpecFile(DEFAULT_SPEC_ID, filePath, data);
+      const result = await modifySpecFile(DEFAULT_ID, filePath, data);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'patch',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files/${filePath}`,
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files/${filePath}`,
           data
         })
       );
@@ -510,7 +509,7 @@ describe('specs unit tests', () => {
 
       const filePath = 'index.json';
       const data = { type: 'ROOT' };
-      await modifySpecFile(DEFAULT_SPEC_ID, filePath, data);
+      await modifySpecFile(DEFAULT_ID, filePath, data);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -528,7 +527,7 @@ describe('specs unit tests', () => {
 
       const filePath = 'old-name.json';
       const data = { name: 'new-name.json' };
-      await modifySpecFile(DEFAULT_SPEC_ID, filePath, data);
+      await modifySpecFile(DEFAULT_ID, filePath, data);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -544,7 +543,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await modifySpecFile(DEFAULT_SPEC_ID, 'test.json', { content: '{}' });
+      await modifySpecFile(DEFAULT_ID, 'test.json', { content: '{}' });
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -565,12 +564,12 @@ describe('specs unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const filePath = 'schemas.json';
-      const result = await deleteSpecFile(DEFAULT_SPEC_ID, filePath);
+      const result = await deleteSpecFile(DEFAULT_ID, filePath);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files/${filePath}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files/${filePath}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -583,11 +582,11 @@ describe('specs unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       const filePath = 'components/schemas.json';
-      await deleteSpecFile(DEFAULT_SPEC_ID, filePath);
+      await deleteSpecFile(DEFAULT_ID, filePath);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/specs/${DEFAULT_SPEC_ID}/files/${filePath}`
+          url: `https://api.getpostman.com/specs/${DEFAULT_ID}/files/${filePath}`
         })
       );
     });
@@ -598,7 +597,7 @@ describe('specs unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteSpecFile(DEFAULT_SPEC_ID, 'test.json');
+      await deleteSpecFile(DEFAULT_ID, 'test.json');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
