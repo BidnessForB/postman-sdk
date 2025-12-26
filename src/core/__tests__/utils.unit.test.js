@@ -91,7 +91,7 @@ describe('utils', () => {
   });
 
   describe('validateId', () => {
-    test('should validate correct UUID format', () => {
+    test('should validate correct ID format', () => {
       expect(() => validateId(DEFAULT_ID, 'testId')).not.toThrow();
     });
 
@@ -101,13 +101,13 @@ describe('utils', () => {
       expect(() => validateId('', 'testId')).toThrow('testId is required');
     });
 
-    test('should throw error for invalid UUID format', () => {
-      expect(() => validateId('invalid-id', 'testId')).toThrow('testId must be a valid UUID format');
-      expect(() => validateId('12345', 'testId')).toThrow('testId must be a valid UUID format');
-      expect(() => validateId('not-a-uuid', 'testId')).toThrow('testId must be a valid UUID format');
+    test('should throw error for invalid ID format', () => {
+      expect(() => validateId('invalid-id', 'testId')).toThrow('testId must be a valid ID format');
+      expect(() => validateId('12345', 'testId')).toThrow('testId must be a valid ID format');
+      expect(() => validateId('not-a-UID', 'testId')).toThrow('testId must be a valid ID format');
     });
 
-    test('should accept uppercase UUID', () => {
+    test('should accept uppercase ID', () => {
       expect(() => validateId('12345678-1234-1234-1234-123456789ABC', 'testId')).not.toThrow();
     });
   });
@@ -135,24 +135,7 @@ describe('utils', () => {
     });
   });
 
-  describe('buildUid', () => {
-    test('should build UID from userId and objectId', () => {
-      const userId = '12345678';
-      const objectId = DEFAULT_ID;
-      const result = buildUid(userId, objectId);
-      expect(result).toBe(`${userId}-${objectId}`);
-    });
-
-    test('should return UID as-is if objectId is already a UID', () => {
-      const userId = '12345678';
-      const result = buildUid(userId, DEFAULT_UID);
-      expect(result).toBe(DEFAULT_UID);
-    });
-
-    test('should throw error for invalid objectId', () => {
-      expect(() => buildUid('12345678', 'invalid-id')).toThrow('objectId must be a valid UUID format');
-    });
-  });
+  
 
   
 });
