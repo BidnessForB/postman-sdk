@@ -53,10 +53,16 @@
     "version": "npm run test:unit && git add -A",
     "postversion": "git push && git push --tags",
     "util:get-workspaces": "node util/get-test-workspaces.js",
-    "util:delete-test-workspaces": "node util/delete-test-workspaces.js 'Updated Workspace Name*' --force"
+    "util:delete-test-workspaces": "node util/delete-test-workspaces.js 'Updated Workspace Name*' --force",
+    "docs:build": "documentation build src/collections/index.js src/requests/index.js src/responses/index.js src/workspaces/index.js src/specs/index.js src/environments/index.js src/tags/index.js src/users/index.js src/mocks/index.js -f html -o docs/api",
+    "docs:md": "documentation build src/collections/index.js src/requests/index.js src/responses/index.js src/workspaces/index.js src/specs/index.js src/environments/index.js src/tags/index.js src/users/index.js src/mocks/index.js -f md -o docs/API-REFERENCE.md && node scripts/format-api-docs.js",
+    "docs:format": "node scripts/format-api-docs.js",
+    "docs:serve": "documentation serve src/collections/index.js src/requests/index.js src/responses/index.js src/workspaces/index.js src/specs/index.js src/environments/index.js src/tags/index.js src/users/index.js src/mocks/index.js -w",
+    "docs:clean": "rm -rf docs/api docs/API-REFERENCE.md"
   },
   "dependencies": {
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "documentation": "^14.0.3"
   },
   "devDependencies": {
     "@jest/test-sequencer": "^30.2.0",
