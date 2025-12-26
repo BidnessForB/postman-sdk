@@ -55,7 +55,4 @@ temp/
 # Persisted test IDs (generated during functional tests)
 src/**/__tests__/test-ids.json
 
-# Generated documentation
-docs/api/
-docs/API-REFERENCE.md
 
