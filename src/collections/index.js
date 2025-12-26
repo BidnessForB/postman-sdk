@@ -1022,9 +1022,16 @@ async function getCollectionPullRequests(collectionUid) {
  *   ['12345678']
  * );
  */
-async function createCollectionPullRequest(collectionUid, title, destinationId, reviewers, description = null) {
+async function createCollectionPullRequest(collectionUid, title, destinationUid, reviewers, description = null) {
   validateUid(collectionUid, 'collectionUid');
-  validateId(destinationId, 'destinationId');
+  validateUid(destinationUid, 'destinationUid');
+  
+  // Ensure all reviewers are strings
+  /*if (Array.isArray(reviewers)) {
+    reviewers = reviewers.map(r => r != null ? String(r) : r);
+  }*/
+  //hack so property key in the resulting data block is correct
+  const destinationId = destinationUid;
 
   const endpoint = `/collections/${collectionUid}/pull-requests`;
   const data = {

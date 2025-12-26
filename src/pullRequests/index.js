@@ -52,19 +52,30 @@ async function getPullRequest(pullRequestId) {
  */
 async function updatePullRequest(pullRequestId, title, reviewers, description = null) {
   validateId(pullRequestId, 'pullRequestId');
+  if(!title || !reviewers) {
+    throw new Error('Title and reviewers are required');
+  }
 
   const endpoint = `/pull-requests/${pullRequestId}`;
   const data = {
     title,
     reviewers
   };
-
-  if (description !== null) {
+  if(description) {
     data.description = description;
   }
 
+
   const config = buildAxiosConfig('put', endpoint, data);
-  return await executeRequest(config);
+  let results;
+  try {
+     results = await executeRequest(config);
+  } catch (error) {
+    results = error;
+  }
+  return results;
+  
+  
 }
 
 /**
@@ -110,7 +121,9 @@ async function updatePullRequest(pullRequestId, title, reviewers, description = 
  */
 async function reviewPullRequest(pullRequestId, action, comment = null) {
   validateId(pullRequestId, 'pullRequestId');
-
+  if(!action) {
+    throw new Error('Action is required');
+  }
   const endpoint = `/pull-requests/${pullRequestId}/tasks`;
   const data = {
     action
