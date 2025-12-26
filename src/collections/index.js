@@ -969,6 +969,78 @@ async function pullCollectionChanges(collectionId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets all pull requests for a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/pull-requests
+ * @param {string} collectionUid - The collection's unique ID
+ * @returns {Promise} Axios response with array of pull requests including id, title, status, source, destination, and timestamps
+ * @example
+ * // Get all pull requests for a collection
+ * const response = await getCollectionPullRequests('12345678-collection-uid-123');
+ * console.log(response.data.data);
+ * response.data.data.forEach(pr => {
+ *   console.log(`PR: ${pr.title} - Status: ${pr.status}`);
+ *   console.log(`  Source: ${pr.sourceId}`);
+ *   console.log(`  Destination: ${pr.destinationId}`);
+ * });
+ */
+async function getCollectionPullRequests(collectionUid) {
+  validateUid(collectionUid, 'collectionUid');
+
+  const endpoint = `/collections/${collectionUid}/pull-requests`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a pull request for a forked collection into its parent collection
+ * Postman API endpoint and method: POST /collections/{collectionUid}/pull-requests
+ * @param {string} collectionUid - The forked collection's unique ID (source)
+ * @param {string} title - The pull request's title (required)
+ * @param {string} destinationId - The collection ID to merge into (required)
+ * @param {Array<string>} reviewers - Array of reviewer user IDs (required)
+ * @param {string} [description] - The pull request's description (optional)
+ * @returns {Promise} Axios response with created pull request details including id, title, status, sourceId, and destinationId
+ * @example
+ * // Create a pull request
+ * const response = await createCollectionPullRequest(
+ *   '12345678-forked-collection-uid',
+ *   'Add new endpoints',
+ *   'parent-collection-id-456',
+ *   ['12345678', '87654321'],
+ *   'This PR adds new API endpoints for user management'
+ * );
+ * console.log(response.data.id);
+ * console.log(response.data.status); // 'open'
+ * 
+ * @example
+ * // Create a pull request without description
+ * const response = await createCollectionPullRequest(
+ *   '12345678-forked-collection-uid',
+ *   'Update documentation',
+ *   'parent-collection-id-456',
+ *   ['12345678']
+ * );
+ */
+async function createCollectionPullRequest(collectionUid, title, destinationId, reviewers, description = null) {
+  validateUid(collectionUid, 'collectionUid');
+  validateId(destinationId, 'destinationId');
+
+  const endpoint = `/collections/${collectionUid}/pull-requests`;
+  const data = {
+    title,
+    destinationId,
+    reviewers
+  };
+
+  if (description !== null) {
+    data.description = description;
+  }
+
+  const config = buildAxiosConfig('post', endpoint, data);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -997,5 +1069,7 @@ module.exports = {
   getCollectionForks,
   createCollectionFork,
   mergeCollectionFork,
-  pullCollectionChanges
+  pullCollectionChanges,
+  getCollectionPullRequests,
+  createCollectionPullRequest
 };

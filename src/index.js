@@ -112,6 +112,15 @@ module.exports = {
    * @property {Function} updateMock - Update a mock
    * @property {Function} deleteMock - Delete a mock
    */
-  mocks: require('./mocks')
+  mocks: require('./mocks'),
+  
+  /**
+   * Pull Requests module - Manage pull requests
+   * @type {object}
+   * @property {Function} getPullRequest - Get a pull request
+   * @property {Function} updatePullRequest - Update a pull request
+   * @property {Function} reviewPullRequest - Review a pull request (approve, decline, merge, unapprove)
+   */
+  pullRequests: require('./pullRequests')
 }; 
 

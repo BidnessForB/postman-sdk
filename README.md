@@ -5,8 +5,8 @@
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-8-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-69%2F161%20(42.86%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-9-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-96%2F161%20(59.63%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -196,15 +196,16 @@ postman-sdk/
 
 The SDK is organized by resource groups:
 
-- **collections**: Endpoints for managing Postman Collections, folders, and comments
+- **collections**: Endpoints for managing Postman Collections, folders, comments, and forks
 - **requests**: Endpoints for managing requests within collections
 - **responses**: Endpoints for managing responses within collections
 - **workspaces**: Endpoints for managing Postman Workspaces
 - **specs**: Endpoints for managing Postman API Specifications
-- **environments**: Endpoints for managing Postman Environments
+- **environments**: Endpoints for managing Postman Environments and forks
 - **tags**: Endpoints for tagging and retrieving tagged entities
 - **transformations**: Endpoints for bi-directional sync between specs and collections
 - **users**: Endpoints for user information and authentication
+- **pullRequests**: Endpoints for managing pull requests (get, update, review)
 
 
 ## Testing
