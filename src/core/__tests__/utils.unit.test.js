@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { buildQueryString, getContentFS, validateId, validateUid, buildUid } = require('../utils');
+const { buildQueryString, getContentFS, validateId, validateUid } = require('../utils');
 const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 jest.mock('fs');

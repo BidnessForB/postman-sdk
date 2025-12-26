@@ -6,8 +6,7 @@ const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds } = require('../../__tests__/test-helpers');
 
 describe('collection tags functional tests', () => {
-  let persistedIds = {};
-  let testCollectionId;
+  let persistedIds = loadTestIds();
   let userId;
 
   beforeAll(async () => {
@@ -15,11 +14,10 @@ describe('collection tags functional tests', () => {
       throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
     }
 
-    persistedIds = loadTestIds();
-    testCollectionId = persistedIds?.collection?.id;
+    
     userId = persistedIds?.userId;
 
-    if (!testCollectionId) {
+    if (!persistedIds.collection.uid) {
       throw new Error('Collection ID not found in test-ids.json. Run collection functional tests first.');
     }
 
@@ -27,12 +25,12 @@ describe('collection tags functional tests', () => {
       throw new Error('User ID not found in test-ids.json. Run user functional tests first.');
     }
 
-    console.log('Using collection ID:', testCollectionId);
+    console.log('Using collection ID:', persistedIds.collection.uid);
     console.log('Using user ID:', userId);
   });
 
   test('1. getCollectionTags - should get collection tags (initially empty)', async () => {
-    const result = await getCollectionTags(userId, testCollectionId);
+    const result = await getCollectionTags(persistedIds.collection.uid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -47,7 +45,7 @@ describe('collection tags functional tests', () => {
       { slug: 'automated-test' }
     ];
 
-    const result = await updateCollectionTags(userId, testCollectionId, tags);
+    const result = await updateCollectionTags(persistedIds.collection.uid, tags);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -58,7 +56,7 @@ describe('collection tags functional tests', () => {
   });
 
   test('3. getCollectionTags - should retrieve the added tags', async () => {
-    const result = await getCollectionTags(userId, testCollectionId);
+    const result = await getCollectionTags(persistedIds.collection.uid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -73,7 +71,7 @@ describe('collection tags functional tests', () => {
       { slug: 'updated-tag' }
     ];
 
-    const result = await updateCollectionTags(userId, testCollectionId, tags);
+    const result = await updateCollectionTags(persistedIds.collection.uid, tags);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -83,7 +81,7 @@ describe('collection tags functional tests', () => {
   });
 
   test('5. updateCollectionTags - should clear all tags', async () => {
-    const result = await updateCollectionTags(userId, testCollectionId, []);
+    const result = await updateCollectionTags(persistedIds.collection.uid, []);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -92,7 +90,7 @@ describe('collection tags functional tests', () => {
   });
 
   test('6. getCollectionTags - should verify tags are cleared', async () => {
-    const result = await getCollectionTags(userId, testCollectionId);
+    const result = await getCollectionTags(persistedIds.collection.uid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -109,7 +107,7 @@ describe('collection tags functional tests', () => {
       { slug: 'tag5' }
     ];
 
-    const result = await updateCollectionTags(userId, testCollectionId, tags);
+    const result = await updateCollectionTags(persistedIds.collection.uid, tags);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('tags');
@@ -123,7 +121,7 @@ describe('collection tags functional tests', () => {
     ];
 
     await expect(
-      updateCollectionTags(userId, testCollectionId, tags)
+      updateCollectionTags(persistedIds.collection.uid, tags)
     ).rejects.toThrow();
     console.log('Successfully rejected invalid tag slug (too short)');
   });
@@ -134,7 +132,7 @@ describe('collection tags functional tests', () => {
     ];
 
     await expect(
-      updateCollectionTags(userId, testCollectionId, tags)
+      updateCollectionTags(persistedIds.collection.uid, tags)
     ).rejects.toThrow();
     console.log('Successfully rejected invalid tag slug (invalid characters)');
   });
@@ -143,7 +141,7 @@ describe('collection tags functional tests', () => {
     const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
 
     await expect(
-      getCollectionTags(userId, fakeCollectionId)
+      getCollectionTags(fakeCollectionId)
     ).rejects.toThrow();
     console.log('Successfully handled non-existent collection');
   });
@@ -151,7 +149,7 @@ describe('collection tags functional tests', () => {
   // Cleanup: clear tags after tests
   afterAll(async () => {
     try {
-      await updateCollectionTags(userId, testCollectionId, []);
+      await updateCollectionTags(persistedIds.collection.uid, []);
       console.log('Cleaned up: cleared all tags from collection');
     } catch (error) {
       console.log('Note: Could not clean up tags (collection may have been deleted)');

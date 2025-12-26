@@ -55,6 +55,7 @@ describe('folders functional tests (sequential flow)', () => {
     persistedIds.folder = {
       ...persistedIds.folder,
       id: result.data.data.id,
+      uid: result.data.data.owner + '-' + result.data.data.id,
       name: folderName,
       createdAt: new Date().toISOString()
     };

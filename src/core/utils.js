@@ -67,24 +67,13 @@ function getContentFS(filePath) {
  * @param {string} objectId - The object's ID (e.g., collection ID, workspace ID)
  * @returns {string} The UID in format: userId-objectId
  */
-function buildUid(userId, objectId) {
-  // If objectId is already a UID, return it as-is
-  if (uidRegex.test(objectId)) {
-    return objectId;
-  }
-  
-  // Validate the objectId is a valid UUID
-  validateId(objectId, 'objectId');
-  
-  // Build and return the UID
-  return `${userId}-${objectId}`;
-}
+
 
 
 module.exports = {
   buildQueryString,
   getContentFS,
-  buildUid,
+  
   validateId,
   validateUid
 };
