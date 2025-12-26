@@ -6,8 +6,8 @@ We release patches for security vulnerabilities. Currently supported versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.8.1   | :white_check_mark: |
-| < 0.7.1 | :x:                |
+| 0.8.2   | :white_check_mark: |
+| < 0.8.0 | :x:                |
 
 **Note:** This project is in alpha stage. The API may change between minor versions until 1.0.0 is released.
 
