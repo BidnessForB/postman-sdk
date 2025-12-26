@@ -66,6 +66,20 @@ const MODULE_DESCRIPTIONS = {
   'Core Utilities': 'Internal utility functions used across modules'
 };
 
+function extractFunctionDescription(content, functionName) {
+  // Find the function heading and extract its description
+  const regex = new RegExp(`## ${functionName}\\n\\n([^\\n]+)`, 'm');
+  const match = content.match(regex);
+  if (match && match[1]) {
+    // Clean up the description - remove "Postman API endpoint" line if present
+    let desc = match[1].trim();
+    // If next line starts with "Postman API endpoint", grab just the first line
+    const lines = desc.split('\n');
+    return lines[0];
+  }
+  return '';
+}
+
 function formatApiDocs() {
   const inputFile = path.join(__dirname, '../docs/API-REFERENCE.md');
   const outputFile = inputFile; // Overwrite the same file
@@ -101,7 +115,7 @@ function formatApiDocs() {
     }
   }
 
-  // Build new TOC organized by module
+  // Build new TOC organized by module with tables
   let newToc = '### Table of Contents\n\n';
   newToc += '*Quick Links: ';
   newToc += Object.keys(MODULES).map(mod => `[${mod}](#${mod.toLowerCase().replace(/\s+/g, '-')})`).join(' • ');
@@ -115,15 +129,28 @@ function formatApiDocs() {
     newToc += `<details open>\n`;
     newToc += `<summary><strong>${moduleName}</strong> - ${MODULE_DESCRIPTIONS[moduleName]}</summary>\n\n`;
     
-    // Add functions in this module
-    for (const funcName of functions) {
+    // Start table
+    newToc += `| Function | Description |\n`;
+    newToc += `|----------|-------------|\n`;
+    
+    // Sort functions alphabetically (case-insensitive)
+    const sortedFunctions = [...functions].sort((a, b) => 
+      a.toLowerCase().localeCompare(b.toLowerCase())
+    );
+    
+    // Add functions in this module as table rows
+    for (const funcName of sortedFunctions) {
       const entry = tocEntries.find(e => e.name === funcName && e.indent === 0);
       if (entry) {
         const newRef = currentRef++;
         refMapping[entry.ref] = newRef;
-        newToc += `*   [${entry.name}][${newRef}]\n`;
         
-        // Find sub-entries (Parameters, Examples, etc.)
+        // Extract description from the actual function documentation
+        const description = extractFunctionDescription(content, funcName);
+        
+        newToc += `| [${entry.name}][${newRef}] | ${description} |\n`;
+        
+        // Still need to process sub-entries for ref mapping
         const funcIndex = tocEntries.indexOf(entry);
         for (let i = funcIndex + 1; i < tocEntries.length; i++) {
           const subEntry = tocEntries[i];
@@ -131,7 +158,6 @@ function formatApiDocs() {
           
           const subRef = currentRef++;
           refMapping[subEntry.ref] = subRef;
-          newToc += `    *   [${subEntry.name}][${subRef}]\n`;
         }
       }
     }
@@ -146,10 +172,19 @@ function formatApiDocs() {
   );
 
   // Update all reference links [1], [2], etc. to use new refs
+  // Use a two-pass approach to avoid conflicts:
+  // Pass 1: Replace with temporary placeholders
   for (const [oldRef, newRef] of Object.entries(refMapping)) {
-    // Update anchor definitions at the bottom
     content = content.replace(
       new RegExp(`^\\[${oldRef}\\]:`, 'gm'),
+      `[__TEMP_REF_${newRef}__]:`
+    );
+  }
+  
+  // Pass 2: Replace placeholders with actual new refs
+  for (const newRef of Object.values(refMapping)) {
+    content = content.replace(
+      new RegExp(`^\\[__TEMP_REF_${newRef}__\\]:`, 'gm'),
       `[${newRef}]:`
     );
   }
