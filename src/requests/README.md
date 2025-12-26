@@ -113,40 +113,36 @@ const response = await requests.deleteRequest(collectionId, requestId);
 console.log('Deleted request:', response.data);
 ```
 
-### `getRequestComments(userId, collectionId, requestId)`
+### `getRequestComments(collectionUid, requestUid)`
 
 Gets all comments left by users in a request.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID (required for building UID)
-- `collectionId` (string) - The collection's ID
-- `requestId` (string) - The request's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `requestUid` (string) - The request's UID (format: `userId-requestId`)
 
 **Returns:** Promise<AxiosResponse>
 
 **Example:**
 ```javascript
-const { requests, users } = require('@bidnessforb/postman-sdk');
+const { requests } = require('@bidnessforb/postman-sdk');
 
-// Get authenticated user ID
-const meResponse = await users.getMe();
-const userId = meResponse.data.user.id;
+const collectionUid = '12345678-abc-123-collection-id';
+const requestUid = '12345678-xyz-789-request-id';
 
-const collectionId = 'abc-123-collection-id';
-const requestId = 'xyz-789-request-id';
-
-const response = await requests.getRequestComments(userId, collectionId, requestId);
+const response = await requests.getRequestComments(collectionUid, requestUid);
 console.log('Comments:', response.data.data);
 ```
 
-### `createRequestComment(userId, collectionId, requestId, commentData)`
+**Note:** This endpoint requires UIDs (format: `userId-objectId`). You must construct the UID by prepending the user ID to both the collection ID and request ID.
+
+### `createRequestComment(collectionUid, requestUid, commentData)`
 
 Creates a comment on a request.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID (required for building UID)
-- `collectionId` (string) - The collection's ID
-- `requestId` (string) - The request's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `requestUid` (string) - The request's UID (format: `userId-requestId`)
 - `commentData` (Object) - The comment data:
   - `body` (string) - Comment text (required, max 10,000 characters)
   - `threadId` (integer, optional) - Thread ID for replies
@@ -156,20 +152,16 @@ Creates a comment on a request.
 
 **Example:**
 ```javascript
-const { requests, users } = require('@bidnessforb/postman-sdk');
+const { requests } = require('@bidnessforb/postman-sdk');
 
-// Get authenticated user ID
-const meResponse = await users.getMe();
-const userId = meResponse.data.user.id;
-
-const collectionId = 'abc-123-collection-id';
-const requestId = 'xyz-789-request-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const requestUid = '12345678-xyz-789-request-id';
 
 // Simple comment
 const commentData = {
   body: 'This endpoint needs authentication'
 };
-const response = await requests.createRequestComment(userId, collectionId, requestId, commentData);
+const response = await requests.createRequestComment(collectionUid, requestUid, commentData);
 console.log('Created comment:', response.data.data);
 
 // Comment with tagged users
@@ -182,17 +174,18 @@ const taggedComment = {
     }
   }
 };
-const taggedResponse = await requests.createRequestComment(userId, collectionId, requestId, taggedComment);
+const taggedResponse = await requests.createRequestComment(collectionUid, requestUid, taggedComment);
 ```
 
-### `updateRequestComment(userId, collectionId, requestId, commentId, commentData)`
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and request ID.
+
+### `updateRequestComment(collectionUid, requestUid, commentId, commentData)`
 
 Updates a comment on a request.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID (required for building UID)
-- `collectionId` (string) - The collection's ID
-- `requestId` (string) - The request's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `requestUid` (string) - The request's UID (format: `userId-requestId`)
 - `commentId` (string) - The comment's ID
 - `commentData` (Object) - The updated comment data:
   - `body` (string) - Updated comment text (required, max 10,000 characters)
@@ -202,50 +195,45 @@ Updates a comment on a request.
 
 **Example:**
 ```javascript
-const { requests, users } = require('@bidnessforb/postman-sdk');
+const { requests } = require('@bidnessforb/postman-sdk');
 
-// Get authenticated user ID
-const meResponse = await users.getMe();
-const userId = meResponse.data.user.id;
-
-const collectionId = 'abc-123-collection-id';
-const requestId = 'xyz-789-request-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const requestUid = '12345678-xyz-789-request-id';
 const commentId = '46814';
 
 const updatedData = {
   body: 'Updated: This endpoint requires Bearer token authentication'
 };
-const response = await requests.updateRequestComment(userId, collectionId, requestId, commentId, updatedData);
+const response = await requests.updateRequestComment(collectionUid, requestUid, commentId, updatedData);
 console.log('Updated comment:', response.data.data);
 ```
 
-### `deleteRequestComment(userId, collectionId, requestId, commentId)`
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and request ID.
+
+### `deleteRequestComment(collectionUid, requestUid, commentId)`
 
 Deletes a comment from a request.
 
 **Parameters:**
-- `userId` (string|number) - The user's ID (required for building UID)
-- `collectionId` (string) - The collection's ID
-- `requestId` (string) - The request's ID
+- `collectionUid` (string) - The collection's UID (format: `userId-collectionId`)
+- `requestUid` (string) - The request's UID (format: `userId-requestId`)
 - `commentId` (string) - The comment's ID
 
 **Returns:** Promise<AxiosResponse> with status 204 (No Content)
 
 **Example:**
 ```javascript
-const { requests, users } = require('@bidnessforb/postman-sdk');
+const { requests } = require('@bidnessforb/postman-sdk');
 
-// Get authenticated user ID
-const meResponse = await users.getMe();
-const userId = meResponse.data.user.id;
-
-const collectionId = 'abc-123-collection-id';
-const requestId = 'xyz-789-request-id';
+const collectionUid = '12345678-abc-123-collection-id';
+const requestUid = '12345678-xyz-789-request-id';
 const commentId = '46814';
 
-await requests.deleteRequestComment(userId, collectionId, requestId, commentId);
+await requests.deleteRequestComment(collectionUid, requestUid, commentId);
 console.log('Comment deleted successfully');
 ```
+
+**Note:** This endpoint requires UIDs. Construct the UID by prepending the user ID to both the collection ID and request ID.
 
 ## Request Data Structure
 
@@ -392,10 +380,10 @@ For complete API documentation, see:
 
 ### Request Comments
 - Collection UID and Request UID must be used for comment endpoints (format: `{userId}-{id}`)
-- The SDK's `buildUid()` utility validates ID formats:
-  - Accepts 36-character UUIDs (e.g., `abc123-def456-...`) and builds UID by prepending userId
-  - Accepts 45-character UIDs (e.g., `12345678-abc123-def456-...`) and returns unchanged
-  - Returns `null` for invalid formats
+- UIDs must be pre-constructed before calling comment functions:
+  - Valid UID format: `12345678-abc123-def456-...` (45 characters)
+  - The SDK validates UID format but does not build UIDs for you
+  - Use string concatenation to build UIDs: `${userId}-${objectId}`
 - Comments support tagging users with the `tags` property
 - Comments have a maximum length of 10,000 characters
 - Comment IDs are simple integers (not UIDs)

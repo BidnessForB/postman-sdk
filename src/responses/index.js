@@ -9,7 +9,7 @@ const { buildQueryString, validateId, validateUid } = require('../core/utils');
  * @param {Object} responseData - The response data (name, code, body, etc.)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and requestId use ID)
+ (collectionId and requestId use ID)
 async function createResponse(collectionId, requestId, responseData) {
   validateId(collectionId, 'collectionId');
   validateId(requestId, 'requestId');
@@ -33,7 +33,7 @@ async function createResponse(collectionId, requestId, responseData) {
  * @param {boolean} [populate] - If true, returns all of a response's contents
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and responseId use ID)
+ (collectionId and responseId use ID)
 async function getResponse(collectionId, responseId, ids = null, uid = null, populate = null) {
   validateId(collectionId, 'collectionId');
   validateId(responseId, 'responseId');
@@ -57,7 +57,7 @@ async function getResponse(collectionId, responseId, ids = null, uid = null, pop
  * @param {Object} responseData - The response data to update (name, code, body, etc.)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and responseId use ID)
+ (collectionId and responseId use ID)
 async function updateResponse(collectionId, responseId, responseData) {
   validateId(collectionId, 'collectionId');
   validateId(responseId, 'responseId');
@@ -74,7 +74,7 @@ async function updateResponse(collectionId, responseId, responseData) {
  * @param {string} responseId - The response's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and responseId use ID)
+ (collectionId and responseId use ID)
 async function deleteResponse(collectionId, responseId) {
   validateId(collectionId, 'collectionId');
   validateId(responseId, 'responseId');
@@ -91,7 +91,7 @@ async function deleteResponse(collectionId, responseId) {
  * @param {string} responseUid - The response's UID (format: userId-responseId)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and responseUid parameters)
+ (collectionUid and responseUid parameters)
 async function getResponseComments(collectionUid, responseUid) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');
@@ -109,7 +109,7 @@ async function getResponseComments(collectionUid, responseUid) {
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and responseUid parameters)
+ (collectionUid and responseUid parameters)
 async function createResponseComment(collectionUid, responseUid, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');
@@ -128,7 +128,7 @@ async function createResponseComment(collectionUid, responseUid, commentData) {
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and responseUid parameters), ID (commentId parameter)
+ (collectionUid and responseUid parameters), ID (commentId parameter)
 async function updateResponseComment(collectionUid, responseUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');
@@ -147,7 +147,7 @@ async function updateResponseComment(collectionUid, responseUid, commentId, comm
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and responseUid parameters), ID (commentId parameter)
+ (collectionUid and responseUid parameters), ID (commentId parameter)
 async function deleteResponseComment(collectionUid, responseUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(responseUid, 'responseUid');

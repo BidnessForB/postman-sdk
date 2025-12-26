@@ -10,7 +10,7 @@ const { buildQueryString, validateId, validateUid } = require('../core/utils');
  * @param {number} [offset] - Offset for pagination
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function getCollections(workspaceId = null, name = null, limit = null, offset = null) {
   if (workspaceId !== null) {
     validateId(workspaceId, 'workspaceId');
@@ -35,7 +35,7 @@ async function getCollections(workspaceId = null, name = null, limit = null, off
  * @param {string} [workspaceId] - The workspace's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function createCollection(collection, workspaceId = null) {
   if (workspaceId !== null) {
     validateId(workspaceId, 'workspaceId');
@@ -58,7 +58,7 @@ async function createCollection(collection, workspaceId = null) {
  * @param {string} [model] - Return minimal model (only root-level IDs)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId uses ID)
+ (collectionId uses ID)
 async function getCollection(collectionId, access_key = null, model = null) {
   validateId(collectionId, 'collectionId');
   
@@ -80,7 +80,7 @@ async function getCollection(collectionId, access_key = null, model = null) {
  * @param {string} [prefer] - Set to 'respond-async' for async update
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId uses ID)
+ (collectionId uses ID)
 async function updateCollection(collectionId, collection, prefer = null) {
   validateId(collectionId, 'collectionId');
   
@@ -102,7 +102,7 @@ async function updateCollection(collectionId, collection, prefer = null) {
  * @param {Object} collection - Partial collection object with fields to update
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId uses ID)
+ (collectionId uses ID)
 async function modifyCollection(collectionId, collection) {
   validateId(collectionId, 'collectionId');
   
@@ -117,7 +117,7 @@ async function modifyCollection(collectionId, collection) {
  * @param {string} collectionId - The collection's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId uses ID)
+ (collectionId uses ID)
 async function deleteCollection(collectionId) {
   validateId(collectionId, 'collectionId');
   
@@ -133,7 +133,7 @@ async function deleteCollection(collectionId) {
  * @param {Object} folderData - The folder data (name, description, etc.)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId uses ID)
+ (collectionId uses ID)
 async function createFolder(collectionId, folderData) {
   validateId(collectionId, 'collectionId');
   
@@ -152,7 +152,7 @@ async function createFolder(collectionId, folderData) {
  * @param {string} [populate] - Return full folder items
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and folderId use ID)
+ (collectionId and folderId use ID)
 async function getFolder(collectionId, folderId, ids = null, uid = null, populate = null) {
   validateId(collectionId, 'collectionId');
   validateId(folderId, 'folderId');
@@ -176,7 +176,7 @@ async function getFolder(collectionId, folderId, ids = null, uid = null, populat
  * @param {Object} folderData - The folder data to update (name, description, etc.)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and folderId use ID)
+ (collectionId and folderId use ID)
 async function updateFolder(collectionId, folderId, folderData) {
   validateId(collectionId, 'collectionId');
   validateId(folderId, 'folderId');
@@ -193,7 +193,7 @@ async function updateFolder(collectionId, folderId, folderData) {
  * @param {string} folderId - The folder's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (collectionId and folderId use ID)
+ (collectionId and folderId use ID)
 async function deleteFolder(collectionId, folderId) {
   validateId(collectionId, 'collectionId');
   validateId(folderId, 'folderId');
@@ -209,7 +209,7 @@ async function deleteFolder(collectionId, folderId) {
  * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function getCollectionComments(collectionUid) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -225,7 +225,7 @@ async function getCollectionComments(collectionUid) {
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function createCollectionComment(collectionUid, commentData) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -242,7 +242,7 @@ async function createCollectionComment(collectionUid, commentData) {
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter), ID (commentId parameter)
+ (collectionUid parameter), ID (commentId parameter)
 async function updateCollectionComment(collectionUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -259,7 +259,7 @@ async function updateCollectionComment(collectionUid, commentId, commentData) {
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter), ID (commentId parameter)
+ (collectionUid parameter), ID (commentId parameter)
 async function deleteCollectionComment(collectionUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -276,7 +276,7 @@ async function deleteCollectionComment(collectionUid, commentId) {
  * @param {string} folderUid - The folder's UID (format: userId-folderId)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and folderUid parameters)
+ (collectionUid and folderUid parameters)
 async function getFolderComments(collectionUid, folderUid) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
@@ -294,7 +294,7 @@ async function getFolderComments(collectionUid, folderUid) {
  * @param {Object} commentData - The comment data (body, threadId, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and folderUid parameters)
+ (collectionUid and folderUid parameters)
 async function createFolderComment(collectionUid, folderUid, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
@@ -313,7 +313,7 @@ async function createFolderComment(collectionUid, folderUid, commentData) {
  * @param {Object} commentData - The comment data (body, tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and folderUid parameters), ID (commentId parameter)
+ (collectionUid and folderUid parameters), ID (commentId parameter)
 async function updateFolderComment(collectionUid, folderUid, commentId, commentData) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
@@ -332,7 +332,7 @@ async function updateFolderComment(collectionUid, folderUid, commentId, commentD
  * @param {string} commentId - The comment's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid and folderUid parameters), ID (commentId parameter)
+ (collectionUid and folderUid parameters), ID (commentId parameter)
 async function deleteFolderComment(collectionUid, folderUid, commentId) {
   validateUid(collectionUid, 'collectionUid');
   validateUid(folderUid, 'folderUid');
@@ -350,7 +350,7 @@ async function deleteFolderComment(collectionUid, folderUid, commentId) {
  * @param {string} specId - The spec's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter), ID (specId parameter)
+ (collectionUid parameter), ID (specId parameter)
 async function syncCollectionWithSpec(collectionUid, specId) {
   validateUid(collectionUid, 'collectionUid');
   validateId(specId, 'specId');
@@ -370,7 +370,7 @@ async function syncCollectionWithSpec(collectionUid, specId) {
  * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function getCollectionTags(collectionUid) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -386,7 +386,7 @@ async function getCollectionTags(collectionUid) {
  * @param {Array} tags - Array of tag objects with 'slug' property (max 5 tags)
  * @returns {Promise} Axios response
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function updateCollectionTags(collectionUid, tags) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -406,7 +406,7 @@ async function updateCollectionTags(collectionUid, tags) {
  * @param {string} format - The format of the API specification (e.g., 'JSON', 'YAML')
  * @returns {Promise} Axios response with taskId and url
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function createCollectionGeneration(collectionUid, elementType, name, type, format) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -426,7 +426,7 @@ async function createCollectionGeneration(collectionUid, elementType, name, type
  * @param {string} elementType - The element type (e.g., 'spec')
  * @returns {Promise} Axios response with specs array and pagination metadata
  */
-// REQUIRES: UID (collectionUid parameter)
+ (collectionUid parameter)
 async function getCollectionGenerations(collectionUid, elementType) {
   validateUid(collectionUid, 'collectionUid');
   
@@ -442,7 +442,7 @@ async function getCollectionGenerations(collectionUid, elementType) {
  * @param {string} taskId - The task ID
  * @returns {Promise} Axios response with task status
  */
-// REQUIRES: UID (collectionUid parameter), ID (taskId parameter)
+ (collectionUid parameter), ID (taskId parameter)
 async function getCollectionTaskStatus(collectionUid, taskId) {
   validateUid(collectionUid, 'collectionUid');
   validateId(taskId, 'taskId');

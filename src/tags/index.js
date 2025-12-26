@@ -23,7 +23,7 @@ const { buildQueryString, validateId } = require('../core/utils');
  * // Get entities with pagination
  * const result = await getTagEntities('api-v2', 20, 'desc', nextCursor);
  */
-// REQUIRES: ID (slugId uses ID)
+ (slugId uses ID)
 async function getTagEntities(slugId, limit = null, direction = null, cursor = null, entityType = null) {
   
 

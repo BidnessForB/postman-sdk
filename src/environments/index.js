@@ -7,7 +7,7 @@ const { buildQueryString, validateId } = require('../core/utils');
  * @param {string} [workspaceId] - Return only results found in the given workspace ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function getEnvironments(workspaceId = null) {
   if (workspaceId !== null) {
     validateId(workspaceId, 'workspaceId');
@@ -29,7 +29,7 @@ async function getEnvironments(workspaceId = null) {
  * @param {string} [workspaceId] - A workspace ID in which to create the environment
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function createEnvironment(environmentData, workspaceId = null) {
   if (workspaceId !== null) {
     validateId(workspaceId, 'workspaceId');
@@ -50,7 +50,7 @@ async function createEnvironment(environmentData, workspaceId = null) {
  * @param {string} environmentId - The environment's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (environmentId uses ID)
+ (environmentId uses ID)
 async function getEnvironment(environmentId) {
   validateId(environmentId, 'environmentId');
 
@@ -87,7 +87,7 @@ async function getEnvironment(environmentId) {
  *   { op: 'remove', path: '/values/2' }
  * ]);
  */
-// REQUIRES: ID (environmentId uses ID)
+ (environmentId uses ID)
 async function modifyEnvironment(environmentId, patchOperations) {
   validateId(environmentId, 'environmentId');
 
@@ -102,7 +102,7 @@ async function modifyEnvironment(environmentId, patchOperations) {
  * @param {string} environmentId - The environment's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (environmentId uses ID)
+ (environmentId uses ID)
 async function deleteEnvironment(environmentId) {
   validateId(environmentId, 'environmentId');
 

@@ -1,6 +1,6 @@
 # Postman SDK
 
-![Version](https://img.shields.io/badge/version-0.6.0-blue)
+![Version](https://img.shields.io/badge/version-0.7.0-blue)
 [![All Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20All%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/all-tests.yml)
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)

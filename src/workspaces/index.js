@@ -9,7 +9,7 @@ const { buildQueryString, validateId } = require('../core/utils');
  * @param {string} [include] - Include additional information (mocks:deactivated, scim)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (createdByUserId uses user ID)
+ (createdByUserId uses user ID)
 async function getWorkspaces(type = null, createdByUserId = null, include = null) {
   const endpoint = '/workspaces';
   const queryParams = {
@@ -55,7 +55,7 @@ async function createWorkspace(name, type, description = null, about = null) {
  * @param {string} [include] - Include additional information (mocks:deactivated, scim)
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function getWorkspace(workspaceId, include = null) {
   validateId(workspaceId, 'workspaceId');
 
@@ -80,7 +80,7 @@ async function getWorkspace(workspaceId, include = null) {
  * @param {string} [about] - A brief summary about the workspace
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function updateWorkspace(workspaceId, name = null, type = null, description = null, about = null) {
   validateId(workspaceId, 'workspaceId');
 
@@ -107,7 +107,7 @@ async function updateWorkspace(workspaceId, name = null, type = null, descriptio
  * @param {string} workspaceId - The workspace's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function deleteWorkspace(workspaceId) {
   validateId(workspaceId, 'workspaceId');
 
@@ -122,7 +122,7 @@ async function deleteWorkspace(workspaceId) {
  * @param {string} workspaceId - The workspace's ID
  * @returns {Promise} Axios response
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function getWorkspaceTags(workspaceId) {
   validateId(workspaceId, 'workspaceId');
 
@@ -149,7 +149,7 @@ async function getWorkspaceTags(workspaceId) {
  * // Clear all tags (pass empty array)
  * await updateWorkspaceTags(workspaceId, []);
  */
-// REQUIRES: ID (workspaceId uses ID)
+ (workspaceId uses ID)
 async function updateWorkspaceTags(workspaceId, tags) {
   validateId(workspaceId, 'workspaceId');
 
