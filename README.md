@@ -1,6 +1,6 @@
 # Postman SDK
 
-![Version](https://img.shields.io/badge/version-0.8.1-blue)
+![Version](https://img.shields.io/badge/version-0.8.2-blue)
 [![All Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20All%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/all-tests.yml)
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
@@ -28,9 +28,11 @@ The Postman API makes use of two different structures for identifying objects.  
  - regex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:`/^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;`
  - example: `'34876850-bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
 
-
+## SDK Docs
+[Review the SDK Reference](docs/API-REFERENCE.md)
   
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** 
+
 
 ## Installation
    

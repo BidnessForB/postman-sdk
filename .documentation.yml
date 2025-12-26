@@ -1,0 +1,24 @@
+toc:
+  - name: Collections
+    description: Manage Postman collections, folders, and comments
+  - name: Requests
+    description: Manage requests within collections
+  - name: Responses
+    description: Manage responses for requests
+  - name: Workspaces
+    description: Manage Postman workspaces
+  - name: Specs
+    description: Manage API specifications
+  - name: Environments
+    description: Manage Postman environments
+  - name: Tags
+    description: Manage and query tags
+  - name: Users
+    description: Get user information
+  - name: Mocks
+    description: Manage mock servers
+
+theme: default
+
+github: true
+
