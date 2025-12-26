@@ -33,7 +33,7 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 ---
 
-### Table of Contents 
+### Table of Contents
 
 *Quick Links: [Collections](#collections) • [Requests](#requests) • [Responses](#responses) • [Workspaces](#workspaces) • [Specs](#specs) • [Environments](#environments) • [Mocks](#mocks) • [Tags](#tags) • [Users](#users) • [Core Utilities](#core-utilities)*
 
@@ -277,7 +277,7 @@ const response = await createCollection({
 // Create a collection in a specific workspace
 const response = await createCollection(
   { info: { name: 'Team API' } },
-  'workspace-id-123'
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
 );
 ```
 
@@ -335,7 +335,7 @@ Postman API endpoint and method: PUT /collections/{collectionId}
 
 ```javascript
 // Replace a collection's data
-const response = await updateCollection('collection-id-123', {
+const response = await updateCollection('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   info: {
     name: 'Updated Collection Name',
     description: 'Updated description',
@@ -348,7 +348,7 @@ const response = await updateCollection('collection-id-123', {
 ```javascript
 // Async update (returns immediately without waiting)
 const response = await updateCollection(
-  'collection-id-123',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   collectionData,
   'respond-async'
 );
@@ -375,7 +375,7 @@ Postman API endpoint and method: PATCH /collections/{collectionId}
 
 ```javascript
 // Update only the collection name
-const response = await modifyCollection('collection-id-123', {
+const response = await modifyCollection('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   info: {
     name: 'New Collection Name'
   }
@@ -384,7 +384,7 @@ const response = await modifyCollection('collection-id-123', {
 
 ```javascript
 // Update collection description
-const response = await modifyCollection('collection-id-123', {
+const response = await modifyCollection('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   info: {
     description: 'Updated description text'
   }
@@ -406,7 +406,7 @@ Postman API endpoint and method: DELETE /collections/{collectionId}
 
 ```javascript
 // Delete a collection
-const response = await deleteCollection('collection-id-123');
+const response = await deleteCollection('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.collection);
 ```
 
@@ -430,14 +430,14 @@ Postman API endpoint and method: POST /collections/{collectionId}/folders
 
 ```javascript
 // Create a simple folder
-const response = await createFolder('collection-id-123', {
+const response = await createFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   name: 'API Endpoints'
 });
 ```
 
 ```javascript
 // Create a folder with description
-const response = await createFolder('collection-id-123', {
+const response = await createFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   name: 'Authentication',
   description: 'Endpoints related to user authentication'
 });
@@ -445,7 +445,7 @@ const response = await createFolder('collection-id-123', {
 
 ```javascript
 // Create a nested folder
-const response = await createFolder('collection-id-123', {
+const response = await createFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
   name: 'Sub-folder',
   parentFolderId: 'parent-folder-id'
 });
@@ -470,20 +470,20 @@ Postman API endpoint and method: GET /collections/{collectionId}/folders/{folder
 
 ```javascript
 // Get folder information
-const response = await getFolder('collection-id-123', 'folder-id-456');
+const response = await getFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'e650c45b-39a2-41cd-b8d2-3c021b951ec2');
 console.log(response.data.data);
 ```
 
 ```javascript
 // Get folder with only item IDs
-const response = await getFolder('collection-id-123', 'folder-id-456', 'true');
+const response = await getFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'e650c45b-39a2-41cd-b8d2-3c021b951ec2', 'true');
 ```
 
 ```javascript
 // Get folder with full item details
 const response = await getFolder(
-  'collection-id-123',
-  'folder-id-456',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   null,
   null,
   'true'
@@ -511,8 +511,8 @@ Postman API endpoint and method: PUT /collections/{collectionId}/folders/{folder
 ```javascript
 // Update folder name
 const response = await updateFolder(
-  'collection-id-123',
-  'folder-id-456',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   { name: 'Updated Folder Name' }
 );
 ```
@@ -520,8 +520,8 @@ const response = await updateFolder(
 ```javascript
 // Update folder name and description
 const response = await updateFolder(
-  'collection-id-123',
-  'folder-id-456',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   {
     name: 'User Management',
     description: 'All user-related API endpoints'
@@ -545,7 +545,7 @@ Postman API endpoint and method: DELETE /collections/{collectionId}/folders/{fol
 
 ```javascript
 // Delete a folder
-const response = await deleteFolder('collection-id-123', 'folder-id-456');
+const response = await deleteFolder('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'e650c45b-39a2-41cd-b8d2-3c021b951ec2');
 console.log(response.data.folder);
 ```
 
@@ -564,7 +564,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/comments
 
 ```javascript
 // Get all comments for a collection
-const response = await getCollectionComments('12345678-abc-def-123');
+const response = await getCollectionComments('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.data);
 ```
 
@@ -594,7 +594,7 @@ Postman API endpoint and method: POST /collections/{collectionUid}/comments
 ```javascript
 // Create a simple comment
 const response = await createCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   {
     body: 'This collection is well organized!'
   }
@@ -604,7 +604,7 @@ const response = await createCollectionComment(
 ```javascript
 // Create a comment with user tags
 const response = await createCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   {
     body: 'Great work @alex-cruz!',
     tags: {
@@ -620,7 +620,7 @@ const response = await createCollectionComment(
 ```javascript
 // Reply to an existing comment thread
 const response = await createCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   {
     body: 'I agree with this suggestion.',
     threadId: 12345
@@ -654,7 +654,7 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/comments/{comm
 ```javascript
 // Update a comment's body
 const response = await updateCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   '12345',
   {
     body: 'Updated comment text'
@@ -665,7 +665,7 @@ const response = await updateCollectionComment(
 ```javascript
 // Update a comment with new tags
 const response = await updateCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   '12345',
   {
     body: 'Updated text with @new-user',
@@ -696,7 +696,7 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/comments/{c
 ```javascript
 // Delete a comment
 const response = await deleteCollectionComment(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   '12345'
 );
 console.log(response.data.comment);
@@ -718,9 +718,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/folders/{folde
 
 ```javascript
 // Get all comments for a folder
-const response = await getFolderComments(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456'
+const response = await getFolderComments('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2'
 );
 console.log(response.data.data);
 ```
@@ -751,9 +749,7 @@ Postman API endpoint and method: POST /collections/{collectionUid}/folders/{fold
 
 ```javascript
 // Create a simple comment
-const response = await createFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await createFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   {
     body: 'This looks great!'
   }
@@ -762,9 +758,7 @@ const response = await createFolderComment(
 
 ```javascript
 // Create a comment with user tags
-const response = await createFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await createFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   {
     body: 'Great work @alex-cruz!',
     tags: {
@@ -779,9 +773,7 @@ const response = await createFolderComment(
 
 ```javascript
 // Reply to an existing comment thread
-const response = await createFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await createFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   {
     body: 'I agree with this suggestion.',
     threadId: 12345
@@ -815,9 +807,7 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/folders/{folde
 
 ```javascript
 // Update a folder comment
-const response = await updateFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await updateFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   '12345',
   {
     body: 'Updated comment text'
@@ -827,9 +817,7 @@ const response = await updateFolderComment(
 
 ```javascript
 // Update with new tags
-const response = await updateFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await updateFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   '12345',
   {
     body: 'Updated text with @new-user',
@@ -860,9 +848,7 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/folders/{fo
 
 ```javascript
 // Delete a folder comment
-const response = await deleteFolderComment(
-  '12345678-abc-def-123',
-  '12345678-folder-id-456',
+const response = await deleteFolderComment('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', '2464332-e650c45b-39a2-41cd-b8d2-3c021b951ec2',
   '12345'
 );
 console.log(response.data.comment);
@@ -884,9 +870,7 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/synchronizatio
 
 ```javascript
 // Sync a collection with an API specification
-const response = await syncCollectionWithSpec(
-  '12345678-abc-def-123',
-  'spec-id-456'
+const response = await syncCollectionWithSpec('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'a0c5ad64-211e-442a-b857-22b7d438d478'
 );
 console.log(response.data);
 ```
@@ -906,7 +890,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/tags
 
 ```javascript
 // Get all tags for a collection
-const response = await getCollectionTags('12345678-abc-def-123');
+const response = await getCollectionTags('2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.tags);
 ```
 
@@ -929,7 +913,7 @@ Postman API endpoint and method: PUT /collections/{collectionUid}/tags
 ```javascript
 // Replace collection tags
 const response = await updateCollectionTags(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   [
     { slug: 'api' },
     { slug: 'production' },
@@ -941,7 +925,7 @@ const response = await updateCollectionTags(
 ```javascript
 // Remove all tags (pass empty array)
 const response = await updateCollectionTags(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   []
 );
 ```
@@ -966,7 +950,7 @@ Postman API endpoint and method: POST /collections/{collectionUid}/generations/{
 ```javascript
 // Generate an OpenAPI 3.0 spec in JSON format
 const response = await createCollectionGeneration(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'spec',
   'My API Spec',
   'OPENAPI:3.0',
@@ -978,7 +962,7 @@ console.log(response.data.taskId);
 ```javascript
 // Generate an OpenAPI 3.1 spec in YAML format
 const response = await createCollectionGeneration(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'spec',
   'My API v2',
   'OPENAPI:3.1',
@@ -1003,7 +987,7 @@ Postman API endpoint and method: GET /collections/{collectionUid}/generations/{e
 ```javascript
 // Get all specs generated from a collection
 const response = await getCollectionGenerations(
-  '12345678-abc-def-123',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'spec'
 );
 console.log(response.data.data);
@@ -1027,18 +1011,18 @@ Postman API endpoint and method: GET /collections/{collectionUid}/tasks/{taskId}
 ```javascript
 // Check the status of a generation task
 const response = await getCollectionTaskStatus(
-  '12345678-abc-def-123',
-  'task-id-789'
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
 );
 console.log(response.data.status);
 ```
 
 ```javascript
 // Poll for task completion
-const taskId = 'task-id-789';
+const taskId = 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
 const checkStatus = async () => {
   const response = await getCollectionTaskStatus(
-    '12345678-abc-def-123',
+    '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
     taskId
   );
   if (response.data.status === 'completed') {
@@ -1050,1275 +1034,6 @@ const checkStatus = async () => {
 ```
 
 Returns **[Promise][263]** Axios response with task status and progress information
-
-## getEnvironments
-
-Gets all environments
-Postman API endpoint and method: GET /environments
-
-### Parameters
-
-*   `workspaceId` **[string][261]?** Return only results found in the given workspace ID (optional, default `null`)
-
-### Examples
-
-```javascript
-// Get all environments
-const response = await getEnvironments();
-console.log(response.data.environments);
-```
-
-```javascript
-// Get environments in a specific workspace
-const response = await getEnvironments('workspace-id-123');
-```
-
-Returns **[Promise][263]** Axios response with environments array
-
-## createEnvironment
-
-Creates a new environment
-Postman API endpoint and method: POST /environments
-
-### Parameters
-
-*   `environmentData` **[Object][264]** The environment object containing name and optional values
-
-    *   `environmentData.name` **[string][261]** (Required) The environment's name
-    *   `environmentData.values` **[Array][266]?** Array of environment variable objects
-*   `workspaceId` **[string][261]?** A workspace ID in which to create the environment (optional, default `null`)
-*   `string` **[string][261]** \[].key] - The variable's key name
-*   `string` **[string][261]** \[].value] - The variable's value
-*   `string` **[string][261]** \[].type] - The variable type ('default' or 'secret')
-*   `boolean` **[boolean][267]** \[].enabled] - Whether the variable is enabled
-
-### Examples
-
-```javascript
-// Create a simple environment
-const response = await createEnvironment({
-  name: 'Production'
-});
-```
-
-```javascript
-// Create an environment with variables
-const response = await createEnvironment({
-  name: 'Development',
-  values: [
-    { key: 'base_url', value: 'https://api.dev.example.com', type: 'default', enabled: true },
-    { key: 'api_key', value: 'dev_key_123', type: 'secret', enabled: true }
-  ]
-});
-```
-
-```javascript
-// Create environment in specific workspace
-const response = await createEnvironment(
-  {
-    name: 'Staging',
-    values: [
-      { key: 'base_url', value: 'https://api.staging.example.com', enabled: true }
-    ]
-  },
-  'workspace-id-123'
-);
-```
-
-Returns **[Promise][263]** Axios response with created environment data
-
-## getEnvironment
-
-Gets information about an environment
-Postman API endpoint and method: GET /environments/{environmentId}
-
-### Parameters
-
-*   `environmentId` **[string][261]** The environment's ID
-
-### Examples
-
-```javascript
-// Get environment by ID
-const response = await getEnvironment('environment-id-123');
-console.log(response.data.environment);
-console.log(response.data.environment.values);
-```
-
-Returns **[Promise][263]** Axios response with environment data including all variables
-
-## modifyEnvironment
-
-Updates an environment using JSON Patch operations (RFC 6902)
-Postman API endpoint and method: PATCH /environments/{environmentId}
-
-### Parameters
-
-*   `environmentId` **[string][261]** The environment's ID
-*   `patchOperations` **[Array][266]** Array of JSON Patch operations
-
-    *   `patchOperations[].op` **[string][261]** The operation ('add', 'remove', 'replace', 'copy', 'move', 'test')
-    *   `patchOperations[].path` **[string][261]** The JSON path to modify
-    *   `patchOperations[].value` **any?** The value for add/replace operations
-
-### Examples
-
-```javascript
-// Update environment name
-const response = await modifyEnvironment('env-id-123', [
-  { op: 'replace', path: '/name', value: 'Production Environment' }
-]);
-```
-
-```javascript
-// Add a new variable
-const response = await modifyEnvironment('env-id-123', [
-  { 
-    op: 'add', 
-    path: '/values/0', 
-    value: { key: 'api_key', value: 'secret_key', type: 'secret', enabled: true } 
-  }
-]);
-```
-
-```javascript
-// Replace a variable's value
-const response = await modifyEnvironment('env-id-123', [
-  { op: 'replace', path: '/values/0/value', value: 'new_api_key' }
-]);
-```
-
-```javascript
-// Remove a variable
-const response = await modifyEnvironment('env-id-123', [
-  { op: 'remove', path: '/values/2' }
-]);
-```
-
-```javascript
-// Multiple operations at once
-const response = await modifyEnvironment('env-id-123', [
-  { op: 'replace', path: '/name', value: 'Updated Name' },
-  { op: 'replace', path: '/values/0/value', value: 'updated_value' },
-  { op: 'add', path: '/values/-', value: { key: 'new_var', value: 'value', enabled: true } }
-]);
-```
-
-Returns **[Promise][263]** Axios response with updated environment data
-
-## deleteEnvironment
-
-Deletes an environment
-Postman API endpoint and method: DELETE /environments/{environmentId}
-
-### Parameters
-
-*   `environmentId` **[string][261]** The environment's ID
-
-### Examples
-
-```javascript
-// Delete an environment
-const response = await deleteEnvironment('environment-id-123');
-console.log(response.data.environment);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## getMocks
-
-Gets all mock servers
-Postman API endpoint and method: GET /mocks
-
-### Parameters
-
-*   `teamId` **[string][261]?** Return only mock servers that belong to the given team ID (optional, default `null`)
-*   `workspaceId` **[string][261]?** Return only mock servers in the given workspace (optional, default `null`)
-
-### Examples
-
-```javascript
-// Get all mocks
-const response = await getMocks();
-console.log(response.data.mocks);
-```
-
-```javascript
-// Get mocks in a workspace
-const response = await getMocks(null, 'workspace-id-123');
-```
-
-```javascript
-// Get mocks for a team
-const response = await getMocks('team-id-456');
-```
-
-Returns **[Promise][263]** Axios response with mocks array
-
-## createMock
-
-Creates a mock server in a collection
-Postman API endpoint and method: POST /mocks
-
-### Parameters
-
-*   `mockData` **[Object][264]** The mock object containing collection and optional configuration
-
-    *   `mockData.collection` **[string][261]** (Required) The collection ID or UID
-    *   `mockData.name` **[string][261]?** The mock server's name
-    *   `mockData.environment` **[string][261]?** The environment ID to use with the mock server
-    *   `mockData.private` **[boolean][267]?** Whether the mock server is private (default: false)
-*   `workspaceId` **[string][261]** A workspace ID in which to create the mock server (required)
-
-### Examples
-
-```javascript
-// Create a simple mock server
-const response = await createMock(
-  {
-    collection: 'collection-id-123',
-    name: 'My Mock Server'
-  },
-  'workspace-id-456'
-);
-console.log(response.data.mock.mockUrl);
-```
-
-```javascript
-// Create a private mock with environment
-const response = await createMock(
-  {
-    collection: 'collection-id-123',
-    name: 'Private Mock',
-    environment: 'env-id-789',
-    private: true
-  },
-  'workspace-id-456'
-);
-```
-
-Returns **[Promise][263]** Axios response with created mock server data including mockUrl
-
-## getMock
-
-Gets information about a mock server
-Postman API endpoint and method: GET /mocks/{mockId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-
-### Examples
-
-```javascript
-// Get mock server information
-const response = await getMock('mock-id-123');
-console.log(response.data.mock);
-console.log(response.data.mock.mockUrl);
-```
-
-Returns **[Promise][263]** Axios response with mock server details including mockUrl
-
-## updateMock
-
-Updates a mock server
-Postman API endpoint and method: PUT /mocks/{mockId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `mockData` **[Object][264]** The mock object with fields to update
-
-    *   `mockData.name` **[string][261]?** The mock server's new name
-    *   `mockData.environment` **[string][261]?** The environment ID to use
-    *   `mockData.private` **[boolean][267]?** Whether the mock server is private
-    *   `mockData.collection` **[string][261]?** The collection ID (required by API)
-
-### Examples
-
-```javascript
-// Update mock server name
-const response = await updateMock('mock-id-123', {
-  collection: 'collection-id-456',
-  name: 'Updated Mock Name'
-});
-```
-
-```javascript
-// Make mock server private
-const response = await updateMock('mock-id-123', {
-  collection: 'collection-id-456',
-  private: true
-});
-```
-
-Returns **[Promise][263]** Axios response with updated mock server data
-
-## deleteMock
-
-Deletes a mock server
-Postman API endpoint and method: DELETE /mocks/{mockId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-
-### Examples
-
-```javascript
-// Delete a mock server
-const response = await deleteMock('mock-id-123');
-console.log(response.data.mock);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## getMockCallLogs
-
-Gets a mock server's call logs
-Postman API endpoint and method: GET /mocks/{mockId}/call-logs
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `limit` **[number][262]?** The maximum number of rows to return (defaults to 100) (optional, default `null`)
-*   `cursor` **[string][261]?** The pointer to the first record of the set of paginated results (optional, default `null`)
-*   `until` **[string][261]?** Return only results created until this given time (ISO 8601 format) (optional, default `null`)
-*   `since` **[string][261]?** Return only results created since the given time (ISO 8601 format) (optional, default `null`)
-*   `responseStatusCode` **[number][262]?** Return only call logs that match the given HTTP response status code (e.g., 200, 404) (optional, default `null`)
-*   `responseType` **[string][261]?** Return only call logs that match the given response type (optional, default `null`)
-*   `requestMethod` **[string][261]?** Return only call logs that match the given HTTP method (e.g., 'GET', 'POST') (optional, default `null`)
-*   `requestPath` **[string][261]?** Return only call logs that match the given request path (optional, default `null`)
-*   `sort` **[string][261]?** Sort the results by the given value (e.g., 'servedAt') (optional, default `null`)
-*   `direction` **[string][261]?** Sort in ascending ('asc') or descending ('desc') order (optional, default `null`)
-*   `include` **[string][261]?** Include call log records with header and body data (comma-separated: 'request.headers,request.body,response.headers,response.body') (optional, default `null`)
-
-### Examples
-
-```javascript
-// Get call logs for a mock
-const response = await getMockCallLogs('mock-id-123');
-console.log(response.data.logs);
-```
-
-```javascript
-// Get filtered call logs
-const response = await getMockCallLogs(
-  'mock-id-123',
-  50,
-  null,
-  null,
-  null,
-  404,
-  null,
-  'GET'
-);
-```
-
-```javascript
-// Get call logs with headers and body
-const response = await getMockCallLogs(
-  'mock-id-123',
-  10,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  'servedAt',
-  'desc',
-  'request.headers,response.body'
-);
-```
-
-Returns **[Promise][263]** Axios response with call logs array and pagination metadata
-
-## createMockPublish
-
-Publishes a mock server (sets Access Control to public)
-Postman API endpoint and method: POST /mocks/{mockId}/publish
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-
-### Examples
-
-```javascript
-// Publish a mock server (make it public)
-const response = await createMockPublish('mock-id-123');
-console.log(response.data.mock);
-```
-
-Returns **[Promise][263]** Axios response with published mock data
-
-## getMockServerResponses
-
-Gets all of a mock server's server responses
-Postman API endpoint and method: GET /mocks/{mockId}/server-responses
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-
-### Examples
-
-```javascript
-// Get all server responses for a mock
-const response = await getMockServerResponses('mock-id-123');
-console.log(response.data.serverResponses);
-```
-
-Returns **[Promise][263]** Axios response with server responses array
-
-## createMockServerResponse
-
-Creates a server response for a mock server
-Postman API endpoint and method: POST /mocks/{mockId}/server-responses
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `serverResponseData` **[Object][264]** The server response object
-
-    *   `serverResponseData.name` **[string][261]** (Required) The server response's name
-    *   `serverResponseData.statusCode` **[number][262]** (Required) The HTTP status code (e.g., 200, 404, 500)
-    *   `serverResponseData.body` **[string][261]?** The response body content
-    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
-    *   `serverResponseData.language` **[string][261]?** The response language (e.g., 'json', 'xml', 'text')
-
-### Examples
-
-```javascript
-// Create a server response
-const response = await createMockServerResponse('mock-id-123', {
-  name: '200 Success Response',
-  statusCode: 200,
-  body: JSON.stringify({ message: 'Success' }),
-  language: 'json'
-});
-```
-
-```javascript
-// Create an error response
-const response = await createMockServerResponse('mock-id-123', {
-  name: '404 Not Found',
-  statusCode: 404,
-  body: JSON.stringify({ error: 'Not found' })
-});
-```
-
-Returns **[Promise][263]** Axios response with created server response data
-
-## getMockServerResponse
-
-Gets information about a server response
-Postman API endpoint and method: GET /mocks/{mockId}/server-responses/{serverResponseId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `serverResponseId` **[string][261]** The server response's ID
-
-### Examples
-
-```javascript
-// Get a server response
-const response = await getMockServerResponse('mock-id-123', 'response-id-456');
-console.log(response.data.serverResponse);
-```
-
-Returns **[Promise][263]** Axios response with server response data
-
-## updateMockServerResponse
-
-Updates a mock server's server response
-Postman API endpoint and method: PUT /mocks/{mockId}/server-responses/{serverResponseId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `serverResponseId` **[string][261]** The server response's ID
-*   `serverResponseData` **[Object][264]** The server response object with fields to update
-
-    *   `serverResponseData.name` **[string][261]?** The server response's name
-    *   `serverResponseData.statusCode` **[number][262]?** The HTTP status code
-    *   `serverResponseData.body` **[string][261]?** The response body content
-    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
-
-### Examples
-
-```javascript
-// Update a server response
-const response = await updateMockServerResponse(
-  'mock-id-123',
-  'response-id-456',
-  {
-    name: 'Updated Response',
-    statusCode: 201,
-    body: JSON.stringify({ message: 'Created' })
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with updated server response data
-
-## deleteMockServerResponse
-
-Deletes a mock server's server response
-Postman API endpoint and method: DELETE /mocks/{mockId}/server-responses/{serverResponseId}
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-*   `serverResponseId` **[string][261]** The server response's ID
-
-### Examples
-
-```javascript
-// Delete a server response
-const response = await deleteMockServerResponse('mock-id-123', 'response-id-456');
-console.log(response.data.serverResponse);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## deleteMockUnpublish
-
-Unpublishes a mock server (sets Access Control to private)
-Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish
-
-### Parameters
-
-*   `mockId` **[string][261]** The mock's ID
-
-### Examples
-
-```javascript
-// Unpublish a mock server (make it private)
-const response = await deleteMockUnpublish('mock-id-123');
-console.log(response.data.mock);
-```
-
-Returns **[Promise][263]** Axios response with unpublished mock data
-
-## createRequest
-
-Creates a request in a collection
-Postman API endpoint and method: POST /collections/{collectionId}/requests
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `requestData` **[Object][264]** The request data
-
-    *   `requestData.name` **[string][261]** (Required) The request's name
-    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
-    *   `requestData.url` **[Object][264]?** The request URL object
-
-        *   `requestData.url.raw` **[string][261]?** The complete URL string
-    *   `requestData.header` **[Array][266]?** Array of header objects
-    *   `requestData.body` **[Object][264]?** The request body object
-    *   `requestData.description` **[string][261]?** The request description
-*   `folderId` **[string][261]?** The folder ID in which to create the request. If not provided, creates at collection root. (optional, default `null`)
-
-### Examples
-
-```javascript
-// Create a simple GET request
-const response = await createRequest('collection-id-123', {
-  name: 'Get Users',
-  method: 'GET',
-  url: {
-    raw: 'https://api.example.com/users'
-  }
-});
-```
-
-```javascript
-// Create a POST request with body in a folder
-const response = await createRequest(
-  'collection-id-123',
-  {
-    name: 'Create User',
-    method: 'POST',
-    url: { raw: 'https://api.example.com/users' },
-    header: [
-      { key: 'Content-Type', value: 'application/json' }
-    ],
-    body: {
-      mode: 'raw',
-      raw: JSON.stringify({ name: 'John Doe' })
-    }
-  },
-  'folder-id-456'
-);
-```
-
-```javascript
-// Create a request with description
-const response = await createRequest('collection-id-123', {
-  name: 'Update User',
-  method: 'PUT',
-  url: { raw: 'https://api.example.com/users/:id' },
-  description: 'Updates an existing user by ID'
-});
-```
-
-Returns **[Promise][263]** Axios response with created request data
-
-## getRequest
-
-Gets information about a request in a collection
-Postman API endpoint and method: GET /collections/{collectionId}/requests/{requestId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `requestId` **[string][261]** The request's ID
-*   `ids` **[boolean][267]?** If true, returns only the request properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][267]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][267]?** If true, returns all of a request's contents including full details (optional, default `null`)
-
-### Examples
-
-```javascript
-// Get a request by ID
-const response = await getRequest('collection-id-123', 'request-id-456');
-console.log(response.data.data);
-```
-
-```javascript
-// Get request with only ID properties
-const response = await getRequest('collection-id-123', 'request-id-456', true);
-```
-
-```javascript
-// Get request with UIDs and full contents
-const response = await getRequest(
-  'collection-id-123',
-  'request-id-456',
-  null,
-  true,
-  true
-);
-```
-
-Returns **[Promise][263]** Axios response with request data
-
-## updateRequest
-
-Updates a request in a collection
-Postman API endpoint and method: PUT /collections/{collectionId}/requests/{requestId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `requestId` **[string][261]** The request's ID
-*   `requestData` **[Object][264]** The request data to update
-
-    *   `requestData.name` **[string][261]?** The request's name
-    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
-    *   `requestData.url` **[Object][264]?** The request URL object
-
-        *   `requestData.url.raw` **[string][261]?** The complete URL string
-    *   `requestData.header` **[Array][266]?** Array of header objects
-    *   `requestData.body` **[Object][264]?** The request body object
-    *   `requestData.description` **[string][261]?** The request description
-
-### Examples
-
-```javascript
-// Update request name and method
-const response = await updateRequest(
-  'collection-id-123',
-  'request-id-456',
-  {
-    name: 'Updated Request Name',
-    method: 'POST'
-  }
-);
-```
-
-```javascript
-// Update request URL and headers
-const response = await updateRequest(
-  'collection-id-123',
-  'request-id-456',
-  {
-    url: { raw: 'https://api.example.com/v2/users' },
-    header: [
-      { key: 'Authorization', value: 'Bearer {{token}}' },
-      { key: 'Content-Type', value: 'application/json' }
-    ]
-  }
-);
-```
-
-```javascript
-// Update request body
-const response = await updateRequest(
-  'collection-id-123',
-  'request-id-456',
-  {
-    body: {
-      mode: 'raw',
-      raw: JSON.stringify({ email: 'user@example.com' }),
-      options: {
-        raw: { language: 'json' }
-      }
-    }
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with updated request data
-
-## deleteRequest
-
-Deletes a request in a collection
-Postman API endpoint and method: DELETE /collections/{collectionId}/requests/{requestId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `requestId` **[string][261]** The request's ID
-
-### Examples
-
-```javascript
-// Delete a request
-const response = await deleteRequest('collection-id-123', 'request-id-456');
-console.log(response.data.request);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## getRequestComments
-
-Gets all comments left by users in a request
-Postman API endpoint and method: GET /collections/{collectionUid}/requests/{requestUid}/comments
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
-
-### Examples
-
-```javascript
-// Get all comments for a request
-const response = await getRequestComments(
-  '12345678-abc-def-123',
-  '12345678-request-id-456'
-);
-console.log(response.data.data);
-```
-
-Returns **[Promise][263]** Axios response with array of comments
-
-## createRequestComment
-
-Creates a comment on a request
-Postman API endpoint and method: POST /collections/{collectionUid}/requests/{requestUid}/comments
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
-*   `commentData` **[Object][264]** The comment data
-
-    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
-
-        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
-
-            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][261]** The user's ID
-
-### Examples
-
-```javascript
-// Create a simple comment
-const response = await createRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  {
-    body: 'This endpoint needs authentication!'
-  }
-);
-```
-
-```javascript
-// Create a comment with user tags
-const response = await createRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  {
-    body: 'Please review this @alex-cruz',
-    tags: {
-      '@alex-cruz': {
-        type: 'user',
-        id: '87654321'
-      }
-    }
-  }
-);
-```
-
-```javascript
-// Reply to an existing comment thread
-const response = await createRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  {
-    body: 'I agree, authentication added.',
-    threadId: 12345
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with created comment data
-
-## updateRequestComment
-
-Updates a comment on a request
-Postman API endpoint and method: PUT /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
-*   `commentId` **[string][261]** The comment's ID
-*   `commentData` **[Object][264]** The comment data to update
-
-    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
-
-        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
-
-            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][261]** The user's ID
-
-### Examples
-
-```javascript
-// Update a comment's body
-const response = await updateRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  '12345',
-  {
-    body: 'Updated: This endpoint now requires authentication'
-  }
-);
-```
-
-```javascript
-// Update with new tags
-const response = await updateRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  '12345',
-  {
-    body: 'Updated comment with @new-user',
-    tags: {
-      '@new-user': {
-        type: 'user',
-        id: '11111111'
-      }
-    }
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with updated comment data
-
-## deleteRequestComment
-
-Deletes a comment from a request
-Postman API endpoint and method: DELETE /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
-*   `commentId` **[string][261]** The comment's ID
-
-### Examples
-
-```javascript
-// Delete a request comment
-const response = await deleteRequestComment(
-  '12345678-abc-def-123',
-  '12345678-request-id-456',
-  '12345'
-);
-console.log(response.data.comment);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## createResponse
-
-Creates a response in a collection
-Postman API endpoint and method: POST /collections/{collectionId}/responses
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `requestId` **[string][261]** The parent request's ID that this response belongs to
-*   `responseData` **[Object][264]** The response data
-
-    *   `responseData.name` **[string][261]** (Required) The response's name
-    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
-    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
-    *   `responseData.header` **[Array][266]?** Array of response header objects
-    *   `responseData.body` **[string][261]?** The response body content
-    *   `responseData.originalRequest` **[Object][264]?** The original request that generated this response
-
-### Examples
-
-```javascript
-// Create a simple success response
-const response = await createResponse(
-  'collection-id-123',
-  'request-id-456',
-  {
-    name: '200 OK',
-    code: 200,
-    status: 'OK',
-    header: [
-      { key: 'Content-Type', value: 'application/json' }
-    ],
-    body: JSON.stringify({ message: 'Success' })
-  }
-);
-```
-
-```javascript
-// Create an error response
-const response = await createResponse(
-  'collection-id-123',
-  'request-id-456',
-  {
-    name: '404 Not Found',
-    code: 404,
-    status: 'Not Found',
-    body: JSON.stringify({ error: 'Resource not found' })
-  }
-);
-```
-
-```javascript
-// Create response with headers
-const response = await createResponse(
-  'collection-id-123',
-  'request-id-456',
-  {
-    name: '201 Created',
-    code: 201,
-    status: 'Created',
-    header: [
-      { key: 'Content-Type', value: 'application/json' },
-      { key: 'Location', value: '/users/123' }
-    ],
-    body: JSON.stringify({ id: 123, name: 'John Doe' })
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with created response data
-
-## getResponse
-
-Gets information about a response in a collection
-Postman API endpoint and method: GET /collections/{collectionId}/responses/{responseId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `responseId` **[string][261]** The response's ID
-*   `ids` **[boolean][267]?** If true, returns only the response properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][267]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][267]?** If true, returns all of a response's contents including full details (optional, default `null`)
-
-### Examples
-
-```javascript
-// Get a response by ID
-const response = await getResponse('collection-id-123', 'response-id-789');
-console.log(response.data.data);
-```
-
-```javascript
-// Get response with only ID properties
-const response = await getResponse('collection-id-123', 'response-id-789', true);
-```
-
-```javascript
-// Get response with UIDs and full contents
-const response = await getResponse(
-  'collection-id-123',
-  'response-id-789',
-  null,
-  true,
-  true
-);
-```
-
-Returns **[Promise][263]** Axios response with response data
-
-## updateResponse
-
-Updates a response in a collection
-Postman API endpoint and method: PUT /collections/{collectionId}/responses/{responseId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `responseId` **[string][261]** The response's ID
-*   `responseData` **[Object][264]** The response data to update
-
-    *   `responseData.name` **[string][261]?** The response's name
-    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
-    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
-    *   `responseData.header` **[Array][266]?** Array of response header objects
-    *   `responseData.body` **[string][261]?** The response body content
-
-### Examples
-
-```javascript
-// Update response name and status code
-const response = await updateResponse(
-  'collection-id-123',
-  'response-id-789',
-  {
-    name: '200 Success - Updated',
-    code: 200
-  }
-);
-```
-
-```javascript
-// Update response body and headers
-const response = await updateResponse(
-  'collection-id-123',
-  'response-id-789',
-  {
-    header: [
-      { key: 'Content-Type', value: 'application/json' },
-      { key: 'Cache-Control', value: 'no-cache' }
-    ],
-    body: JSON.stringify({ data: 'updated response' })
-  }
-);
-```
-
-```javascript
-// Update error response
-const response = await updateResponse(
-  'collection-id-123',
-  'response-id-789',
-  {
-    name: '500 Internal Server Error',
-    code: 500,
-    status: 'Internal Server Error',
-    body: JSON.stringify({ error: 'Server error occurred' })
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with updated response data
-
-## deleteResponse
-
-Deletes a response in a collection
-Postman API endpoint and method: DELETE /collections/{collectionId}/responses/{responseId}
-
-### Parameters
-
-*   `collectionId` **[string][261]** The collection's ID
-*   `responseId` **[string][261]** The response's ID
-
-### Examples
-
-```javascript
-// Delete a response
-const response = await deleteResponse('collection-id-123', 'response-id-789');
-console.log(response.data.response);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
-
-## getResponseComments
-
-Gets all comments left by users in a response
-Postman API endpoint and method: GET /collections/{collectionUid}/responses/{responseUid}/comments
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
-
-### Examples
-
-```javascript
-// Get all comments for a response
-const response = await getResponseComments(
-  '12345678-abc-def-123',
-  '12345678-response-id-789'
-);
-console.log(response.data.data);
-```
-
-Returns **[Promise][263]** Axios response with array of comments
-
-## createResponseComment
-
-Creates a comment on a response
-Postman API endpoint and method: POST /collections/{collectionUid}/responses/{responseUid}/comments
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
-*   `commentData` **[Object][264]** The comment data
-
-    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
-    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
-    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
-
-        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
-
-            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][261]** The user's ID
-
-### Examples
-
-```javascript
-// Create a simple comment
-const response = await createResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  {
-    body: 'This response example is helpful!'
-  }
-);
-```
-
-```javascript
-// Create a comment with user tags
-const response = await createResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  {
-    body: 'Great example @alex-cruz!',
-    tags: {
-      '@alex-cruz': {
-        type: 'user',
-        id: '87654321'
-      }
-    }
-  }
-);
-```
-
-```javascript
-// Reply to an existing comment thread
-const response = await createResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  {
-    body: 'Thanks, I updated the response.',
-    threadId: 12345
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with created comment data
-
-## updateResponseComment
-
-Updates a comment on a response
-Postman API endpoint and method: PUT /collections/{collectionUid}/responses/{responseUid}/comments/{commentId}
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
-*   `commentId` **[string][261]** The comment's ID
-*   `commentData` **[Object][264]** The comment data to update
-
-    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
-    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
-
-        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
-
-            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
-            *   `commentData.tags.userName.id` **[string][261]** The user's ID
-
-### Examples
-
-```javascript
-// Update a comment's body
-const response = await updateResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  '12345',
-  {
-    body: 'Updated: This response format has changed'
-  }
-);
-```
-
-```javascript
-// Update with new tags
-const response = await updateResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  '12345',
-  {
-    body: 'Updated comment with @new-user',
-    tags: {
-      '@new-user': {
-        type: 'user',
-        id: '11111111'
-      }
-    }
-  }
-);
-```
-
-Returns **[Promise][263]** Axios response with updated comment data
-
-## deleteResponseComment
-
-Deletes a comment from a response
-Postman API endpoint and method: DELETE /collections/{collectionUid}/responses/{responseUid}/comments/{commentId}
-
-### Parameters
-
-*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
-*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
-*   `commentId` **[string][261]** The comment's ID
-
-### Examples
-
-```javascript
-// Delete a response comment
-const response = await deleteResponseComment(
-  '12345678-abc-def-123',
-  '12345678-response-id-789',
-  '12345'
-);
-console.log(response.data.comment);
-```
-
-Returns **[Promise][263]** Axios response with deletion confirmation
 
 ## buildAxiosConfig
 
@@ -2361,7 +1076,7 @@ Validates a standard ID (UUID format)
 
 <!---->
 
-*   Throws **[Error][268]** If the ID is invalid
+*   Throws **[Error][267]** If the ID is invalid
 
 ## validateUid
 
@@ -2374,7 +1089,7 @@ Validates a UID (userId-UUID format)
 
 <!---->
 
-*   Throws **[Error][268]** If the UID is invalid
+*   Throws **[Error][267]** If the UID is invalid
 
 ## buildQueryString
 
@@ -2407,6 +1122,1275 @@ Builds a UID from a user ID and an object ID
 
 Returns **[string][261]** The UID in format: userId-objectId
 
+## getEnvironments
+
+Gets all environments
+Postman API endpoint and method: GET /environments
+
+### Parameters
+
+*   `workspaceId` **[string][261]?** Return only results found in the given workspace ID (optional, default `null`)
+
+### Examples
+
+```javascript
+// Get all environments
+const response = await getEnvironments();
+console.log(response.data.environments);
+```
+
+```javascript
+// Get environments in a specific workspace
+const response = await getEnvironments('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+```
+
+Returns **[Promise][263]** Axios response with environments array
+
+## createEnvironment
+
+Creates a new environment
+Postman API endpoint and method: POST /environments
+
+### Parameters
+
+*   `environmentData` **[Object][264]** The environment object containing name and optional values
+
+    *   `environmentData.name` **[string][261]** (Required) The environment's name
+    *   `environmentData.values` **[Array][266]?** Array of environment variable objects
+*   `workspaceId` **[string][261]?** A workspace ID in which to create the environment (optional, default `null`)
+*   `string` **[string][261]** \[].key] - The variable's key name
+*   `string` **[string][261]** \[].value] - The variable's value
+*   `string` **[string][261]** \[].type] - The variable type ('default' or 'secret')
+*   `boolean` **[boolean][268]** \[].enabled] - Whether the variable is enabled
+
+### Examples
+
+```javascript
+// Create a simple environment
+const response = await createEnvironment({
+  name: 'Production'
+});
+```
+
+```javascript
+// Create an environment with variables
+const response = await createEnvironment({
+  name: 'Development',
+  values: [
+    { key: 'base_url', value: 'https://api.dev.example.com', type: 'default', enabled: true },
+    { key: 'api_key', value: 'dev_key_123', type: 'secret', enabled: true }
+  ]
+});
+```
+
+```javascript
+// Create environment in specific workspace
+const response = await createEnvironment(
+  {
+    name: 'Staging',
+    values: [
+      { key: 'base_url', value: 'https://api.staging.example.com', enabled: true }
+    ]
+  },
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+);
+```
+
+Returns **[Promise][263]** Axios response with created environment data
+
+## getEnvironment
+
+Gets information about an environment
+Postman API endpoint and method: GET /environments/{environmentId}
+
+### Parameters
+
+*   `environmentId` **[string][261]** The environment's ID
+
+### Examples
+
+```javascript
+// Get environment by ID
+const response = await getEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32');
+console.log(response.data.environment);
+console.log(response.data.environment.values);
+```
+
+Returns **[Promise][263]** Axios response with environment data including all variables
+
+## modifyEnvironment
+
+Updates an environment using JSON Patch operations (RFC 6902)
+Postman API endpoint and method: PATCH /environments/{environmentId}
+
+### Parameters
+
+*   `environmentId` **[string][261]** The environment's ID
+*   `patchOperations` **[Array][266]** Array of JSON Patch operations
+
+    *   `patchOperations[].op` **[string][261]** The operation ('add', 'remove', 'replace', 'copy', 'move', 'test')
+    *   `patchOperations[].path` **[string][261]** The JSON path to modify
+    *   `patchOperations[].value` **any?** The value for add/replace operations
+
+### Examples
+
+```javascript
+// Update environment name
+const response = await modifyEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32', [
+  { op: 'replace', path: '/name', value: 'Production Environment' }
+]);
+```
+
+```javascript
+// Add a new variable
+const response = await modifyEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32', [
+  { 
+    op: 'add', 
+    path: '/values/0', 
+    value: { key: 'api_key', value: 'secret_key', type: 'secret', enabled: true } 
+  }
+]);
+```
+
+```javascript
+// Replace a variable's value
+const response = await modifyEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32', [
+  { op: 'replace', path: '/values/0/value', value: 'new_api_key' }
+]);
+```
+
+```javascript
+// Remove a variable
+const response = await modifyEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32', [
+  { op: 'remove', path: '/values/2' }
+]);
+```
+
+```javascript
+// Multiple operations at once
+const response = await modifyEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32', [
+  { op: 'replace', path: '/name', value: 'Updated Name' },
+  { op: 'replace', path: '/values/0/value', value: 'updated_value' },
+  { op: 'add', path: '/values/-', value: { key: 'new_var', value: 'value', enabled: true } }
+]);
+```
+
+Returns **[Promise][263]** Axios response with updated environment data
+
+## deleteEnvironment
+
+Deletes an environment
+Postman API endpoint and method: DELETE /environments/{environmentId}
+
+### Parameters
+
+*   `environmentId` **[string][261]** The environment's ID
+
+### Examples
+
+```javascript
+// Delete an environment
+const response = await deleteEnvironment('5c6b4f4d-8a24-45f4-8b02-1f07c306be32');
+console.log(response.data.environment);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## getMocks
+
+Gets all mock servers
+Postman API endpoint and method: GET /mocks
+
+### Parameters
+
+*   `teamId` **[string][261]?** Return only mock servers that belong to the given team ID (optional, default `null`)
+*   `workspaceId` **[string][261]?** Return only mock servers in the given workspace (optional, default `null`)
+
+### Examples
+
+```javascript
+// Get all mocks
+const response = await getMocks();
+console.log(response.data.mocks);
+```
+
+```javascript
+// Get mocks in a workspace
+const response = await getMocks(null, 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+```
+
+```javascript
+// Get mocks for a team
+const response = await getMocks('team-id-456');
+```
+
+Returns **[Promise][263]** Axios response with mocks array
+
+## createMock
+
+Creates a mock server in a collection
+Postman API endpoint and method: POST /mocks
+
+### Parameters
+
+*   `mockData` **[Object][264]** The mock object containing collection and optional configuration
+
+    *   `mockData.collection` **[string][261]** (Required) The collection ID or UID
+    *   `mockData.name` **[string][261]?** The mock server's name
+    *   `mockData.environment` **[string][261]?** The environment ID to use with the mock server
+    *   `mockData.private` **[boolean][268]?** Whether the mock server is private (default: false)
+*   `workspaceId` **[string][261]** A workspace ID in which to create the mock server (required)
+
+### Examples
+
+```javascript
+// Create a simple mock server
+const response = await createMock(
+  {
+    collection: 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+    name: 'My Mock Server'
+  },
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+);
+console.log(response.data.mock.mockUrl);
+```
+
+```javascript
+// Create a private mock with environment
+const response = await createMock(
+  {
+    collection: 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+    name: 'Private Mock',
+    environment: '5c6b4f4d-8a24-45f4-8b02-1f07c306be32',
+    private: true
+  },
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+);
+```
+
+Returns **[Promise][263]** Axios response with created mock server data including mockUrl
+
+## getMock
+
+Gets information about a mock server
+Postman API endpoint and method: GET /mocks/{mockId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+
+### Examples
+
+```javascript
+// Get mock server information
+const response = await getMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.mock);
+console.log(response.data.mock.mockUrl);
+```
+
+Returns **[Promise][263]** Axios response with mock server details including mockUrl
+
+## updateMock
+
+Updates a mock server
+Postman API endpoint and method: PUT /mocks/{mockId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `mockData` **[Object][264]** The mock object with fields to update
+
+    *   `mockData.name` **[string][261]?** The mock server's new name
+    *   `mockData.environment` **[string][261]?** The environment ID to use
+    *   `mockData.private` **[boolean][268]?** Whether the mock server is private
+    *   `mockData.collection` **[string][261]?** The collection ID (required by API)
+
+### Examples
+
+```javascript
+// Update mock server name
+const response = await updateMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  collection: 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  name: 'Updated Mock Name'
+});
+```
+
+```javascript
+// Make mock server private
+const response = await updateMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  collection: 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  private: true
+});
+```
+
+Returns **[Promise][263]** Axios response with updated mock server data
+
+## deleteMock
+
+Deletes a mock server
+Postman API endpoint and method: DELETE /mocks/{mockId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+
+### Examples
+
+```javascript
+// Delete a mock server
+const response = await deleteMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## getMockCallLogs
+
+Gets a mock server's call logs
+Postman API endpoint and method: GET /mocks/{mockId}/call-logs
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `limit` **[number][262]?** The maximum number of rows to return (defaults to 100) (optional, default `null`)
+*   `cursor` **[string][261]?** The pointer to the first record of the set of paginated results (optional, default `null`)
+*   `until` **[string][261]?** Return only results created until this given time (ISO 8601 format) (optional, default `null`)
+*   `since` **[string][261]?** Return only results created since the given time (ISO 8601 format) (optional, default `null`)
+*   `responseStatusCode` **[number][262]?** Return only call logs that match the given HTTP response status code (e.g., 200, 404) (optional, default `null`)
+*   `responseType` **[string][261]?** Return only call logs that match the given response type (optional, default `null`)
+*   `requestMethod` **[string][261]?** Return only call logs that match the given HTTP method (e.g., 'GET', 'POST') (optional, default `null`)
+*   `requestPath` **[string][261]?** Return only call logs that match the given request path (optional, default `null`)
+*   `sort` **[string][261]?** Sort the results by the given value (e.g., 'servedAt') (optional, default `null`)
+*   `direction` **[string][261]?** Sort in ascending ('asc') or descending ('desc') order (optional, default `null`)
+*   `include` **[string][261]?** Include call log records with header and body data (comma-separated: 'request.headers,request.body,response.headers,response.body') (optional, default `null`)
+
+### Examples
+
+```javascript
+// Get call logs for a mock
+const response = await getMockCallLogs('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.logs);
+```
+
+```javascript
+// Get filtered call logs
+const response = await getMockCallLogs(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  50,
+  null,
+  null,
+  null,
+  404,
+  null,
+  'GET'
+);
+```
+
+```javascript
+// Get call logs with headers and body
+const response = await getMockCallLogs(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  10,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  'servedAt',
+  'desc',
+  'request.headers,response.body'
+);
+```
+
+Returns **[Promise][263]** Axios response with call logs array and pagination metadata
+
+## createMockPublish
+
+Publishes a mock server (sets Access Control to public)
+Postman API endpoint and method: POST /mocks/{mockId}/publish
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+
+### Examples
+
+```javascript
+// Publish a mock server (make it public)
+const response = await createMockPublish('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with published mock data
+
+## getMockServerResponses
+
+Gets all of a mock server's server responses
+Postman API endpoint and method: GET /mocks/{mockId}/server-responses
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+
+### Examples
+
+```javascript
+// Get all server responses for a mock
+const response = await getMockServerResponses('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.serverResponses);
+```
+
+Returns **[Promise][263]** Axios response with server responses array
+
+## createMockServerResponse
+
+Creates a server response for a mock server
+Postman API endpoint and method: POST /mocks/{mockId}/server-responses
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseData` **[Object][264]** The server response object
+
+    *   `serverResponseData.name` **[string][261]** (Required) The server response's name
+    *   `serverResponseData.statusCode` **[number][262]** (Required) The HTTP status code (e.g., 200, 404, 500)
+    *   `serverResponseData.body` **[string][261]?** The response body content
+    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
+    *   `serverResponseData.language` **[string][261]?** The response language (e.g., 'json', 'xml', 'text')
+
+### Examples
+
+```javascript
+// Create a server response
+const response = await createMockServerResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  name: '200 Success Response',
+  statusCode: 200,
+  body: JSON.stringify({ message: 'Success' }),
+  language: 'json'
+});
+```
+
+```javascript
+// Create an error response
+const response = await createMockServerResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  name: '404 Not Found',
+  statusCode: 404,
+  body: JSON.stringify({ error: 'Not found' })
+});
+```
+
+Returns **[Promise][263]** Axios response with created server response data
+
+## getMockServerResponse
+
+Gets information about a server response
+Postman API endpoint and method: GET /mocks/{mockId}/server-responses/{serverResponseId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
+
+### Examples
+
+```javascript
+// Get a server response
+const response = await getMockServerResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.serverResponse);
+```
+
+Returns **[Promise][263]** Axios response with server response data
+
+## updateMockServerResponse
+
+Updates a mock server's server response
+Postman API endpoint and method: PUT /mocks/{mockId}/server-responses/{serverResponseId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
+*   `serverResponseData` **[Object][264]** The server response object with fields to update
+
+    *   `serverResponseData.name` **[string][261]?** The server response's name
+    *   `serverResponseData.statusCode` **[number][262]?** The HTTP status code
+    *   `serverResponseData.body` **[string][261]?** The response body content
+    *   `serverResponseData.headers` **[Array][266]?** Array of header objects
+
+### Examples
+
+```javascript
+// Update a server response
+const response = await updateMockServerResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: 'Updated Response',
+    statusCode: 201,
+    body: JSON.stringify({ message: 'Created' })
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated server response data
+
+## deleteMockServerResponse
+
+Deletes a mock server's server response
+Postman API endpoint and method: DELETE /mocks/{mockId}/server-responses/{serverResponseId}
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+*   `serverResponseId` **[string][261]** The server response's ID
+
+### Examples
+
+```javascript
+// Delete a server response
+const response = await deleteMockServerResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.serverResponse);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## deleteMockUnpublish
+
+Unpublishes a mock server (sets Access Control to private)
+Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish
+
+### Parameters
+
+*   `mockId` **[string][261]** The mock's ID
+
+### Examples
+
+```javascript
+// Unpublish a mock server (make it private)
+const response = await deleteMockUnpublish('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.mock);
+```
+
+Returns **[Promise][263]** Axios response with unpublished mock data
+
+## createRequest
+
+Creates a request in a collection
+Postman API endpoint and method: POST /collections/{collectionId}/requests
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestData` **[Object][264]** The request data
+
+    *   `requestData.name` **[string][261]** (Required) The request's name
+    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
+    *   `requestData.url` **[Object][264]?** The request URL object
+
+        *   `requestData.url.raw` **[string][261]?** The complete URL string
+    *   `requestData.header` **[Array][266]?** Array of header objects
+    *   `requestData.body` **[Object][264]?** The request body object
+    *   `requestData.description` **[string][261]?** The request description
+*   `folderId` **[string][261]?** The folder ID in which to create the request. If not provided, creates at collection root. (optional, default `null`)
+
+### Examples
+
+```javascript
+// Create a simple GET request
+const response = await createRequest('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  name: 'Get Users',
+  method: 'GET',
+  url: {
+    raw: 'https://api.example.com/users'
+  }
+});
+```
+
+```javascript
+// Create a POST request with body in a folder
+const response = await createRequest(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: 'Create User',
+    method: 'POST',
+    url: { raw: 'https://api.example.com/users' },
+    header: [
+      { key: 'Content-Type', value: 'application/json' }
+    ],
+    body: {
+      mode: 'raw',
+      raw: JSON.stringify({ name: 'John Doe' })
+    }
+  },
+  'e650c45b-39a2-41cd-b8d2-3c021b951ec2'
+);
+```
+
+```javascript
+// Create a request with description
+const response = await createRequest('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', {
+  name: 'Update User',
+  method: 'PUT',
+  url: { raw: 'https://api.example.com/users/:id' },
+  description: 'Updates an existing user by ID'
+});
+```
+
+Returns **[Promise][263]** Axios response with created request data
+
+## getRequest
+
+Gets information about a request in a collection
+Postman API endpoint and method: GET /collections/{collectionId}/requests/{requestId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
+*   `ids` **[boolean][268]?** If true, returns only the request properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][268]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][268]?** If true, returns all of a request's contents including full details (optional, default `null`)
+
+### Examples
+
+```javascript
+// Get a request by ID
+const response = await getRequest('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.data);
+```
+
+```javascript
+// Get request with only ID properties
+const response = await getRequest('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830', true);
+```
+
+```javascript
+// Get request with UIDs and full contents
+const response = await getRequest(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  null,
+  true,
+  true
+);
+```
+
+Returns **[Promise][263]** Axios response with request data
+
+## updateRequest
+
+Updates a request in a collection
+Postman API endpoint and method: PUT /collections/{collectionId}/requests/{requestId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
+*   `requestData` **[Object][264]** The request data to update
+
+    *   `requestData.name` **[string][261]?** The request's name
+    *   `requestData.method` **[string][261]?** The HTTP method (GET, POST, PUT, PATCH, DELETE, etc.)
+    *   `requestData.url` **[Object][264]?** The request URL object
+
+        *   `requestData.url.raw` **[string][261]?** The complete URL string
+    *   `requestData.header` **[Array][266]?** Array of header objects
+    *   `requestData.body` **[Object][264]?** The request body object
+    *   `requestData.description` **[string][261]?** The request description
+
+### Examples
+
+```javascript
+// Update request name and method
+const response = await updateRequest(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: 'Updated Request Name',
+    method: 'POST'
+  }
+);
+```
+
+```javascript
+// Update request URL and headers
+const response = await updateRequest(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    url: { raw: 'https://api.example.com/v2/users' },
+    header: [
+      { key: 'Authorization', value: 'Bearer {{token}}' },
+      { key: 'Content-Type', value: 'application/json' }
+    ]
+  }
+);
+```
+
+```javascript
+// Update request body
+const response = await updateRequest(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: {
+      mode: 'raw',
+      raw: JSON.stringify({ email: 'user@example.com' }),
+      options: {
+        raw: { language: 'json' }
+      }
+    }
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated request data
+
+## deleteRequest
+
+Deletes a request in a collection
+Postman API endpoint and method: DELETE /collections/{collectionId}/requests/{requestId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The request's ID
+
+### Examples
+
+```javascript
+// Delete a request
+const response = await deleteRequest('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.request);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## getRequestComments
+
+Gets all comments left by users in a request
+Postman API endpoint and method: GET /collections/{collectionUid}/requests/{requestUid}/comments
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+
+### Examples
+
+```javascript
+// Get all comments for a request
+const response = await getRequestComments(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+);
+console.log(response.data.data);
+```
+
+Returns **[Promise][263]** Axios response with array of comments
+
+## createRequestComment
+
+Creates a comment on a request
+Postman API endpoint and method: POST /collections/{collectionUid}/requests/{requestUid}/comments
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentData` **[Object][264]** The comment data
+
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
+
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
+
+### Examples
+
+```javascript
+// Create a simple comment
+const response = await createRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'This endpoint needs authentication!'
+  }
+);
+```
+
+```javascript
+// Create a comment with user tags
+const response = await createRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'Please review this @alex-cruz',
+    tags: {
+      '@alex-cruz': {
+        type: 'user',
+        id: '87654321'
+      }
+    }
+  }
+);
+```
+
+```javascript
+// Reply to an existing comment thread
+const response = await createRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'I agree, authentication added.',
+    threadId: 12345
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with created comment data
+
+## updateRequestComment
+
+Updates a comment on a request
+Postman API endpoint and method: PUT /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
+
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
+
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
+
+### Examples
+
+```javascript
+// Update a comment's body
+const response = await updateRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345',
+  {
+    body: 'Updated: This endpoint now requires authentication'
+  }
+);
+```
+
+```javascript
+// Update with new tags
+const response = await updateRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345',
+  {
+    body: 'Updated comment with @new-user',
+    tags: {
+      '@new-user': {
+        type: 'user',
+        id: '11111111'
+      }
+    }
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated comment data
+
+## deleteRequestComment
+
+Deletes a comment from a request
+Postman API endpoint and method: DELETE /collections/{collectionUid}/requests/{requestUid}/comments/{commentId}
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `requestUid` **[string][261]** The request's UID (format: userId-requestId)
+*   `commentId` **[string][261]** The comment's ID
+
+### Examples
+
+```javascript
+// Delete a request comment
+const response = await deleteRequestComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345'
+);
+console.log(response.data.comment);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## createResponse
+
+Creates a response in a collection
+Postman API endpoint and method: POST /collections/{collectionId}/responses
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `requestId` **[string][261]** The parent request's ID that this response belongs to
+*   `responseData` **[Object][264]** The response data
+
+    *   `responseData.name` **[string][261]** (Required) The response's name
+    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
+    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
+    *   `responseData.header` **[Array][266]?** Array of response header objects
+    *   `responseData.body` **[string][261]?** The response body content
+    *   `responseData.originalRequest` **[Object][264]?** The original request that generated this response
+
+### Examples
+
+```javascript
+// Create a simple success response
+const response = await createResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: '200 OK',
+    code: 200,
+    status: 'OK',
+    header: [
+      { key: 'Content-Type', value: 'application/json' }
+    ],
+    body: JSON.stringify({ message: 'Success' })
+  }
+);
+```
+
+```javascript
+// Create an error response
+const response = await createResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: '404 Not Found',
+    code: 404,
+    status: 'Not Found',
+    body: JSON.stringify({ error: 'Resource not found' })
+  }
+);
+```
+
+```javascript
+// Create response with headers
+const response = await createResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: '201 Created',
+    code: 201,
+    status: 'Created',
+    header: [
+      { key: 'Content-Type', value: 'application/json' },
+      { key: 'Location', value: '/users/123' }
+    ],
+    body: JSON.stringify({ id: 123, name: 'John Doe' })
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with created response data
+
+## getResponse
+
+Gets information about a response in a collection
+Postman API endpoint and method: GET /collections/{collectionId}/responses/{responseId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
+*   `ids` **[boolean][268]?** If true, returns only the response properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][268]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][268]?** If true, returns all of a response's contents including full details (optional, default `null`)
+
+### Examples
+
+```javascript
+// Get a response by ID
+const response = await getResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.data);
+```
+
+```javascript
+// Get response with only ID properties
+const response = await getResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830', true);
+```
+
+```javascript
+// Get response with UIDs and full contents
+const response = await getResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  null,
+  true,
+  true
+);
+```
+
+Returns **[Promise][263]** Axios response with response data
+
+## updateResponse
+
+Updates a response in a collection
+Postman API endpoint and method: PUT /collections/{collectionId}/responses/{responseId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
+*   `responseData` **[Object][264]** The response data to update
+
+    *   `responseData.name` **[string][261]?** The response's name
+    *   `responseData.code` **[number][262]?** The HTTP response status code (e.g., 200, 404, 500)
+    *   `responseData.status` **[string][261]?** The HTTP status text (e.g., 'OK', 'Not Found')
+    *   `responseData.header` **[Array][266]?** Array of response header objects
+    *   `responseData.body` **[string][261]?** The response body content
+
+### Examples
+
+```javascript
+// Update response name and status code
+const response = await updateResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: '200 Success - Updated',
+    code: 200
+  }
+);
+```
+
+```javascript
+// Update response body and headers
+const response = await updateResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    header: [
+      { key: 'Content-Type', value: 'application/json' },
+      { key: 'Cache-Control', value: 'no-cache' }
+    ],
+    body: JSON.stringify({ data: 'updated response' })
+  }
+);
+```
+
+```javascript
+// Update error response
+const response = await updateResponse(
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    name: '500 Internal Server Error',
+    code: 500,
+    status: 'Internal Server Error',
+    body: JSON.stringify({ error: 'Server error occurred' })
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated response data
+
+## deleteResponse
+
+Deletes a response in a collection
+Postman API endpoint and method: DELETE /collections/{collectionId}/responses/{responseId}
+
+### Parameters
+
+*   `collectionId` **[string][261]** The collection's ID
+*   `responseId` **[string][261]** The response's ID
+
+### Examples
+
+```javascript
+// Delete a response
+const response = await deleteResponse('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+console.log(response.data.response);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
+## getResponseComments
+
+Gets all comments left by users in a response
+Postman API endpoint and method: GET /collections/{collectionUid}/responses/{responseUid}/comments
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+
+### Examples
+
+```javascript
+// Get all comments for a response
+const response = await getResponseComments(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+);
+console.log(response.data.data);
+```
+
+Returns **[Promise][263]** Axios response with array of comments
+
+## createResponseComment
+
+Creates a comment on a response
+Postman API endpoint and method: POST /collections/{collectionUid}/responses/{responseUid}/comments
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentData` **[Object][264]** The comment data
+
+    *   `commentData.body` **[string][261]** (Required) The contents of the comment. Max 10,000 characters.
+    *   `commentData.threadId` **[number][262]?** The comment's thread ID. Include this to create a reply on an existing comment.
+    *   `commentData.tags` **[Object][264]?** Information about users tagged in the body comment
+
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
+
+### Examples
+
+```javascript
+// Create a simple comment
+const response = await createResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'This response example is helpful!'
+  }
+);
+```
+
+```javascript
+// Create a comment with user tags
+const response = await createResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'Great example @alex-cruz!',
+    tags: {
+      '@alex-cruz': {
+        type: 'user',
+        id: '87654321'
+      }
+    }
+  }
+);
+```
+
+```javascript
+// Reply to an existing comment thread
+const response = await createResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  {
+    body: 'Thanks, I updated the response.',
+    threadId: 12345
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with created comment data
+
+## updateResponseComment
+
+Updates a comment on a response
+Postman API endpoint and method: PUT /collections/{collectionUid}/responses/{responseUid}/comments/{commentId}
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentId` **[string][261]** The comment's ID
+*   `commentData` **[Object][264]** The comment data to update
+
+    *   `commentData.body` **[string][261]?** The updated contents of the comment. Max 10,000 characters.
+    *   `commentData.tags` **[Object][264]?** Updated information about users tagged in the body comment
+
+        *   `commentData.tags.userName` **[Object][264]** Tagged user info. Key is the user's Postman username (e.g., '@user-postman')
+
+            *   `commentData.tags.userName.type` **[string][261]** Must be 'user'
+            *   `commentData.tags.userName.id` **[string][261]** The user's ID
+
+### Examples
+
+```javascript
+// Update a comment's body
+const response = await updateResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345',
+  {
+    body: 'Updated: This response format has changed'
+  }
+);
+```
+
+```javascript
+// Update with new tags
+const response = await updateResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345',
+  {
+    body: 'Updated comment with @new-user',
+    tags: {
+      '@new-user': {
+        type: 'user',
+        id: '11111111'
+      }
+    }
+  }
+);
+```
+
+Returns **[Promise][263]** Axios response with updated comment data
+
+## deleteResponseComment
+
+Deletes a comment from a response
+Postman API endpoint and method: DELETE /collections/{collectionUid}/responses/{responseUid}/comments/{commentId}
+
+### Parameters
+
+*   `collectionUid` **[string][261]** The collection's UID (format: userId-collectionId)
+*   `responseUid` **[string][261]** The response's UID (format: userId-responseId)
+*   `commentId` **[string][261]** The comment's ID
+
+### Examples
+
+```javascript
+// Delete a response comment
+const response = await deleteResponseComment(
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+  '12345'
+);
+console.log(response.data.comment);
+```
+
+Returns **[Promise][263]** Axios response with deletion confirmation
+
 ## getSpecs
 
 Gets all API specifications in a workspace
@@ -2422,13 +2406,13 @@ Postman API endpoint and method: GET /specs
 
 ```javascript
 // Get all specs in a workspace
-const response = await getSpecs('workspace-id-123');
+const response = await getSpecs('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.specs);
 ```
 
 ```javascript
 // Get specs with pagination
-const response = await getSpecs('workspace-id-123', null, 10);
+const response = await getSpecs('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', null, 10);
 const nextCursor = response.data.meta.nextCursor;
 ```
 
@@ -2447,7 +2431,7 @@ Postman API endpoint and method: GET /specs/{specId}
 
 ```javascript
 // Get spec information
-const response = await getSpec('spec-id-123');
+const response = await getSpec('a0c5ad64-211e-442a-b857-22b7d438d478');
 console.log(response.data.spec);
 ```
 
@@ -2473,7 +2457,7 @@ Postman API endpoint and method: POST /specs
 ```javascript
 // Create an OpenAPI 3.0 spec
 const response = await createSpec(
-  'workspace-id-123',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'My API Spec',
   'OPENAPI:3.0',
   [{
@@ -2486,7 +2470,7 @@ const response = await createSpec(
 ```javascript
 // Create an AsyncAPI spec
 const response = await createSpec(
-  'workspace-id-123',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'Event API',
   'ASYNCAPI:2.6.0',
   [{
@@ -2512,7 +2496,7 @@ Postman API endpoint and method: PATCH /specs/{specId}
 
 ```javascript
 // Update spec name
-const response = await modifySpec('spec-id-123', 'Updated API Spec Name');
+const response = await modifySpec('a0c5ad64-211e-442a-b857-22b7d438d478', 'Updated API Spec Name');
 ```
 
 Returns **[Promise][263]** Axios response with updated spec data
@@ -2530,7 +2514,7 @@ Postman API endpoint and method: DELETE /specs/{specId}
 
 ```javascript
 // Delete a spec
-const response = await deleteSpec('spec-id-123');
+const response = await deleteSpec('a0c5ad64-211e-442a-b857-22b7d438d478');
 ```
 
 Returns **[Promise][263]** Axios response with deletion confirmation
@@ -2548,7 +2532,7 @@ Postman API endpoint and method: GET /specs/{specId}/definitions
 
 ```javascript
 // Get spec definition
-const response = await getSpecDefinition('spec-id-123');
+const response = await getSpecDefinition('a0c5ad64-211e-442a-b857-22b7d438d478');
 console.log(response.data.definition);
 ```
 
@@ -2567,7 +2551,7 @@ Postman API endpoint and method: GET /specs/{specId}/files
 
 ```javascript
 // Get all files in a spec
-const response = await getSpecFiles('spec-id-123');
+const response = await getSpecFiles('a0c5ad64-211e-442a-b857-22b7d438d478');
 console.log(response.data.files);
 ```
 
@@ -2589,7 +2573,7 @@ Postman API endpoint and method: POST /specs/{specId}/files
 ```javascript
 // Create a YAML spec file
 const response = await createSpecFile(
-  'spec-id-123',
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
   'index.yaml',
   'openapi: 3.0.0\ninfo:\n  title: My API\n  version: 1.0.0'
 );
@@ -2598,7 +2582,7 @@ const response = await createSpecFile(
 ```javascript
 // Create a JSON schema file
 const response = await createSpecFile(
-  'spec-id-123',
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
   'schemas/user.json',
   JSON.stringify({ type: 'object', properties: { name: { type: 'string' } } })
 );
@@ -2620,7 +2604,7 @@ Postman API endpoint and method: GET /specs/{specId}/files/{filePath}
 
 ```javascript
 // Get a spec file
-const response = await getSpecFile('spec-id-123', 'index.yaml');
+const response = await getSpecFile('a0c5ad64-211e-442a-b857-22b7d438d478', 'index.yaml');
 console.log(response.data.content);
 ```
 
@@ -2646,7 +2630,7 @@ Postman API endpoint and method: PATCH /specs/{specId}/files/{filePath}
 ```javascript
 // Update file content
 const response = await modifySpecFile(
-  'spec-id-123',
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
   'index.yaml',
   { content: 'openapi: 3.0.0\ninfo:\n  title: Updated API\n  version: 2.0.0' }
 );
@@ -2655,7 +2639,7 @@ const response = await modifySpecFile(
 ```javascript
 // Rename a file
 const response = await modifySpecFile(
-  'spec-id-123',
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
   'old-name.yaml',
   { name: 'new-name.yaml' }
 );
@@ -2677,7 +2661,7 @@ Postman API endpoint and method: DELETE /specs/{specId}/files/{filePath}
 
 ```javascript
 // Delete a spec file
-const response = await deleteSpecFile('spec-id-123', 'schemas/user.json');
+const response = await deleteSpecFile('a0c5ad64-211e-442a-b857-22b7d438d478', 'schemas/user.json');
 ```
 
 Returns **[Promise][263]** Axios response with deletion confirmation
@@ -2698,14 +2682,14 @@ Postman API endpoint and method: POST /specs/{specId}/generations/{elementType}
 
 ```javascript
 // Generate a collection from spec
-const response = await createSpecGeneration('spec-id-123', 'collection', 'My API Collection');
+const response = await createSpecGeneration('a0c5ad64-211e-442a-b857-22b7d438d478', 'collection', 'My API Collection');
 const taskId = response.data.taskId;
 ```
 
 ```javascript
 // Generate with options
 const response = await createSpecGeneration(
-  'spec-id-123',
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
   'collection',
   'API Collection',
   { folderStrategy: 'tags' }
@@ -2728,14 +2712,14 @@ Postman API endpoint and method: GET /specs/{specId}/tasks/{taskId}
 
 ```javascript
 // Check generation task status
-const response = await getSpecTaskStatus('spec-id-123', 'task-id-789');
+const response = await getSpecTaskStatus('a0c5ad64-211e-442a-b857-22b7d438d478', 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.status); // 'pending', 'completed', or 'failed'
 ```
 
 ```javascript
 // Poll for task completion
 const checkStatus = async () => {
-  const response = await getSpecTaskStatus('spec-id-123', taskId);
+  const response = await getSpecTaskStatus('a0c5ad64-211e-442a-b857-22b7d438d478', taskId);
   if (response.data.status === 'completed') {
     console.log('Generation complete!', response.data.result);
   }
@@ -2760,13 +2744,13 @@ Postman API endpoint and method: GET /specs/{specId}/generations/{elementType}
 
 ```javascript
 // Get all collections generated from a spec
-const response = await getSpecGenerations('spec-id-123', 'collection');
+const response = await getSpecGenerations('a0c5ad64-211e-442a-b857-22b7d438d478', 'collection');
 console.log(response.data.data);
 ```
 
 ```javascript
 // Get with pagination
-const response = await getSpecGenerations('spec-id-123', 'collection', 20, nextCursor);
+const response = await getSpecGenerations('a0c5ad64-211e-442a-b857-22b7d438d478', 'collection', 20, nextCursor);
 ```
 
 Returns **[Promise][263]** Axios response with generated collections array and pagination metadata
@@ -2786,8 +2770,8 @@ Postman API endpoint and method: PUT /specs/{specId}/synchronizations
 ```javascript
 // Sync spec with collection
 const response = await syncSpecWithCollection(
-  'spec-id-123',
-  '12345678-abc-def-456'
+  'a0c5ad64-211e-442a-b857-22b7d438d478',
+  '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
 );
 console.log(response.data.taskId);
 ```
@@ -2936,13 +2920,13 @@ Postman API endpoint and method: GET /workspaces/{workspaceId}
 
 ```javascript
 // Get workspace information
-const response = await getWorkspace('workspace-id-123');
+const response = await getWorkspace('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.workspace);
 ```
 
 ```javascript
 // Get workspace with SCIM information
-const response = await getWorkspace('workspace-id-123', 'scim');
+const response = await getWorkspace('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'scim');
 ```
 
 Returns **[Promise][263]** Axios response with workspace details including collections, environments, and mocks
@@ -2966,18 +2950,18 @@ then merges updates, because the Postman API requires 'type' to be present in PU
 
 ```javascript
 // Update workspace name
-const response = await updateWorkspace('workspace-id-123', 'New Workspace Name');
+const response = await updateWorkspace('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', 'New Workspace Name');
 ```
 
 ```javascript
 // Update workspace type to team
-const response = await updateWorkspace('workspace-id-123', null, 'team');
+const response = await updateWorkspace('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', null, 'team');
 ```
 
 ```javascript
 // Update multiple properties
 const response = await updateWorkspace(
-  'workspace-id-123',
+  'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
   'Updated Name',
   'private',
   'Updated description',
@@ -3000,7 +2984,7 @@ Postman API endpoint and method: DELETE /workspaces/{workspaceId}
 
 ```javascript
 // Delete a workspace
-const response = await deleteWorkspace('workspace-id-123');
+const response = await deleteWorkspace('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.workspace);
 ```
 
@@ -3019,7 +3003,7 @@ Postman API endpoint and method: GET /workspaces/{workspaceId}/tags
 
 ```javascript
 // Get all tags for a workspace
-const response = await getWorkspaceTags('workspace-id-123');
+const response = await getWorkspaceTags('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.tags);
 ```
 
@@ -3042,7 +3026,7 @@ Note: This replaces all existing tags with the provided tags array
 
 ```javascript
 // Replace workspace tags
-const response = await updateWorkspaceTags('workspace-id-123', [
+const response = await updateWorkspaceTags('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', [
   { slug: 'production' },
   { slug: 'api-v2' },
   { slug: 'needs-review' }
@@ -3051,7 +3035,7 @@ const response = await updateWorkspaceTags('workspace-id-123', [
 
 ```javascript
 // Remove all tags (pass empty array)
-const response = await updateWorkspaceTags('workspace-id-123', []);
+const response = await updateWorkspaceTags('bf5cb6e7-0a1e-4b82-a577-b2068a70f830', []);
 ```
 
 Returns **[Promise][263]** Axios response with updated tags
@@ -3200,239 +3184,239 @@ Returns **[Promise][263]** Axios response with updated tags
 
 [45]: #examples-23
 
+[246]: #buildaxiosconfig
+
+[247]: #parameters-24
+
+[250]: #executerequest
+
+[251]: #parameters-25
+
+[77]: #postman_api_key_env_var
+
+[256]: #validateid
+
+[257]: #parameters-26
+
+[258]: #validateuid
+
+[259]: #parameters-27
+
+[248]: #buildquerystring
+
+[249]: #parameters-28
+
+[252]: #getcontentfs
+
+[253]: #parameters-29
+
+[254]: #utils
+
+[255]: #parameters-30
+
 [196]: #getenvironments
 
-[197]: #parameters-24
+[197]: #parameters-31
 
 [198]: #examples-24
 
 [187]: #createenvironment
 
-[188]: #parameters-25
+[188]: #parameters-32
 
 [189]: #examples-25
 
 [193]: #getenvironment
 
-[194]: #parameters-26
+[194]: #parameters-33
 
 [195]: #examples-26
 
 [199]: #modifyenvironment
 
-[200]: #parameters-27
+[200]: #parameters-34
 
 [201]: #examples-27
 
 [190]: #deleteenvironment
 
-[191]: #parameters-28
+[191]: #parameters-35
 
 [192]: #examples-28
 
 [226]: #getmocks
 
-[227]: #parameters-29
+[227]: #parameters-36
 
 [228]: #examples-29
 
 [202]: #createmock
 
-[203]: #parameters-30
+[203]: #parameters-37
 
 [204]: #examples-30
 
 [220]: #getmock
 
-[221]: #parameters-31
+[221]: #parameters-38
 
 [222]: #examples-31
 
 [235]: #updatemock
 
-[236]: #parameters-32
+[236]: #parameters-39
 
 [237]: #examples-32
 
 [211]: #deletemock
 
-[212]: #parameters-33
+[212]: #parameters-40
 
 [213]: #examples-33
 
 [223]: #getmockcalllogs
 
-[224]: #parameters-34
+[224]: #parameters-41
 
 [225]: #examples-34
 
 [205]: #createmockpublish
 
-[206]: #parameters-35
+[206]: #parameters-42
 
 [207]: #examples-35
 
 [232]: #getmockserverresponses
 
-[233]: #parameters-36
+[233]: #parameters-43
 
 [234]: #examples-36
 
 [208]: #createmockserverresponse
 
-[209]: #parameters-37
+[209]: #parameters-44
 
 [210]: #examples-37
 
 [229]: #getmockserverresponse
 
-[230]: #parameters-38
+[230]: #parameters-45
 
 [231]: #examples-38
 
 [238]: #updatemockserverresponse
 
-[239]: #parameters-39
+[239]: #parameters-46
 
 [240]: #examples-39
 
 [214]: #deletemockserverresponse
 
-[215]: #parameters-40
+[215]: #parameters-47
 
 [216]: #examples-40
 
 [217]: #deletemockunpublish
 
-[218]: #parameters-41
+[218]: #parameters-48
 
 [219]: #examples-41
 
 [73]: #createrequest
 
-[74]: #parameters-42
+[74]: #parameters-49
 
 [75]: #examples-42
 
 [85]: #getrequest
 
-[86]: #parameters-43
+[86]: #parameters-50
 
 [87]: #examples-43
 
 [91]: #updaterequest
 
-[92]: #parameters-44
+[92]: #parameters-51
 
 [93]: #examples-44
 
 [79]: #deleterequest
 
-[80]: #parameters-45
+[80]: #parameters-52
 
 [81]: #examples-45
 
 [88]: #getrequestcomments
 
-[89]: #parameters-46
+[89]: #parameters-53
 
 [90]: #examples-46
 
 [76]: #createrequestcomment
 
-[77]: #parameters-47
+[77]: #parameters-54
 
 [78]: #examples-47
 
 [94]: #updaterequestcomment
 
-[95]: #parameters-48
+[95]: #parameters-55
 
 [96]: #examples-48
 
 [82]: #deleterequestcomment
 
-[83]: #parameters-49
+[83]: #parameters-56
 
 [84]: #examples-49
 
 [97]: #createresponse
 
-[98]: #parameters-50
+[98]: #parameters-57
 
 [99]: #examples-50
 
 [109]: #getresponse
 
-[110]: #parameters-51
+[110]: #parameters-58
 
 [111]: #examples-51
 
 [115]: #updateresponse
 
-[116]: #parameters-52
+[116]: #parameters-59
 
 [117]: #examples-52
 
 [103]: #deleteresponse
 
-[104]: #parameters-53
+[104]: #parameters-60
 
 [105]: #examples-53
 
 [112]: #getresponsecomments
 
-[113]: #parameters-54
+[113]: #parameters-61
 
 [114]: #examples-54
 
 [100]: #createresponsecomment
 
-[101]: #parameters-55
+[101]: #parameters-62
 
 [102]: #examples-55
 
 [118]: #updateresponsecomment
 
-[119]: #parameters-56
+[119]: #parameters-63
 
 [120]: #examples-56
 
 [106]: #deleteresponsecomment
 
-[107]: #parameters-57
+[107]: #parameters-64
 
 [108]: #examples-57
-
-[246]: #buildaxiosconfig
-
-[247]: #parameters-58
-
-[250]: #executerequest
-
-[251]: #parameters-59
-
-[179]: #postman_api_key_env_var
-
-[256]: #validateid
-
-[257]: #parameters-60
-
-[258]: #validateuid
-
-[259]: #parameters-61
-
-[248]: #buildquerystring
-
-[249]: #parameters-62
-
-[252]: #getcontentfs
-
-[253]: #parameters-63
-
-[254]: #utils
-
-[255]: #parameters-64
 
 [172]: #getspecs
 
@@ -3588,6 +3572,6 @@ Returns **[Promise][263]** Axios response with updated tags
 
 [266]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[267]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[267]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
 
-[268]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+[268]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean

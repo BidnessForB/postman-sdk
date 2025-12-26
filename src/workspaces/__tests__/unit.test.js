@@ -15,7 +15,9 @@ jest.mock('../../core/config', () => ({
   baseUrl: 'https://api.getpostman.com'
 }));
 
-const DEFAULT_ID = '1f0df51a-8658-4ee8-a2a1-d2567dfa09a9';
+const { DEFAULT_ID } = require('../../__tests__/test-helpers');
+
+
 
 describe('workspaces unit tests', () => {
   beforeEach(() => {

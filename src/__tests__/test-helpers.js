@@ -4,8 +4,8 @@ const path = require('path');
 // Shared test IDs file location - accessible to all test modules
 const TEST_IDS_FILE = path.join(__dirname, 'test-ids.json');
 
-const DEFAULT_ID = 'bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
-const DEFAULT_UID = '34829850-bf5cb6e7-0a1e-4b82-a577-b2068a70f830';
+const DEFAULT_ID = 'bf5cb6e7-4b82-a577-d70a-b2068a70f830';
+const DEFAULT_UID = '34829850-bf5cb6e7-4b82-a577-d70a-b2068a70f830';
 
 
 /**
