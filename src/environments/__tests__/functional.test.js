@@ -6,7 +6,7 @@ const {
   deleteEnvironment
 } = require('../index');
 const { getAuthenticatedUser } = require('../../users');
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, DEFAULT_UID, DEFAULT_ID } = require('../../__tests__/test-helpers');
 
 describe('Environments Functional Tests', () => {
   let persistedIds;
@@ -96,9 +96,11 @@ describe('Environments Functional Tests', () => {
   }, 10000);
 
   test('4. getEnvironment - should error on non-existent environment', async () => {
-    const environmentId = 'foo';
+    const environmentId = DEFAULT_ID;
     let result;
     try {
+
+      
       result = await getEnvironment(environmentId);
     }
     catch (error) {

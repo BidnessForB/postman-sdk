@@ -86,6 +86,7 @@ describe('collections functional tests (sequential flow)', () => {
     persistedIds.collection = {
       ...persistedIds.collection,
       id: result.data.collection.id,
+      uid: result.data.collection.uid,
       name: collectionName,
       createdAt: new Date().toISOString()
     };

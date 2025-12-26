@@ -6,6 +6,7 @@ const {
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('../../__tests__/test-helpers');
+const { DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 describe('folder comments functional tests (sequential flow)', () => {
   let testUserId;
@@ -42,13 +43,13 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('1. getFolderComments - should retrieve comments (initially empty)', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
 
-    const result = await getFolderComments(testUserId, collectionId, folderId);
+    const result = await getFolderComments(collectionUid, folderUid);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -56,17 +57,17 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('2. createFolderComment - should create a comment on the folder', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
 
     const commentData = {
       body: 'This is a test comment created by SDK functional tests'
     };
 
-    const result = await createFolderComment(testUserId, collectionId, folderId, commentData);
+    const result = await createFolderComment(collectionUid, folderUid, commentData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -88,15 +89,15 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('3. getFolderComments - should retrieve comments including the new one', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
     
     
 
-    const result = await getFolderComments(testUserId, collectionId, folderId);
+    const result = await getFolderComments(collectionUid, folderUid);
 
     expect(result.status).toBe(200);
     expect(result.data.data.length).toBeGreaterThan(0);
@@ -107,11 +108,11 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('4. createFolderCommentReply - should create a reply comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
     
     
 
@@ -122,7 +123,7 @@ describe('folder comments functional tests (sequential flow)', () => {
     };
 
     try {
-      const result = await createFolderComment(testUserId, collectionId, folderId, replyData);
+      const result = await createFolderComment(collectionUid, folderUid, replyData);
 
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('data');
@@ -142,11 +143,11 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('5. updateFolderComment - should update the comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
     
     
 
@@ -155,7 +156,7 @@ describe('folder comments functional tests (sequential flow)', () => {
       body: 'This is an updated test comment'
     };
 
-    const result = await updateFolderComment(testUserId, collectionId, folderId, commentId, updatedData);
+    const result = await updateFolderComment(collectionUid, folderUid, commentId, updatedData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -163,16 +164,16 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('6. deleteFolderComment - should delete the reply comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
     
     
 
     const replyCommentId = persistedIds.folder.comment.replyId;
-    const result = await deleteFolderComment(testUserId, collectionId, folderId, replyCommentId);
+    const result = await deleteFolderComment(collectionUid, folderUid, replyCommentId);
 
     expect(result.status).toBe(204);
 
@@ -187,16 +188,16 @@ describe('folder comments functional tests (sequential flow)', () => {
   });
 
   test('7. deleteFolderComment - should delete the main comment', async () => {
-    const collectionId = persistedIds.collection.id;
-    const folderId = persistedIds.folder.id;
+    const collectionUid = persistedIds.collection.uid;
+    const folderUid = persistedIds.folder.uid;
     
-    expect(collectionId).toBeDefined();
-    expect(folderId).toBeDefined();
+    expect(collectionUid).toBeDefined();
+    expect(folderUid).toBeDefined();
     
     
 
     const commentId = persistedIds.folder.comment.id;
-    const result = await deleteFolderComment(testUserId, collectionId, folderId, commentId);
+    const result = await deleteFolderComment(collectionUid, folderUid, commentId);
 
     expect(result.status).toBe(204);
 
@@ -213,24 +214,24 @@ describe('folder comments functional tests (sequential flow)', () => {
 
   describe('error handling', () => {
     test('should handle getting comments from non-existent collection', async () => {
-      const folderId = persistedIds.folder.id;
-      const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
-      await expect(getFolderComments(testUserId, fakeCollectionId, folderId)).rejects.toThrow();
+      const folderUid = persistedIds.folder.uid;
+      
+      await expect(getFolderComments(DEFAULT_UID, folderUid)).rejects.toThrow();
     });
 
     test('should handle updating non-existent comment', async () => {
-      const collectionId = persistedIds.collection.id;
-      const folderId = persistedIds.folder.id;
+      const collectionUid = persistedIds.collection.uid;
+      const folderUid = persistedIds.folder.uid;
       const fakeId = '999999';
       const commentData = { body: 'Updated comment' };
-      await expect(updateFolderComment(testUserId, collectionId, folderId, fakeId, commentData)).rejects.toThrow();
+      await expect(updateFolderComment(collectionUid, folderUid, fakeId, commentData)).rejects.toThrow();
     });
 
     test('should handle deleting non-existent comment', async () => {
-      const collectionId = persistedIds.collection.id;
-      const folderId = persistedIds.folder.id;
+      const collectionUid = persistedIds.collection.uid;
+      const folderUid = persistedIds.folder.uid;
       const fakeId = '999999';
-      await expect(deleteFolderComment(testUserId, collectionId, folderId, fakeId)).rejects.toThrow();
+      await expect(deleteFolderComment(collectionUid, folderUid, fakeId)).rejects.toThrow();
     });
   });
 });

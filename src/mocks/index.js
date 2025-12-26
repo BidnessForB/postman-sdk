@@ -1,18 +1,24 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString } = require('../core/utils');
+const { buildQueryString, validateId } = require('../core/utils');
 
 /**
  * Gets all mock servers
  * Postman API endpoint and method: GET /mocks
  * @param {string} [teamId] - Return only mock servers that belong to the given team ID
- * @param {string} [workspace] - Return only mock servers in the given workspace
+ * @param {string} [workspaceId] - Return only mock servers in the given workspace
  * @returns {Promise} Axios response
  */
-async function getMocks(teamId = null, workspace = null) {
+// REQUIRES: ID (teamId and workspaceId use ID)
+async function getMocks(teamId = null, workspaceId = null) {
+  
+  if (workspaceId !== null) {
+    validateId(workspaceId, 'workspaceId');
+  }
+
   const endpoint = '/mocks';
   const queryParams = {
     teamId,
-    workspace
+    workspace: workspaceId
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
   const config = buildAxiosConfig('get', fullEndpoint);
@@ -23,13 +29,16 @@ async function getMocks(teamId = null, workspace = null) {
  * Creates a mock server in a collection
  * Postman API endpoint and method: POST /mocks
  * @param {Object} mockData - The mock object containing collection and optional configuration
- * @param {string} workspace - A workspace ID in which to create the mock server (required)
+ * @param {string} workspaceId - A workspace ID in which to create the mock server (required)
  * @returns {Promise} Axios response
  */
-async function createMock(mockData, workspace) {
+// REQUIRES: ID (workspaceId uses ID)
+async function createMock(mockData, workspaceId) {
+  validateId(workspaceId, 'workspaceId');
+
   const endpoint = '/mocks';
   const queryParams = {
-    workspace
+    workspace: workspaceId
   };
   const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
   const config = buildAxiosConfig('post', fullEndpoint, { mock: mockData });
@@ -42,7 +51,10 @@ async function createMock(mockData, workspace) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function getMock(mockId) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -55,7 +67,10 @@ async function getMock(mockId) {
  * @param {Object} mockData - The mock object containing collection (required) and optional fields
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function updateMock(mockId, mockData) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}`;
   const config = buildAxiosConfig('put', endpoint, { mock: mockData });
   return await executeRequest(config);
@@ -67,7 +82,10 @@ async function updateMock(mockId, mockData) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function deleteMock(mockId) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -90,6 +108,7 @@ async function deleteMock(mockId) {
  * @param {string} [include] - Include call log records with header and body data (comma-separated values)
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function getMockCallLogs(
   mockId,
   limit = null,
@@ -104,6 +123,8 @@ async function getMockCallLogs(
   direction = null,
   include = null
 ) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}/call-logs`;
   const queryParams = {
     limit,
@@ -129,7 +150,10 @@ async function getMockCallLogs(
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function createMockPublish(mockId) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}/publish`;
   const config = buildAxiosConfig('post', endpoint);
   return await executeRequest(config);
@@ -141,7 +165,10 @@ async function createMockPublish(mockId) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function getMockServerResponses(mockId) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}/server-responses`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -154,7 +181,10 @@ async function getMockServerResponses(mockId) {
  * @param {Object} serverResponseData - The server response object containing name and statusCode (required)
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function createMockServerResponse(mockId, serverResponseData) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}/server-responses`;
   const config = buildAxiosConfig('post', endpoint, { serverResponse: serverResponseData });
   return await executeRequest(config);
@@ -167,7 +197,11 @@ async function createMockServerResponse(mockId, serverResponseData) {
  * @param {string} serverResponseId - The server response's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId and serverResponseId use ID)
 async function getMockServerResponse(mockId, serverResponseId) {
+  validateId(mockId, 'mockId');
+  validateId(serverResponseId, 'serverResponseId');
+
   const endpoint = `/mocks/${mockId}/server-responses/${serverResponseId}`;
   const config = buildAxiosConfig('get', endpoint);
   return await executeRequest(config);
@@ -181,7 +215,11 @@ async function getMockServerResponse(mockId, serverResponseId) {
  * @param {Object} serverResponseData - The server response object with fields to update
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId and serverResponseId use ID)
 async function updateMockServerResponse(mockId, serverResponseId, serverResponseData) {
+  validateId(mockId, 'mockId');
+  validateId(serverResponseId, 'serverResponseId');
+
   const endpoint = `/mocks/${mockId}/server-responses/${serverResponseId}`;
   const config = buildAxiosConfig('put', endpoint, { serverResponse: serverResponseData });
   return await executeRequest(config);
@@ -194,7 +232,11 @@ async function updateMockServerResponse(mockId, serverResponseId, serverResponse
  * @param {string} serverResponseId - The server response's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId and serverResponseId use ID)
 async function deleteMockServerResponse(mockId, serverResponseId) {
+  validateId(mockId, 'mockId');
+  validateId(serverResponseId, 'serverResponseId');
+
   const endpoint = `/mocks/${mockId}/server-responses/${serverResponseId}`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);
@@ -206,7 +248,10 @@ async function deleteMockServerResponse(mockId, serverResponseId) {
  * @param {string} mockId - The mock's ID
  * @returns {Promise} Axios response
  */
+// REQUIRES: ID (mockId uses ID)
 async function deleteMockUnpublish(mockId) {
+  validateId(mockId, 'mockId');
+
   const endpoint = `/mocks/${mockId}/unpublish`;
   const config = buildAxiosConfig('delete', endpoint);
   return await executeRequest(config);

@@ -9,7 +9,7 @@ const {
   deleteRequestComment
 } = require('../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 describe('requests functional tests (sequential flow)', () => {
   let persistedIds = {};
@@ -63,6 +63,7 @@ describe('requests functional tests (sequential flow)', () => {
     persistedIds.request = {
       ...persistedIds.request,
       id: result.data.data.id,
+      uid: result.data.data.owner + '-' + result.data.data.id,
       name: requestName,
       createdAt: new Date().toISOString()
     };
@@ -78,7 +79,7 @@ describe('requests functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(requestId).toBeDefined();
 
-    const result = await getRequest(collectionId, requestId);
+    const result = await getRequest(persistedIds.collection.id, persistedIds.request.id);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -108,7 +109,7 @@ describe('requests functional tests (sequential flow)', () => {
       description: 'Updated request description'
     };
 
-    const result = await updateRequest(collectionId, requestId, requestData);
+    const result = await updateRequest(persistedIds.collection.id, persistedIds.request.id, requestData);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('data');
@@ -128,7 +129,7 @@ describe('requests functional tests (sequential flow)', () => {
     expect(collectionId).toBeDefined();
     expect(requestId).toBeDefined();
 
-    const result = await getRequest(collectionId, requestId);
+    const result = await getRequest(persistedIds.collection.id, persistedIds.request.id);
 
     expect(result.status).toBe(200);
     expect(result.data.data).toHaveProperty('name');
@@ -254,7 +255,7 @@ describe('requests functional tests (sequential flow)', () => {
           body: 'This is a test comment on a request'
         };
 
-        const result = await createRequestComment(userId, collectionId, requestId, commentData);
+        const result = await createRequestComment(persistedIds.collection.uid, persistedIds.request.uid, commentData);
 
         expect(result.status).toBeGreaterThanOrEqual(200);
         expect(result.status).toBeLessThan(300);
@@ -277,7 +278,7 @@ describe('requests functional tests (sequential flow)', () => {
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
 
-        const result = await getRequestComments(userId, collectionId, requestId);
+        const result = await getRequestComments(persistedIds.collection.uid, persistedIds.request.uid);
 
         expect(result.status).toBe(200);
         expect(result.data).toBeDefined();
@@ -300,7 +301,7 @@ describe('requests functional tests (sequential flow)', () => {
           body: 'This is an updated comment on a request'
         };
 
-        const result = await updateRequestComment(userId, collectionId, requestId, commentId, updatedCommentData);
+        const result = await updateRequestComment(persistedIds.collection.uid, persistedIds.request.uid, commentId, updatedCommentData);
 
         expect(result.status).toBe(200);
         expect(result.data).toBeDefined();
@@ -317,7 +318,7 @@ describe('requests functional tests (sequential flow)', () => {
         let result;
         
         try {
-          result = await deleteRequestComment(userId, collectionId, requestId, commentId);
+          result = await deleteRequestComment(persistedIds.collection.uid, persistedIds.request.uid, commentId);
         } catch (error) {
           result = error.response;
         }
@@ -332,16 +333,16 @@ describe('requests functional tests (sequential flow)', () => {
     describe('comment error handling', () => {
       test('should return 404 for comments on non-existent request', async () => {
         const userId = persistedIds.userId;
-        const collectionId = persistedIds.collection.id;
-        const nonExistentRequestId = '00000000-0000-0000-0000-000000000000';
-        const result = await getRequestComments(userId, collectionId, nonExistentRequestId);
+        const collectionUid = persistedIds.collection.uid;
+        const nonExistentRequestId = DEFAULT_UID;
+        const result = await getRequestComments(collectionUid, nonExistentRequestId);
         expect(result.status).toBe(200);
         expect(result.data).toBeDefined();
         expect(result.data.data).toBeDefined();
         expect(Array.isArray(result.data.data)).toBe(true);
         expect(result.data.data.length).toBe(0);
 
-        //await expect(getRequestComments(userId, collectionId, nonExistentRequestId)).rejects.toThrow();
+        //await expect(getRequestComments(collectionId, nonExistentRequestId)).rejects.toThrow();
       });
 
       test('should return error for invalid comment ID', async () => {
@@ -350,7 +351,7 @@ describe('requests functional tests (sequential flow)', () => {
         const requestId = persistedIds.request.id;
         const invalidCommentId = 999999999;
 
-        await expect(updateRequestComment(userId, collectionId, requestId, invalidCommentId, { body: 'test' })).rejects.toThrow();
+        await expect(updateRequestComment(persistedIds.collection.uid, persistedIds.request.uid, invalidCommentId, { body: 'test' })).rejects.toThrow();
       });
     });
   });

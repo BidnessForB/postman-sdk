@@ -13,7 +13,7 @@ const {
   getCollectionGenerations
 } = require('../../collections');
 const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
-const { buildUid } = require('../../core/utils');
+
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
 describe('transformations functional tests', () => {
@@ -376,7 +376,7 @@ describe('transformations functional tests', () => {
       let result;
       
        try {
-        result = await syncCollectionWithSpec(userId, genCollectionid, srcSpecId);  
+        result = await syncCollectionWithSpec(genCollectionid, srcSpecId);  
       } catch (err) {
         // Handle known error responses
         if(err?.response?.data?.status === 400 && err?.response?.data?.detail === 'Collection is already in sync') {
@@ -420,7 +420,7 @@ describe('transformations functional tests', () => {
       
 
       await expect(
-        syncCollectionWithSpec(userId, fakeCollectionId, genSpecId)
+        syncCollectionWithSpec(fakeCollectionId, genSpecId)
       ).rejects.toThrow();
     });
 
@@ -432,7 +432,7 @@ describe('transformations functional tests', () => {
       
 
       await expect(
-        syncCollectionWithSpec(userId, srcCollectionId, fakeSpecId)
+        syncCollectionWithSpec(srcCollectionId, fakeSpecId)
       ).rejects.toThrow();
     });
     });
@@ -440,13 +440,14 @@ describe('transformations functional tests', () => {
 
   describe('collection-to-spec', () => {
     test('1. createCollectionGeneration - should generate spec from collection', async () => {
-      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      
+      const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const userId = persistedIds?.userId;
 
       
 
-      expect(collectionId).toBeDefined();
-      expect(userId).toBeDefined();
+      
+      expect(collectionUid).toBeDefined();
 
       const elementType = 'spec';
       const name = `Generated Spec from Collection ${Date.now()}`;
@@ -456,7 +457,7 @@ describe('transformations functional tests', () => {
       try {
         // Retry the creation in case of transient failures
         const result = await retryWithBackoff(
-          async () => await createCollectionGeneration(userId, collectionId, elementType, name, type, format),
+          async () => await createCollectionGeneration(collectionUid, elementType, name, type, format),
           {
             maxAttempts: 3,
             initialDelay: 2000,
@@ -506,7 +507,7 @@ describe('transformations functional tests', () => {
     });
 
     test('2. getCollectionTaskStatus - should get status of generation task', async () => {
-      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
       const userId = persistedIds?.userId;
 
@@ -514,12 +515,12 @@ describe('transformations functional tests', () => {
 
       
 
-      expect(collectionId).toBeDefined();
+      expect(collectionUid).toBeDefined();
       expect(taskId).toBeDefined();
       expect(userId).toBeDefined();
 
       try {
-        const result = await getCollectionTaskStatus(userId, collectionId, taskId);
+        const result = await getCollectionTaskStatus(collectionUid, taskId);
 
         expect(result.status).toBe(200);
         expect(result.data).toHaveProperty('status');
@@ -539,7 +540,7 @@ describe('transformations functional tests', () => {
     });
 
     test('3. getCollectionTaskStatus - Poll until complete', async () => {
-      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
       const userId = persistedIds?.userId;
 
@@ -547,7 +548,7 @@ describe('transformations functional tests', () => {
 
       
 
-      expect(collectionId).toBeDefined();
+      expect(collectionUid).toBeDefined();
       expect(taskId).toBeDefined();
       expect(userId).toBeDefined();
 
@@ -556,7 +557,7 @@ describe('transformations functional tests', () => {
       try {
         // Use the polling helper with retry logic
         const result = await pollUntilComplete(
-          async () => await getCollectionTaskStatus(userId, collectionId, taskId),
+          async () => await getCollectionTaskStatus(collectionUid, taskId),
           {
             pollInterval: 5000,
             timeout: 60000, // Increased to 60 seconds
@@ -589,19 +590,19 @@ describe('transformations functional tests', () => {
     }, 70000); // Set Jest timeout to 70s (higher than our 60s polling timeout)
 
     test('4. getCollectionGenerations - should retrieve generated specs list', async () => {
-      const collectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const userId = persistedIds?.userId;
 
       
 
 
-      expect(collectionId).toBeDefined();
+      expect(collectionUid).toBeDefined();
       expect(userId).toBeDefined();
 
       const elementType = 'spec';
 
       try {
-        const result = await getCollectionGenerations(userId, collectionId, elementType);
+        const result = await getCollectionGenerations(collectionUid, elementType);
 
         expect(result.status).toBe(200);
         expect(result.data).toHaveProperty('specs');
@@ -644,25 +645,24 @@ describe('transformations functional tests', () => {
 
     describe('syncSpecWithCollection', () => {
     test('5. should sync generated spec with source collection', async () => {
-      persistedIds = loadTestIds();
       const genSpecId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.id;
-      const srcCollectionId = persistedIds?.transformations?.sourceCollection?.id;
+      const srcCollectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const userId = persistedIds?.userId;
 
       
 
       expect(genSpecId).toBeDefined();
-      expect(srcCollectionId).toBeDefined();
+      expect(srcCollectionUid).toBeDefined();
       expect(userId).toBeDefined();
 
       // Build the collection UID (userId-collectionId)
-      const collectionUid = buildUid(userId, srcCollectionId);
+      
 
-      console.log(`Attempting to sync spec ${genSpecId} with collection ${collectionUid}`);
+      console.log(`Attempting to sync spec ${genSpecId} with collection ${srcCollectionUid}`);
 
       let result;
       try {
-        result = await syncSpecWithCollection(genSpecId, collectionUid);
+        result = await syncSpecWithCollection(genSpecId, srcCollectionUid);
       } catch (err) {
         // Accept 400/404 responses as known limitations
         if (err.message && (err.message.includes('Request failed with status code 400') || err.message.includes('Request failed with status code 404'))) {
@@ -700,15 +700,15 @@ describe('transformations functional tests', () => {
 
     test('6. should handle error for non-existent spec', async () => {
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
-      const srcCollectionId = persistedIds?.collection?.id;
+      const srcCollectionUid = persistedIds?.collection?.uid;
       const userId = persistedIds?.userId;
 
       
 
-      const collectionUid = buildUid(userId, srcCollectionId);
+      
 
       await expect(
-        syncSpecWithCollection(fakeSpecId, collectionUid)
+        syncSpecWithCollection(fakeSpecId, srcCollectionUid)
       ).rejects.toThrow();
     });
     });

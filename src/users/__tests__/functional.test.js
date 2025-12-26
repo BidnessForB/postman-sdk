@@ -1,6 +1,6 @@
 const { getAuthenticatedUser } = require('../index');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/constants');
+const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 
 describe('users functional tests', () => {
   let persistedIds = {};
