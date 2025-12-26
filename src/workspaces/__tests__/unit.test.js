@@ -15,7 +15,7 @@ jest.mock('../../core/config', () => ({
   baseUrl: 'https://api.getpostman.com'
 }));
 
-const DEFAULT_WORKSPACE_ID = '1f0df51a-8658-4ee8-a2a1-d2567dfa09a9';
+const DEFAULT_ID = '1f0df51a-8658-4ee8-a2a1-d2567dfa09a9';
 
 describe('workspaces unit tests', () => {
   beforeEach(() => {
@@ -114,7 +114,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: { 
           workspace: { 
-            id: DEFAULT_WORKSPACE_ID, 
+            id: DEFAULT_ID, 
             name: 'Test Workspace' 
           } 
         }
@@ -143,7 +143,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: { 
           workspace: { 
-            id: DEFAULT_WORKSPACE_ID, 
+            id: DEFAULT_ID, 
             name: 'Test Workspace' 
           } 
         }
@@ -170,7 +170,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: { 
           workspace: { 
-            id: DEFAULT_WORKSPACE_ID, 
+            id: DEFAULT_ID, 
             name: 'Test Workspace' 
           } 
         }
@@ -198,7 +198,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: { 
           workspace: { 
-            id: DEFAULT_WORKSPACE_ID, 
+            id: DEFAULT_ID, 
             name: 'Test Workspace' 
           } 
         }
@@ -224,7 +224,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: { 
           workspace: { 
-            id: DEFAULT_WORKSPACE_ID, 
+            id: DEFAULT_ID, 
             name: 'Test Workspace' 
           } 
         }
@@ -256,7 +256,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Team Workspace',
             type: 'team'
           }
@@ -264,12 +264,12 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getWorkspace(DEFAULT_WORKSPACE_ID);
+      const result = await getWorkspace(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -280,7 +280,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Team Workspace',
             type: 'team'
           }
@@ -288,11 +288,11 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getWorkspace(DEFAULT_WORKSPACE_ID, 'scim');
+      await getWorkspace(DEFAULT_ID, 'scim');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}?include=scim`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}?include=scim`
         })
       );
     });
@@ -302,7 +302,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Team Workspace',
             type: 'team'
           }
@@ -310,11 +310,11 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getWorkspace(DEFAULT_WORKSPACE_ID, null);
+      await getWorkspace(DEFAULT_ID, null);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}`
         })
       ); 
     });
@@ -326,7 +326,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name',
             type: 'team',
             description: 'Original description',
@@ -338,7 +338,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Updated Workspace'
           }
         }
@@ -349,13 +349,13 @@ describe('workspaces unit tests', () => {
         .mockResolvedValueOnce(mockGetResponse)
         .mockResolvedValueOnce(mockPutResponse);
 
-      const result = await updateWorkspace(DEFAULT_WORKSPACE_ID, 'Updated Workspace');
+      const result = await updateWorkspace(DEFAULT_ID, 'Updated Workspace');
 
       // Should have called GET first
       expect(axios.request).toHaveBeenNthCalledWith(1,
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}`
         })
       );
       
@@ -363,7 +363,7 @@ describe('workspaces unit tests', () => {
       expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`,
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}`,
           data: {
             workspace: {
               name: 'Updated Workspace',
@@ -382,7 +382,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name',
             type: 'team',
             description: 'Original description',
@@ -394,7 +394,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name'
           }
         }
@@ -404,7 +404,7 @@ describe('workspaces unit tests', () => {
         .mockResolvedValueOnce(mockGetResponse)
         .mockResolvedValueOnce(mockPutResponse);
 
-      await updateWorkspace(DEFAULT_WORKSPACE_ID, null, 'private');
+      await updateWorkspace(DEFAULT_ID, null, 'private');
 
       expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
@@ -425,7 +425,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name',
             type: 'team',
             description: 'Original description',
@@ -437,7 +437,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Updated Workspace'
           }
         }
@@ -448,7 +448,7 @@ describe('workspaces unit tests', () => {
         .mockResolvedValueOnce(mockPutResponse);
 
       await updateWorkspace(
-        DEFAULT_WORKSPACE_ID, 
+        DEFAULT_ID, 
         'Updated Workspace', 
         'private', 
         'Updated description', 
@@ -474,7 +474,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name',
             type: 'team',
             description: 'Original description',
@@ -486,7 +486,7 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID,
+            id: DEFAULT_ID,
             name: 'Original Name'
           }
         }
@@ -496,7 +496,7 @@ describe('workspaces unit tests', () => {
         .mockResolvedValueOnce(mockGetResponse)
         .mockResolvedValueOnce(mockPutResponse);
 
-      await updateWorkspace(DEFAULT_WORKSPACE_ID, null, null, null, null);
+      await updateWorkspace(DEFAULT_ID, null, null, null, null);
 
       expect(axios.request).toHaveBeenNthCalledWith(2,
         expect.objectContaining({
@@ -519,18 +519,18 @@ describe('workspaces unit tests', () => {
         status: 200,
         data: {
           workspace: {
-            id: DEFAULT_WORKSPACE_ID
+            id: DEFAULT_ID
           }
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteWorkspace(DEFAULT_WORKSPACE_ID);
+      const result = await deleteWorkspace(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -550,12 +550,12 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getWorkspaceTags(DEFAULT_WORKSPACE_ID);
+      const result = await getWorkspaceTags(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}/tags`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -570,12 +570,12 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getWorkspaceTags(DEFAULT_WORKSPACE_ID);
+      const result = await getWorkspaceTags(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}/tags`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -599,12 +599,12 @@ describe('workspaces unit tests', () => {
       ];
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, tags);
+      const result = await updateWorkspaceTags(DEFAULT_ID, tags);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`,
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}/tags`,
           data: {
             tags: [
               { slug: 'needs-review' },
@@ -625,12 +625,12 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, []);
+      const result = await updateWorkspaceTags(DEFAULT_ID, []);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/workspaces/${DEFAULT_WORKSPACE_ID}/tags`,
+          url: `https://api.getpostman.com/workspaces/${DEFAULT_ID}/tags`,
           data: {
             tags: []
           }
@@ -650,7 +650,7 @@ describe('workspaces unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, [{ slug: 'production' }]);
+      const result = await updateWorkspaceTags(DEFAULT_ID, [{ slug: 'production' }]);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -687,7 +687,7 @@ describe('workspaces unit tests', () => {
       ];
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await updateWorkspaceTags(DEFAULT_WORKSPACE_ID, tags);
+      const result = await updateWorkspaceTags(DEFAULT_ID, tags);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

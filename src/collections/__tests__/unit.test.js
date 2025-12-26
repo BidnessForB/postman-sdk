@@ -28,19 +28,16 @@ const {
   getCollectionTaskStatus
 } = require('../index');
 
+
+
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
   apiKey: 'test-api-key',
   baseUrl: 'https://api.getpostman.com'
 }));
 
-// Test constants - valid ID and UID formats for testing
-const DEFAULT_COLLECTION_UID = DEFAULT_UID;
-const DEFAULT_FOLDER_UID = '12345678-87654321-1234-1234-1234-123456789abc';
-const DEFAULT_COMMENT_ID = DEFAULT_ID;
-const DEFAULT_TASK_ID = DEFAULT_ID;
-const DEFAULT_SPEC_ID = DEFAULT_ID;
-const DEFAULT_USER_ID = '12345678';
+
+
 
 describe('collections unit tests', () => {
   beforeEach(() => {
@@ -571,12 +568,12 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getFolderComments(DEFAULT_COLLECTION_UID, DEFAULT_FOLDER_UID);
+      const result = await getFolderComments(DEFAULT_UID, DEFAULT_UID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/folders/${DEFAULT_FOLDER_UID}/comments`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/folders/${DEFAULT_UID}/comments`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -600,12 +597,12 @@ describe('collections unit tests', () => {
         body: 'Test comment'
       };
 
-      const result = await createFolderComment(DEFAULT_COLLECTION_UID, DEFAULT_FOLDER_UID, commentData);
+      const result = await createFolderComment(DEFAULT_UID, DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/folders/${DEFAULT_FOLDER_UID}/comments`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/folders/${DEFAULT_UID}/comments`,
           data: commentData
         })
       );
@@ -630,7 +627,7 @@ describe('collections unit tests', () => {
         threadId: 1
       };
 
-      await createFolderComment(DEFAULT_COLLECTION_UID, DEFAULT_FOLDER_UID, commentData);
+      await createFolderComment(DEFAULT_UID, DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -659,12 +656,12 @@ describe('collections unit tests', () => {
         body: 'Updated comment'
       };
 
-      const result = await updateFolderComment(DEFAULT_COLLECTION_UID, DEFAULT_FOLDER_UID, 1, commentData);
+      const result = await updateFolderComment(DEFAULT_UID, DEFAULT_UID, 1, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/folders/${DEFAULT_FOLDER_UID}/comments/1`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/folders/${DEFAULT_UID}/comments/1`,
           data: commentData
         })
       );
@@ -680,12 +677,12 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteFolderComment(DEFAULT_COLLECTION_UID, DEFAULT_FOLDER_UID, 1);
+      const result = await deleteFolderComment(DEFAULT_UID, DEFAULT_UID, 1);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/folders/${DEFAULT_FOLDER_UID}/comments/1`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/folders/${DEFAULT_UID}/comments/1`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -716,7 +713,7 @@ describe('collections unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/comments`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/comments`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -730,7 +727,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getCollectionComments(DEFAULT_COLLECTION_UID);
+      await getCollectionComments(DEFAULT_UID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -761,12 +758,12 @@ describe('collections unit tests', () => {
         content: 'New comment'
       };
 
-      const result = await createCollectionComment(DEFAULT_COLLECTION_UID, commentData);
+      const result = await createCollectionComment(DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/comments`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/comments`,
           data: commentData
         })
       );
@@ -793,7 +790,7 @@ describe('collections unit tests', () => {
         threadId: 1
       };
 
-      await createCollectionComment(DEFAULT_COLLECTION_UID, commentData);
+      await createCollectionComment(DEFAULT_UID, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -822,12 +819,12 @@ describe('collections unit tests', () => {
         content: 'Updated comment'
       };
 
-      const result = await updateCollectionComment(DEFAULT_COLLECTION_UID, 1, commentData);
+      const result = await updateCollectionComment(DEFAULT_UID, 1, commentData);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/comments/1`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/comments/1`,
           data: commentData
         })
       );
@@ -841,7 +838,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await updateCollectionComment(DEFAULT_COLLECTION_UID, 1, { content: 'test' });
+      await updateCollectionComment(DEFAULT_UID, 1, { content: 'test' });
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -871,7 +868,7 @@ describe('collections unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'delete',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/comments/1`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/comments/1`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -884,7 +881,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteCollectionComment(DEFAULT_COLLECTION_UID, 1);
+      await deleteCollectionComment(DEFAULT_UID, 1);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -915,7 +912,7 @@ describe('collections unit tests', () => {
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/tags`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tags`
         })
       );
       expect(result).toEqual(mockResponse);
@@ -950,7 +947,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await getCollectionTags(DEFAULT_COLLECTION_UID);
+      await getCollectionTags(DEFAULT_UID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -975,12 +972,12 @@ describe('collections unit tests', () => {
 
       const tags = [];
 
-      const result = await updateCollectionTags(DEFAULT_COLLECTION_UID, tags);
+      const result = await updateCollectionTags(DEFAULT_UID, tags);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/tags`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tags`,
           data: { tags: [] }
         })
       );
@@ -998,12 +995,12 @@ describe('collections unit tests', () => {
 
       const tags = [{ slug: 'production' }];
 
-      const result = await updateCollectionTags(DEFAULT_COLLECTION_UID, tags);
+      const result = await updateCollectionTags(DEFAULT_UID, tags);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/tags`,
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tags`,
           data: { tags: [{ slug: 'production' }] }
         })
       );
@@ -1029,7 +1026,7 @@ describe('collections unit tests', () => {
         { slug: 'sdk-test' }
       ];
 
-      const result = await updateCollectionTags(DEFAULT_COLLECTION_UID, tags);
+      const result = await updateCollectionTags(DEFAULT_UID, tags);
 
       expect(result.data.tags).toHaveLength(3);
     });
@@ -1057,7 +1054,7 @@ describe('collections unit tests', () => {
         { slug: 'tag5' }
       ];
 
-      const result = await updateCollectionTags(DEFAULT_COLLECTION_UID, tags);
+      const result = await updateCollectionTags(DEFAULT_UID, tags);
 
       expect(result.data.tags).toHaveLength(5);
     });
@@ -1069,7 +1066,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await updateCollectionTags(DEFAULT_COLLECTION_UID, []);
+      await updateCollectionTags(DEFAULT_UID, []);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -1088,17 +1085,17 @@ describe('collections unit tests', () => {
         status: 202,
         data: {
           taskId: 'task-123',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/tasks/${DEFAULT_TASK_ID}`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tasks/${DEFAULT_ID}`
         }
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await syncCollectionWithSpec(DEFAULT_COLLECTION_UID, DEFAULT_SPEC_ID);
+      const result = await syncCollectionWithSpec(DEFAULT_UID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'put',
-          url: expect.stringContaining(`/collections/${DEFAULT_COLLECTION_UID}/synchronizations`),
+          url: expect.stringContaining(`/collections/${DEFAULT_UID}/synchronizations`),
           //url: expect.stringContaining(specId)
         })
       );
@@ -1113,7 +1110,7 @@ describe('collections unit tests', () => {
         status: 202,
         data: {
           taskId: 'gen-task-123',
-          url: `https://api.getpostman.com/collections/${DEFAULT_COLLECTION_UID}/tasks/${DEFAULT_TASK_ID}`
+          url: `https://api.getpostman.com/collections/${DEFAULT_UID}/tasks/${DEFAULT_ID}`
         }
       };
       axios.request.mockResolvedValue(mockResponse);
@@ -1123,12 +1120,12 @@ describe('collections unit tests', () => {
       const type = 'OPENAPI:3.0';
       const format = 'JSON';
 
-      const result = await createCollectionGeneration(DEFAULT_COLLECTION_UID, elementType, name, type, format);
+      const result = await createCollectionGeneration(DEFAULT_UID, elementType, name, type, format);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'post',
-          url: expect.stringContaining(`/collections/${DEFAULT_COLLECTION_UID}/generations/${elementType}`),
+          url: expect.stringContaining(`/collections/${DEFAULT_UID}/generations/${elementType}`),
           data: {
             name,
             type,
@@ -1146,7 +1143,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createCollectionGeneration(DEFAULT_COLLECTION_UID, 'spec', 'My API Spec', 'OPENAPI:3.1', 'YAML');
+      await createCollectionGeneration(DEFAULT_UID, 'spec', 'My API Spec', 'OPENAPI:3.1', 'YAML');
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -1220,12 +1217,12 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getCollectionTaskStatus(DEFAULT_COLLECTION_UID, DEFAULT_TASK_ID);
+      const result = await getCollectionTaskStatus(DEFAULT_UID, DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'get',
-          url: expect.stringContaining(`/collections/${DEFAULT_COLLECTION_UID}/tasks/${DEFAULT_TASK_ID}`)
+          url: expect.stringContaining(`/collections/${DEFAULT_UID}/tasks/${DEFAULT_ID}`)
         })
       );
       expect(result).toEqual(mockResponse);
@@ -1240,7 +1237,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getCollectionTaskStatus(DEFAULT_COLLECTION_UID, DEFAULT_TASK_ID);
+      const result = await getCollectionTaskStatus(DEFAULT_UID, DEFAULT_ID);
 
       expect(result.data.status).toBe('pending');
     });
@@ -1257,7 +1254,7 @@ describe('collections unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await getCollectionTaskStatus(DEFAULT_COLLECTION_UID, DEFAULT_TASK_ID);
+      const result = await getCollectionTaskStatus(DEFAULT_UID, DEFAULT_ID);
 
       expect(result.data.status).toBe('failed');
       expect(result.data.error).toBeDefined();

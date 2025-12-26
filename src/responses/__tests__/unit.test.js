@@ -3,7 +3,7 @@ const axios = require('axios');
 const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 // Test constants
-const DEFAULT_COMMENT_ID = DEFAULT_ID;
+
 const {
   createResponse,
   getResponse,
