@@ -4,7 +4,8 @@ const { DEFAULT_ID, DEFAULT_UID } = require('../../../__tests__/test-helpers');
 const { 
   getCollectionForks,
   createCollectionFork,
-  mergeCollectionFork
+  mergeCollectionFork,
+  pullCollectionChanges
 } = require('../../../collections/index');
 
 jest.mock('axios');
@@ -259,6 +260,59 @@ describe('forks', () => {
           const destinationUid = `${DEFAULT_UID.split('-')[0]}-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee`;
 
           await mergeCollectionFork(sourceUid, destinationUid);
+
+          expect(axios.request).toHaveBeenCalledWith(
+            expect.objectContaining({
+              headers: expect.objectContaining({
+                'Content-Type': 'application/json',
+                'X-API-Key': 'test-api-key'
+              })
+            })
+          );
+        });
+      });
+
+      describe('pullCollectionChanges', () => {
+        test('should call PUT /collections/{collectionId}/pulls', async () => {
+          const mockResponse = {
+            status: 200,
+            data: {
+              collection: {
+                destinationId: DEFAULT_ID,
+                sourceId: 'parent-collection-id'
+              }
+            }
+          };
+          axios.request.mockResolvedValue(mockResponse);
+
+          const result = await pullCollectionChanges(DEFAULT_ID);
+
+          expect(axios.request).toHaveBeenCalledWith(
+            expect.objectContaining({
+              method: 'put',
+              url: `https://api.getpostman.com/collections/${DEFAULT_ID}/pulls`,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': 'test-api-key'
+              }
+            })
+          );
+          expect(result).toEqual(mockResponse);
+        });
+
+        test('should include correct headers', async () => {
+          const mockResponse = {
+            status: 200,
+            data: {
+              collection: {
+                destinationId: DEFAULT_ID,
+                sourceId: 'parent-id'
+              }
+            }
+          };
+          axios.request.mockResolvedValue(mockResponse);
+
+          await pullCollectionChanges(DEFAULT_ID);
 
           expect(axios.request).toHaveBeenCalledWith(
             expect.objectContaining({

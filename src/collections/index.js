@@ -950,6 +950,25 @@ async function mergeCollectionFork(source, destination, strategy = null) {
   return await executeRequest(config);
 }
 
+/**
+ * Pulls changes from parent collection into a forked collection
+ * Postman API endpoint and method: PUT /collections/{collectionId}/pulls
+ * @param {string} collectionId - The forked collection's ID
+ * @returns {Promise} Axios response with source and destination IDs
+ * @example
+ * // Pull parent changes into fork
+ * const response = await pullCollectionChanges('forked-collection-id-123');
+ * console.log(response.data.collection.destinationId);
+ * console.log(response.data.collection.sourceId);
+ */
+async function pullCollectionChanges(collectionId) {
+  validateId(collectionId, 'collectionId');
+
+  const endpoint = `/collections/${collectionId}/pulls`;
+  const config = buildAxiosConfig('put', endpoint);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -977,5 +996,6 @@ module.exports = {
   getCollectionTaskStatus,
   getCollectionForks,
   createCollectionFork,
-  mergeCollectionFork
+  mergeCollectionFork,
+  pullCollectionChanges
 };

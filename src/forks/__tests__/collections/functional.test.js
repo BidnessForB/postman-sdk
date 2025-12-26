@@ -2,6 +2,7 @@ const {
   getCollectionForks,
   createCollectionFork,
   mergeCollectionFork,
+  pullCollectionChanges,
   deleteCollection
 } = require('../../../collections/index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../../core/config');
@@ -118,7 +119,26 @@ describe('forks', () => {
       console.log(`Retrieved ${result.data.data.length} fork(s) in descending order`);
     });
 
-    test('5. mergeCollectionFork - should merge fork back to parent (default strategy)', async () => {
+    test('5. pullCollectionChanges - should pull changes from parent to fork', async () => {
+      if (!persistedIds.fork.collection?.id) {
+        throw new Error('Fork ID not available. Previous test may have failed.');
+      }
+
+      const result = await pullCollectionChanges(persistedIds.fork.collection.id);
+
+      expect(result.status).toBe(200);
+      expect(result.data).toHaveProperty('collection');
+      expect(result.data.collection).toHaveProperty('destinationId');
+      expect(result.data.collection).toHaveProperty('sourceId');
+      expect(result.data.collection.destinationId).toBe(persistedIds.fork.collection.uid);
+      expect(result.data.collection.sourceId).toBe(persistedIds.collection.uid);
+
+      console.log('Successfully pulled changes from parent to fork');
+      console.log('Destination ID (fork):', result.data.collection.destinationId);
+      console.log('Source ID (parent):', result.data.collection.sourceId);
+    });
+
+    test('6. mergeCollectionFork - should merge fork back to parent (default strategy)', async () => {
       if (!persistedIds.fork.collection?.uid) {
         throw new Error('Fork UID not available. Previous test may have failed.');
       }
@@ -137,7 +157,7 @@ describe('forks', () => {
       console.log('Result collection ID:', result.data.collection.id);
     });
 
-    test('6. createCollectionFork - should create another fork for deleteSource test', async () => {
+    test('7. createCollectionFork - should create another fork for deleteSource test', async () => {
       const label = `SDK Test Fork DeleteSource - ${Date.now()}`;
       
       const result = await createCollectionFork(
@@ -159,7 +179,7 @@ describe('forks', () => {
       console.log('Successfully created second fork for deleteSource test:', result.data.collection.id);
     });
 
-    test('7. mergeCollectionFork - should merge and delete source fork', async () => {
+    test('8. mergeCollectionFork - should merge and delete source fork', async () => {
       if (!persistedIds.fork.collection?.uid) {
         throw new Error('Fork UID not available. Previous test may have failed.');
       }
@@ -177,7 +197,7 @@ describe('forks', () => {
       console.log('Fork should be deleted after merge');
     });
 
-    test('8. createCollectionFork - should handle invalid collection ID', async () => {
+    test('9. createCollectionFork - should handle invalid collection ID', async () => {
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
       const label = 'Test Fork';
 
@@ -188,7 +208,7 @@ describe('forks', () => {
       console.log('Successfully handled invalid collection ID');
     });
 
-    test('9. createCollectionFork - should handle invalid workspace ID', async () => {
+    test('10. createCollectionFork - should handle invalid workspace ID', async () => {
       const fakeWorkspaceId = '00000000-0000-0000-0000-000000000000';
       const label = 'Test Fork';
 
@@ -199,7 +219,7 @@ describe('forks', () => {
       console.log('Successfully handled invalid workspace ID');
     });
 
-    test('10. mergeCollectionFork - should handle invalid source UID', async () => {
+    test('11. mergeCollectionFork - should handle invalid source UID', async () => {
       const fakeUid = `${userId}-00000000-0000-0000-0000-000000000000`;
 
       await expect(
@@ -207,6 +227,16 @@ describe('forks', () => {
       ).rejects.toThrow();
 
       console.log('Successfully handled invalid source UID');
+    });
+
+    test('12. pullCollectionChanges - should handle invalid collection ID', async () => {
+      const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
+
+      await expect(
+        pullCollectionChanges(fakeCollectionId)
+      ).rejects.toThrow();
+
+      console.log('Successfully handled invalid collection ID for pull');
     });
   });
 });
