@@ -33,6 +33,10 @@ The Postman API makes use of two different structures for identifying objects.  
   
 📋 **[View API Endpoint Implementation Status](docs/API-ENDPOINTS-TODO.md)** 
 
+## API Builder endpoints (/apis)
+
+API Builder endpoints have not been implemented.
+
 
 ## Installation
    
