@@ -12,23 +12,35 @@ const {
   getCollectionTaskStatus,
   getCollectionGenerations
 } = require('../../collections/collection');
-const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
+const { 
+  loadTestIds, 
+  saveTestIds, 
+  retryWithBackoff, 
+  pollUntilComplete ,
+  initPersistedIds,
+  getUserId
+} = require('../../__tests__/test-helpers');
 
 
 
 describe('transformations functional tests', () => {
-  let persistedIds;
+  
+  let persistedIds = {};
+  let userId;
+  
 
-  beforeAll(() => {
-    
-    
 
-    // Load persisted test IDs
+  beforeAll(async () => {
+    
     persistedIds = loadTestIds();
+    userId = await getUserId();
+    // Load persisted test IDs
+    
     console.log('Loaded persisted test IDs for transformations tests');
   });
 
   test('CreateSourceCollection - should create a new collection for transformations', async () => {
+    await initPersistedIds(['transformations.sourceCollection']);
     const workspaceId = persistedIds.workspace?.id;
 
     
@@ -85,7 +97,7 @@ describe('transformations functional tests', () => {
 
   test('CreateSourceSpec - should create a new spec for transformations', async () => {
     const workspaceId = persistedIds.workspace?.id;
-
+    await initPersistedIds(['transformations.sourceSpec']);
     
 
     const timestamp = Date.now();

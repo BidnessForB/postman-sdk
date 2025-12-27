@@ -5,15 +5,29 @@ const {
 } = require('../../collections/collection');
 const { reviewPullRequest, getPullRequest, updatePullRequest } = require('../pullRequest');
 
-const { loadTestIds, saveTestIds, clearTestIds, getUserId } = require('../../__tests__/test-helpers');
-let persistedIds = loadTestIds();
+const { 
+  loadTestIds, 
+  saveTestIds, 
+  clearTestIds, 
+  getUserId, 
+  getTestWorkspaceId, 
+  initPersistedIds,
+
+} = require('../../__tests__/test-helpers');
+
 
 
 describe('Collection Pull Request Functional Tests', () => {
+  let testWorkspaceId;
+  let persistedIds = {};
+  let userId;
 
   beforeAll(async () => {
     
-    await initPersistedIds(['fork.collection', 'pullRequest']);
+    //await initPersistedIds(['fork.collection', 'pullRequest']);
+    persistedIds = loadTestIds();
+    testWorkspaceId = await getTestWorkspaceId();
+    userId = await getUserId();
     
     
 
@@ -21,7 +35,7 @@ describe('Collection Pull Request Functional Tests', () => {
   });
 
   test('1. createCollectionPullRequest - should create a pull request from fork', async () => {
-    
+    await initPersistedIds(['fork.collection', 'pullRequest']);
       // Create a fork of the collection and persist the fork ids
       const label = `SDK PR Test Fork - ${Date.now()}`;
       
@@ -63,7 +77,7 @@ describe('Collection Pull Request Functional Tests', () => {
     try {
       const title = `SDK Test PR - ${Date.now()}`;
       const description = 'Pull request created by SDK functional test';
-      const reviewers = [getUserId().toString()];
+      const reviewers = [userId.toString()];
 
       const result = await createCollectionPullRequest(
         persistedIds.fork.collection.uid,
@@ -204,7 +218,7 @@ describe('Collection Pull Request Functional Tests', () => {
 
   test('101. updatePullRequest - should update pull request title and reviewers', async () => {
     const newTitle = `Updated SDK Test PR - ${Date.now()}`;
-    const newReviewers = [getUserId().toString()];
+    const newReviewers = [userId.toString()];
     const newDescription = 'Updated by SDK functional test';
 
     try {
@@ -235,7 +249,7 @@ describe('Collection Pull Request Functional Tests', () => {
 
   test('102. updatePullRequest - should update without description', async () => {
     const newTitle = `SDK Test PR No Desc - ${Date.now()}`;
-    const newReviewers = [getUserId().toString()];
+    const newReviewers = [userId.toString()];
 
     try {
       const result = await updatePullRequest(
@@ -339,7 +353,7 @@ describe('Collection Pull Request Functional Tests', () => {
   test('107. updatePullRequest - should handle invalid PR ID', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
 
-    const results = await updatePullRequest(fakeId, 'Test Title', [getUserId().toString()]);
+    const results = await updatePullRequest(fakeId, 'Test Title', [userId.toString()]);
     expect([400, 401, 403, 404, 409, 422, 500, 501, 502, 503, 504]).toContain(results.status);
     expect(results.code).toBe('ERR_BAD_REQUEST');
 

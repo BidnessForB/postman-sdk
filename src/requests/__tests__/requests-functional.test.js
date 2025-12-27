@@ -9,7 +9,7 @@ const {
   deleteRequestComment
 } = require('../request');
 
-const { loadTestIds, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
+const { loadTestIds,getUserId, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 describe('requests functional tests (sequential flow)', () => {
   let persistedIds = {};

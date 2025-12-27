@@ -2,45 +2,75 @@ const { getTagEntities } = require('../tag');
 const { updateWorkspaceTags } = require('../../workspaces/workspace');
 const { updateCollectionTags } = require('../../collections/collection');
 
-const { loadTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds,getUserId,getTestWorkspaceId,gettestCollectionUid,initPersistedIds } = require('../../__tests__/test-helpers');
 
 describe('tags functional tests', () => {
   let testWorkspaceId;
-  let testCollectionId;
+  let testCollectionUid;
   let userId;
-  let testTagSlug;
-  let collectionTagSlug;
+  let testTagSlug = 'sdk-test';
+  let collectionTagSlug = 'sdk-collection-test';
+  let persistedIds = {};
   
-  beforeAll(() => {
+  
+  beforeAll(async () => {
     
     
     // Load the persisted workspace ID and collection ID from test-ids.json
-    const persistedIds = loadTestIds();
-    if (persistedIds.workspace && persistedIds.workspace.id) {
-      testWorkspaceId = persistedIds.workspace.id;
-      console.log(`Using persisted workspace ID: ${testWorkspaceId}`);
-    } else {
-      throw new Error('No workspace ID found in test-ids.json. Run workspace tests first.');
+    await initPersistedIds(['tags']);
+    persistedIds = loadTestIds();
+    testWorkspaceId = await getTestWorkspaceId();
+    if(!testWorkspaceId) {
+      throw new Error('Workspace ID not found in test-ids.json. Run workspace functional tests first.');
     }
+    userId = await getUserId();
+      console.log('Using persisted userId:', userId);
+
     
-    if (persistedIds.collection && persistedIds.collection.id) {
-      testCollectionId = persistedIds.collection.id;
-      testCollectionUid = persistedIds.collection.uid;
-      console.log(`Using persisted collection ID: ${testCollectionId}`);
-    } else {
-      throw new Error('No collection ID found in test-ids.json. Run collection tests first.');
-    }
     
-    if (getUserId()) {
-      userId = getUserId();
-      console.log(`Using persisted user ID: ${userId}`);
-    } else {
-      throw new Error('No user ID found in test-ids.json. Run user tests first.');
-    }
+      
+      if (!persistedIds.collection || !persistedIds.collection.id) {
+        // Create a test collection and persist its details in test-ids.json if not already present
+      const { createCollection } = require('../../collections/collection');
+        const collectionName = `SDK Test Collection ${Date.now()}`;
+        const collectionData = {
+          info: {
+            name: collectionName,
+            description: 'Test collection for tag functional tests',
+            schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+          },
+          item: [
+            {
+              name: 'Test Request',
+              request: {
+                method: 'GET',
+                url: 'https://postman-echo.com/get',
+                description: 'Sample GET request'
+              }
+            }
+          ]
+        };
+        const result = await createCollection(collectionData, testWorkspaceId);
+        if (result.status !== 200 || !result.data.collection || !result.data.collection.id) {
+          throw new Error('Failed to create test collection for tag functional tests.');
+        }
+        persistedIds.collection = {
+          ...persistedIds.collection,
+          id: result.data.collection.id,
+          uid: result.data.collection.uid,
+          name: collectionName,
+          createdAt: new Date().toISOString()
+        };
+        const { saveTestIds } = require('../../__tests__/test-helpers');
+        saveTestIds(persistedIds);
+        testCollectionUid = result.data.collection.uid;
+      } else {
+        testCollectionUid = persistedIds.collection.uid;
+      }
     
+
     // Use unique tags for testing
-    testTagSlug = 'sdk-test';
-    collectionTagSlug = 'sdk-collection-test';
+    
   });
 
   describe('Workspace tags', () => {
@@ -48,7 +78,7 @@ describe('tags functional tests', () => {
       expect(testWorkspaceId).toBeDefined();
       
       // Add a test tag to the workspace
-      const result = await workspaces.updateWorkspaceTags(testWorkspaceId, [
+      const result = await updateWorkspaceTags(testWorkspaceId, [
         { slug: testTagSlug }
       ]);
 
@@ -159,7 +189,7 @@ describe('tags functional tests', () => {
       expect(testWorkspaceId).toBeDefined();
       
       // Remove all tags from the workspace
-      const result = await workspaces.updateWorkspaceTags(testWorkspaceId, []);
+      const result = await updateWorkspaceTags(testWorkspaceId, []);
 
       expect(result.status).toBe(200);
       expect(result.data.tags).toHaveLength(0);
@@ -170,11 +200,11 @@ describe('tags functional tests', () => {
 
   describe('Collection tags', () => {
     test('Setup - Add tag to test collection', async () => {
-      expect(testCollectionId).toBeDefined();
+      expect(testCollectionUid).toBeDefined();
       expect(userId).toBeDefined();
       
       // Add a test tag to the collection
-      const result = await collections.updateCollectionTags(testCollectionUid, [
+      const result = await updateCollectionTags(testCollectionUid, [
         { slug: collectionTagSlug }
       ]);
 
@@ -183,7 +213,7 @@ describe('tags functional tests', () => {
       expect(result.data.tags).toHaveLength(1);
       expect(result.data.tags[0].slug).toBe(collectionTagSlug);
       
-      console.log(`Tag '${collectionTagSlug}' added to collection ${testCollectionId}`);
+      console.log(`Tag '${collectionTagSlug}' added to collection ${testCollectionUid}`);
     });
 
     test('should find collection with test tag', async () => {
@@ -205,7 +235,7 @@ describe('tags functional tests', () => {
       
       // Verify our collection is in the results (API returns UID format)
       const ourCollection = result.data.data.entities.find(
-        e => (e.entityId === testCollectionId || e.entityId === `${userId}-${testCollectionId}`) && e.entityType === 'collection'
+        e => (e.entityId === testCollectionUid || e.entityId === testCollectionUid) && e.entityType === 'collection'
       );
       expect(ourCollection).toBeDefined();
       
@@ -225,7 +255,7 @@ describe('tags functional tests', () => {
       
       // Our collection should be in the results (API returns UID format)
       const ourCollection = result.data.data.entities.find(
-        e => e.entityId === testCollectionId || e.entityId === `${userId}-${testCollectionId}`
+        e => e.entityId === testCollectionUid || e.entityId === testCollectionUid
       );
       expect(ourCollection).toBeDefined();
       
@@ -246,7 +276,7 @@ describe('tags functional tests', () => {
       
       // Our collection should NOT be in the results (checking both ID formats)
       const ourCollection = result.data.data.entities.find(
-        e => e.entityId === testCollectionId || e.entityId === `${userId}-${testCollectionId}`
+        e => e.entityId === testCollectionUid || e.entityId === testCollectionUid
       );
       expect(ourCollection).toBeUndefined();
     });
@@ -255,8 +285,8 @@ describe('tags functional tests', () => {
       // Add the same tag to both workspace and collection
       const sharedTag = 'sdk-shared-test';
       
-      await workspaces.updateWorkspaceTags(testWorkspaceId, [{ slug: sharedTag }]);
-      await collections.updateCollectionTags(testCollectionUid, [{ slug: sharedTag }]);
+      await updateWorkspaceTags(testWorkspaceId, [{ slug: sharedTag }]);
+      await updateCollectionTags(testCollectionUid, [{ slug: sharedTag }]);
       
       // Wait a moment for tag indexing
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -272,7 +302,7 @@ describe('tags functional tests', () => {
         e => e.entityId === testWorkspaceId && e.entityType === 'workspace'
       );
       const collectionEntity = result.data.data.entities.find(
-        e => (e.entityId === testCollectionId || e.entityId === `${userId}-${testCollectionId}`) && e.entityType === 'collection'
+        e => (e.entityId === testCollectionUid || e.entityId === testCollectionUid) && e.entityType === 'collection'
       );
       
       expect(workspaceEntity).toBeDefined();
@@ -281,21 +311,21 @@ describe('tags functional tests', () => {
       console.log(`Found ${result.data.data.entities.length} entities with shared tag '${sharedTag}'`);
       
       // Cleanup - remove shared tag
-      await workspaces.updateWorkspaceTags(testWorkspaceId, []);
-      await collections.updateCollectionTags(testCollectionUid, []);
+      await updateWorkspaceTags(testWorkspaceId, []);
+      await updateCollectionTags(testCollectionUid, []);
     });
 
     test('Cleanup - Remove tag from test collection', async () => {
-      expect(testCollectionId).toBeDefined();
+      expect(testCollectionUid).toBeDefined();
       expect(userId).toBeDefined();
       
       // Remove all tags from the collection
-      const result = await collections.updateCollectionTags(testCollectionUid, []);
+      const result = await updateCollectionTags(testCollectionUid, []);
 
       expect(result.status).toBe(200);
       expect(result.data.tags).toHaveLength(0);
       
-      console.log(`Tag '${collectionTagSlug}' removed from collection ${testCollectionId}`);
+      console.log(`Tag '${collectionTagSlug}' removed from collection ${testCollectionUid}`);
     });
   });
 
