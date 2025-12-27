@@ -13,7 +13,7 @@ jest.mock('../../core/config', () => ({
   baseUrl: 'https://api.getpostman.com'
 }));
 
-describe('unit tests', () => {
+describe('Pull Request Unit Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

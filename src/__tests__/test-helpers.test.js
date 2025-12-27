@@ -71,8 +71,7 @@ describe('test-helpers shared utilities', () => {
       expect(cleared.specName).toBe('Test Spec');
       expect(cleared.collectionId).toBe('col-789');
       expect(cleared.collectionName).toBe('Test Collection');
-      expect(cleared).toHaveProperty('clearedAt');
-      expect(typeof cleared.clearedAt).toBe('string');
+      
     });
 
     test('should save cleared state to file', () => {
@@ -89,7 +88,7 @@ describe('test-helpers shared utilities', () => {
       expect(loaded.workspaceId).toBeNull();
       expect(loaded.specId).toBe('spec-456'); // Should be preserved
       expect(loaded.collectionId).toBe('col-789'); // Should be preserved
-      expect(loaded).toHaveProperty('clearedAt');
+      
     });
 
     test('should handle empty array (no keys to clear)', () => {
@@ -151,7 +150,7 @@ describe('test-helpers shared utilities', () => {
       expect(cleared).toHaveProperty('specName');
       expect(cleared).toHaveProperty('folderId');
       expect(cleared).toHaveProperty('folderName');
-      expect(cleared).toHaveProperty('clearedAt');
+      
 
       // Count of properties should be original + clearedAt
       const propertyCount = Object.keys(cleared).length;
@@ -218,8 +217,7 @@ describe('test-helpers shared utilities', () => {
         'workspaceId',
         'collectionId',
         'specId',
-        'folderId',
-        'clearedAt'
+        'folderId'
       ]));
     });
   });

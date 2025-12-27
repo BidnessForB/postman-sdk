@@ -1,18 +1,18 @@
 const axios = require('axios');
 
-const { DEFAULT_ID, DEFAULT_UID } = require('../../../__tests__/test-helpers');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 const {
   getCollectionPullRequests,
   createCollectionPullRequest
-} = require('../../../collections/index');
+} = require('../../collections/index');
 
 jest.mock('axios');
-jest.mock('../../../core/config', () => ({
+jest.mock('../../core/config', () => ({
   apiKey: 'test-api-key',
   baseUrl: 'https://api.getpostman.com'
 }));
 
-describe('unit tests', () => {
+describe('Collection Pull Requests Unit Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

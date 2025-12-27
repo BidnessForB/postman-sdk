@@ -4,14 +4,14 @@ const {
   createSpecGeneration,
   getSpecTaskStatus,
   getSpecGenerations
-} = require('../../specs');
+} = require('../../specs/spec');
 const { 
   syncCollectionWithSpec, 
   createCollection,
   createCollectionGeneration,
   getCollectionTaskStatus,
   getCollectionGenerations
-} = require('../../collections');
+} = require('../../collections/collection');
 const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
 
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');

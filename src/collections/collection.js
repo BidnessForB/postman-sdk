@@ -1045,7 +1045,7 @@ async function createCollectionPullRequest(collectionUid, title, destinationUid,
   }
   
   const config = buildAxiosConfig('post', endpoint, data);
-  console.log('COnfig', config);
+  console.log('CORNFIG:', config);
   return await executeRequest(config);
 }
 

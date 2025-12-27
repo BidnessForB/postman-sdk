@@ -4,8 +4,8 @@ const {
   getEnvironment,
   modifyEnvironment,
   deleteEnvironment
-} = require('../index');
-const { getAuthenticatedUser } = require('../../users');
+} = require('../environment');
+const { getAuthenticatedUser } = require('../../users/user');
 const { loadTestIds, saveTestIds, DEFAULT_UID, DEFAULT_ID } = require('../../__tests__/test-helpers');
 
 describe('Environments Functional Tests', () => {

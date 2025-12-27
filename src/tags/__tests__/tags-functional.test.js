@@ -1,4 +1,4 @@
-const { getTagEntities } = require('../index');
+const { getTagEntities } = require('../tag');
 const { workspaces, collections } = require('../../index');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds } = require('../../__tests__/test-helpers');

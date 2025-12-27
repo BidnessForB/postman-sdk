@@ -104,5 +104,21 @@ describe('All-Up Functional Test Suite', () => {
     const tagsTests = require('../tags/__tests__/functional.test');
     // Tests are automatically executed when the module is required
   });
+
+  describe('Phase 13: Forks - Collections', () => {
+    const forksTests = require('../forks/__tests__/collections/functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 14: Forks - Environments', () => {
+    const forksTests = require('../forks/__tests__/environments/functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 15: Pull Requests - Collections', () => {
+    const forksTests = require('../pullRequests/__tests__/01-collections-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+  
 });
 

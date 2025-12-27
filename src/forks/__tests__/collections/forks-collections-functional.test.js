@@ -4,9 +4,9 @@ const {
   mergeCollectionFork,
   pullCollectionChanges,
   deleteCollection
-} = require('../../../collections/index');
+} = require('../../../collections/collection');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../../core/config');
-const { loadTestIds, saveTestIds } = require('../../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, clearTestIds } = require('../../../__tests__/test-helpers');
 
 describe('forks', () => {
   describe('collections', () => {
@@ -157,27 +157,7 @@ describe('forks', () => {
       console.log('Result collection ID:', result.data.collection.id);
     });
 
-    test('7. createCollectionFork - should create another fork for deleteSource test', async () => {
-      const label = `SDK Test Fork DeleteSource - ${Date.now()}`;
-      
-      const result = await createCollectionFork(
-        persistedIds.collection.id,
-        persistedIds.workspace.id,
-        label
-      );
-
-      expect(result.status).toBe(200);
-      expect(result.data).toHaveProperty('collection');
-      expect(result.data.collection).toHaveProperty('id');
-      expect(result.data.collection).toHaveProperty('uid');
-
-      // Update fork details for next test
-      persistedIds.fork.collection.id = result.data.collection.id;
-      persistedIds.fork.collection.uid = result.data.collection.uid;
-      saveTestIds(persistedIds);
-
-      console.log('Successfully created second fork for deleteSource test:', result.data.collection.id);
-    });
+    
 
     test('8. mergeCollectionFork - should merge and delete source fork', async () => {
       if (!persistedIds.fork.collection?.uid) {
@@ -192,10 +172,13 @@ describe('forks', () => {
 
       expect(result.status).toBe(200);
       expect(result.data).toHaveProperty('collection');
+      clearTestIds(persistedIds.fork.collection);
 
       console.log('Successfully merged fork with deleteSource strategy');
       console.log('Fork should be deleted after merge');
     });
+
+    
 
     test('9. createCollectionFork - should handle invalid collection ID', async () => {
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';

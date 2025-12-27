@@ -140,7 +140,9 @@ async function reviewPullRequest(pullRequestId, action, comment = null) {
 module.exports = {
   getPullRequest,
   updatePullRequest,
-  reviewPullRequest
+  reviewPullRequest,
+  updatePullRequest,
+  getPullRequest
 };
 
 

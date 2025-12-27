@@ -12,8 +12,8 @@ const {
   updateMockServerResponse,
   deleteMockServerResponse,
   deleteMockUnpublish
-} = require('../index');
-const { getAuthenticatedUser } = require('../../users');
+} = require('../mock');
+const { getAuthenticatedUser } = require('../../users/user');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
 const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 

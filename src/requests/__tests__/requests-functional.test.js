@@ -7,7 +7,7 @@ const {
   createRequestComment,
   updateRequestComment,
   deleteRequestComment
-} = require('../index');
+} = require('../request');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
 

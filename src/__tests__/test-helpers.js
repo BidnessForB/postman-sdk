@@ -75,9 +75,7 @@ function clearTestIds(keysToClear = []) {
     // Add/update clearedAt timestamp for thread
     if (!ids.folder) ids.folder = {};
     if (!ids.folder.thread) ids.folder.thread = {};
-    if (keysToClear.some(k => k.startsWith('folder.'))) {
-      ids.folder.thread.clearedAt = new Date().toISOString();
-    }
+    
     
     // Save the updated state
     saveTestIds(ids);
@@ -121,7 +119,7 @@ async function initializeUserId() {
   
   // Otherwise, fetch it from the API
   try {
-    const { getAuthenticatedUser } = require('../users/index');
+    const { getAuthenticatedUser } = require('../users/user');
     const result = await getAuthenticatedUser();
     const userId = result.data.user.id;
     

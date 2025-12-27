@@ -3,7 +3,7 @@ const {
   createFolderComment,
   updateFolderComment,
   deleteFolderComment
-} = require('../index');
+} = require('../collection');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('../../__tests__/test-helpers');
 const { DEFAULT_UID } = require('../../__tests__/test-helpers');

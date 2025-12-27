@@ -4,7 +4,7 @@ const {
   mergeEnvironmentFork,
   pullEnvironmentChanges,
   deleteEnvironment
-} = require('../../../environments/index');
+} = require('../../../environments/environment');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../../core/config');
 const { loadTestIds, saveTestIds } = require('../../../__tests__/test-helpers');
 

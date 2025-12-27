@@ -50,7 +50,7 @@ describe('Postman SDK - Main Entry Point', () => {
     expect(typeof sdk.mocks).toBe('object');
   });
 
-  test('should export exactly 9 modules', () => {
+  test('should export exactly 10 modules', () => {
     const expectedModules = [
       'collections',
       'requests',
@@ -60,7 +60,8 @@ describe('Postman SDK - Main Entry Point', () => {
       'environments',
       'tags',
       'users',
-      'mocks'
+      'mocks',
+      'pullRequests'
     ];
     const exportedKeys = Object.keys(sdk);
     expect(exportedKeys).toHaveLength(expectedModules.length);

@@ -6,8 +6,8 @@ const {
   modifyCollection,
   deleteCollection,
   syncCollectionWithSpec
-} = require('../index');
-const { getAuthenticatedUser } = require('../../users/index');
+} = require('../collection');
+const { getAuthenticatedUser } = require('../../users/user');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
 

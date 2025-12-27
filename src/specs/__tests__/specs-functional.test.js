@@ -11,7 +11,7 @@ const {
   modifySpecFile,
   deleteSpecFile,
   syncSpecWithCollection
-} = require('../index');
+} = require('../spec');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
