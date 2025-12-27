@@ -34,10 +34,11 @@ describe('collection roles functional tests', () => {
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('user');
+    //Won't be any group or team roles in the beginning
     //expect(result.data).toHaveProperty('group');
+    //expect(Array.isArray(result.data.group)).toBe(true);
     expect(result.data).toHaveProperty('team');
     expect(Array.isArray(result.data.user)).toBe(true);
-    //expect(Array.isArray(result.data.group)).toBe(true);
     expect(Array.isArray(result.data.team)).toBe(true);
 
     // The creator should have a role in the collection
