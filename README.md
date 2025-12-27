@@ -6,7 +6,7 @@
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
 ![Modules](https://img.shields.io/badge/modules-12-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-102%2F161%20(63.35%25)-yellow)
+![Endpoints](https://img.shields.io/badge/endpoints-110%2F161%20(68.32%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -196,7 +196,7 @@ postman-sdk/
 
 The SDK is organized by resource groups:
 
-- **collections**: Endpoints for managing Postman Collections, folders, comments, forks, and pull requests (41/64 endpoints - 64.1%)
+- **collections**: Endpoints for managing Postman Collections, folders, comments, forks, and pull requests (43/64 endpoints - 67.2%)
 - **requests**: Endpoints for managing requests and comments within collections (8/8 endpoints - 100% ✅)
 - **responses**: Endpoints for managing responses and comments within collections (8/8 endpoints - 100% ✅)
 - **workspaces**: Endpoints for managing Postman Workspaces and tags (7/14 endpoints - 50%)

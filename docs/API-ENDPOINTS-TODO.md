@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 88 unique paths
 - **Total Operations**: 161 HTTP method operations
-- **Implemented**: 102 operations (63.35%)
-- **Not Implemented**: 59 operations (36.65%)
+- **Implemented**: 110 operations (68.32%)
+- **Not Implemented**: 51 operations (31.68%)
 
 ### Legend
 
@@ -49,7 +49,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Collections Module (41/64 completed - 64.1%)</strong></summary>
+<summary><strong>Collections Module (43/64 completed - 67.2%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -130,8 +130,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/roles` | Get collection roles | - | ❌ | ❌ None |
-| PATCH | `/collections/{collectionId}/roles` | Update collection roles | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/roles` | Get collection roles | `getCollectionRoles()` | ✅ | ✅ Passing |
+| PATCH | `/collections/{collectionId}/roles` | Update collection roles | `modifyCollectionRoles()` | ✅ | ✅ Passing |
 | GET | `/collections/{collectionUid}/tags` | Get collection tags | `getCollectionTags()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionUid}/tags` | Update collection tags | `updateCollectionTags()` | ✅ | ✅ Passing |
 
