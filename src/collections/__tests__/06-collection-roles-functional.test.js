@@ -12,6 +12,12 @@ describe('collection roles functional tests', () => {
   let persistedIds = loadTestIds();
   let userId;
   let collectionId;
+  
+  // Group ID for 'sdk-test-devs' group - update this with your actual group ID
+  // To find your group ID, use the GET /groups endpoint or check your Postman team settings
+  const SDK_TEST_DEVS_GROUP_ID = process.env.SDK_TEST_DEVS_GROUP_ID 
+    ? parseInt(process.env.SDK_TEST_DEVS_GROUP_ID) 
+    : null;
 
   beforeAll(async () => {
     userId = getUserId();
@@ -27,9 +33,51 @@ describe('collection roles functional tests', () => {
     collectionId = persistedIds.collection.id;
     console.log('Using collection ID:', collectionId);
     console.log('Using user ID:', userId);
+    
+    if (SDK_TEST_DEVS_GROUP_ID) {
+      console.log('Using sdk-test-devs group ID:', SDK_TEST_DEVS_GROUP_ID);
+    } else {
+      console.log('Note: SDK_TEST_DEVS_GROUP_ID not set - group role test will be skipped');
+    }
   });
 
-  test('1. getCollectionRoles - should get collection roles', async () => {
+  test('1. modifyCollectionRoles - should add sdk-test-devs group as EDITOR', async () => {
+    if (!SDK_TEST_DEVS_GROUP_ID) {
+      console.log('Skipping: SDK_TEST_DEVS_GROUP_ID environment variable not set');
+      console.log('To run this test, set: export SDK_TEST_DEVS_GROUP_ID=<your-group-id>');
+      return;
+    }
+
+    const roles = [
+      {
+        op: 'update',
+        path: '/group',
+        value: [
+          { id: SDK_TEST_DEVS_GROUP_ID, role: 'EDITOR' }
+        ]
+      }
+    ];
+
+    const result = await modifyCollectionRoles(collectionId, roles);
+
+    // PATCH /roles returns 204 No Content on success
+    expect(result.status).toBe(204);
+    console.log('Successfully added sdk-test-devs group as EDITOR (HTTP 204)');
+
+    // Verify the change by getting roles again
+    const verifyResult = await getCollectionRoles(collectionId);
+    
+    expect(verifyResult.data).toHaveProperty('group');
+    expect(Array.isArray(verifyResult.data.group)).toBe(true);
+    
+    const sdkTestDevsGroup = verifyResult.data.group.find(g => g.id === SDK_TEST_DEVS_GROUP_ID);
+    expect(sdkTestDevsGroup).toBeDefined();
+    expect(sdkTestDevsGroup.role).toBe('EDITOR');
+    
+    console.log(`Verified sdk-test-devs group (ID: ${SDK_TEST_DEVS_GROUP_ID}) has EDITOR role`);
+  }, 10000);
+
+  test('2. getCollectionRoles - should get collection roles', async () => {
     const result = await getCollectionRoles(collectionId);
 
     expect(result.status).toBe(200);
@@ -55,7 +103,7 @@ describe('collection roles functional tests', () => {
     }
   }, 10000);
 
-  test('2. getCollectionRoles - should return consistent role structure', async () => {
+  test('3. getCollectionRoles - should return consistent role structure', async () => {
     const result = await getCollectionRoles(collectionId);
 
     expect(result.status).toBe(200);
@@ -99,7 +147,7 @@ describe('collection roles functional tests', () => {
     
   }, 10000);
 
-  test('3. modifyCollectionRoles - should update user role (ensure current user remains EDITOR)', async () => {
+  test('4. modifyCollectionRoles - should update user role (ensure current user remains EDITOR)', async () => {
     // First get current roles
     const getCurrentRoles = await getCollectionRoles(collectionId);
     const currentUserRole = getCurrentRoles.data.user.find(u => u.id === userId);
@@ -135,7 +183,7 @@ describe('collection roles functional tests', () => {
     console.log('Verified current user maintained EDITOR role');
   }, 10000);
 
-  test('4. modifyCollectionRoles - should accept valid role update structure', async () => {
+  test('5. modifyCollectionRoles - should accept valid role update structure', async () => {
     // Get current roles to work with existing IDs
     const getCurrentRoles = await getCollectionRoles(collectionId);
     
@@ -163,7 +211,7 @@ describe('collection roles functional tests', () => {
     console.log('Successfully verified role update structure');
   }, 10000);
 
-  test.skip('5. modifyCollectionRoles - should handle multiple path types (if available)', async () => {
+  test.skip('6. modifyCollectionRoles - should handle multiple path types (if available)', async () => {
     const getCurrentRoles = await getCollectionRoles(collectionId);
     
     const roles = [];
