@@ -8,6 +8,7 @@
  * 2. Environments - Create/test environments within the workspace
  * 3. Collections - Create/test a collection within the workspace
  * 4. Collection Comments - Create/test comments on the collection
+ * 4a. Collection Roles - Get/test collection roles
  * 5. Folders - Create/test a folder within the collection
  * 6. Folder Comments - Create/test comments on the folder
  * 7. Requests - Create/test requests within the collection and folders
@@ -60,6 +61,11 @@ describe('All-Up Functional Test Suite', () => {
 
   describe('Phase 4: Collection Comments', () => {
     const collectionCommentTests = require('../collections/__tests__/04-collection-comments-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 4a: Collection Roles', () => {
+    const collectionRolesTests = require('../collections/__tests__/06-collection-roles-functional.test');
     // Tests are automatically executed when the module is required
   });
 
