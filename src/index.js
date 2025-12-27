@@ -115,6 +115,18 @@ module.exports = {
   mocks: require('./mocks/mock'),
   
   /**
+   * Monitors module - Manage monitors
+   * @type {object}
+   * @property {Function} getMonitors - Get all monitors
+   * @property {Function} createMonitor - Create a monitor
+   * @property {Function} getMonitor - Get a monitor
+   * @property {Function} updateMonitor - Update a monitor
+   * @property {Function} deleteMonitor - Delete a monitor
+   * @property {Function} runMonitor - Run a monitor
+   */
+  monitors: require('./monitors/monitor'),
+  
+  /**
    * Pull Requests module - Manage pull requests
    * @type {object}
    * @property {Function} getPullRequest - Get a pull request

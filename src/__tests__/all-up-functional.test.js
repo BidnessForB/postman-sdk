@@ -13,9 +13,10 @@
  * 7. Requests - Create/test requests within the collection and folders
  * 8. Responses - Create/test responses on the requests
  * 9. Mocks - Create/test mock servers for the collection
- * 10. Specs - Create/test API specs within the workspace
- * 11. Transformations - Test bi-directional sync between specs and collections
- * 12. Tags - Test tagging and entity retrieval by tag
+ * 10. Monitors - Create/test monitors for the collection
+ * 11. Specs - Create/test API specs within the workspace
+ * 12. Transformations - Test bi-directional sync between specs and collections
+ * 13. Tags - Test tagging and entity retrieval by tag
  * 
  * Run this test with:
  *   npx jest src/__tests__/all-up-functional.test.js
@@ -88,32 +89,37 @@ describe('All-Up Functional Test Suite', () => {
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 10: Specs', () => {
+  describe('Phase 10: Monitors', () => {
+    const monitorTests = require('../monitors/__tests__/monitors-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 11: Specs', () => {
     const specTests = require('../specs/__tests__/specs-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 11: Transformations', () => {
+  describe('Phase 12: Transformations', () => {
     const transformationTests = require('../transformations/__tests__/transformations-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 12: Tags', () => {
+  describe('Phase 13: Tags', () => {
     const tagsTests = require('../tags/__tests__/tags-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 13: Forks - Collections', () => {
+  describe('Phase 14: Forks - Collections', () => {
     const forksTests = require('../forks/__tests__/forks-collections-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 14: Forks - Environments', () => {
+  describe('Phase 15: Forks - Environments', () => {
     const forksTests = require('../forks/__tests__/forks-environment-functional.test');
     // Tests are automatically executed when the module is required
   });
 
-  describe('Phase 15: Pull Requests - Collections', () => {
+  describe('Phase 16: Pull Requests - Collections', () => {
     const forksTests = require('../pullRequests/__tests__/prs-collections-functional.test');
     // Tests are automatically executed when the module is required
   });
