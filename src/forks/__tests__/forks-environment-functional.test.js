@@ -4,49 +4,61 @@ const {
   mergeEnvironmentFork,
   pullEnvironmentChanges,
   deleteEnvironment
-} = require('../../../environments/environment');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../../core/config');
-const { loadTestIds, saveTestIds } = require('../../../__tests__/test-helpers');
+} = require('../../environments/environment');
 
-describe('forks', () => {
-  describe('environments', () => {
-    let persistedIds = loadTestIds();
+const { loadTestIds,
+   saveTestIds,
+   initPersistedIds,
+   getTestWorkspaceId,
+   getUserId
+    } = require('../../__tests__/test-helpers');
+  describe('Forks Environments Functional Tests', () => {
+    let persistedIds;
     let userId;
+    let workspaceId;
+
+      
 
     beforeAll(async () => {
-      if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-        throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-      }
-
-      userId = persistedIds?.user?.Id;
-
-      if (!persistedIds.environment?.uid) {
-        throw new Error('Environment UID not found in test-ids.json. Run environment functional tests first.');
-      }
-
-      if (!userId) {
-        throw new Error('User ID not found in test-ids.json. Run user functional tests first.');
-      }
-
-      if (!persistedIds.workspace?.id) {
+      userId = getUserId();
+      persistedIds = loadTestIds();
+      workspaceId = await getTestWorkspaceId();
+      if(!workspaceId) {
         throw new Error('Workspace ID not found in test-ids.json. Run workspace functional tests first.');
       }
+      
+      if (!persistedIds.environment) {
+        const { createEnvironment } = require('../../environments/environment');
+        const environmentName = `SDK Test Environment ${Date.now()}`;
+        const envResult = await createEnvironment(
+          {
+            name: environmentName,
+            values: [
+              { key: 'var1', value: 'value1', enabled: true }
+            ]
+          },
+          workspaceId
+        );
+        if (envResult.status !== 200) {
+          throw new Error('Failed to create environment for fork tests');
+        }
+        persistedIds.environment = {
+          id: envResult.data.environment.id,
+          uid: envResult.data.environment.uid,
+          name: environmentName,
+          createdAt: new Date().toISOString()
+        };
+        saveTestIds(persistedIds);
 
-      console.log('Using environment ID:', persistedIds.environment.id);
-      console.log('Using environment UID:', persistedIds.environment.uid);
-      console.log('Using workspace ID:', persistedIds.workspace.id);
-      console.log('Using user ID:', userId);
-
-      // Initialize fork storage
-      if (!persistedIds.fork) {
-        persistedIds.fork = {};
       }
-      if (!persistedIds.fork.environment) {
-        persistedIds.fork.environment = {};
-      }
+      
+      
     });
 
     test('1. createEnvironmentFork - should create a fork of an environment', async () => {
+      // If no environment ID is persisted, create a new environment and save its info to test-ids
+      
+      await initPersistedIds(['fork.environment']);
       const forkName = `SDK Test Env Fork - ${Date.now()}`;
       
       const result = await createEnvironmentFork(
@@ -232,4 +244,4 @@ describe('forks', () => {
       console.log('Successfully handled invalid fork UID for pull');
     });
   });
-});
+

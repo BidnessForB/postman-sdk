@@ -116,13 +116,13 @@ function clearTestIds(keysToClear = []) {
 async function initPersistedIds(idsToClear = []) {
   clearTestIds(idsToClear);
   const persistedIds = loadTestIds();
-  let userId = persistedIds?.user?.Id;
-  if(!userId) {
-    userId = await initializeUserId();
-    saveTestIds({ ...persistedIds, userId });
-  }
+  const userId = await getUserId();
+  saveTestIds({ ...persistedIds, user: { id: userId } });
   console.log('Using user ID:', userId);
+  
 }
+
+
 
 
 
@@ -141,12 +141,26 @@ function deleteTestIdsFile() {
   }
 }
 
+async function getTestWorkspaceId(create = true) {
+
+  const ids = loadTestIds();
+  let workspaceId = ids && ids.workspace && ids.workspace.id ? ids.workspace.id : undefined;
+  if(!workspaceId && create) {
+    const { createWorkspace } = require('../workspaces/workspace');
+    const result = await createWorkspace('Test Workspace', 'personal', 'Test workspace created by SDK', 'SDK functional test');
+    workspaceId = result.data.workspace.id;
+    saveTestIds({ ...ids, workspace: { id: workspaceId } });
+  }
+  return workspaceId;
+  
+}
+
 /**
  * Initialize userId by calling /me endpoint if not already persisted
  * This should be called in beforeAll hooks of test suites
  * @returns {Promise<number>} The user's ID
  */
-async function initializeUserId() {
+async function getUserId() {
   const ids = loadTestIds();
   
   // If userId already exists, return it
@@ -320,12 +334,14 @@ module.exports = {
   saveTestIds,
   clearTestIds,
   deleteTestIdsFile,
-  initializeUserId,
+  getUserId,
   initPersistedIds,
   retryWithBackoff,
   pollUntilComplete,
   TEST_IDS_FILE, 
   DEFAULT_ID,
-  DEFAULT_UID
+  DEFAULT_UID,
+  getTestWorkspaceId,
+  getUserId
 };
 

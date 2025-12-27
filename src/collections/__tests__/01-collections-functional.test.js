@@ -1,4 +1,5 @@
 const { 
+  
   getCollections, 
   createCollection,
   getCollection,
@@ -8,8 +9,12 @@ const {
   syncCollectionWithSpec
 } = require('../collection');
 const { getAuthenticatedUser } = require('../../users/user');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+
+const { loadTestIds,
+   saveTestIds,
+   getTestWorkspaceId,
+   getUserId,
+   initPersistedIds } = require('../../__tests__/test-helpers');
 
 
 
@@ -19,34 +24,13 @@ describe('collections functional tests (sequential flow)', () => {
   let userId;
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
-
+    
+    initPersistedIds(['collection']);
     persistedIds = loadTestIds();
-    testWorkspaceId = persistedIds?.workspace?.id;
-
-    if (persistedIds.workspace && persistedIds.workspace.id) {
-      console.log('Using persisted workspace ID:', testWorkspaceId);
-    } else {
-      console.log('Using default workspace ID:', testWorkspaceId);
-    }
-
-    if (persistedIds.collection && persistedIds.collection.id) {
-      console.log('Found persisted collection ID:', persistedIds.collection.id);
-    }
-
-    // Get userId for UID construction
-    if (persistedIds?.user?.Id) {
-      userId = persistedIds?.user?.Id;
+    testWorkspaceId = await getTestWorkspaceId();
+    userId = getUserId();
       console.log('Using persisted userId:', userId);
-    } else {
-      const meResult = await getAuthenticatedUser();
-      userId = meResult.data.user.id;
-      persistedIds?.user?.Id = userId;
-      saveTestIds(persistedIds);
-      console.log('Retrieved and persisted userId:', userId);
-    }
+    
   });
 
   afterAll(async () => {
@@ -278,7 +262,7 @@ describe('collections functional tests (sequential flow)', () => {
     }, 10000);
 
     test('should handle createCollection with invalid data', async () => {
-      const workspaceId = persistedIds?.workspace?.id;
+      const workspaceId = await getTestWorkspaceId();
       const invalidData = {
         // Missing required 'info' property
       };
@@ -318,7 +302,7 @@ describe('collections functional tests (sequential flow)', () => {
 
       
 
-      await expect(syncCollectionWithSpec(userId, fakeCollectionId, specId)).rejects.toThrow();
+      await expect(syncCollectionWithSpec( fakeCollectionId, specId)).rejects.toThrow();
     });
 
     test('syncCollectionWithSpec - should throw error for non-existent spec', async () => {
@@ -327,7 +311,7 @@ describe('collections functional tests (sequential flow)', () => {
 
       
 
-      await expect(syncCollectionWithSpec(userId, collectionId, fakeSpecId)).rejects.toThrow();
+      await expect(syncCollectionWithSpec( collectionId, fakeSpecId)).rejects.toThrow();
     });
 
   });

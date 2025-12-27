@@ -1,22 +1,22 @@
 const axios = require('axios');
 
-const { DEFAULT_ID, DEFAULT_UID } = require('../../../__tests__/test-helpers');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 const { 
   getEnvironmentForks,
   createEnvironmentFork,
   mergeEnvironmentFork,
   pullEnvironmentChanges
-} = require('../../../environments/environment');
+} = require('../../environments/environment');
 
 jest.mock('axios');
-jest.mock('../../../core/config', () => ({
+jest.mock('../../core/config', () => ({
   apiKey: 'test-api-key',
   baseUrl: 'https://api.getpostman.com'
 }));
 
-describe('forks', () => {
-  describe('environments', () => {
-    describe('unit tests', () => {
+
+  
+    describe('Forks Environments Unit Tests', () => {
       beforeEach(() => {
         jest.clearAllMocks();
       });
@@ -256,6 +256,6 @@ describe('forks', () => {
         });
       });
     });
-  });
-});
+  
+
 

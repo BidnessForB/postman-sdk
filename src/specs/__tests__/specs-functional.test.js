@@ -12,7 +12,7 @@ const {
   deleteSpecFile,
   syncSpecWithCollection
 } = require('../spec');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 const { loadSpecFixture, getAllSpecFixtures } = require('./fixtures-loader');
@@ -32,13 +32,11 @@ describe('specs functional tests', () => {
   let persistedIds = {};
 
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     // Load persisted IDs and use workspaceId if available
     persistedIds = loadTestIds();
-    testWorkspaceId = persistedIds?.workspace?.id;
+    testWorkspaceId = getWorkspaceId();
     
     if (persistedIds.workspace && persistedIds.workspace.id) {
       console.log(`Using persisted workspace ID: ${testWorkspaceId}`);

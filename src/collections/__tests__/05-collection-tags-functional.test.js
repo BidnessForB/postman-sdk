@@ -2,7 +2,7 @@ const {
   getCollectionTags,
   updateCollectionTags
 } = require('../collection');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 const { loadTestIds } = require('../../__tests__/test-helpers');
 
 describe('collection tags functional tests', () => {
@@ -10,12 +10,10 @@ describe('collection tags functional tests', () => {
   let userId;
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     
-    userId = persistedIds?.user?.Id;
+    userId = getUserId();
 
     if (!persistedIds.collection.uid) {
       throw new Error('Collection ID not found in test-ids.json. Run collection functional tests first.');

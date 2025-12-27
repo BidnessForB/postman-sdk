@@ -8,7 +8,7 @@ const {
   deleteFolderComment,
   getFolderComments
 } = require('../collection');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 const { loadTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
 /**
@@ -37,9 +37,7 @@ describe('collections manual cleanup', () => {
   let testCollectionReplyCommentId;
   
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required`);
-    }
+    
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();

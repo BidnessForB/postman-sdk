@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: 'node',
-  runInBand: true,  // Force tests to run sequentially in order
+  
   testMatch: ['**/__tests__/**/*.test.js'],
   testTimeout: 30000, // Default 30s for most tests (individual tests can override)
   collectCoverageFrom: [

@@ -1,6 +1,7 @@
 const { getTagEntities } = require('../tag');
-const { workspaces, collections } = require('../../workspaces');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+const { updateWorkspaceTags } = require('../../workspaces/workspace');
+const { updateCollectionTags } = require('../../collections/collection');
+
 const { loadTestIds } = require('../../__tests__/test-helpers');
 
 describe('tags functional tests', () => {
@@ -11,9 +12,7 @@ describe('tags functional tests', () => {
   let collectionTagSlug;
   
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
     
     // Load the persisted workspace ID and collection ID from test-ids.json
     const persistedIds = loadTestIds();
@@ -32,8 +31,8 @@ describe('tags functional tests', () => {
       throw new Error('No collection ID found in test-ids.json. Run collection tests first.');
     }
     
-    if (persistedIds?.user?.Id) {
-      userId = persistedIds?.user?.Id;
+    if (getUserId()) {
+      userId = getUserId();
       console.log(`Using persisted user ID: ${userId}`);
     } else {
       throw new Error('No user ID found in test-ids.json. Run user tests first.');

@@ -1,15 +1,13 @@
 const { getAuthenticatedUser } = require('../user');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 
 describe('users functional tests', () => {
   let persistedIds = {};
   let testUserId;
 
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();

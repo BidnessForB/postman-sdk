@@ -25,13 +25,11 @@
  * deleted after the test completes.
  */
 
-const { POSTMAN_API_KEY_ENV_VAR } = require('../core/config');
+
 
 describe('All-Up Functional Test Suite', () => {
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
     
     console.log('\n========================================');
     console.log('Starting All-Up Functional Test Suite');
@@ -106,12 +104,12 @@ describe('All-Up Functional Test Suite', () => {
   });
 
   describe('Phase 13: Forks - Collections', () => {
-    const forksTests = require('../forks/__tests__/collections/forks-collections-functional.test');
+    const forksTests = require('../forks/__tests__/forks-collections-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 14: Forks - Environments', () => {
-    const forksTests = require('../forks/__tests__/environments/forks-environment-functional.test');
+    const forksTests = require('../forks/__tests__/forks-environment-functional.test');
     // Tests are automatically executed when the module is required
   });
 

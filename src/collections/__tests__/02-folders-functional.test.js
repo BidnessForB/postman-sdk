@@ -4,16 +4,14 @@ const {
   updateFolder,
   deleteFolder
 } = require('../collection');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
 describe('folders functional tests (sequential flow)', () => {
   let persistedIds = {};
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     persistedIds = loadTestIds();
 

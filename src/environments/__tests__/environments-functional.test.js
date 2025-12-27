@@ -6,40 +6,18 @@ const {
   deleteEnvironment
 } = require('../environment');
 const { getAuthenticatedUser } = require('../../users/user');
-const { loadTestIds, saveTestIds, DEFAULT_UID, DEFAULT_ID } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, DEFAULT_ID, getTestWorkspaceId, initPersistedIds } = require('../../__tests__/test-helpers');
 
 describe('Environments Functional Tests', () => {
   let persistedIds;
   let userId;
 
   beforeAll(async () => {
+    initPersistedIds(['environment']);
     persistedIds = loadTestIds();
-    const userResult = await getAuthenticatedUser();
-    userId = userResult.data.user.id;
+    
   }, 10000);
-
-  test('1. getEnvironments - should get all environments', async () => {
-    const result = await getEnvironments();
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('environments');
-    expect(Array.isArray(result.data.environments)).toBe(true);
-
-    console.log(`Retrieved ${result.data.environments.length} environments`);
-  }, 10000);
-
-  test('2. getEnvironments - should get environments in workspace', async () => {
-    const workspaceId = persistedIds.workspace.id;
-    const result = await getEnvironments(workspaceId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('environments');
-    expect(Array.isArray(result.data.environments)).toBe(true);
-
-    console.log(`Retrieved ${result.data.environments.length} environments in workspace ${workspaceId}`);
-  }, 10000);
-
-  test('3. createEnvironment - should create a new environment', async () => {
+  test('1. createEnvironment - should create a new environment', async () => {
     const environmentName = `Test Environment ${Date.now()}`;
     const environmentData = {
       name: environmentName,
@@ -80,6 +58,29 @@ describe('Environments Functional Tests', () => {
     console.log(`Environment ID: ${result.data.environment.id}`);
   }, 10000);
 
+  test('2. getEnvironments - should get all environments', async () => {
+    const result = await getEnvironments();
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('environments');
+    expect(Array.isArray(result.data.environments)).toBe(true);
+
+    console.log(`Retrieved ${result.data.environments.length} environments`);
+  }, 10000);
+
+  test('3. getEnvironments - should get environments in workspace', async () => {
+    const workspaceId = persistedIds.workspace.id;
+    const result = await getEnvironments(workspaceId);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('environments');
+    expect(Array.isArray(result.data.environments)).toBe(true);
+
+    console.log(`Retrieved ${result.data.environments.length} environments in workspace ${workspaceId}`);
+  }, 10000);
+
+  
+
   test('4. getEnvironment - should get a single environment', async () => {
     const environmentId = persistedIds.environment.id;
     const result = await getEnvironment(environmentId);
@@ -95,7 +96,7 @@ describe('Environments Functional Tests', () => {
     console.log(`Environment has ${result.data.environment.values.length} values`);
   }, 10000);
 
-  test('4. getEnvironment - should error on non-existent environment', async () => {
+  test('5. getEnvironment - should error on non-existent environment', async () => {
     const environmentId = DEFAULT_ID;
     let result;
     try {
@@ -120,7 +121,7 @@ describe('Environments Functional Tests', () => {
     
   }, 10000);
 
-  test('5. modifyEnvironment - should update environment name', async () => {
+  test('6. modifyEnvironment - should update environment name', async () => {
     const environmentId = persistedIds.environment.id;
     const updatedName = `Updated Environment ${Date.now()}`;
     const patchOperations = [
@@ -145,7 +146,7 @@ describe('Environments Functional Tests', () => {
     console.log(`Updated environment name to: ${updatedName}`);
   }, 10000);
 
-  test('6. modifyEnvironment - should add a new environment variable', async () => {
+  test('7. modifyEnvironment - should add a new environment variable', async () => {
     const environmentId = persistedIds.environment.id;
     
     // First, get the current environment to know how many variables exist
@@ -180,7 +181,7 @@ describe('Environments Functional Tests', () => {
     console.log(`Added new variable, environment now has ${result.data.environment.values.length} values`);
   }, 10000);
 
-  test('6a. modifyEnvironment - should replace an environment variable value', async () => {
+  test('8. modifyEnvironment - should replace an environment variable value', async () => {
     const environmentId = persistedIds.environment.id;
     
     // Get current environment to find the variable we just added
@@ -210,7 +211,7 @@ describe('Environments Functional Tests', () => {
     console.log(`Updated variable value at index ${testVarIndex}`);
   }, 10000);
 
-  test('6b. modifyEnvironment - should remove an environment variable', async () => {
+  test('9. modifyEnvironment - should remove an environment variable', async () => {
     const environmentId = persistedIds.environment.id;
     
     // Get current environment to find the variable we added
@@ -245,7 +246,7 @@ describe('Environments Functional Tests', () => {
     console.log(`Removed variable, environment now has ${result.data.environment.values.length} values`);
   }, 10000);
 
-  test('7. deleteEnvironment - should delete an environment', async () => {
+  test('10. deleteEnvironment - should delete an environment', async () => {
     // Create a temporary environment to delete
     const tempEnvironmentName = `Temp Environment ${Date.now()}`;
     const createResult = await createEnvironment(

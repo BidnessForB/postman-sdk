@@ -1,22 +1,22 @@
 const axios = require('axios');
 
-const { DEFAULT_ID, DEFAULT_UID } = require('../../../__tests__/test-helpers');
+const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 const { 
   getCollectionForks,
   createCollectionFork,
   mergeCollectionFork,
   pullCollectionChanges
-} = require('../../../collections/collection');
+} = require('../../collections/collection');
 
 jest.mock('axios');
-jest.mock('../../../core/config', () => ({
+jest.mock('../../core/config', () => ({
   apiKey: 'test-api-key',
   baseUrl: 'https://api.getpostman.com'
 }));
 
-describe('forks', () => {
-  describe('collections', () => {
-    describe('unit tests', () => {
+
+  
+    describe('Forks Collections Unit Tests', () => {
       beforeEach(() => {
         jest.clearAllMocks();
       });
@@ -325,6 +325,6 @@ describe('forks', () => {
         });
       });
     });
-  });
-});
+
+
 
