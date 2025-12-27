@@ -1,7 +1,7 @@
 const { 
   getCollectionTags,
   updateCollectionTags
-} = require('../index');
+} = require('../collection');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds } = require('../../__tests__/test-helpers');
 
@@ -15,7 +15,7 @@ describe('collection tags functional tests', () => {
     }
 
     
-    userId = persistedIds?.userId;
+    userId = persistedIds?.user?.Id;
 
     if (!persistedIds.collection.uid) {
       throw new Error('Collection ID not found in test-ids.json. Run collection functional tests first.');

@@ -37,13 +37,13 @@ describe('collections functional tests (sequential flow)', () => {
     }
 
     // Get userId for UID construction
-    if (persistedIds.userId) {
-      userId = persistedIds.userId;
+    if (persistedIds?.user?.Id) {
+      userId = persistedIds?.user?.Id;
       console.log('Using persisted userId:', userId);
     } else {
       const meResult = await getAuthenticatedUser();
       userId = meResult.data.user.id;
-      persistedIds.userId = userId;
+      persistedIds?.user?.Id = userId;
       saveTestIds(persistedIds);
       console.log('Retrieved and persisted userId:', userId);
     }

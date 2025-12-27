@@ -5,7 +5,7 @@ const {
   getPullRequest,
   updatePullRequest,
   reviewPullRequest
-} = require('../index');
+} = require('../pullRequest');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

@@ -116,7 +116,7 @@ function clearTestIds(keysToClear = []) {
 async function initPersistedIds(idsToClear = []) {
   clearTestIds(idsToClear);
   const persistedIds = loadTestIds();
-  let userId = persistedIds?.userId;
+  let userId = persistedIds?.user?.Id;
   if(!userId) {
     userId = await initializeUserId();
     saveTestIds({ ...persistedIds, userId });

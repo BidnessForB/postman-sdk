@@ -247,7 +247,7 @@ describe('requests functional tests (sequential flow)', () => {
 
     describe('comment lifecycle', () => {
       test('should create a comment on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         
@@ -274,7 +274,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should get all comments on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
 
@@ -292,7 +292,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should update a comment on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const commentId = persistedIds.request.commentId;
@@ -311,7 +311,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should delete a comment from a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const commentId = persistedIds.request.commentId;
@@ -332,7 +332,7 @@ describe('requests functional tests (sequential flow)', () => {
 
     describe('comment error handling', () => {
       test('should return 404 for comments on non-existent request', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionUid = persistedIds.collection.uid;
         const nonExistentRequestId = DEFAULT_UID;
         const result = await getRequestComments(collectionUid, nonExistentRequestId);
@@ -346,7 +346,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should return error for invalid comment ID', async () => {
-        const userId = persistedIds.userId;
+        const userId = persistedIds?.user?.Id;
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const invalidCommentId = 999999999;

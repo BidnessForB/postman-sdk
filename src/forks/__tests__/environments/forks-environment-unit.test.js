@@ -6,7 +6,7 @@ const {
   createEnvironmentFork,
   mergeEnvironmentFork,
   pullEnvironmentChanges
-} = require('../../../environments/index');
+} = require('../../../environments/environment');
 
 jest.mock('axios');
 jest.mock('../../../core/config', () => ({

@@ -7,7 +7,7 @@ const {
   deleteWorkspace,
   getWorkspaceTags,
   updateWorkspaceTags
-} = require('../index');
+} = require('../workspace');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

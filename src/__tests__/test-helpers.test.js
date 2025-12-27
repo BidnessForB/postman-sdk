@@ -88,7 +88,9 @@ describe('test-helpers shared utilities', () => {
     test('should not re-initialize userId if already present', async () => {
       // Setup: Save test data with existing userId
       saveTestIds({
-        userId: 54321,
+        user:{
+          id: 54321
+        },
         workspaceId: 'ws-123'
       });
 

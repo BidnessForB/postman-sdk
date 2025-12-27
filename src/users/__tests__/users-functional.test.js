@@ -1,4 +1,4 @@
-const { getAuthenticatedUser } = require('../index');
+const { getAuthenticatedUser } = require('../user');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 

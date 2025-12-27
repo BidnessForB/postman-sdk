@@ -1,7 +1,7 @@
 const { 
   deleteWorkspace,
   getWorkspace
-} = require('../index');
+} = require('../workspace');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 

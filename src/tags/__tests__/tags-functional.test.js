@@ -1,5 +1,5 @@
 const { getTagEntities } = require('../tag');
-const { workspaces, collections } = require('../../index');
+const { workspaces, collections } = require('../../workspaces');
 const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
 const { loadTestIds } = require('../../__tests__/test-helpers');
 
@@ -32,8 +32,8 @@ describe('tags functional tests', () => {
       throw new Error('No collection ID found in test-ids.json. Run collection tests first.');
     }
     
-    if (persistedIds.userId) {
-      userId = persistedIds.userId;
+    if (persistedIds?.user?.Id) {
+      userId = persistedIds?.user?.Id;
       console.log(`Using persisted user ID: ${userId}`);
     } else {
       throw new Error('No user ID found in test-ids.json. Run user tests first.');

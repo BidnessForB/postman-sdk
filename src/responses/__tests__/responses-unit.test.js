@@ -13,7 +13,7 @@ const {
   createResponseComment,
   updateResponseComment,
   deleteResponseComment
-} = require('../index');
+} = require('../response');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

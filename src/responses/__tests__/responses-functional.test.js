@@ -32,13 +32,13 @@ describe('responses functional tests (sequential flow)', () => {
       throw new Error('No request ID found. Please run request tests first to create a test request.');
     }
 
-    if (!persistedIds.userId) {
+    if (!persistedIds?.user?.Id) {
       throw new Error('No user ID found. Please run user tests first to get user ID.');
     }
 
     console.log('Using collection ID:', persistedIds.collection.id);
     console.log('Using request ID:', persistedIds.request.id);
-    console.log('Using user ID:', persistedIds.userId);
+    console.log('Using user ID:', persistedIds?.user?.Id);
 
     if (persistedIds.response && persistedIds.response.id) {
       console.log('Found persisted response ID:', persistedIds.response.id);
@@ -157,7 +157,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('5. getResponseComments - should retrieve comments on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = persistedIds?.user?.Id;
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     
@@ -175,7 +175,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('6. createResponseComment - should create a comment on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = persistedIds?.user?.Id;
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     
@@ -205,7 +205,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('7. updateResponseComment - should update the comment on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = persistedIds?.user?.Id;
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;
@@ -233,7 +233,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('8. deleteResponseComment - should delete the comment from the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = persistedIds?.user?.Id;
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;

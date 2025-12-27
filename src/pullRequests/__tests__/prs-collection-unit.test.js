@@ -4,7 +4,7 @@ const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 const {
   getCollectionPullRequests,
   createCollectionPullRequest
-} = require('../../collections/index');
+} = require('../../collections/collection');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

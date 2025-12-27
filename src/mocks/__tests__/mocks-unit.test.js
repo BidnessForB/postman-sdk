@@ -13,7 +13,7 @@ const {
   updateMockServerResponse,
   deleteMockServerResponse,
   deleteMockUnpublish
-} = require('../index');
+} = require('../mock');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

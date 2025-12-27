@@ -63,7 +63,7 @@ describe('Collection Pull Request Functional Tests', () => {
     try {
       const title = `SDK Test PR - ${Date.now()}`;
       const description = 'Pull request created by SDK functional test';
-      const reviewers = [persistedIds.userId.toString()];
+      const reviewers = [persistedIds?.user?.Id.toString()];
 
       const result = await createCollectionPullRequest(
         persistedIds.fork.collection.uid,
@@ -204,7 +204,7 @@ describe('Collection Pull Request Functional Tests', () => {
 
   test('101. updatePullRequest - should update pull request title and reviewers', async () => {
     const newTitle = `Updated SDK Test PR - ${Date.now()}`;
-    const newReviewers = [persistedIds.userId.toString()];
+    const newReviewers = [persistedIds?.user?.Id.toString()];
     const newDescription = 'Updated by SDK functional test';
 
     try {
@@ -235,7 +235,7 @@ describe('Collection Pull Request Functional Tests', () => {
 
   test('102. updatePullRequest - should update without description', async () => {
     const newTitle = `SDK Test PR No Desc - ${Date.now()}`;
-    const newReviewers = [persistedIds.userId.toString()];
+    const newReviewers = [persistedIds?.user?.Id.toString()];
 
     try {
       const result = await updatePullRequest(
@@ -339,7 +339,7 @@ describe('Collection Pull Request Functional Tests', () => {
   test('107. updatePullRequest - should handle invalid PR ID', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
 
-    const results = await updatePullRequest(fakeId, 'Test Title', [persistedIds.userId.toString()]);
+    const results = await updatePullRequest(fakeId, 'Test Title', [persistedIds?.user?.Id.toString()]);
     expect([400, 401, 403, 404, 409, 422, 500, 501, 502, 503, 504]).toContain(results.status);
     expect(results.code).toBe('ERR_BAD_REQUEST');
 

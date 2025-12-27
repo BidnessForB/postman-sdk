@@ -18,7 +18,7 @@ describe('forks', () => {
         throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
       }
 
-      userId = persistedIds?.userId;
+      userId = persistedIds?.user?.Id;
 
       if (!persistedIds.environment?.uid) {
         throw new Error('Environment UID not found in test-ids.json. Run environment functional tests first.');
