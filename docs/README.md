@@ -55,10 +55,11 @@ The documentation is organized by module:
 5. **Specs** - Manage API specifications (OpenAPI, AsyncAPI) and generations
 6. **Environments** - Manage environment variables and forks
 7. **Mocks** - Manage mock servers, responses, and call logs
-8. **Tags** - Query entities by tag
-9. **Transformations** - Bi-directional sync between specs and collections
-10. **Users** - Get authenticated user information
-11. **Pull Requests** - Manage pull requests (get, update, review)
+8. **Monitors** - Manage monitors and monitor executions
+9. **Tags** - Query entities by tag
+10. **Transformations** - Bi-directional sync between specs and collections
+11. **Users** - Get authenticated user information
+12. **Pull Requests** - Manage pull requests (get, update, review)
 
 ## Updating Documentation
 
