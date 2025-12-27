@@ -5,8 +5,8 @@
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-9-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-96%2F161%20(59.63%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-12-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-102%2F161%20(63.35%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -196,16 +196,18 @@ postman-sdk/
 
 The SDK is organized by resource groups:
 
-- **collections**: Endpoints for managing Postman Collections, folders, comments, and forks
-- **requests**: Endpoints for managing requests within collections
-- **responses**: Endpoints for managing responses within collections
-- **workspaces**: Endpoints for managing Postman Workspaces
-- **specs**: Endpoints for managing Postman API Specifications
-- **environments**: Endpoints for managing Postman Environments and forks
-- **tags**: Endpoints for tagging and retrieving tagged entities
-- **transformations**: Endpoints for bi-directional sync between specs and collections
-- **users**: Endpoints for user information and authentication
-- **pullRequests**: Endpoints for managing pull requests (get, update, review)
+- **collections**: Endpoints for managing Postman Collections, folders, comments, forks, and pull requests (41/64 endpoints - 64.1%)
+- **requests**: Endpoints for managing requests and comments within collections (8/8 endpoints - 100% ✅)
+- **responses**: Endpoints for managing responses and comments within collections (8/8 endpoints - 100% ✅)
+- **workspaces**: Endpoints for managing Postman Workspaces and tags (7/14 endpoints - 50%)
+- **specs**: Endpoints for managing Postman API Specifications and generations (15/15 endpoints - 100% ✅)
+- **environments**: Endpoints for managing Postman Environments and forks (9/10 endpoints - 90%)
+- **mocks**: Endpoints for managing mock servers, responses, and call logs (13/13 endpoints - 100% ✅)
+- **tags**: Endpoints for retrieving entities by tag (1/1 endpoint - 100% ✅)
+- **transformations**: Endpoints for bi-directional sync between specs and collections (2/2 endpoints - 100% ✅)
+- **users**: Endpoints for user information and authentication (1/3 endpoints - 33.3%)
+- **pullRequests**: Endpoints for managing pull requests - get, update, review (3/3 endpoints - 100% ✅)
+- **forks**: Fork operations for collections and environments (included in collections and environments modules)
 
 
 ## Testing
@@ -254,9 +256,12 @@ This orchestrates all functional tests in sequence:
 6. Folder Comments (create/test comments on folder)
 7. Requests (create/test requests in collections and folders)
 8. Responses (create/test responses on requests)
-9. Specs (create/test API specs in workspace)
-10. Transformations (test bidirectional sync between specs and collections)
-11. Tags (test tagging and entity retrieval)
+9. Mocks (create/test mock servers)
+10. Specs (create/test API specs in workspace)
+11. Transformations (test bidirectional sync between specs and collections)
+12. Tags (test tagging and entity retrieval)
+13. Forks (test collection and environment forking operations)
+14. Pull Requests (test PR creation, update, and review)
 
 **Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
 

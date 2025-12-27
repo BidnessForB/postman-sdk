@@ -1,7 +1,7 @@
 # Postman API SDK - Endpoint Implementation Status
 
 **SDK Version**: 0.8.2
-**Last Updated**: December 25, 2025  
+**Last Updated**: December 27, 2025  
 **Jest Version**: 30.2.0
 
 ## Overview
@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 88 unique paths
 - **Total Operations**: 161 HTTP method operations
-- **Implemented**: 96 operations (59.63%)
-- **Not Implemented**: 65 operations (40.37%)
+- **Implemented**: 102 operations (63.35%)
+- **Not Implemented**: 59 operations (36.65%)
 
 ### Legend
 
@@ -49,7 +49,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Collections Module (39/64 completed - 60.9%)</strong></summary>
+<summary><strong>Collections Module (41/64 completed - 64.1%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -123,6 +123,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 |--------|----------|-------------|----------|-------------|-------|
 | GET | `/collections/{collectionUid}/pull-requests` | Get pull requests | `getCollectionPullRequests()` | ✅ | ✅ Passing |
 | POST | `/collections/{collectionUid}/pull-requests` | Create pull request | `createCollectionPullRequest()` | ✅ | ✅ Passing |
+
+**Note**: See also [Pull Requests Module](#pull-requests-module) for PR management operations.
 
 ### Collection Roles & Tags
 
@@ -273,7 +275,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-<details>
+<details open>
 <summary><strong>Environments Module (9/10 completed - 90%)</strong></summary>
 
 ### Core Environment Operations
@@ -409,6 +411,37 @@ This document tracks the implementation status of all Postman API endpoints in t
 | GET | `/pull-requests/{pullRequestId}` | Get a pull request | `getPullRequest()` | ✅ | ✅ Passing |
 | PUT | `/pull-requests/{pullRequestId}` | Update a pull request | `updatePullRequest()` | ✅ | ✅ Passing |
 | POST | `/pull-requests/{pullRequestId}/tasks` | Review a pull request | `reviewPullRequest()` | ✅ | ✅ Passing |
+
+**Note**: Pull requests can be created for collections via `createCollectionPullRequest()` in the Collections module.
+
+</details>
+
+---
+
+<details open>
+<summary><strong>Tags Module (1/1 completed - 100%) ✅</strong></summary>
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| GET | `/tags/{slugId}/entities` | Get entities by tag | `getTagEntities()` | ✅ | ✅ Passing |
+
+**Note**: Tags can be managed on collections and workspaces via their respective modules:
+- Collections: `getCollectionTags()`, `updateCollectionTags()`
+- Workspaces: `getWorkspaceTags()`, `updateWorkspaceTags()`
+
+</details>
+
+---
+
+<details open>
+<summary><strong>Transformations Module (2/2 completed - 100%) ✅</strong></summary>
+
+| Method | Endpoint | Description | Function | Implemented | Tests |
+|--------|----------|-------------|----------|-------------|-------|
+| PUT | `/collections/{collectionUid}/synchronizations` | Sync collection with spec | `syncCollectionWithSpec()` | ✅ | ✅ Passing |
+| PUT | `/specs/{specId}/synchronizations` | Sync spec with collection | `syncSpecWithCollection()` | ✅ | ✅ Passing |
+
+**Note**: Bi-directional synchronization between API specs and collections. Comprehensive functional tests verify both sync directions.
 
 </details>
 

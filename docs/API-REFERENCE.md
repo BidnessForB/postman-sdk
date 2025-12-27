@@ -3,7 +3,9 @@
 [![npm version](https://img.shields.io/npm/v/@bidnessforb/postman-sdk.svg)](https://www.npmjs.com/package/@bidnessforb/postman-sdk)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
-> **Auto-generated API documentation** from JSDoc comments. Last generated: 2025-12-26
+> **Auto-generated API documentation** from JSDoc comments. Last generated: 2025-12-27
+> 
+> **Note**: This file should be regenerated using `npm run docs:md` to include the Pull Requests module documentation.
 
 ## Overview
 
@@ -35,7 +37,9 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 
 ### Table of Contents
 
-*Quick Links: [Collections](#collections) • [Requests](#requests) • [Responses](#responses) • [Workspaces](#workspaces) • [Specs](#specs) • [Environments](#environments) • [Mocks](#mocks) • [Tags](#tags) • [Users](#users) • [Core Utilities](#core-utilities)*
+*Quick Links: [Collections](#collections) • [Requests](#requests) • [Responses](#responses) • [Workspaces](#workspaces) • [Specs](#specs) • [Environments](#environments) • [Mocks](#mocks) • [Tags](#tags) • [Users](#users) • [Pull Requests](#pull-requests) • [Core Utilities](#core-utilities)*
+
+**Note**: Pull Requests module documentation will be added when this file is regenerated with `npm run docs:md`.
 
 ---
 

@@ -48,15 +48,17 @@ This removes all auto-generated documentation files.
 
 The documentation is organized by module:
 
-1. **Collections** - Manage collections, folders, and comments
-2. **Requests** - Manage requests within collections
-3. **Responses** - Manage responses for requests
-4. **Workspaces** - Manage Postman workspaces
-5. **Specs** - Manage API specifications (OpenAPI, AsyncAPI)
-6. **Environments** - Manage environment variables
-7. **Tags** - Query and manage tags
-8. **Users** - Get authenticated user information
-9. **Mocks** - Manage mock servers
+1. **Collections** - Manage collections, folders, comments, forks, and pull requests
+2. **Requests** - Manage requests and comments within collections
+3. **Responses** - Manage responses and comments for requests
+4. **Workspaces** - Manage Postman workspaces and tags
+5. **Specs** - Manage API specifications (OpenAPI, AsyncAPI) and generations
+6. **Environments** - Manage environment variables and forks
+7. **Mocks** - Manage mock servers, responses, and call logs
+8. **Tags** - Query entities by tag
+9. **Transformations** - Bi-directional sync between specs and collections
+10. **Users** - Get authenticated user information
+11. **Pull Requests** - Manage pull requests (get, update, review)
 
 ## Updating Documentation
 
