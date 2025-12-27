@@ -17,7 +17,6 @@ describe('groups functional tests', () => {
   describe('getGroups', () => {
     test('should retrieve all groups and verify structure', async () => {
       await initPersistedIds(['group']);
-
       const result = await getGroups();
 
       expect(result.status).toBe(200);
