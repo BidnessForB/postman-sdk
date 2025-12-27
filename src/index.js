@@ -30,7 +30,7 @@ module.exports = {
    * @property {Function} modifyCollection - Partially update a collection
    * @property {Function} deleteCollection - Delete a collection
    */
-  collections: require('./collections'),
+  collections: require('./collections/collection'),
   
   /**
    * Requests module - Manage requests within collections
@@ -42,7 +42,7 @@ module.exports = {
    * @property {Function} getRequestComments - Get request comments
    * @property {Function} createRequestComment - Create a request comment
    */
-  requests: require('./requests'),
+  requests: require('./requests/request'),
   
   /**
    * Responses module - Manage responses for requests
@@ -53,7 +53,7 @@ module.exports = {
    * @property {Function} deleteResponse - Delete a response
    * @property {Function} getResponseComments - Get response comments
    */
-  responses: require('./responses'),
+  responses: require('./responses/response'),
   
   /**
    * Workspaces module - Manage Postman workspaces
@@ -64,7 +64,7 @@ module.exports = {
    * @property {Function} updateWorkspace - Update a workspace
    * @property {Function} deleteWorkspace - Delete a workspace
    */
-  workspaces: require('./workspaces'),
+  workspaces: require('./workspaces/workspace'),
   
   /**
    * Specs module - Manage API specifications
@@ -76,7 +76,7 @@ module.exports = {
    * @property {Function} deleteSpec - Delete a spec
    * @property {Function} getSpecFiles - Get spec files
    */
-  specs: require('./specs'),
+  specs: require('./specs/spec'),
   
   /**
    * Environments module - Manage Postman environments
@@ -87,21 +87,21 @@ module.exports = {
    * @property {Function} modifyEnvironment - Update an environment
    * @property {Function} deleteEnvironment - Delete an environment
    */
-  environments: require('./environments'),
+  environments: require('./environments/environment'),
   
   /**
    * Tags module - Manage and query tags
    * @type {object}
    * @property {Function} getTagEntities - Get entities by tag
    */
-  tags: require('./tags'),
+  tags: require('./tags/tag'),
   
   /**
    * Users module - Get user information
    * @type {object}
    * @property {Function} getAuthenticatedUser - Get authenticated user info
    */
-  users: require('./users'),
+  users: require('./users/user'),
   
   /**
    * Mocks module - Manage mock servers
@@ -112,6 +112,15 @@ module.exports = {
    * @property {Function} updateMock - Update a mock
    * @property {Function} deleteMock - Delete a mock
    */
-  mocks: require('./mocks')
+  mocks: require('./mocks/mock'),
+  
+  /**
+   * Pull Requests module - Manage pull requests
+   * @type {object}
+   * @property {Function} getPullRequest - Get a pull request
+   * @property {Function} updatePullRequest - Update a pull request
+   * @property {Function} reviewPullRequest - Review a pull request (approve, decline, merge, unapprove)
+   */
+  pullRequests: require('./pullRequests/pullRequest')
 }; 
 

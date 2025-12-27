@@ -15,7 +15,7 @@ const {
   getSpecTaskStatus,
   getSpecGenerations,
   syncSpecWithCollection
-} = require('../index');
+} = require('../spec');
 const { DEFAULT_ID, DEFAULT_UID } = require('../../__tests__/test-helpers');
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

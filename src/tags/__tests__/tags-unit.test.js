@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getTagEntities } = require('../index');
+const { getTagEntities } = require('../tag');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

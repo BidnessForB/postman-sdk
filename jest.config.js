@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: 'node',
+  
   testMatch: ['**/__tests__/**/*.test.js'],
   testTimeout: 30000, // Default 30s for most tests (individual tests can override)
   collectCoverageFrom: [

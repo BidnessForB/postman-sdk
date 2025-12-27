@@ -1,5 +1,5 @@
 const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString, validateId } = require('../core/utils');
+const { buildQueryString, validateId, validateUid } = require('../core/utils');
 
 /**
  * Gets all environments
@@ -173,11 +173,114 @@ async function deleteEnvironment(environmentId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets all forks of an environment
+ * Postman API endpoint and method: GET /environments/{environmentUid}/forks
+ * @param {string} environmentUid - The environment's unique ID
+ * @param {string} [cursor] - The pointer to the first record of the set of paginated results
+ * @param {string} [direction] - Sort results in ascending ('asc') or descending ('desc') order
+ * @param {number} [limit] - The maximum number of rows to return in the response (default 10)
+ * @param {string} [sort] - Sort the results by the date and time of creation ('createdAt')
+ * @returns {Promise} Axios response with array of environment forks
+ * @example
+ * // Get all forks of an environment
+ * const response = await getEnvironmentForks('12345678-env-uid-123');
+ * console.log(response.data.data);
+ * 
+ * @example
+ * // Get forks with pagination
+ * const response = await getEnvironmentForks('12345678-env-uid-123', null, 'desc', 20, 'createdAt');
+ * console.log(response.data.meta.nextCursor);
+ */
+async function getEnvironmentForks(environmentUid, cursor = null, direction = null, limit = null, sort = null) {
+  validateUid(environmentUid, 'environmentUid');
+
+  const endpoint = `/environments/${environmentUid}/forks`;
+  const queryParams = {
+    cursor,
+    direction,
+    limit,
+    sort
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('get', fullEndpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a fork from an existing environment
+ * Postman API endpoint and method: POST /environments/{environmentUid}/forks
+ * @param {string} environmentUid - The environment's unique ID to fork
+ * @param {string} workspaceId - The workspace ID in which to fork the environment (required)
+ * @param {string} forkName - The fork's label (required)
+ * @returns {Promise} Axios response with forked environment data
+ * @example
+ * // Create a fork of an environment
+ * const response = await createEnvironmentFork(
+ *   '12345678-env-uid-123',
+ *   'workspace-id-456',
+ *   'My Environment Fork'
+ * );
+ * console.log(response.data.environment);
+ */
+async function createEnvironmentFork(environmentUid, workspaceId, forkName) {
+  validateUid(environmentUid, 'environmentUid');
+  validateId(workspaceId, 'workspaceId');
+
+  const endpoint = `/environments/${environmentUid}/forks`;
+  const queryParams = {
+    workspace: workspaceId
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('post', fullEndpoint, { forkName });
+  return await executeRequest(config);
+}
+
+/**
+ * Merges a forked environment back into its parent environment
+ * Postman API endpoint and method: POST /environments/{environmentUid}/merges
+ * @param {string} environmentUid - The forked environment's unique ID
+ * @returns {Promise} Axios response with merged environment data
+ * @example
+ * // Merge a fork back to parent
+ * const response = await mergeEnvironmentFork('12345678-fork-uid-123');
+ * console.log(response.data.environment.uid);
+ */
+async function mergeEnvironmentFork(environmentUid) {
+  validateUid(environmentUid, 'environmentUid');
+
+  const endpoint = `/environments/${environmentUid}/merges`;
+  const config = buildAxiosConfig('post', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Pulls changes from parent environment into a forked environment
+ * Postman API endpoint and method: POST /environments/{environmentUid}/pulls
+ * @param {string} environmentUid - The forked environment's unique ID
+ * @returns {Promise} Axios response with updated environment data
+ * @example
+ * // Pull parent changes into fork
+ * const response = await pullEnvironmentChanges('12345678-fork-uid-123');
+ * console.log(response.data.environment.uid);
+ */
+async function pullEnvironmentChanges(environmentUid, data = undefined) {
+  validateUid(environmentUid, 'environmentUid');
+  
+  const endpoint = `/environments/${environmentUid}/pulls`;
+  const config = buildAxiosConfig('post', endpoint, data);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getEnvironments,
   createEnvironment,
   getEnvironment,
   modifyEnvironment,
-  deleteEnvironment
+  deleteEnvironment,
+  getEnvironmentForks,
+  createEnvironmentFork,
+  mergeEnvironmentFork,
+  pullEnvironmentChanges
 };
 

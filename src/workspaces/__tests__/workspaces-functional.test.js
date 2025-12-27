@@ -6,8 +6,8 @@ const {
   deleteWorkspace,
   getWorkspaceTags,
   updateWorkspaceTags
-} = require('../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+} = require('../workspace');
+
 const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
 describe('workspaces functional tests (sequential flow)', () => {
@@ -18,9 +18,7 @@ describe('workspaces functional tests (sequential flow)', () => {
   let persistedIds = {};
   
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();

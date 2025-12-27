@@ -45,6 +45,9 @@ function saveTestIds(ids) {
  * @returns {Object} Updated test IDs object
  */
 function clearTestIds(keysToClear = []) {
+  if(!Array.isArray(keysToClear)) {
+    throw new Error('keysToClear must be an array');
+  }
   try {
     // Load existing IDs
     const ids = loadTestIds();
@@ -57,7 +60,7 @@ function clearTestIds(keysToClear = []) {
     
     // Set only the specified keys to null (supports nested paths)
     keysToClear.forEach(key => {
-      const parts = key.split('.');
+      /*const parts = key.split('.');
       let current = ids;
       
       // Navigate to the parent object
@@ -69,15 +72,23 @@ function clearTestIds(keysToClear = []) {
       }
       
       // Set the final property to null
-      current[parts[parts.length - 1]] = null;
+      current[parts[parts.length - 1]] = null;*/
+      const parts = key.split('.');
+      let current = ids;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) {
+          // If the parent path does not exist, nothing to delete
+          return;
+        }
+        current = current[parts[i]];
+      }
+      delete current[parts[parts.length - 1]];
     });
     
     // Add/update clearedAt timestamp for thread
-    if (!ids.folder) ids.folder = {};
-    if (!ids.folder.thread) ids.folder.thread = {};
-    if (keysToClear.some(k => k.startsWith('folder.'))) {
-      ids.folder.thread.clearedAt = new Date().toISOString();
-    }
+    //if (!ids.folder) ids.folder = {};
+    //if (!ids.folder.thread) ids.folder.thread = {};
+    
     
     // Save the updated state
     saveTestIds(ids);
@@ -89,6 +100,31 @@ function clearTestIds(keysToClear = []) {
     return {};
   }
 }
+
+/**
+ * Initializes persisted test IDs by clearing specified keys and ensuring userId is set.
+ * - Calls clearTestIds with the provided list of keys/paths to clear from persisted ids.
+ * - Ensures userId is initialized and saved in test IDs if not already present.
+ * - Logs the userId being used.
+ *
+ * @param {Array<string>} idsToClear - Array of string paths representing properties to clear in persisted test IDs (supports nested paths, e.g., 'folder.thread').
+ * @returns {Promise<void>} Resolves after initialization is complete.
+ *
+ * Example usage:
+ *   await initPersistedIds(['workspace.id', 'collection.id']);
+ */
+async function initPersistedIds(idsToClear = []) {
+  clearTestIds(idsToClear);
+  const persistedIds = loadTestIds();
+  const userId = await getUserId();
+  saveTestIds({ ...persistedIds, user: { id: userId } });
+  console.log('Using user ID:', userId);
+  
+}
+
+
+
+
 
 /**
  * Delete the test IDs file completely
@@ -105,12 +141,26 @@ function deleteTestIdsFile() {
   }
 }
 
+async function getTestWorkspaceId(create = true) {
+
+  const ids = loadTestIds();
+  let workspaceId = ids && ids.workspace && ids.workspace.id ? ids.workspace.id : undefined;
+  if(!workspaceId && create) {
+    const { createWorkspace } = require('../workspaces/workspace');
+    const result = await createWorkspace('Test Workspace', 'personal', 'Test workspace created by SDK', 'SDK functional test');
+    workspaceId = result.data.workspace.id;
+    saveTestIds({ ...ids, workspace: { id: workspaceId } });
+  }
+  return workspaceId;
+  
+}
+
 /**
  * Initialize userId by calling /me endpoint if not already persisted
  * This should be called in beforeAll hooks of test suites
  * @returns {Promise<number>} The user's ID
  */
-async function initializeUserId() {
+async function getUserId() {
   const ids = loadTestIds();
   
   // If userId already exists, return it
@@ -121,7 +171,7 @@ async function initializeUserId() {
   
   // Otherwise, fetch it from the API
   try {
-    const { getAuthenticatedUser } = require('../users/index');
+    const { getAuthenticatedUser } = require('../users/user');
     const result = await getAuthenticatedUser();
     const userId = result.data.user.id;
     
@@ -284,11 +334,14 @@ module.exports = {
   saveTestIds,
   clearTestIds,
   deleteTestIdsFile,
-  initializeUserId,
+  getUserId,
+  initPersistedIds,
   retryWithBackoff,
   pollUntilComplete,
   TEST_IDS_FILE, 
   DEFAULT_ID,
-  DEFAULT_UID
+  DEFAULT_UID,
+  getTestWorkspaceId,
+  getUserId
 };
 

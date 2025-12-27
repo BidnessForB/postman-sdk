@@ -7,17 +7,15 @@ const {
   createRequestComment,
   updateRequestComment,
   deleteRequestComment
-} = require('../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
-const { loadTestIds, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
+} = require('../request');
+
+const { loadTestIds,getUserId, saveTestIds, DEFAULT_UID } = require('../../__tests__/test-helpers');
 
 describe('requests functional tests (sequential flow)', () => {
   let persistedIds = {};
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     // persistedIds must be loaded so that sequential functional tests have access
     // to IDs (e.g., collectionId) persisted from previous phases. This enables
@@ -247,7 +245,7 @@ describe('requests functional tests (sequential flow)', () => {
 
     describe('comment lifecycle', () => {
       test('should create a comment on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         
@@ -274,7 +272,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should get all comments on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
 
@@ -292,7 +290,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should update a comment on a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const commentId = persistedIds.request.commentId;
@@ -311,7 +309,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should delete a comment from a request', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const commentId = persistedIds.request.commentId;
@@ -332,7 +330,7 @@ describe('requests functional tests (sequential flow)', () => {
 
     describe('comment error handling', () => {
       test('should return 404 for comments on non-existent request', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionUid = persistedIds.collection.uid;
         const nonExistentRequestId = DEFAULT_UID;
         const result = await getRequestComments(collectionUid, nonExistentRequestId);
@@ -346,7 +344,7 @@ describe('requests functional tests (sequential flow)', () => {
       });
 
       test('should return error for invalid comment ID', async () => {
-        const userId = persistedIds.userId;
+        const userId = getUserId();
         const collectionId = persistedIds.collection.id;
         const requestId = persistedIds.request.id;
         const invalidCommentId = 999999999;

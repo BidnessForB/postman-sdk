@@ -831,6 +831,224 @@ async function getCollectionTaskStatus(collectionUid, taskId) {
   return await executeRequest(config);
 }
 
+/**
+ * Gets all forked collections
+ * Postman API endpoint and method: GET /collections/collection-forks
+ * @param {string} [cursor] - The pointer to the first record of the set of paginated results
+ * @param {string} [direction] - Sort order: 'asc' or 'desc' based on creation date
+ * @param {number} [limit] - The maximum number of rows to return (defaults to 10)
+ * @returns {Promise} Axios response with array of forked collections
+ * @example
+ * // Get all forked collections
+ * const response = await getCollectionForks();
+ * console.log(response.data.forks);
+ * 
+ * @example
+ * // Get forked collections with pagination
+ * const response = await getCollectionForks(null, 'desc', 20);
+ * 
+ * @example
+ * // Get forked collections with cursor-based pagination
+ * const response = await getCollectionForks('cursor-abc-123', 'asc', 10);
+ */
+async function getCollectionForks(cursor = null, direction = null, limit = null) {
+  const endpoint = '/collections/collection-forks';
+  const queryParams = {
+    cursor,
+    direction,
+    limit
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('get', fullEndpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a fork from an existing collection
+ * Postman API endpoint and method: POST /collections/fork/{collectionId}
+ * @param {string} collectionId - The collection's ID to fork
+ * @param {string} workspaceId - The workspace ID in which to fork the collection (required)
+ * @param {string} label - The fork's label (required)
+ * @returns {Promise} Axios response with forked collection data including fork metadata
+ * @example
+ * // Create a fork of a collection
+ * const response = await createCollectionFork(
+ *   'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'My Fork Label'
+ * );
+ * console.log(response.data.collection.fork);
+ * 
+ * @example
+ * // Create a fork with a descriptive label
+ * const response = await createCollectionFork(
+ *   'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'Feature Branch - Authentication Updates'
+ * );
+ */
+async function createCollectionFork(collectionId, workspaceId, label) {
+  validateId(collectionId, 'collectionId');
+  validateId(workspaceId, 'workspaceId');
+  
+  const endpoint = `/collections/fork/${collectionId}`;
+  const queryParams = {
+    workspace: workspaceId
+  };
+  const fullEndpoint = `${endpoint}${buildQueryString(queryParams)}`;
+  const config = buildAxiosConfig('post', fullEndpoint, { label });
+  return await executeRequest(config);
+}
+
+/**
+ * Merges a forked collection back into its parent collection
+ * Postman API endpoint and method: POST /collections/merge
+ * Note: This endpoint is deprecated. Requires Editor role for the parent collection.
+ * @param {string} source - The source (forked) collection's unique ID
+ * @param {string} destination - The destination (parent) collection's unique ID
+ * @param {string} [strategy] - Merge strategy: 'deleteSource' or 'updateSourceWithDestination' (default)
+ * @returns {Promise} Axios response with merged collection ID and UID
+ * @example
+ * // Merge fork back to parent (default strategy)
+ * const response = await mergeCollectionFork(
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830'
+ * );
+ * console.log(response.data.collection);
+ * 
+ * @example
+ * // Merge and delete source fork
+ * const response = await mergeCollectionFork(
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'deleteSource'
+ * );
+ * 
+ * @example
+ * // Merge with updateSourceWithDestination strategy
+ * const response = await mergeCollectionFork(
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   '2464332-bf5cb6e7-0a1e-4b82-a577-b2068a70f830',
+ *   'updateSourceWithDestination'
+ * );
+ */
+async function mergeCollectionFork(source, destination, strategy = null) {
+  validateUid(source, 'source');
+  validateUid(destination, 'destination');
+  
+  const endpoint = '/collections/merge';
+  const data = {
+    source,
+    destination
+  };
+  
+  if (strategy !== null) {
+    data.strategy = strategy;
+  }
+  
+  const config = buildAxiosConfig('post', endpoint, data);
+  return await executeRequest(config);
+}
+
+/**
+ * Pulls changes from parent collection into a forked collection
+ * Postman API endpoint and method: PUT /collections/{collectionId}/pulls
+ * @param {string} collectionId - The forked collection's ID
+ * @returns {Promise} Axios response with source and destination IDs
+ * @example
+ * // Pull parent changes into fork
+ * const response = await pullCollectionChanges('forked-collection-id-123');
+ * console.log(response.data.collection.destinationId);
+ * console.log(response.data.collection.sourceId);
+ */
+async function pullCollectionChanges(collectionId) {
+  validateId(collectionId, 'collectionId');
+
+  const endpoint = `/collections/${collectionId}/pulls`;
+  const config = buildAxiosConfig('put', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Gets all pull requests for a collection
+ * Postman API endpoint and method: GET /collections/{collectionUid}/pull-requests
+ * @param {string} collectionUid - The collection's unique ID
+ * @returns {Promise} Axios response with array of pull requests including id, title, status, source, destination, and timestamps
+ * @example
+ * // Get all pull requests for a collection
+ * const response = await getCollectionPullRequests('12345678-collection-uid-123');
+ * console.log(response.data.data);
+ * response.data.data.forEach(pr => {
+ *   console.log(`PR: ${pr.title} - Status: ${pr.status}`);
+ *   console.log(`  Source: ${pr.sourceId}`);
+ *   console.log(`  Destination: ${pr.destinationId}`);
+ * });
+ */
+async function getCollectionPullRequests(collectionUid) {
+  validateUid(collectionUid, 'collectionUid');
+
+  const endpoint = `/collections/${collectionUid}/pull-requests`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Creates a pull request for a forked collection into its parent collection
+ * Postman API endpoint and method: POST /collections/{collectionUid}/pull-requests
+ * @param {string} collectionUid - The forked collection's unique ID (source)
+ * @param {string} title - The pull request's title (required)
+ * @param {string} destinationId - The collection ID to merge into (required)
+ * @param {Array<string>} reviewers - Array of reviewer user IDs (required)
+ * @param {string} [description] - The pull request's description (optional)
+ * @returns {Promise} Axios response with created pull request details including id, title, status, sourceId, and destinationId
+ * @example
+ * // Create a pull request
+ * const response = await createCollectionPullRequest(
+ *   '12345678-forked-collection-uid',
+ *   'Add new endpoints',
+ *   'parent-collection-id-456',
+ *   ['12345678', '87654321'],
+ *   'This PR adds new API endpoints for user management'
+ * );
+ * console.log(response.data.id);
+ * console.log(response.data.status); // 'open'
+ * 
+ * @example
+ * // Create a pull request without description
+ * const response = await createCollectionPullRequest(
+ *   '12345678-forked-collection-uid',
+ *   'Update documentation',
+ *   'parent-collection-id-456',
+ *   ['12345678']
+ * );
+ */
+async function createCollectionPullRequest(collectionUid, title, destinationUid, reviewers, description = null) {
+  validateUid(collectionUid, 'collectionUid');
+  validateUid(destinationUid, 'destinationUid');
+  
+  // Ensure all reviewers are strings
+  /*if (Array.isArray(reviewers)) {
+    reviewers = reviewers.map(r => r != null ? String(r) : r);
+  }*/
+  //hack so property key in the resulting data block is correct
+  const destinationId = destinationUid;
+
+  const endpoint = `/collections/${collectionUid}/pull-requests`;
+  const data = {
+    title,
+    destinationId,
+    reviewers
+  };
+
+  if (description !== null) {
+    data.description = description;
+  }
+  
+  const config = buildAxiosConfig('post', endpoint, data);
+  console.log('CORNFIG:', config);
+  return await executeRequest(config);
+}
+
 module.exports = {
   getCollections,
   createCollection,
@@ -855,5 +1073,11 @@ module.exports = {
   syncCollectionWithSpec,
   createCollectionGeneration,
   getCollectionGenerations,
-  getCollectionTaskStatus
+  getCollectionTaskStatus,
+  getCollectionForks,
+  createCollectionFork,
+  mergeCollectionFork,
+  pullCollectionChanges,
+  getCollectionPullRequests,
+  createCollectionPullRequest
 };

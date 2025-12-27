@@ -6,7 +6,7 @@ const {
   getEnvironment,
   modifyEnvironment,
   deleteEnvironment
-} = require('../index');
+} = require('../environment');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({

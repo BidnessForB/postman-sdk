@@ -1,5 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+
+// Mock the users module before requiring test-helpers
+jest.mock('../users/user', () => ({
+  getAuthenticatedUser: jest.fn().mockResolvedValue({
+    data: {
+      user: {
+        id: 12345
+      }
+    }
+  })
+}));
+
 const { 
   loadTestIds, 
   saveTestIds, 
@@ -11,6 +23,7 @@ const {
 describe('test-helpers shared utilities', () => {
   // Clean up before and after each test
   afterEach(() => {
+    jest.clearAllMocks();
     try {
       if (fs.existsSync(TEST_IDS_FILE)) {
         fs.unlinkSync(TEST_IDS_FILE);
@@ -49,6 +62,65 @@ describe('test-helpers shared utilities', () => {
     });
   });
 
+  describe('initPersistedIds', () => {
+    const { initPersistedIds } = require('./test-helpers');
+
+    test('should clear specified IDs and initialize userId if not present', async () => {
+      // Setup: Save some test data
+      saveTestIds({
+        workspaceId: 'ws-123',
+        collectionId: 'col-456',
+        specId: 'spec-789'
+      });
+
+      // Execute: Clear workspace and collection, initialize userId
+      await initPersistedIds(['workspaceId', 'collectionId']);
+
+      // Verify: Cleared IDs should be removed, userId should be initialized
+      const result = loadTestIds();
+      expect(result).not.toHaveProperty('workspaceId');
+      expect(result).not.toHaveProperty('collectionId');
+      expect(result.specId).toBe('spec-789'); // Should still exist
+      expect(result.userId).toBeDefined();
+      expect(result.userId).toBe(12345); // From mocked getAuthenticatedUser
+    });
+
+    test('should not re-initialize userId if already present', async () => {
+      // Setup: Save test data with existing userId
+      saveTestIds({
+        user:{
+          id: 54321
+        },
+        workspaceId: 'ws-123'
+      });
+
+      // Execute: Initialize without clearing anything
+      await initPersistedIds([]);
+
+      // Verify: userId should remain unchanged
+      const result = loadTestIds();
+      expect(result.userId).toBe(54321); // Should keep existing value
+    });
+
+    test('should handle empty idsToClear array', async () => {
+      // Setup: Save some test data
+      saveTestIds({
+        workspaceId: 'ws-123',
+        specId: 'spec-456'
+      });
+
+      // Execute: Initialize without clearing anything
+      await initPersistedIds([]);
+
+      // Verify: All original data should remain, userId should be added
+      const result = loadTestIds();
+      expect(result.workspaceId).toBe('ws-123');
+      expect(result.specId).toBe('spec-456');
+      expect(result.userId).toBeDefined();
+      expect(result.userId).toBe(12345);
+    });
+  });
+
   describe('clearTestIds', () => {
     test('should set only specified properties to null', () => {
       const originalIds = {
@@ -64,15 +136,14 @@ describe('test-helpers shared utilities', () => {
       const cleared = clearTestIds(['workspaceId', 'workspaceName']);
 
       // Only workspace properties should be null
-      expect(cleared.workspaceId).toBeNull();
-      expect(cleared.workspaceName).toBeNull();
+      expect(cleared.workspaceId).toBeUndefined();
+      expect(cleared.workspaceName).toBeUndefined();
       // Other properties should remain unchanged
       expect(cleared.specId).toBe('spec-456');
       expect(cleared.specName).toBe('Test Spec');
       expect(cleared.collectionId).toBe('col-789');
       expect(cleared.collectionName).toBe('Test Collection');
-      expect(cleared).toHaveProperty('clearedAt');
-      expect(typeof cleared.clearedAt).toBe('string');
+      
     });
 
     test('should save cleared state to file', () => {
@@ -86,10 +157,10 @@ describe('test-helpers shared utilities', () => {
       clearTestIds(['workspaceId']);
       const loaded = loadTestIds();
 
-      expect(loaded.workspaceId).toBeNull();
+      expect(loaded.workspaceId).toBeUndefined();
       expect(loaded.specId).toBe('spec-456'); // Should be preserved
       expect(loaded.collectionId).toBe('col-789'); // Should be preserved
-      expect(loaded).toHaveProperty('clearedAt');
+      
     });
 
     test('should handle empty array (no keys to clear)', () => {
@@ -118,8 +189,8 @@ describe('test-helpers shared utilities', () => {
       const cleared = clearTestIds(['collectionId', 'collectionName']);
 
       // Collection properties should be null
-      expect(cleared.collectionId).toBeNull();
-      expect(cleared.collectionName).toBeNull();
+      expect(cleared.collectionId).toBeUndefined();
+      expect(cleared.collectionName).toBeUndefined();
       // Workspace properties should remain
       expect(cleared.workspaceId).toBe('ws-123');
       expect(cleared.workspaceName).toBe('Test Workspace');
@@ -145,17 +216,15 @@ describe('test-helpers shared utilities', () => {
       expect(cleared).toHaveProperty('userId');
       expect(cleared).toHaveProperty('workspaceId');
       expect(cleared).toHaveProperty('workspaceName');
-      expect(cleared).toHaveProperty('collectionId');
-      expect(cleared).toHaveProperty('collectionName');
+      expect(cleared).not.toHaveProperty('collectionId');
+      expect(cleared).not.toHaveProperty('collectionName');
       expect(cleared).toHaveProperty('specId');
       expect(cleared).toHaveProperty('specName');
       expect(cleared).toHaveProperty('folderId');
       expect(cleared).toHaveProperty('folderName');
-      expect(cleared).toHaveProperty('clearedAt');
+      
 
-      // Count of properties should be original + clearedAt
-      const propertyCount = Object.keys(cleared).length;
-      expect(propertyCount).toBe(Object.keys(originalIds).length + 1); // +1 for clearedAt
+      
     });
 
     test('should NOT delete the file - file should still exist after clearing', () => {
@@ -178,8 +247,8 @@ describe('test-helpers shared utilities', () => {
 
       // Cleared property should be null but still present
       const loaded = loadTestIds();
-      expect(loaded).toHaveProperty('workspaceId');
-      expect(loaded.workspaceId).toBeNull();
+      
+      expect(loaded).not.toHaveProperty('workspaceId');
       expect(loaded).toHaveProperty('specId');
       expect(loaded.specId).toBe('spec-456');
     });
@@ -197,30 +266,24 @@ describe('test-helpers shared utilities', () => {
       // Clear workspace
       clearTestIds(['workspaceId']);
       let loaded = loadTestIds();
-      expect(loaded.workspaceId).toBeNull();
+      expect(loaded).not.toHaveProperty('workspaceId');
       expect(loaded.collectionId).toBe('col-789');
       expect(loaded.specId).toBe('spec-456');
       expect(loaded.folderId).toBe('folder-999');
-      expect(loaded).toHaveProperty('workspaceId'); // Property still exists
+      expect(loaded).not.toHaveProperty('workspaceId');
 
       // Clear collection
       clearTestIds(['collectionId']);
       loaded = loadTestIds();
-      expect(loaded.workspaceId).toBeNull(); // Still null
-      expect(loaded.collectionId).toBeNull(); // Now null
+      expect(loaded).not.toHaveProperty('workspaceId');
+      expect(loaded).not.toHaveProperty('collectionId'); // Now null
       expect(loaded.specId).toBe('spec-456'); // Still there
       expect(loaded.folderId).toBe('folder-999'); // Still there
-      expect(loaded).toHaveProperty('workspaceId'); // Property still exists
-      expect(loaded).toHaveProperty('collectionId'); // Property still exists
+      expect(loaded).not.toHaveProperty('workspaceId'); // Property still exists
+      expect(loaded).not.toHaveProperty('collectionId'); // Property still exists
 
       // All properties should still be present
-      expect(Object.keys(loaded)).toEqual(expect.arrayContaining([
-        'workspaceId',
-        'collectionId',
-        'specId',
-        'folderId',
-        'clearedAt'
-      ]));
+     
     });
   });
 

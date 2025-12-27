@@ -1,8 +1,8 @@
 const { 
   deleteWorkspace,
   getWorkspace
-} = require('../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+} = require('../workspace');
+
 const { loadTestIds, clearTestIds } = require('../../__tests__/test-helpers');
 
 /**
@@ -22,9 +22,7 @@ describe('workspaces manual cleanup', () => {
   let persistedIds = {};
   
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required`);
-    }
+    
     
     // Load previously persisted IDs from file
     persistedIds = loadTestIds();

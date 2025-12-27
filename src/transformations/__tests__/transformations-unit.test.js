@@ -6,18 +6,20 @@
  */
 
 const axios = require('axios');
+
 const {
   createSpecGeneration,
   getSpecTaskStatus,
   getSpecGenerations,
   syncSpecWithCollection
-} = require('../../specs');
+} = require('../../specs/spec');
+
 const {
   createCollectionGeneration,
   getCollectionTaskStatus,
   getCollectionGenerations,
   syncCollectionWithSpec
-} = require('../../collections');
+} = require('../../collections/collection');
 const { DEFAULT_USER_ID, DEFAULT_UID, DEFAULT_ID } = require('../../__tests__/test-helpers');
 
 jest.mock('axios');

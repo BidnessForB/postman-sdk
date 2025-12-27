@@ -69,16 +69,14 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 1. Assume an APIKey exists in an environment variable POSTMAN_API_KEY
 2. Always include 'Content-Type': 'application/json' header
 3. Always include 'X-API-Key': apiKey header
-4. Use JSDoc comments for documentation
+4. Use JSDoc comments for documentation.  Enrich with information from the spec, including all query, path and body parameters as well as examples.  
 5. Return the axios response promise directly
 6. Follow the same structure as `createSpecFile` function
-7. Handle exception response code by throwing an error
 8. Do not repeat yourself.  Abstract reused code into named functions.
 9. DO NOT perform additional work.  
 10. Create unit, functional and end-to-end JEST tests modules for each api module
 11. Functional tests should NOT use mocks, they should use the actual SDK and make actual API calls.  
-12. End-to-end tests should: 
- - Run in the following order: 
+12. Functional tests should run in the following order: 
    - Create
    - get
    - modify
@@ -98,3 +96,5 @@ See `createSpecFile` function in `pmansdkexample.js` as the reference implementa
 17. Do not update documentation until told to do so
 18. DO NOT CREATE SUMMARY DOCUMENTS UNLESS INSTRUCTED TO SO SO
 19. Exclude all /api endpoints from API-ENDPOINTS-TODO.md
+20. Organize test suites as instructed.  
+21. DO NOT create README files unless instructed.  

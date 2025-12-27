@@ -25,13 +25,11 @@
  * deleted after the test completes.
  */
 
-const { POSTMAN_API_KEY_ENV_VAR } = require('../core/config');
+
 
 describe('All-Up Functional Test Suite', () => {
   beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
     
     console.log('\n========================================');
     console.log('Starting All-Up Functional Test Suite');
@@ -45,15 +43,16 @@ describe('All-Up Functional Test Suite', () => {
   });
 
   describe('Phase 1: Workspaces', () => {
-    const workspaceTests = require('../workspaces/__tests__/functional.test');
+    const workspaceTests = require('../workspaces/__tests__/workspaces-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 2: Environments', () => {
-    const environmentTests = require('../environments/__tests__/functional.test');
+    const environmentTests = require('../environments/__tests__/environments-functional.test');
     // Tests are automatically executed when the module is required
   });
-
+  
+  
   describe('Phase 3: Collections', () => {
     const collectionTests = require('../collections/__tests__/01-collections-functional.test');
     // Tests are automatically executed when the module is required
@@ -75,33 +74,49 @@ describe('All-Up Functional Test Suite', () => {
   });
 
   describe('Phase 7: Requests', () => {
-    const requestTests = require('../requests/__tests__/functional.test');
+    const requestTests = require('../requests/__tests__/requests-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 8: Responses', () => {
-    const responseTests = require('../responses/__tests__/functional.test');
+    const responseTests = require('../responses/__tests__/responses-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 9: Mocks', () => {
-    const mockTests = require('../mocks/__tests__/functional.test');
+    const mockTests = require('../mocks/__tests__/mocks-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 10: Specs', () => {
-    const specTests = require('../specs/__tests__/functional.test');
+    const specTests = require('../specs/__tests__/specs-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 11: Transformations', () => {
-    const transformationTests = require('../transformations/__tests__/functional.test');
+    const transformationTests = require('../transformations/__tests__/transformations-functional.test');
     // Tests are automatically executed when the module is required
   });
 
   describe('Phase 12: Tags', () => {
-    const tagsTests = require('../tags/__tests__/functional.test');
+    const tagsTests = require('../tags/__tests__/tags-functional.test');
     // Tests are automatically executed when the module is required
   });
+
+  describe('Phase 13: Forks - Collections', () => {
+    const forksTests = require('../forks/__tests__/forks-collections-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 14: Forks - Environments', () => {
+    const forksTests = require('../forks/__tests__/forks-environment-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+
+  describe('Phase 15: Pull Requests - Collections', () => {
+    const forksTests = require('../pullRequests/__tests__/prs-collections-functional.test');
+    // Tests are automatically executed when the module is required
+  });
+  
 });
 

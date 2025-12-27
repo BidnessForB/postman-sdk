@@ -28,7 +28,8 @@ const MODULES = {
     'getFolderComments', 'createFolderComment', 'updateFolderComment',
     'deleteFolderComment', 'syncCollectionWithSpec', 'getCollectionTags',
     'updateCollectionTags', 'createCollectionGeneration', 'getCollectionGenerations',
-    'getCollectionTaskStatus'
+    'getCollectionTaskStatus', 'getCollectionForks', 'createCollectionFork',
+    'mergeCollectionFork'
   ],
   'Requests': [
     'createRequest', 'getRequest', 'updateRequest', 'deleteRequest',

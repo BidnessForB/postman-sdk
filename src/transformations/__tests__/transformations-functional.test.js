@@ -4,33 +4,43 @@ const {
   createSpecGeneration,
   getSpecTaskStatus,
   getSpecGenerations
-} = require('../../specs');
+} = require('../../specs/spec');
 const { 
   syncCollectionWithSpec, 
   createCollection,
   createCollectionGeneration,
   getCollectionTaskStatus,
   getCollectionGenerations
-} = require('../../collections');
-const { loadTestIds, saveTestIds, retryWithBackoff, pollUntilComplete } = require('../../__tests__/test-helpers');
+} = require('../../collections/collection');
+const { 
+  loadTestIds, 
+  saveTestIds, 
+  retryWithBackoff, 
+  pollUntilComplete ,
+  initPersistedIds,
+  getUserId
+} = require('../../__tests__/test-helpers');
 
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+
 
 describe('transformations functional tests', () => {
-  let persistedIds;
+  
+  let persistedIds = {};
+  let userId;
+  
 
-  beforeAll(() => {
-    // Verify POSTMAN_API_KEY is set
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is not set`);
-    }
 
-    // Load persisted test IDs
+  beforeAll(async () => {
+    
     persistedIds = loadTestIds();
+    userId = await getUserId();
+    // Load persisted test IDs
+    
     console.log('Loaded persisted test IDs for transformations tests');
   });
 
   test('CreateSourceCollection - should create a new collection for transformations', async () => {
+    await initPersistedIds(['transformations.sourceCollection']);
     const workspaceId = persistedIds.workspace?.id;
 
     
@@ -87,7 +97,7 @@ describe('transformations functional tests', () => {
 
   test('CreateSourceSpec - should create a new spec for transformations', async () => {
     const workspaceId = persistedIds.workspace?.id;
-
+    await initPersistedIds(['transformations.sourceSpec']);
     
 
     const timestamp = Date.now();
@@ -363,7 +373,7 @@ describe('transformations functional tests', () => {
     test('7. should sync generated collection with source spec', async () => {
       const srcSpecId = persistedIds?.transformations?.sourceSpec?.id;
       const genCollectionid = persistedIds?.transformations?.sourceSpec?.generatedCollection?.id;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -415,7 +425,7 @@ describe('transformations functional tests', () => {
     test('8. should handle error for non-existent collection', async () => {
       const genSpecId = persistedIds?.collection?.generatedSpec?.id;
       const fakeCollectionId = '00000000-0000-0000-0000-000000000000';
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -427,7 +437,7 @@ describe('transformations functional tests', () => {
     test('9. should handle error for non-existent spec', async () => {
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
       const srcCollectionId = persistedIds?.collection?.id;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -442,7 +452,7 @@ describe('transformations functional tests', () => {
     test('1. createCollectionGeneration - should generate spec from collection', async () => {
       
       const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -509,7 +519,7 @@ describe('transformations functional tests', () => {
     test('2. getCollectionTaskStatus - should get status of generation task', async () => {
       const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -542,7 +552,7 @@ describe('transformations functional tests', () => {
     test('3. getCollectionTaskStatus - Poll until complete', async () => {
       const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
       const taskId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.taskId;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -591,7 +601,7 @@ describe('transformations functional tests', () => {
 
     test('4. getCollectionGenerations - should retrieve generated specs list', async () => {
       const collectionUid = persistedIds?.transformations?.sourceCollection?.uid;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -647,7 +657,7 @@ describe('transformations functional tests', () => {
     test('5. should sync generated spec with source collection', async () => {
       const genSpecId = persistedIds?.transformations?.sourceCollection?.generatedSpec?.id;
       const srcCollectionUid = persistedIds?.transformations?.sourceCollection?.uid;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 
@@ -701,7 +711,7 @@ describe('transformations functional tests', () => {
     test('6. should handle error for non-existent spec', async () => {
       const fakeSpecId = '00000000-0000-0000-0000-000000000000';
       const srcCollectionUid = persistedIds?.collection?.uid;
-      const userId = persistedIds?.userId;
+      const userId = getUserId();
 
       
 

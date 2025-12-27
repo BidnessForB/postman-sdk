@@ -11,10 +11,10 @@ const {
   modifySpecFile,
   deleteSpecFile,
   syncSpecWithCollection
-} = require('../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
+} = require('../spec');
+
 const { isValidYaml, parseYaml, parseContent, toBeValidYaml } = require('./test-utils');
-const { loadTestIds, saveTestIds, clearTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds,getUserId,getTestWorkspaceId, clearTestIds ,initPersistedIds } = require('../../__tests__/test-helpers');
 const { loadSpecFixture, getAllSpecFixtures } = require('./fixtures-loader');
 
 
@@ -26,29 +26,29 @@ expect.extend({
 
 
 describe('specs functional tests', () => {
-  let testWorkspaceId; // Workspace to use for tests
+  
   let rootFileName = 'openapi.yaml';
   let additionalFileName = 'components/schemas.json';
+  let testWorkspaceId;
   let persistedIds = {};
+  let userId;
 
-  beforeAll(() => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+
+  beforeAll(async () => {
+    
 
     // Load persisted IDs and use workspaceId if available
+    
     persistedIds = loadTestIds();
-    testWorkspaceId = persistedIds?.workspace?.id;
-    
-    if (persistedIds.workspace && persistedIds.workspace.id) {
-      console.log(`Using persisted workspace ID: ${testWorkspaceId}`);
-    } else {
-      console.log(`Using default workspace ID: ${testWorkspaceId}`);
+    testWorkspaceId = await getTestWorkspaceId();
+    if(!testWorkspaceId) {
+      throw new Error('Workspace ID not found in test-ids.json. Run workspace functional tests first.');
     }
+    userId = await getUserId();
+    console.log('Using persisted userId:', userId);
+
     
-    if (persistedIds.spec && persistedIds.spec.id) {
-      console.log(`Found persisted spec ID: ${persistedIds.spec.id}`);
-    }
+    
   });
 
   afterAll(async () => {
@@ -57,7 +57,8 @@ describe('specs functional tests', () => {
 
   test('1. createSpec - should create an OpenAPI 3.0 spec', async () => {
     
-
+    initPersistedIds(['spec']);
+    persistedIds = loadTestIds();
     // Load fixture content
     const fixture = loadSpecFixture('OPENAPI:3.0', 'yaml');
     const specName = `SDK Functional Test Spec ${Date.now()}`;

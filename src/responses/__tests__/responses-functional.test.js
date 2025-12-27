@@ -7,17 +7,15 @@ const {
   createResponseComment,
   updateResponseComment,
   deleteResponseComment
-} = require('../index');
-const { POSTMAN_API_KEY_ENV_VAR } = require('../../core/config');
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+} = require('../response');
+
+const { loadTestIds,getUserId, saveTestIds } = require('../../__tests__/test-helpers');
 
 describe('responses functional tests (sequential flow)', () => {
   let persistedIds = {};
 
   beforeAll(async () => {
-    if (!process.env[POSTMAN_API_KEY_ENV_VAR]) {
-      throw new Error(`${POSTMAN_API_KEY_ENV_VAR} environment variable is required for functional tests`);
-    }
+    
 
     // persistedIds must be loaded so that sequential functional tests have access
     // to IDs (e.g., collectionUid, requestId) persisted from previous phases. This enables
@@ -32,13 +30,13 @@ describe('responses functional tests (sequential flow)', () => {
       throw new Error('No request ID found. Please run request tests first to create a test request.');
     }
 
-    if (!persistedIds.userId) {
+    if (!getUserId()) {
       throw new Error('No user ID found. Please run user tests first to get user ID.');
     }
 
     console.log('Using collection ID:', persistedIds.collection.id);
     console.log('Using request ID:', persistedIds.request.id);
-    console.log('Using user ID:', persistedIds.userId);
+    console.log('Using user ID:', getUserId());
 
     if (persistedIds.response && persistedIds.response.id) {
       console.log('Found persisted response ID:', persistedIds.response.id);
@@ -157,7 +155,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('5. getResponseComments - should retrieve comments on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = getUserId();
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     
@@ -175,7 +173,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('6. createResponseComment - should create a comment on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = getUserId();
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     
@@ -205,7 +203,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('7. updateResponseComment - should update the comment on the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = getUserId();
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;
@@ -233,7 +231,7 @@ describe('responses functional tests (sequential flow)', () => {
   });
 
   test('8. deleteResponseComment - should delete the comment from the response', async () => {
-    const userId = persistedIds.userId;
+    const userId = getUserId();
     const collectionUid = persistedIds.collection.uid;
     const responseUid = persistedIds.response.uid;
     const commentId = persistedIds.response.commentId;

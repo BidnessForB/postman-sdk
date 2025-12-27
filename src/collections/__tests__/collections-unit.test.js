@@ -26,7 +26,7 @@ const {
   createCollectionGeneration,
   getCollectionGenerations,
   getCollectionTaskStatus
-} = require('../index');
+} = require('../collection');
 
 
 

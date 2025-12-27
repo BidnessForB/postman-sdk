@@ -12,7 +12,7 @@ const {
   createRequestComment,
   updateRequestComment,
   deleteRequestComment
-} = require('../index');
+} = require('../request');
 
 jest.mock('axios');
 jest.mock('../../core/config', () => ({
