@@ -1,34 +1,29 @@
 const {
   getCollectionPullRequests,
   createCollectionFork,
-  createCollectionPullRequest,
-  
+  createCollectionPullRequest,  
 } = require('../../collections/collection');
 const { reviewPullRequest, getPullRequest, updatePullRequest } = require('../pullRequest');
 
-const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
+const { loadTestIds, saveTestIds, clearTestIds, initializeUserId } = require('../../__tests__/test-helpers');
 let persistedIds = loadTestIds();
+
+
 describe('Collection Pull Request Functional Tests', () => {
-  
-  let userId;
 
   beforeAll(async () => {
     
+    await initPersistedIds(['fork.collection', 'pullRequest']);
+    
+    
 
-    console.log('Using user ID:', userId);
-    console.log('Using collection UID:', persistedIds.collection.uid);
-
-    if (!persistedIds.fork?.collection?.uid) {
-      console.log('\n⚠️  No fork configured. Run fork functional tests first to create a fork.');
-    }
+    
   });
 
   test('1. createCollectionPullRequest - should create a pull request from fork', async () => {
-    //this one
-    persistedIds = loadTestIds();
-    if (!persistedIds.fork?.collection?.uid) {
+    
       // Create a fork of the collection and persist the fork ids
-      const label = `SDK Test Fork - ${Date.now()}`;
+      const label = `SDK PR Test Fork - ${Date.now()}`;
       
       const result = await createCollectionFork(
         persistedIds.collection.id,
@@ -48,7 +43,7 @@ describe('Collection Pull Request Functional Tests', () => {
       expect(result.data.collection.fork).toHaveProperty('from');
 
       // Save the fork details
-      if (!persistedIds.fork) {
+      if (!persistedIds.fork.collection) {
         persistedIds.fork = {};
       }
       persistedIds.fork.collection = {
@@ -63,7 +58,7 @@ describe('Collection Pull Request Functional Tests', () => {
       console.log('Successfully created fork:', result.data.collection.id);
       console.log('Fork label:', result.data.collection.fork.label);
       console.log('Forked from:', result.data.collection.fork.from);
-    }
+    
 
     try {
       const title = `SDK Test PR - ${Date.now()}`;

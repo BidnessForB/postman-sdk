@@ -45,6 +45,9 @@ function saveTestIds(ids) {
  * @returns {Object} Updated test IDs object
  */
 function clearTestIds(keysToClear = []) {
+  if(!Array.isArray(keysToClear)) {
+    throw new Error('keysToClear must be an array');
+  }
   try {
     // Load existing IDs
     const ids = loadTestIds();
@@ -57,7 +60,7 @@ function clearTestIds(keysToClear = []) {
     
     // Set only the specified keys to null (supports nested paths)
     keysToClear.forEach(key => {
-      const parts = key.split('.');
+      /*const parts = key.split('.');
       let current = ids;
       
       // Navigate to the parent object
@@ -69,12 +72,22 @@ function clearTestIds(keysToClear = []) {
       }
       
       // Set the final property to null
-      current[parts[parts.length - 1]] = null;
+      current[parts[parts.length - 1]] = null;*/
+      const parts = key.split('.');
+      let current = ids;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) {
+          // If the parent path does not exist, nothing to delete
+          return;
+        }
+        current = current[parts[i]];
+      }
+      delete current[parts[parts.length - 1]];
     });
     
     // Add/update clearedAt timestamp for thread
-    if (!ids.folder) ids.folder = {};
-    if (!ids.folder.thread) ids.folder.thread = {};
+    //if (!ids.folder) ids.folder = {};
+    //if (!ids.folder.thread) ids.folder.thread = {};
     
     
     // Save the updated state
@@ -87,6 +100,31 @@ function clearTestIds(keysToClear = []) {
     return {};
   }
 }
+
+/**
+ * Initializes persisted test IDs by clearing specified keys and ensuring userId is set.
+ * - Calls clearTestIds with the provided list of keys/paths to clear from persisted ids.
+ * - Ensures userId is initialized and saved in test IDs if not already present.
+ * - Logs the userId being used.
+ *
+ * @param {Array<string>} idsToClear - Array of string paths representing properties to clear in persisted test IDs (supports nested paths, e.g., 'folder.thread').
+ * @returns {Promise<void>} Resolves after initialization is complete.
+ *
+ * Example usage:
+ *   await initPersistedIds(['workspace.id', 'collection.id']);
+ */
+async function initPersistedIds(idsToClear = []) {
+  clearTestIds(idsToClear);
+  const persistedIds = loadTestIds();
+  let userId = persistedIds?.userId;
+  if(!userId) {
+    userId = await initializeUserId();
+    saveTestIds({ ...persistedIds, userId });
+  }
+  console.log('Using user ID:', userId);
+}
+
+
 
 /**
  * Delete the test IDs file completely
@@ -283,6 +321,7 @@ module.exports = {
   clearTestIds,
   deleteTestIdsFile,
   initializeUserId,
+  initPersistedIds,
   retryWithBackoff,
   pollUntilComplete,
   TEST_IDS_FILE, 
