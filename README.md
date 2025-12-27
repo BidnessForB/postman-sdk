@@ -5,8 +5,8 @@
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-12-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-110%2F161%20(68.32%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-13-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-112%2F161%20(69.57%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -203,6 +203,7 @@ The SDK is organized by resource groups:
 - **specs**: Endpoints for managing Postman API Specifications and generations (15/15 endpoints - 100% ✅)
 - **environments**: Endpoints for managing Postman Environments and forks (9/10 endpoints - 90%)
 - **mocks**: Endpoints for managing mock servers, responses, and call logs (13/13 endpoints - 100% ✅)
+- **groups**: Endpoints for retrieving team groups (2/2 endpoints - 100% ✅)
 - **tags**: Endpoints for retrieving entities by tag (1/1 endpoint - 100% ✅)
 - **transformations**: Endpoints for bi-directional sync between specs and collections (2/2 endpoints - 100% ✅)
 - **users**: Endpoints for user information and authentication (1/3 endpoints - 33.3%)

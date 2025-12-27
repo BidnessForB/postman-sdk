@@ -90,6 +90,14 @@ module.exports = {
   environments: require('./environments/environment'),
   
   /**
+   * Groups module - Get information about team groups
+   * @type {object}
+   * @property {Function} getGroups - Get all groups
+   * @property {Function} getGroup - Get a specific group
+   */
+  groups: require('./groups/group'),
+  
+  /**
    * Tags module - Manage and query tags
    * @type {object}
    * @property {Function} getTagEntities - Get entities by tag

@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 88 unique paths
 - **Total Operations**: 161 HTTP method operations
-- **Implemented**: 110 operations (68.32%)
-- **Not Implemented**: 51 operations (31.68%)
+- **Implemented**: 112 operations (69.57%)
+- **Not Implemented**: 49 operations (30.43%)
 
 ### Legend
 
@@ -448,12 +448,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Groups Module (0/2 completed - 0%)</strong></summary>
+<summary><strong>Groups Module (2/2 completed - 100%) ✅</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/groups` | Get all groups | - | ❌ | ❌ None |
-| GET | `/groups/{groupId}` | Get a group | - | ❌ | ❌ None |
+| GET | `/groups` | Get all groups | `getGroups()` | ✅ | ✅ Passing |
+| GET | `/groups/{groupId}` | Get a group | `getGroup()` | ✅ | ✅ Passing |
 
 </details>
 
