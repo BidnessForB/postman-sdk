@@ -147,7 +147,7 @@ const { loadTestIds,
       console.log(`Retrieved ${result.data.data.length} fork(s) sorted by createdAt`);
     });
 
-    test.skip('6. pullEnvironmentChanges - should pull changes from parent to fork', async () => {
+    test('6. pullEnvironmentChanges - should pull changes from parent to fork', async () => {
       //Does not work with the current API?
       if (!persistedIds.fork.environment?.uid) {
         throw new Error('Fork UID not available. Previous test may have failed.');

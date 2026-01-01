@@ -53,15 +53,20 @@ describe('Postman SDK - Main Entry Point', () => {
   test('should export exactly 10 modules', () => {
     const expectedModules = [
       'collections',
+      'environments',
+      'forks',
+      'groups',
+      'mocks',
+      'pullRequests',
       'requests',
       'responses',
-      'workspaces',
+      'roles',
       'specs',
-      'environments',
       'tags',
+      'transformations',
       'users',
-      'mocks',
-      'pullRequests'
+      'workspaces'
+
     ];
     const exportedKeys = Object.keys(sdk);
     expect(exportedKeys).toHaveLength(expectedModules.length);
