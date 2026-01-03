@@ -12,7 +12,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'json-summary'],
   verbose: true,
-  // Optimize test execution
+  // Optimize test execution and stuff
   maxWorkers: '50%'
 };
 
