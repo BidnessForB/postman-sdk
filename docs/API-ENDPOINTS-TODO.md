@@ -1,6 +1,6 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**SDK Version**: 0.8.2
+**SDK Version**: 0.8.3
 **Last Updated**: December 27, 2025  
 **Jest Version**: 30.2.0
 
@@ -337,17 +337,17 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-<details>
-<summary><strong>Monitors Module (0/6 completed - 0%)</strong></summary>
+<details open>
+<summary><strong>Monitors Module (6/6 completed - 100%) ✅</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/monitors` | Get all monitors | - | ❌ | ❌ None |
-| POST | `/monitors` | Create a monitor | - | ❌ | ❌ None |
-| GET | `/monitors/{monitorId}` | Get a monitor | - | ❌ | ❌ None |
-| PUT | `/monitors/{monitorId}` | Update a monitor | - | ❌ | ❌ None |
-| DELETE | `/monitors/{monitorId}` | Delete a monitor | - | ❌ | ❌ None |
-| POST | `/monitors/{monitorId}/run` | Run a monitor | - | ❌ | ❌ None |
+| GET | `/monitors` | Get all monitors | `getMonitors()` | ✅ | ✅ Passing |
+| POST | `/monitors` | Create a monitor | `createMonitor()` | ✅ | ✅ Passing |
+| GET | `/monitors/{monitorId}` | Get a monitor | `getMonitor()` | ✅ | ✅ Passing |
+| PUT | `/monitors/{monitorId}` | Update a monitor | `updateMonitor()` | ✅ | ✅ Passing |
+| DELETE | `/monitors/{monitorId}` | Delete a monitor | `deleteMonitor()` | ✅ | ✅ Passing |
+| POST | `/monitors/{monitorId}/run` | Run a monitor | `runMonitor()` | ✅ | ✅ Passing |
 
 </details>
 
