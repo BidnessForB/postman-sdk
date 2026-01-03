@@ -22,6 +22,8 @@ const {
   deleteFolderComment,
   getCollectionTags,
   updateCollectionTags,
+  getCollectionRoles,
+  modifyCollectionRoles,
   syncCollectionWithSpec,
   createCollectionGeneration,
   getCollectionGenerations,
@@ -1067,6 +1069,233 @@ describe('collections unit tests', () => {
       axios.request.mockResolvedValue(mockResponse);
 
       await updateCollectionTags(DEFAULT_UID, []);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('getCollectionRoles', () => {
+    test('should call GET /collections/{collectionId}/roles', async () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          user: [
+            { id: 12345678, role: 'VIEWER' },
+            { id: 87654321, role: 'EDITOR' }
+          ],
+          group: [
+            { id: 321, role: 'VIEWER' }
+          ],
+          team: [
+            { id: 123, role: 'EDITOR' }
+          ]
+        }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const result = await getCollectionRoles(DEFAULT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'get',
+          url: `https://api.getpostman.com/collections/${DEFAULT_ID}/roles`
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.data).toHaveProperty('user');
+      expect(result.data).toHaveProperty('group');
+      expect(result.data).toHaveProperty('team');
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 200,
+        data: { user: [], group: [], team: [] }
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      await getCollectionRoles(DEFAULT_ID);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'X-API-Key': 'test-api-key'
+          })
+        })
+      );
+    });
+  });
+
+  describe('modifyCollectionRoles', () => {
+    test('should call PATCH /collections/{collectionId}/roles with user roles', async () => {
+      const mockResponse = {
+        status: 204,
+        data: {}
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const roles = [
+        {
+          op: 'update',
+          path: '/user',
+          value: [
+            { id: 12345678, role: 'EDITOR' },
+            { id: 87654321, role: 'VIEWER' }
+          ]
+        }
+      ];
+
+      const result = await modifyCollectionRoles(DEFAULT_ID, roles);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'patch',
+          url: `https://api.getpostman.com/collections/${DEFAULT_ID}/roles`,
+          data: {
+            roles: roles
+          }
+        })
+      );
+      expect(result).toEqual(mockResponse);
+      expect(result.status).toBe(204);
+    });
+
+    test('should call PATCH /collections/{collectionId}/roles with team roles', async () => {
+      const mockResponse = {
+        status: 204,
+        data: {}
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const roles = [
+        {
+          op: 'update',
+          path: '/team',
+          value: [
+            { id: 456, role: 'EDITOR' }
+          ]
+        }
+      ];
+
+      await modifyCollectionRoles(DEFAULT_ID, roles);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            roles: expect.arrayContaining([
+              expect.objectContaining({
+                op: 'update',
+                path: '/team',
+                value: expect.arrayContaining([
+                  expect.objectContaining({ id: 456, role: 'EDITOR' })
+                ])
+              })
+            ])
+          }
+        })
+      );
+    });
+
+    test('should call PATCH /collections/{collectionId}/roles with group roles', async () => {
+      const mockResponse = {
+        status: 204,
+        data: {}
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const roles = [
+        {
+          op: 'update',
+          path: '/group',
+          value: [
+            { id: 789, role: 'VIEWER' }
+          ]
+        }
+      ];
+
+      await modifyCollectionRoles(DEFAULT_ID, roles);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            roles: expect.arrayContaining([
+              expect.objectContaining({
+                op: 'update',
+                path: '/group',
+                value: expect.arrayContaining([
+                  expect.objectContaining({ id: 789, role: 'VIEWER' })
+                ])
+              })
+            ])
+          }
+        })
+      );
+    });
+
+    test('should call PATCH /collections/{collectionId}/roles with multiple role types', async () => {
+      const mockResponse = {
+        status: 204,
+        data: {}
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const roles = [
+        {
+          op: 'update',
+          path: '/user',
+          value: [{ id: 12345678, role: 'EDITOR' }]
+        },
+        {
+          op: 'update',
+          path: '/team',
+          value: [{ id: 456, role: 'VIEWER' }]
+        },
+        {
+          op: 'update',
+          path: '/group',
+          value: [{ id: 789, role: 'EDITOR' }]
+        }
+      ];
+
+      await modifyCollectionRoles(DEFAULT_ID, roles);
+
+      expect(axios.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            roles: expect.arrayContaining([
+              expect.objectContaining({ path: '/user' }),
+              expect.objectContaining({ path: '/team' }),
+              expect.objectContaining({ path: '/group' })
+            ])
+          }
+        })
+      );
+    });
+
+    test('should include correct headers', async () => {
+      const mockResponse = {
+        status: 204,
+        data: {}
+      };
+      axios.request.mockResolvedValue(mockResponse);
+
+      const roles = [
+        {
+          op: 'update',
+          path: '/user',
+          value: [{ id: 12345678, role: 'EDITOR' }]
+        }
+      ];
+
+      await modifyCollectionRoles(DEFAULT_ID, roles);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

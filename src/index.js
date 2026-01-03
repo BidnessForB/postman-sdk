@@ -90,6 +90,14 @@ module.exports = {
   environments: require('./environments/environment'),
   
   /**
+   * Groups module - Get information about team groups
+   * @type {object}
+   * @property {Function} getGroups - Get all groups
+   * @property {Function} getGroup - Get a specific group
+   */
+  groups: require('./groups/group'),
+  
+  /**
    * Tags module - Manage and query tags
    * @type {object}
    * @property {Function} getTagEntities - Get entities by tag
@@ -113,6 +121,18 @@ module.exports = {
    * @property {Function} deleteMock - Delete a mock
    */
   mocks: require('./mocks/mock'),
+  
+  /**
+   * Monitors module - Manage monitors
+   * @type {object}
+   * @property {Function} getMonitors - Get all monitors
+   * @property {Function} createMonitor - Create a monitor
+   * @property {Function} getMonitor - Get a monitor
+   * @property {Function} updateMonitor - Update a monitor
+   * @property {Function} deleteMonitor - Delete a monitor
+   * @property {Function} runMonitor - Run a monitor
+   */
+  monitors: require('./monitors/monitor'),
   
   /**
    * Pull Requests module - Manage pull requests

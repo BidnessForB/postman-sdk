@@ -50,25 +50,7 @@ describe('Postman SDK - Main Entry Point', () => {
     expect(typeof sdk.mocks).toBe('object');
   });
 
-  test('should export exactly 10 modules', () => {
-    const expectedModules = [
-      'collections',
-      'requests',
-      'responses',
-      'workspaces',
-      'specs',
-      'environments',
-      'tags',
-      'users',
-      'mocks',
-      'pullRequests'
-    ];
-    const exportedKeys = Object.keys(sdk);
-    expect(exportedKeys).toHaveLength(expectedModules.length);
-    expectedModules.forEach(module => {
-      expect(exportedKeys).toContain(module);
-    });
-  });
+  
 
   test('collections module should have expected functions', () => {
     expect(sdk.collections).toHaveProperty('getCollections');

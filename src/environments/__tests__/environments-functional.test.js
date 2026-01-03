@@ -13,11 +13,13 @@ describe('Environments Functional Tests', () => {
   let userId;
 
   beforeAll(async () => {
-    initPersistedIds(['environment']);
+    
     persistedIds = loadTestIds();
     
   }, 10000);
   test('1. createEnvironment - should create a new environment', async () => {
+    initPersistedIds(['environment']);
+    persistedIds = loadTestIds();
     const environmentName = `Test Environment ${Date.now()}`;
     const environmentData = {
       name: environmentName,

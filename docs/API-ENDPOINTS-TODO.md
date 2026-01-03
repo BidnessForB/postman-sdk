@@ -1,7 +1,7 @@
 # Postman API SDK - Endpoint Implementation Status
 
-**SDK Version**: 0.8.2
-**Last Updated**: December 27, 2025  
+**SDK Version**: 0.8.4
+**Last Updated**: January 3, 2026  
 **Jest Version**: 30.2.0
 
 ## Overview
@@ -12,8 +12,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 - **Total Endpoints**: 88 unique paths
 - **Total Operations**: 161 HTTP method operations
-- **Implemented**: 102 operations (63.35%)
-- **Not Implemented**: 59 operations (36.65%)
+- **Implemented**: 112 operations (69.57%)
+- **Not Implemented**: 49 operations (30.43%)
 
 ### Legend
 
@@ -49,7 +49,7 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Collections Module (41/64 completed - 64.1%)</strong></summary>
+<summary><strong>Collections Module (43/64 completed - 67.2%)</strong></summary>
 
 ### Core Collection Operations
 
@@ -130,8 +130,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/collections/{collectionId}/roles` | Get collection roles | - | ❌ | ❌ None |
-| PATCH | `/collections/{collectionId}/roles` | Update collection roles | - | ❌ | ❌ None |
+| GET | `/collections/{collectionId}/roles` | Get collection roles | `getCollectionRoles()` | ✅ | ✅ Passing |
+| PATCH | `/collections/{collectionId}/roles` | Update collection roles | `modifyCollectionRoles()` | ✅ | ✅ Passing |
 | GET | `/collections/{collectionUid}/tags` | Get collection tags | `getCollectionTags()` | ✅ | ✅ Passing |
 | PUT | `/collections/{collectionUid}/tags` | Update collection tags | `updateCollectionTags()` | ✅ | ✅ Passing |
 
@@ -337,17 +337,17 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 ---
 
-<details>
-<summary><strong>Monitors Module (0/6 completed - 0%)</strong></summary>
+<details open>
+<summary><strong>Monitors Module (6/6 completed - 100%) ✅</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/monitors` | Get all monitors | - | ❌ | ❌ None |
-| POST | `/monitors` | Create a monitor | - | ❌ | ❌ None |
-| GET | `/monitors/{monitorId}` | Get a monitor | - | ❌ | ❌ None |
-| PUT | `/monitors/{monitorId}` | Update a monitor | - | ❌ | ❌ None |
-| DELETE | `/monitors/{monitorId}` | Delete a monitor | - | ❌ | ❌ None |
-| POST | `/monitors/{monitorId}/run` | Run a monitor | - | ❌ | ❌ None |
+| GET | `/monitors` | Get all monitors | `getMonitors()` | ✅ | ✅ Passing |
+| POST | `/monitors` | Create a monitor | `createMonitor()` | ✅ | ✅ Passing |
+| GET | `/monitors/{monitorId}` | Get a monitor | `getMonitor()` | ✅ | ✅ Passing |
+| PUT | `/monitors/{monitorId}` | Update a monitor | `updateMonitor()` | ✅ | ✅ Passing |
+| DELETE | `/monitors/{monitorId}` | Delete a monitor | `deleteMonitor()` | ✅ | ✅ Passing |
+| POST | `/monitors/{monitorId}/run` | Run a monitor | `runMonitor()` | ✅ | ✅ Passing |
 
 </details>
 
@@ -448,12 +448,12 @@ This document tracks the implementation status of all Postman API endpoints in t
 ---
 
 <details>
-<summary><strong>Groups Module (0/2 completed - 0%)</strong></summary>
+<summary><strong>Groups Module (2/2 completed - 100%) ✅</strong></summary>
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| GET | `/groups` | Get all groups | - | ❌ | ❌ None |
-| GET | `/groups/{groupId}` | Get a group | - | ❌ | ❌ None |
+| GET | `/groups` | Get all groups | `getGroups()` | ✅ | ✅ Passing |
+| GET | `/groups/{groupId}` | Get a group | `getGroup()` | ✅ | ✅ Passing |
 
 </details>
 

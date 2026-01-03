@@ -277,7 +277,17 @@ describe('Mocks Functional Tests', () => {
     console.log(`Retrieved ${result.data['call-logs'].length} call logs with limit of 10`);
   }, 10000);
 
-  test.skip('14. createMockPublish - should publish mock server', async () => {
+  test('14. deleteMockUnpublish - should unpublish mock server', async () => {
+    const result = await deleteMockUnpublish(persistedIds.mock.id);
+
+    expect(result.status).toBe(200);
+    expect(result.data).toHaveProperty('mock');
+    expect(result.data.mock).toHaveProperty('id');
+
+    console.log(`Unpublished mock server ${persistedIds.mock.id}`);
+  }, 10000);
+
+  test('15. createMockPublish - should publish mock server', async () => {
     mockId = persistedIds.mock.id;
     const result = await createMockPublish(mockId);
 
@@ -288,15 +298,7 @@ describe('Mocks Functional Tests', () => {
     console.log(`Published mock server ${mockId}`);
   }, 10000);
 
-  test.skip('15. deleteMockUnpublish - should unpublish mock server', async () => {
-    const result = await deleteMockUnpublish(mockId);
-
-    expect(result.status).toBe(200);
-    expect(result.data).toHaveProperty('mock');
-    expect(result.data.mock).toHaveProperty('id');
-
-    console.log(`Unpublished mock server ${mockId}`);
-  }, 10000);
+  
 
   test('16. deleteMockServerResponse - should delete server response', async () => {
     mockId = persistedIds.mock.id;

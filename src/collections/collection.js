@@ -729,6 +729,73 @@ async function updateCollectionTags(collectionUid, tags) {
 }
 
 /**
+ * Gets information about all roles in a collection
+ * Postman API endpoint and method: GET /collections/{collectionId}/roles
+ * @param {string} collectionId - The collection's ID
+ * @returns {Promise} Axios response with user, group, and team roles
+ * @example
+ * // Get collection roles
+ * const response = await getCollectionRoles('collection-id-123');
+ * console.log(response.data.user); // User roles
+ * console.log(response.data.group); // Group roles
+ * console.log(response.data.team); // Team roles
+ */
+async function getCollectionRoles(collectionId) {
+  validateId(collectionId, 'collectionId');
+
+  const endpoint = `/collections/${collectionId}/roles`;
+  const config = buildAxiosConfig('get', endpoint);
+  return await executeRequest(config);
+}
+
+/**
+ * Updates the roles of users, groups, or teams in a collection
+ * Postman API endpoint and method: PATCH /collections/{collectionId}/roles
+ * @param {string} collectionId - The collection's ID
+ * @param {Array} roles - Array of role update operations
+ * @param {string} roles[].op - The operation to perform (must be 'update')
+ * @param {string} roles[].path - The resource path ('/user', '/group', or '/team')
+ * @param {Array} roles[].value - Array of role assignments
+ * @param {number} roles[].value[].id - The user, group, or team ID
+ * @param {string} roles[].value[].role - The role type ('VIEWER' or 'EDITOR')
+ * @returns {Promise} Axios response (HTTP 204 No Content on success)
+ * @example
+ * // Update user roles in a collection
+ * const response = await modifyCollectionRoles('collection-id-123', [
+ *   {
+ *     op: 'update',
+ *     path: '/user',
+ *     value: [
+ *       { id: 12345678, role: 'EDITOR' },
+ *       { id: 87654321, role: 'VIEWER' }
+ *     ]
+ *   }
+ * ]);
+ * 
+ * @example
+ * // Update team and group roles
+ * const response = await modifyCollectionRoles('collection-id-123', [
+ *   {
+ *     op: 'update',
+ *     path: '/team',
+ *     value: [{ id: 456, role: 'EDITOR' }]
+ *   },
+ *   {
+ *     op: 'update',
+ *     path: '/group',
+ *     value: [{ id: 789, role: 'VIEWER' }]
+ *   }
+ * ]);
+ */
+async function modifyCollectionRoles(collectionId, roles) {
+  validateId(collectionId, 'collectionId');
+
+  const endpoint = `/collections/${collectionId}/roles`;
+  const config = buildAxiosConfig('patch', endpoint, { roles });
+  return await executeRequest(config);
+}
+
+/**
  * Generates a spec from a collection
  * Postman API endpoint and method: POST /collections/{collectionUid}/generations/{elementType}
  * @param {string} collectionUid - The collection's UID (format: userId-collectionId)
@@ -1070,6 +1137,8 @@ module.exports = {
   deleteFolderComment,
   getCollectionTags,
   updateCollectionTags,
+  getCollectionRoles,
+  modifyCollectionRoles,
   syncCollectionWithSpec,
   createCollectionGeneration,
   getCollectionGenerations,

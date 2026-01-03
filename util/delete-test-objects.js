@@ -11,12 +11,14 @@
  *   -s, --specs          Delete ALL specs in the workspace
  *   -e, --environments   Delete ALL environments in the workspace
  *   --force              Skip confirmation prompt and delete immediately
+ *   --dry-run            List objects that would be deleted without deleting them
  * 
  * Examples:
  *   node util/delete-test-objects.js -c                    # Delete all collections
  *   node util/delete-test-objects.js -s                    # Delete all specs
  *   node util/delete-test-objects.js -c -s                 # Delete all collections and specs
  *   node util/delete-test-objects.js -c -s --force         # Delete without confirmation
+ *   node util/delete-test-objects.js -c -s --dry-run       # Show what would be deleted
  *   node util/delete-test-objects.js --collections --specs # Long form options
  * 
  * Note: This script retrieves ALL objects of the specified type from the workspace
@@ -275,6 +277,7 @@ async function main() {
   const deleteSpecsFlag = args.includes('-s') || args.includes('--specs');
   const deleteEnvironmentsFlag = args.includes('-e') || args.includes('--environments');
   const forceFlag = args.includes('--force');
+  const dryRunFlag = args.includes('--dry-run');
 
   // Check if at least one option is provided
   if (!deleteCollectionsFlag && !deleteSpecsFlag && !deleteEnvironmentsFlag) {
@@ -285,17 +288,23 @@ async function main() {
     console.error('  -s, --specs          Delete ALL specs in workspace');
     console.error('  -e, --environments   Delete ALL environments in workspace');
     console.error('  --force              Skip confirmation prompt');
+    console.error('  --dry-run            List objects without deleting them');
     console.error('');
     console.error('Examples:');
     console.error('  node util/delete-test-objects.js -c');
     console.error('  node util/delete-test-objects.js -c -s');
     console.error('  node util/delete-test-objects.js --collections --specs --force');
+    console.error('  node util/delete-test-objects.js -c -s --dry-run');
     process.exit(1);
   }
 
   // Load workspace ID
   console.log('\n========================================');
-  console.log('⚠️  DELETE TEST OBJECTS ⚠️');
+  if (dryRunFlag) {
+    console.log('🔍 DRY RUN MODE - NO DELETIONS WILL BE PERFORMED');
+  } else {
+    console.log('⚠️  DELETE TEST OBJECTS ⚠️');
+  }
   console.log('========================================');
   console.log(`Reading workspace ID from: ${TEST_IDS_PATH}`);
   
@@ -374,6 +383,35 @@ async function main() {
   }
 
   console.log(`Total objects to delete: ${totalCount}\n`);
+
+  // If dry-run, skip deletion and show summary
+  if (dryRunFlag) {
+    console.log('========================================');
+    console.log('DRY RUN SUMMARY');
+    console.log('========================================');
+    console.log('The following objects would be deleted:');
+    console.log('');
+    
+    if (collectionsToDelete.length > 0) {
+      console.log(`Collections: ${collectionsToDelete.length}`);
+    }
+    
+    if (specsToDelete.length > 0) {
+      console.log(`Specs: ${specsToDelete.length}`);
+    }
+    
+    if (environmentsToDelete.length > 0) {
+      console.log(`Environments: ${environmentsToDelete.length}`);
+    }
+    
+    console.log('');
+    console.log(`Total: ${totalCount} object(s)`);
+    console.log('');
+    console.log('ℹ️  No deletions performed (dry-run mode)');
+    console.log('ℹ️  Run without --dry-run to actually delete these objects');
+    console.log('========================================\n');
+    return;
+  }
 
   // Confirm deletion unless --force flag is used
   if (!forceFlag) {

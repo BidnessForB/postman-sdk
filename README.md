@@ -1,12 +1,12 @@
 # Postman SDK
 
-![Version](https://img.shields.io/badge/version-0.8.2-blue)
+![Version](https://img.shields.io/badge/version-0.8.4-blue)
 [![All Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20All%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/all-tests.yml)
 [![Unit Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Unit%20Tests/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/unit-tests.yml)
 [![Functional Tests](https://github.com/bidnessforb/postman-sdk/workflows/Postman%20SDK%20-%20Functional%20Tests%20%26%20Coverage/badge.svg)](https://github.com/bidnessforb/postman-sdk/actions/workflows/functional-tests.yml)
 [![codecov](https://codecov.io/gh/bidnessforb/postman-sdk/branch/main/graph/badge.svg?token=XBROJOTUS4)](https://codecov.io/gh/bidnessforb/postman-sdk)
-![Modules](https://img.shields.io/badge/modules-12-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-102%2F161%20(63.35%25)-yellow)
+![Modules](https://img.shields.io/badge/modules-13-blue)
+![Endpoints](https://img.shields.io/badge/endpoints-112%2F161%20(69.57%25)-yellow)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 
@@ -90,7 +90,7 @@ process.env.POSTMAN_API_KEY = 'your_api_key_here';
 ### Basic Example
 
 ```javascript
-const { collections, workspaces, specs, requests, responses } = require('@bidnessforb/postman-sdk');
+const { collections, workspaces, specs, monitors, requests, responses } = require('@bidnessforb/postman-sdk');
 
 // Make sure your API key is set
 process.env.POSTMAN_API_KEY = 'your_api_key_here';
@@ -107,6 +107,19 @@ async function example() {
   // Get all specs
   const specsResponse = await specs.getSpecs();
   console.log('Specs:', specsResponse.data);
+
+  // Create a monitor for a collection
+  const collectionUid = collectionsResponse.data.collections[0].uid;
+  const workspaceId = workspacesResponse.data.workspaces[0].id;
+  const monitorResponse = await monitors.createMonitor({
+    name: 'API Monitor',
+    collection: collectionUid,
+    schedule: {
+      cron: '0 0 * * *',
+      timezone: 'UTC'
+    }
+  }, workspaceId);
+  console.log('Created Monitor:', monitorResponse.data);
 
   // Create a request in a collection
   const collectionId = collectionsResponse.data.collections[0].id;
@@ -196,13 +209,15 @@ postman-sdk/
 
 The SDK is organized by resource groups:
 
-- **collections**: Endpoints for managing Postman Collections, folders, comments, forks, and pull requests (41/64 endpoints - 64.1%)
+- **collections**: Endpoints for managing Postman Collections, folders, comments, forks, and pull requests (43/64 endpoints - 67.2%)
 - **requests**: Endpoints for managing requests and comments within collections (8/8 endpoints - 100% ✅)
 - **responses**: Endpoints for managing responses and comments within collections (8/8 endpoints - 100% ✅)
 - **workspaces**: Endpoints for managing Postman Workspaces and tags (7/14 endpoints - 50%)
 - **specs**: Endpoints for managing Postman API Specifications and generations (15/15 endpoints - 100% ✅)
 - **environments**: Endpoints for managing Postman Environments and forks (9/10 endpoints - 90%)
 - **mocks**: Endpoints for managing mock servers, responses, and call logs (13/13 endpoints - 100% ✅)
+- **groups**: Endpoints for retrieving team groups (2/2 endpoints - 100% ✅)
+- **monitors**: Endpoints for managing monitors and running monitor executions (6/6 endpoints - 100% ✅)
 - **tags**: Endpoints for retrieving entities by tag (1/1 endpoint - 100% ✅)
 - **transformations**: Endpoints for bi-directional sync between specs and collections (2/2 endpoints - 100% ✅)
 - **users**: Endpoints for user information and authentication (1/3 endpoints - 33.3%)
@@ -249,19 +264,22 @@ npm run test:all-up
 
 This orchestrates all functional tests in sequence:
 1. Workspaces (create/test workspace)
-2. Environments (create/test environments in workspace)
-3. Collections (create/test collection in workspace)
-4. Collection Comments (create/test comments on collection)
-5. Folders (create/test folder in collection)
-6. Folder Comments (create/test comments on folder)
-7. Requests (create/test requests in collections and folders)
-8. Responses (create/test responses on requests)
-9. Mocks (create/test mock servers)
-10. Specs (create/test API specs in workspace)
-11. Transformations (test bidirectional sync between specs and collections)
-12. Tags (test tagging and entity retrieval)
-13. Forks (test collection and environment forking operations)
-14. Pull Requests (test PR creation, update, and review)
+2. Groups (retrieve and persist team groups)
+3. Environments (create/test environments in workspace)
+4. Collections (create/test collection in workspace)
+5. Collection Roles (test collection access control with user and group roles)
+6. Collection Comments (create/test comments on collection)
+7. Folders (create/test folder in collection)
+8. Folder Comments (create/test comments on folder)
+9. Requests (create/test requests in collections and folders)
+10. Responses (create/test responses on requests)
+11. Mocks (create/test mock servers)
+12. Monitors (create/test monitors for collections)
+13. Specs (create/test API specs in workspace)
+14. Transformations (test bidirectional sync between specs and collections)
+15. Tags (test tagging and entity retrieval)
+16. Forks (test collection and environment forking operations)
+17. Pull Requests (test PR creation, update, and review)
 
 **Note**: Functional tests make real API calls and create actual resources. Test IDs are persisted to `test-ids.json` for reuse across test runs. Resources are NOT automatically deleted after the test.
 
