@@ -1,12 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
+const { apiKey, baseUrl } = require('./config');
 
 // Regex patterns for ID validation
+
+//Regex pattern for ID validation
 const idRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+//Regex pattern for UID validation
 const uidRegex = /^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * Validates a standard ID (UUID format)
+ * Validates a standard ID (UUID format).  
  * @param {string} id - The ID to validate
  * @param {string} paramName - The parameter name for error messages
  * @throws {Error} If the ID is invalid
@@ -62,18 +67,42 @@ function getContentFS(filePath) {
 }
 
 /**
- * Builds a UID from a user ID and an object ID
- * @param {string|number} userId - The user's ID
- * @param {string} objectId - The object's ID (e.g., collection ID, workspace ID)
- * @returns {string} The UID in format: userId-objectId
+ * Builds an Axios config for Postman API requests
+ * @param {string} method - HTTP method (e.g., 'get', 'post', 'patch')
+ * @param {string} endpoint - The API endpoint path (e.g., '/specs/{specId}')
+ * @param {Object} [data] - The request body data
+ * @param {Object} [extra] - Extra Axios config (e.g. maxBodyLength, etc)
+ * @returns {Object} Axios request config
  */
+function buildAxiosConfig(method, endpoint, data = undefined, extra = {}) {
+  return {
+    method,
+    url: `${baseUrl}${endpoint}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey
+    },
+    ...(data !== undefined && { data }),
+    ...extra
+  };
+}
 
+/**
+ * Executes an axios request and throws an error for non-2xx responses.
+ * @param {Object} config - Axios request configuration
+ * @returns {Promise} Axios response
+ */
+async function executeRequest(config) {
+  return await axios.request(config);
+  
+}
 
 
 module.exports = {
   buildQueryString,
   getContentFS,
-  
+  executeRequest,
+  buildAxiosConfig,
   validateId,
   validateUid
 };

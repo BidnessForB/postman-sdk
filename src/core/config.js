@@ -4,8 +4,11 @@
  */
 
 
+//Name of the environment variable that contains the Postman API key
 const POSTMAN_API_KEY_ENV_VAR = 'POSTMAN_API_KEY';
+//API key from the environment variable
 const apiKey = process.env[POSTMAN_API_KEY_ENV_VAR];
+//Base URL for the Postman API
 const baseUrl = 'https://api.getpostman.com';
 
 

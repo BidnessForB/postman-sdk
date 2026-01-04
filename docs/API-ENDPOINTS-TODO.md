@@ -319,8 +319,8 @@ This document tracks the implementation status of all Postman API endpoints in t
 
 | Method | Endpoint | Description | Function | Implemented | Tests |
 |--------|----------|-------------|----------|-------------|-------|
-| POST | `/mocks/{mockId}/publish` | Publish a mock | `createMockPublish()` | ✅ | ✅ Passing |
-| DELETE | `/mocks/{mockId}/unpublish` | Unpublish a mock | `deleteMockUnpublish()` | ✅ | ✅ Passing |
+| POST | `/mocks/{mockId}/publish` | Publish a mock | `publishMock()` | ✅ | ✅ Passing |
+| DELETE | `/mocks/{mockId}/unpublish` | Unpublish a mock | `unpublishMock()` | ✅ | ✅ Passing |
 | GET | `/mocks/{mockId}/call-logs` | Get mock call logs | `getMockCallLogs()` | ✅ | ✅ Passing |
 
 ### Mock Server Responses

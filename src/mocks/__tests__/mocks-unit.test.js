@@ -6,13 +6,13 @@ const {
   updateMock,
   deleteMock,
   getMockCallLogs,
-  createMockPublish,
+  publishMock,
   getMockServerResponses,
   createMockServerResponse,
   getMockServerResponse,
   updateMockServerResponse,
   deleteMockServerResponse,
-  deleteMockUnpublish
+  unpublishMock
 } = require('../mock');
 
 jest.mock('axios');
@@ -454,7 +454,7 @@ describe('mocks unit tests', () => {
     });
   });
 
-  describe('createMockPublish', () => {
+  describe('publishMock', () => {
     test('should call POST /mocks/{mockId}/publish', async () => {
       const mockResponse = {
         status: 200,
@@ -466,7 +466,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await createMockPublish(DEFAULT_ID);
+      const result = await publishMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -484,7 +484,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await createMockPublish(DEFAULT_ID);
+      await publishMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -737,7 +737,7 @@ describe('mocks unit tests', () => {
     });
   });
 
-  describe('deleteMockUnpublish', () => {
+  describe('unpublishMock', () => {
     test('should call DELETE /mocks/{mockId}/unpublish', async () => {
       const mockResponse = {
         status: 200,
@@ -749,7 +749,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      const result = await deleteMockUnpublish(DEFAULT_ID);
+      const result = await unpublishMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -767,7 +767,7 @@ describe('mocks unit tests', () => {
       };
       axios.request.mockResolvedValue(mockResponse);
 
-      await deleteMockUnpublish(DEFAULT_ID);
+      await unpublishMock(DEFAULT_ID);
 
       expect(axios.request).toHaveBeenCalledWith(
         expect.objectContaining({

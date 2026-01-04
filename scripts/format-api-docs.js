@@ -57,7 +57,7 @@ const MODULES = {
   ],
   'Mocks': [
     'getMocks', 'createMock', 'getMock', 'updateMock', 'deleteMock',
-    'getMockCallLogs', 'createMockPublish', 'deleteMockUnpublish',
+    'getMockCallLogs', 'publishMock', 'unpublishMock',
     'getMockServerResponses', 'createMockServerResponse',
     'getMockServerResponse', 'updateMockServerResponse',
     'deleteMockServerResponse'
@@ -210,7 +210,7 @@ function normalizeLine(line) {
     { pattern: /\b(getSpec|modifySpec|deleteSpec|getSpecDefinition|getSpecFiles|getSpecTaskStatus|getSpecGenerations|syncSpecWithCollection)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_SPEC_ID },
     { pattern: /\b(createSpecFile|getSpecFile|modifySpecFile|deleteSpecFile|createSpecGeneration)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_SPEC_ID },
     { pattern: /\b(getEnvironment|modifyEnvironment|deleteEnvironment)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_ENVIRONMENT_ID },
-    { pattern: /\b(getMock|updateMock|deleteMock|getMockCallLogs|createMockPublish|deleteMockUnpublish|getMockServerResponses|createMockServerResponse|getMockServerResponse|updateMockServerResponse|deleteMockServerResponse)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_ID },
+    { pattern: /\b(getMock|updateMock|deleteMock|getMockCallLogs|publishMock|unpublishMock|getMockServerResponses|createMockServerResponse|getMockServerResponse|updateMockServerResponse|deleteMockServerResponse)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_ID },
     { pattern: /\b(createFolder|getFolder|updateFolder|deleteFolder)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_COLLECTION_ID },
     { pattern: /\b(getSpecs|createSpec)\s*\(\s*['"]([^'"]+)['"]/gi, replacement: DEFAULT_ID },
   ];
