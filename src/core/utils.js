@@ -2,11 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 // Regex patterns for ID validation
+
+//Regex pattern for ID validation
 const idRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+//Regex pattern for UID validation
 const uidRegex = /^[0-9]{1,10}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * Validates a standard ID (UUID format)
+ * Validates a standard ID (UUID format).  
  * @param {string} id - The ID to validate
  * @param {string} paramName - The parameter name for error messages
  * @throws {Error} If the ID is invalid
@@ -60,13 +63,6 @@ function getContentFS(filePath) {
   const fileContent = fs.readFileSync(path.resolve(filePath), 'utf8');
   return { content: fileContent };
 }
-
-/**
- * Builds a UID from a user ID and an object ID
- * @param {string|number} userId - The user's ID
- * @param {string} objectId - The object's ID (e.g., collection ID, workspace ID)
- * @returns {string} The UID in format: userId-objectId
- */
 
 
 

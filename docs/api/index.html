@@ -349,6 +349,36 @@
               
                 
                 <li><a
+                  href='#buildaxiosconfig'
+                  class="">
+                  buildAxiosConfig
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#executerequest'
+                  class="">
+                  executeRequest
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#postman_api_key_env_var'
+                  class="">
+                  POSTMAN_API_KEY_ENV_VAR
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getenvironments'
                   class="">
                   getEnvironments
@@ -519,9 +549,9 @@
               
                 
                 <li><a
-                  href='#createmockpublish'
+                  href='#publishmock'
                   class="">
-                  createMockPublish
+                  publishMock
                   
                 </a>
                 
@@ -579,9 +609,9 @@
               
                 
                 <li><a
-                  href='#deletemockunpublish'
+                  href='#unpublishmock'
                   class="">
-                  deleteMockUnpublish
+                  unpublishMock
                   
                 </a>
                 
@@ -752,36 +782,6 @@
                   href='#deleterequestcomment'
                   class="">
                   deleteRequestComment
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#buildaxiosconfig'
-                  class="">
-                  buildAxiosConfig
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#executerequest'
-                  class="">
-                  executeRequest
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#postman_api_key_env_var'
-                  class="">
-                  POSTMAN_API_KEY_ENV_VAR
                   
                 </a>
                 
@@ -5179,6 +5179,235 @@ Postman API endpoint and method: POST /collections/{collectionUid}/pull-requests
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='buildaxiosconfig'>
+      buildAxiosConfig
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Builds an Axios config for Postman API requests</p>
+
+    <div class='pre p1 fill-light mt0'>buildAxiosConfig(method: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, endpoint: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, data: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?, extra: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>method</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    HTTP method (e.g., 'get', 'post', 'patch')
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>endpoint</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The API endpoint path (e.g., '/specs/{specId}')
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?
+            = <code>undefined</code>)</code>
+	    The request body data
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>extra</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?
+            = <code>{}</code>)</code>
+	    Extra Axios config (e.g. maxBodyLength, etc)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        Axios request config
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='executerequest'>
+      executeRequest
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Executes an axios request and throws an error for non-2xx responses.</p>
+
+    <div class='pre p1 fill-light mt0'>executeRequest(config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    Axios request configuration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        Axios response
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='postman_api_key_env_var'>
+      POSTMAN_API_KEY_ENV_VAR
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Configuration module for Postman SDK
+Reads API key from environment and sets base URL</p>
+
+    <div class='pre p1 fill-light mt0'>POSTMAN_API_KEY_ENV_VAR</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getenvironments'>
       getEnvironments
     </h3>
@@ -7124,8 +7353,8 @@ Postman API endpoint and method: GET /mocks/{mockId}/call-logs</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='createmockpublish'>
-      createMockPublish
+    <h3 class='fl m0' id='publishmock'>
+      publishMock
     </h3>
     
     
@@ -7135,7 +7364,7 @@ Postman API endpoint and method: GET /mocks/{mockId}/call-logs</p>
   <p>Publishes a mock server (sets Access Control to public)
 Postman API endpoint and method: POST /mocks/{mockId}/publish</p>
 
-    <div class='pre p1 fill-light mt0'>createMockPublish(mockId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>publishMock(mockId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7183,7 +7412,7 @@ Postman API endpoint and method: POST /mocks/{mockId}/publish</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Publish a mock server (make it public)</span>
-<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">createMockPublish</span>(<span class="hljs-string">&#x27;mock-id-123&#x27;</span>);
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">publishMock</span>(<span class="hljs-string">&#x27;mock-id-123&#x27;</span>);
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">data</span>.<span class="hljs-property">mock</span>);</pre>
     
   
@@ -7787,8 +8016,8 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/server-responses/{server
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='deletemockunpublish'>
-      deleteMockUnpublish
+    <h3 class='fl m0' id='unpublishmock'>
+      unpublishMock
     </h3>
     
     
@@ -7798,7 +8027,7 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/server-responses/{server
   <p>Unpublishes a mock server (sets Access Control to private)
 Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish</p>
 
-    <div class='pre p1 fill-light mt0'>deleteMockUnpublish(mockId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>unpublishMock(mockId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7846,7 +8075,7 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Unpublish a mock server (make it private)</span>
-<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">deleteMockUnpublish</span>(<span class="hljs-string">&#x27;mock-id-123&#x27;</span>);
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">unpublishMock</span>(<span class="hljs-string">&#x27;mock-id-123&#x27;</span>);
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">data</span>.<span class="hljs-property">mock</span>);</pre>
     
   
@@ -10454,235 +10683,6 @@ Postman API endpoint and method: DELETE /collections/{collectionUid}/requests/{r
 );
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">data</span>.<span class="hljs-property">comment</span>);</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='buildaxiosconfig'>
-      buildAxiosConfig
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Builds an Axios config for Postman API requests</p>
-
-    <div class='pre p1 fill-light mt0'>buildAxiosConfig(method: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, endpoint: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, data: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?, extra: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>method</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    HTTP method (e.g., 'get', 'post', 'patch')
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>endpoint</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    The API endpoint path (e.g., '/specs/{specId}')
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?
-            = <code>undefined</code>)</code>
-	    The request body data
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>extra</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?
-            = <code>{}</code>)</code>
-	    Extra Axios config (e.g. maxBodyLength, etc)
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
-        Axios request config
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='executerequest'>
-      executeRequest
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Executes an axios request and throws an error for non-2xx responses.</p>
-
-    <div class='pre p1 fill-light mt0'>executeRequest(config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    Axios request configuration
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        Axios response
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='postman_api_key_env_var'>
-      POSTMAN_API_KEY_ENV_VAR
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Configuration module for Postman SDK
-Reads API key from environment and sets base URL</p>
-
-    <div class='pre p1 fill-light mt0'>POSTMAN_API_KEY_ENV_VAR</div>
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   

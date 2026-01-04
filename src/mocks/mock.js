@@ -243,10 +243,10 @@ async function getMockCallLogs(
  * @returns {Promise} Axios response with published mock data
  * @example
  * // Publish a mock server (make it public)
- * const response = await createMockPublish('mock-id-123');
+ * const response = await publishMock('mock-id-123');
  * console.log(response.data.mock);
  */
-async function createMockPublish(mockId) {
+async function publishMock(mockId) {
   validateId(mockId, 'mockId');
 
   const endpoint = `/mocks/${mockId}/publish`;
@@ -387,10 +387,10 @@ async function deleteMockServerResponse(mockId, serverResponseId) {
  * @returns {Promise} Axios response with unpublished mock data
  * @example
  * // Unpublish a mock server (make it private)
- * const response = await deleteMockUnpublish('mock-id-123');
+ * const response = await unpublishMock('mock-id-123');
  * console.log(response.data.mock);
  */
-async function deleteMockUnpublish(mockId) {
+async function unpublishMock(mockId) {
   validateId(mockId, 'mockId');
 
   const endpoint = `/mocks/${mockId}/unpublish`;
@@ -405,12 +405,12 @@ module.exports = {
   updateMock,
   deleteMock,
   getMockCallLogs,
-  createMockPublish,
+  publishMock: publishMock,
   getMockServerResponses,
   createMockServerResponse,
   getMockServerResponse,
   updateMockServerResponse,
   deleteMockServerResponse,
-  deleteMockUnpublish
+  unpublishMock: unpublishMock
 };
 

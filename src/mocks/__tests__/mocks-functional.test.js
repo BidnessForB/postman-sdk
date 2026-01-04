@@ -5,13 +5,13 @@ const {
   updateMock,
   deleteMock,
   getMockCallLogs,
-  createMockPublish,
+  publishMock,
   getMockServerResponses,
   createMockServerResponse,
   getMockServerResponse,
   updateMockServerResponse,
   deleteMockServerResponse,
-  deleteMockUnpublish
+  unpublishMock
 } = require('../mock');
 const { getAuthenticatedUser } = require('../../users/user');
 const { loadTestIds, saveTestIds } = require('../../__tests__/test-helpers');
@@ -277,8 +277,8 @@ describe('Mocks Functional Tests', () => {
     console.log(`Retrieved ${result.data['call-logs'].length} call logs with limit of 10`);
   }, 10000);
 
-  test('14. deleteMockUnpublish - should unpublish mock server', async () => {
-    const result = await deleteMockUnpublish(persistedIds.mock.id);
+  test('14. unpublishMock - should unpublish mock server', async () => {
+    const result = await unpublishMock(persistedIds.mock.id);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('mock');
@@ -287,9 +287,9 @@ describe('Mocks Functional Tests', () => {
     console.log(`Unpublished mock server ${persistedIds.mock.id}`);
   }, 10000);
 
-  test('15. createMockPublish - should publish mock server', async () => {
+  test('15. publishMock - should publish mock server', async () => {
     mockId = persistedIds.mock.id;
-    const result = await createMockPublish(mockId);
+    const result = await publishMock(mockId);
 
     expect(result.status).toBe(200);
     expect(result.data).toHaveProperty('mock');

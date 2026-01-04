@@ -167,11 +167,11 @@ const workspace = await postman.workspaces.createWorkspace('My Workspace', 'team
 | Function | Description |
 |----------|-------------|
 | [createMock][211] | Creates a mock server in a collection |
-| [createMockPublish][214] | Publishes a mock server (sets Access Control to public) |
+| [publishMock][214] | Publishes a mock server (sets Access Control to public) |
 | [createMockServerResponse][217] | Creates a server response for a mock server |
 | [deleteMock][220] | Deletes a mock server |
 | [deleteMockServerResponse][223] | Deletes a mock server's server response |
-| [deleteMockUnpublish][226] | Unpublishes a mock server (sets Access Control to private) |
+| [unpublishMock][226] | Unpublishes a mock server (sets Access Control to private) |
 | [getMock][229] | Gets information about a mock server |
 | [getMockCallLogs][232] | Gets a mock server's call logs |
 | [getMocks][235] | Gets all mock servers |
@@ -1534,7 +1534,7 @@ const response = await getMockCallLogs(
 
 Returns **[Promise][272]** Axios response with call logs array and pagination metadata
 
-## createMockPublish
+## publishMock
 
 Publishes a mock server (sets Access Control to public)
 Postman API endpoint and method: POST /mocks/{mockId}/publish
@@ -1547,7 +1547,7 @@ Postman API endpoint and method: POST /mocks/{mockId}/publish
 
 ```javascript
 // Publish a mock server (make it public)
-const response = await createMockPublish('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+const response = await publishMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.mock);
 ```
 
@@ -1684,7 +1684,7 @@ console.log(response.data.serverResponse);
 
 Returns **[Promise][272]** Axios response with deletion confirmation
 
-## deleteMockUnpublish
+## unpublishMock
 
 Unpublishes a mock server (sets Access Control to private)
 Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish
@@ -1697,7 +1697,7 @@ Postman API endpoint and method: DELETE /mocks/{mockId}/unpublish
 
 ```javascript
 // Unpublish a mock server (make it private)
-const response = await deleteMockUnpublish('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
+const response = await unpublishMock('bf5cb6e7-0a1e-4b82-a577-b2068a70f830');
 console.log(response.data.mock);
 ```
 
@@ -3383,7 +3383,7 @@ Returns **[Promise][272]** Axios response with updated tags
 
 [234]: #examples-37
 
-[214]: #createmockpublish
+[214]: #publishMock
 
 [215]: #parameters-38
 
@@ -3419,7 +3419,7 @@ Returns **[Promise][272]** Axios response with updated tags
 
 [225]: #examples-43
 
-[226]: #deletemockunpublish
+[226]: #unpublishMock
 
 [227]: #parameters-44
 
