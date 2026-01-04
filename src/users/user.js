@@ -1,4 +1,4 @@
-const { buildAxiosConfig, executeRequest } = require('../core/request');
+const { buildAxiosConfig, executeRequest } = require('../core/utils');
 
 /**
  * Gets information about the authenticated user

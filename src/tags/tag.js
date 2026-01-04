@@ -1,5 +1,4 @@
-const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString, validateId } = require('../core/utils');
+const { buildQueryString, validateId, buildAxiosConfig, executeRequest } = require('../core/utils');
 
 /**
  * Gets Postman elements (entities) by a given tag

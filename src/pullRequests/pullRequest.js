@@ -1,5 +1,4 @@
-const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { validateId } = require('../core/utils');
+const { buildAxiosConfig, executeRequest,validateId } = require('../core/utils');
 
 /**
  * Gets information about a pull request

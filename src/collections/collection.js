@@ -1,5 +1,4 @@
-const { buildAxiosConfig, executeRequest } = require('../core/request');
-const { buildQueryString, validateId, validateUid } = require('../core/utils');
+const { buildAxiosConfig, executeRequest, buildQueryString, validateId, validateUid } = require('../core/utils');
 
 /**
  * Gets all collections
