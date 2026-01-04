@@ -190,16 +190,15 @@ postman-sdk/
 │   ├── index.js                 # Main entry point, exports all modules
 │   ├── core/
 │   │   ├── config.js            # Configuration (baseUrl, apiKey from env)
-│   │   ├── request.js           # buildAxiosConfig and executeRequest helpers
-│   │   └── utils.js             # Shared utilities (query param building, etc.)
+│   │   └── utils.js             # Core utilities (buildAxiosConfig, executeRequest, query params, etc.)
 │   ├── collections/
-│   │   └── index.js             # Collection endpoints
+│   │   └── collection.js        # Collection endpoints
 │   ├── requests/
-│   │   └── index.js             # Request endpoints
+│   │   └── request.js           # Request endpoints
 │   ├── workspaces/
-│   │   └── index.js             # Workspace endpoints
+│   │   └── workspace.js         # Workspace endpoints
 │   └── specs/
-│       └── index.js             # Spec endpoints
+│       └── spec.js              # Spec endpoints
 ├── package.json
 ├── README.md
 
@@ -231,11 +230,10 @@ The SDK includes comprehensive test coverage with unit tests, integration tests,
 
 ### Test Organization
 
-The test suite is organized into three levels:
+The test suite is organized into two levels:
 
 1. **Unit Tests** - Fast, mocked tests for individual functions and modules
-2. **Integration Tests** - Tests that use real resources (e.g., file system) but don't call external APIs
-3. **Functional Tests** - End-to-end tests that make real API calls to Postman
+2. **Functional Tests** - End-to-end tests that make real API calls to Postman
 
 ### Unit Tests
 
@@ -246,13 +244,11 @@ npm run test:unit
 ```
 
 Unit tests cover:
-- Main SDK entry point (`src/__tests__/index.unit.test.js`)
-- Core utilities (request building, query strings, UID construction)
+- Main SDK entry point (`src/__tests__/sdk.unit.test.js`)
+- Core utilities (`src/core/__tests__/utils.unit.test.js`) - request building, query strings, ID/UID validation
+- Test helpers (`src/__tests__/test-helpers.test.js`)
 - All module exports and function signatures
 - Error handling and edge cases
-
-**Integration Tests** are included in the unit test suite and run actual file system operations:
-- Fixtures loading (`src/core/__tests__/fixtures.integration.test.js`)
 
 ### Functional Tests
 
