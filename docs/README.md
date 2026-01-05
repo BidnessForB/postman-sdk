@@ -4,7 +4,7 @@ This directory contains auto-generated API documentation for the Postman SDK.
 
 ## Documentation Files
 
-- **`API-REFERENCE.md`** - Complete API reference in Markdown format (auto-generated)
+- **`API-REFERENCE.md`** - [Complete SDK reference](https://github.com/BidnessForB/postman-sdk/blob/main/docs/API-REFERENCE.md) in Markdown format (auto-generated)
 - **`api/`** - HTML documentation website (auto-generated)
 - **`API-ENDPOINTS-TODO.md`** - Implementation status tracker (manually maintained)
 
