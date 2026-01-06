@@ -57,7 +57,6 @@
     "docs:build": "documentation build src/collections/collection.js src/requests/request.js src/responses/response.js src/workspaces/workspace.js src/specs/spec.js src/environments/environment.js src/tags/tag.js src/users/user.js src/mocks/mock.js src/monitors/monitor.js src/groups/group.js src/pullRequests/pullRequest.js src/forks/fork.js src/transformations/transformation.js -f html -o docs/api",
     "docs:md": "documentation build src/collections/collection.js src/requests/request.js src/responses/response.js src/workspaces/workspace.js src/specs/spec.js src/environments/environment.js src/tags/tag.js src/users/user.js src/mocks/mock.js src/monitors/monitor.js src/groups/group.js src/pullRequests/pullRequest.js src/forks/fork.js src/transformations/transformation.js -f md -o docs/API-REFERENCE.md && node scripts/format-api-docs.js",
     "docs:format": "node scripts/format-api-docs.js",
-    "docs:serve": "documentation serve src/collections/collection.js src/requests/request.js src/responses/response.js src/workspaces/workspace.js src/specs/spec.js src/environments/environment.js src/tags/tag.js src/users/user.js src/mocks/mock.js src/monitors/monitor.js src/groups/group.js src/pullRequests/pullRequest.js src/forks/fork.js src/transformations/transformation.js -w",
     "docs:clean": "rm -rf docs/api docs/API-REFERENCE.md"
   },
   "dependencies": {

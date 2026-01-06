@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@bidnessforb/postman-sdk.svg)](https://www.npmjs.com/package/@bidnessforb/postman-sdk)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
-> **Auto-generated API documentation** from JSDoc comments. Last generated: 2026-01-04
+> **Auto-generated API documentation** from JSDoc comments. Last generated: 2026-01-06
 
 ## Overview
 
@@ -1301,6 +1301,82 @@ const response = await createCollectionPullRequest(
 
 Returns **[Promise][329]** Axios response with created pull request details including id, title, status, sourceId, and destinationId
 
+## validateId
+
+Validates a standard ID (UUID format).
+
+### Parameters
+
+*   `id` **[string][327]** The ID to validate
+*   `paramName` **[string][327]** The parameter name for error messages
+
+<!---->
+
+*   Throws **[Error][333]** If the ID is invalid
+
+## validateUid
+
+Validates a UID (userId-UUID format)
+
+### Parameters
+
+*   `uid` **[string][327]** The UID to validate
+*   `paramName` **[string][327]** The parameter name for error messages
+
+<!---->
+
+*   Throws **[Error][333]** If the UID is invalid
+
+## buildQueryString
+
+Builds a query string from parameters object
+
+### Parameters
+
+*   `params` **[Object][330]** Object with query parameters
+
+Returns **[string][327]** Query string (e.g., '?key1=value1\&key2=value2')
+
+## getContentFS
+
+Reads file content from the filesystem and returns it in the format expected by Postman API
+
+### Parameters
+
+*   `filePath` **[string][327]** The path to the file
+
+Returns **[Object][330]** Object with content property containing the file content
+
+## buildAxiosConfig
+
+Builds an Axios config for Postman API requests
+
+### Parameters
+
+*   `method` **[string][327]** HTTP method (e.g., 'get', 'post', 'patch')
+*   `endpoint` **[string][327]** The API endpoint path (e.g., '/specs/{specId}')
+*   `data` **[Object][330]?** The request body data (optional, default `undefined`)
+*   `extra` **[Object][330]?** Extra Axios config (e.g. maxBodyLength, etc) (optional, default `{}`)
+
+Returns **[Object][330]** Axios request config
+
+## executeRequest
+
+Executes an axios request and throws an error for non-2xx responses.
+
+### Parameters
+
+*   `config` **[Object][330]** Axios request configuration
+
+Returns **[Promise][329]** Axios response
+
+## POSTMAN\_API\_KEY\_ENV\_VAR
+
+Configuration module for Postman SDK
+Reads API key from environment and sets base URL
+
+Type: [string][327]
+
 ## getEnvironments
 
 Gets all environments
@@ -1340,7 +1416,7 @@ Postman API endpoint and method: POST /environments
 *   `string` **[string][327]** \[].key] - The variable's key name
 *   `string` **[string][327]** \[].value] - The variable's value
 *   `string` **[string][327]** \[].type] - The variable type ('default' or 'secret')
-*   `boolean` **[boolean][333]** \[].enabled] - Whether the variable is enabled
+*   `boolean` **[boolean][334]** \[].enabled] - Whether the variable is enabled
 
 ### Examples
 
@@ -1649,7 +1725,7 @@ Postman API endpoint and method: POST /mocks
     *   `mockData.collection` **[string][327]** (Required) The collection ID or UID
     *   `mockData.name` **[string][327]?** The mock server's name
     *   `mockData.environment` **[string][327]?** The environment ID to use with the mock server
-    *   `mockData.private` **[boolean][333]?** Whether the mock server is private (default: false)
+    *   `mockData.private` **[boolean][334]?** Whether the mock server is private (default: false)
 *   `workspaceId` **[string][327]** A workspace ID in which to create the mock server (required)
 
 ### Examples
@@ -1713,7 +1789,7 @@ Postman API endpoint and method: PUT /mocks/{mockId}
 
     *   `mockData.name` **[string][327]?** The mock server's new name
     *   `mockData.environment` **[string][327]?** The environment ID to use
-    *   `mockData.private` **[boolean][333]?** Whether the mock server is private
+    *   `mockData.private` **[boolean][334]?** Whether the mock server is private
     *   `mockData.collection` **[string][327]?** The collection ID (required by API)
 
 ### Examples
@@ -1994,7 +2070,7 @@ Postman API endpoint and method: GET /monitors
 ### Parameters
 
 *   `workspaceId` **[string][327]?** Return only results found in the given workspace ID (optional, default `null`)
-*   `active` **[boolean][333]?** If true, return only active monitors (optional, default `null`)
+*   `active` **[boolean][334]?** If true, return only active monitors (optional, default `null`)
 *   `owner` **[number][328]?** Return the results by the given user ID (optional, default `null`)
 *   `collectionUid` **[string][327]?** Filter the results by a collection's unique ID (optional, default `null`)
 *   `environmentUid` **[string][327]?** Filter the results by an environment's unique ID (optional, default `null`)
@@ -2033,7 +2109,7 @@ Postman API endpoint and method: POST /monitors
     *   `monitorData.name` **[string][327]** (Required) The monitor's name
     *   `monitorData.collection` **[string][327]** (Required) The unique ID of the monitor's associated collection
     *   `monitorData.environment` **[string][327]?** The unique ID of the monitor's associated environment
-    *   `monitorData.active` **[boolean][333]?** If true, the monitor is active and makes calls (default: true)
+    *   `monitorData.active` **[boolean][334]?** If true, the monitor is active and makes calls (default: true)
     *   `monitorData.schedule` **[Object][330]?** Information about the monitor's schedule
 
         *   `monitorData.schedule.cron` **[string][327]?** The monitor's run frequency (cron pattern)
@@ -2042,10 +2118,10 @@ Postman API endpoint and method: POST /monitors
     *   `monitorData.distribution` **[Array][332]?** List of geographic regions
     *   `monitorData.options` **[Object][330]?** Information about the monitor's option settings
 
-        *   `monitorData.options.followRedirects` **[boolean][333]?** If true, follow redirects enabled
+        *   `monitorData.options.followRedirects` **[boolean][334]?** If true, follow redirects enabled
         *   `monitorData.options.requestDelay` **[number][328]?** The monitor's request delay value in milliseconds (1-900000)
         *   `monitorData.options.requestTimeout` **[number][328]?** The monitor's request timeout value in milliseconds (1-900000)
-        *   `monitorData.options.strictSSL` **[boolean][333]?** If true, strict SSL enabled
+        *   `monitorData.options.strictSSL` **[boolean][334]?** If true, strict SSL enabled
     *   `monitorData.notifications` **[Object][330]?** Information about the monitor's notification settings
 
         *   `monitorData.notifications.onError` **[Array][332]?** Array of objects with email property
@@ -2145,14 +2221,14 @@ Postman API endpoint and method: PUT /monitors/{monitorId}
         *   `monitorData.schedule.cron` **[string][327]?** The monitor's run frequency (cron pattern)
         *   `monitorData.schedule.timezone` **[string][327]?** The monitor's timezone
     *   `monitorData.notificationLimit` **[number][328]?** Stop email notifications after given consecutive failures (1-99)
-    *   `monitorData.active` **[boolean][333]?** If true, the monitor is active
+    *   `monitorData.active` **[boolean][334]?** If true, the monitor is active
     *   `monitorData.distribution` **[Array][332]?** List of geographic regions
     *   `monitorData.options` **[Object][330]?** Information about the monitor's option settings
 
-        *   `monitorData.options.followRedirects` **[boolean][333]?** If true, follow redirects enabled
+        *   `monitorData.options.followRedirects` **[boolean][334]?** If true, follow redirects enabled
         *   `monitorData.options.requestDelay` **[number][328]?** The monitor's request delay value in milliseconds (1-900000)
         *   `monitorData.options.requestTimeout` **[number][328]?** The monitor's request timeout value in milliseconds (1-900000)
-        *   `monitorData.options.strictSSL` **[boolean][333]?** If true, strict SSL enabled
+        *   `monitorData.options.strictSSL` **[boolean][334]?** If true, strict SSL enabled
     *   `monitorData.notifications` **[Object][330]?** Information about the monitor's notification settings
 
         *   `monitorData.notifications.onError` **[Array][332]?** Array of objects with email property
@@ -2210,7 +2286,7 @@ Postman API endpoint and method: POST /monitors/{monitorId}/run
 ### Parameters
 
 *   `monitorId` **[string][327]** The monitor's ID
-*   `async` **[boolean][333]?** If true, runs the monitor asynchronously (default: false) (optional, default `null`)
+*   `async` **[boolean][334]?** If true, runs the monitor asynchronously (default: false) (optional, default `null`)
 
 ### Examples
 
@@ -2417,9 +2493,9 @@ Postman API endpoint and method: GET /collections/{collectionId}/requests/{reque
 
 *   `collectionId` **[string][327]** The collection's ID
 *   `requestId` **[string][327]** The request's ID
-*   `ids` **[boolean][333]?** If true, returns only the request properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][333]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][333]?** If true, returns all of a request's contents including full details (optional, default `null`)
+*   `ids` **[boolean][334]?** If true, returns only the request properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][334]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][334]?** If true, returns all of a request's contents including full details (optional, default `null`)
 
 ### Examples
 
@@ -2701,82 +2777,6 @@ console.log(response.data.comment);
 
 Returns **[Promise][329]** Axios response with deletion confirmation
 
-## validateId
-
-Validates a standard ID (UUID format).
-
-### Parameters
-
-*   `id` **[string][327]** The ID to validate
-*   `paramName` **[string][327]** The parameter name for error messages
-
-<!---->
-
-*   Throws **[Error][334]** If the ID is invalid
-
-## validateUid
-
-Validates a UID (userId-UUID format)
-
-### Parameters
-
-*   `uid` **[string][327]** The UID to validate
-*   `paramName` **[string][327]** The parameter name for error messages
-
-<!---->
-
-*   Throws **[Error][334]** If the UID is invalid
-
-## buildQueryString
-
-Builds a query string from parameters object
-
-### Parameters
-
-*   `params` **[Object][330]** Object with query parameters
-
-Returns **[string][327]** Query string (e.g., '?key1=value1\&key2=value2')
-
-## getContentFS
-
-Reads file content from the filesystem and returns it in the format expected by Postman API
-
-### Parameters
-
-*   `filePath` **[string][327]** The path to the file
-
-Returns **[Object][330]** Object with content property containing the file content
-
-## buildAxiosConfig
-
-Builds an Axios config for Postman API requests
-
-### Parameters
-
-*   `method` **[string][327]** HTTP method (e.g., 'get', 'post', 'patch')
-*   `endpoint` **[string][327]** The API endpoint path (e.g., '/specs/{specId}')
-*   `data` **[Object][330]?** The request body data (optional, default `undefined`)
-*   `extra` **[Object][330]?** Extra Axios config (e.g. maxBodyLength, etc) (optional, default `{}`)
-
-Returns **[Object][330]** Axios request config
-
-## executeRequest
-
-Executes an axios request and throws an error for non-2xx responses.
-
-### Parameters
-
-*   `config` **[Object][330]** Axios request configuration
-
-Returns **[Promise][329]** Axios response
-
-## POSTMAN\_API\_KEY\_ENV\_VAR
-
-Configuration module for Postman SDK
-Reads API key from environment and sets base URL
-
-Type: [string][327]
-
 ## createResponse
 
 Creates a response in a collection
@@ -2857,9 +2857,9 @@ Postman API endpoint and method: GET /collections/{collectionId}/responses/{resp
 
 *   `collectionId` **[string][327]** The collection's ID
 *   `responseId` **[string][327]** The response's ID
-*   `ids` **[boolean][333]?** If true, returns only the response properties that contain ID values (optional, default `null`)
-*   `uid` **[boolean][333]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
-*   `populate` **[boolean][333]?** If true, returns all of a response's contents including full details (optional, default `null`)
+*   `ids` **[boolean][334]?** If true, returns only the response properties that contain ID values (optional, default `null`)
+*   `uid` **[boolean][334]?** If true, returns all IDs in UID format (userId-objectId) (optional, default `null`)
+*   `populate` **[boolean][334]?** If true, returns all of a response's contents including full details (optional, default `null`)
 
 ### Examples
 
@@ -3976,275 +3976,275 @@ Returns **[Promise][329]** Axios response with updated tags
 
 [96]: #examples-31
 
+[263]: #validateid
+
+[264]: #parameters-32
+
+[265]: #validateuid
+
+[266]: #parameters-33
+
+[257]: #buildquerystring
+
+[258]: #parameters-34
+
+[261]: #getcontentfs
+
+[262]: #parameters-35
+
+[255]: #buildaxiosconfig
+
+[256]: #parameters-36
+
+[259]: #executerequest
+
+[260]: #parameters-37
+
+[109]: #postman_api_key_env_var
+
 [205]: #getenvironments
 
-[206]: #parameters-32
+[206]: #parameters-38
 
 [207]: #examples-32
 
 [196]: #createenvironment
 
-[197]: #parameters-33
+[197]: #parameters-39
 
 [198]: #examples-33
 
 [202]: #getenvironment
 
-[203]: #parameters-34
+[203]: #parameters-40
 
 [204]: #examples-34
 
 [208]: #modifyenvironment
 
-[209]: #parameters-35
+[209]: #parameters-41
 
 [210]: #examples-35
 
 [199]: #deleteenvironment
 
-[200]: #parameters-36
+[200]: #parameters-42
 
 [201]: #examples-36
 
-[112]: #getenvironmentforks
+[125]: #getenvironmentforks
 
-[113]: #parameters-37
+[126]: #parameters-43
 
-[114]: #examples-37
+[127]: #examples-37
 
-[115]: #createenvironmentfork
+[128]: #createenvironmentfork
 
-[116]: #parameters-38
+[129]: #parameters-44
 
-[117]: #examples-38
+[130]: #examples-38
 
-[118]: #mergeenvironmentfork
+[131]: #mergeenvironmentfork
 
-[119]: #parameters-39
+[132]: #parameters-45
 
-[120]: #examples-39
+[133]: #examples-39
 
-[121]: #pullenvironmentchanges
+[134]: #pullenvironmentchanges
 
-[122]: #parameters-40
+[135]: #parameters-46
 
-[123]: #examples-40
+[136]: #examples-40
 
-[124]: #getgroups
+[137]: #getgroups
 
-[125]: #examples-41
+[138]: #examples-41
 
-[126]: #getgroup
+[139]: #getgroup
 
-[127]: #parameters-41
+[140]: #parameters-47
 
-[128]: #examples-42
+[141]: #examples-42
 
 [229]: #getmocks
 
-[230]: #parameters-42
+[230]: #parameters-48
 
 [231]: #examples-43
 
 [211]: #createmock
 
-[212]: #parameters-43
+[212]: #parameters-49
 
 [213]: #examples-44
 
 [223]: #getmock
 
-[224]: #parameters-44
+[224]: #parameters-50
 
 [225]: #examples-45
 
 [244]: #updatemock
 
-[245]: #parameters-45
+[245]: #parameters-51
 
 [246]: #examples-46
 
 [217]: #deletemock
 
-[218]: #parameters-46
+[218]: #parameters-52
 
 [219]: #examples-47
 
 [226]: #getmockcalllogs
 
-[227]: #parameters-47
+[227]: #parameters-53
 
 [228]: #examples-48
 
 [238]: #publishmock
 
-[239]: #parameters-48
+[239]: #parameters-54
 
 [240]: #examples-49
 
 [235]: #getmockserverresponses
 
-[236]: #parameters-49
+[236]: #parameters-55
 
 [237]: #examples-50
 
 [214]: #createmockserverresponse
 
-[215]: #parameters-50
+[215]: #parameters-56
 
 [216]: #examples-51
 
 [232]: #getmockserverresponse
 
-[233]: #parameters-51
+[233]: #parameters-57
 
 [234]: #examples-52
 
 [247]: #updatemockserverresponse
 
-[248]: #parameters-52
+[248]: #parameters-58
 
 [249]: #examples-53
 
 [220]: #deletemockserverresponse
 
-[221]: #parameters-53
+[221]: #parameters-59
 
 [222]: #examples-54
 
 [241]: #unpublishmock
 
-[242]: #parameters-54
+[242]: #parameters-60
 
 [243]: #examples-55
 
-[168]: #getmonitors
+[181]: #getmonitors
 
-[169]: #parameters-55
+[182]: #parameters-61
 
-[170]: #examples-56
+[183]: #examples-56
 
-[171]: #createmonitor
+[184]: #createmonitor
 
-[172]: #parameters-56
+[185]: #parameters-62
 
-[173]: #examples-57
+[186]: #examples-57
 
-[174]: #getmonitor
+[187]: #getmonitor
 
-[175]: #parameters-57
+[188]: #parameters-63
 
-[176]: #examples-58
+[189]: #examples-58
 
-[177]: #updatemonitor
+[190]: #updatemonitor
 
-[178]: #parameters-58
+[191]: #parameters-64
 
-[179]: #examples-59
+[192]: #examples-59
 
-[180]: #deletemonitor
+[193]: #deletemonitor
 
-[181]: #parameters-59
+[194]: #parameters-65
 
-[182]: #examples-60
+[195]: #examples-60
 
-[183]: #runmonitor
+[196]: #runmonitor
 
-[184]: #parameters-60
+[197]: #parameters-66
 
-[185]: #examples-61
+[198]: #examples-61
 
-[186]: #getpullrequest
+[199]: #getpullrequest
 
-[187]: #parameters-61
+[200]: #parameters-67
 
-[188]: #examples-62
+[201]: #examples-62
 
-[189]: #updatepullrequest
+[202]: #updatepullrequest
 
-[190]: #parameters-62
+[203]: #parameters-68
 
-[191]: #examples-63
+[204]: #examples-63
 
-[192]: #reviewpullrequest
+[205]: #reviewpullrequest
 
-[193]: #parameters-63
+[206]: #parameters-69
 
-[194]: #examples-64
+[207]: #examples-64
 
 [82]: #createrequest
 
-[83]: #parameters-64
+[83]: #parameters-70
 
 [84]: #examples-65
 
 [94]: #getrequest
 
-[95]: #parameters-65
+[95]: #parameters-71
 
 [96]: #examples-66
 
 [100]: #updaterequest
 
-[101]: #parameters-66
+[101]: #parameters-72
 
 [102]: #examples-67
 
 [88]: #deleterequest
 
-[89]: #parameters-67
+[89]: #parameters-73
 
 [90]: #examples-68
 
 [97]: #getrequestcomments
 
-[98]: #parameters-68
+[98]: #parameters-74
 
 [99]: #examples-69
 
 [85]: #createrequestcomment
 
-[86]: #parameters-69
+[86]: #parameters-75
 
 [87]: #examples-70
 
 [103]: #updaterequestcomment
 
-[104]: #parameters-70
+[104]: #parameters-76
 
 [105]: #examples-71
 
 [91]: #deleterequestcomment
 
-[92]: #parameters-71
+[92]: #parameters-77
 
 [93]: #examples-72
-
-[263]: #validateid
-
-[264]: #parameters-72
-
-[265]: #validateuid
-
-[266]: #parameters-73
-
-[257]: #buildquerystring
-
-[258]: #parameters-74
-
-[261]: #getcontentfs
-
-[262]: #parameters-75
-
-[255]: #buildaxiosconfig
-
-[256]: #parameters-76
-
-[259]: #executerequest
-
-[260]: #parameters-77
-
-[231]: #postman_api_key_env_var
 
 [106]: #createresponse
 
@@ -4448,6 +4448,6 @@ Returns **[Promise][329]** Axios response with updated tags
 
 [332]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[333]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[333]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
 
-[334]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+[334]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
