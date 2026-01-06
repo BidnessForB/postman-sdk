@@ -6,7 +6,7 @@ This directory contains auto-generated API documentation for the Postman SDK.
 
 - **`API-REFERENCE.md`** - [Complete SDK reference](https://github.com/BidnessForB/postman-sdk/blob/main/docs/API-REFERENCE.md) in Markdown format (auto-generated)
 - **`api/`** - HTML documentation website (auto-generated)
-- **`API-ENDPOINTS-TODO.md`** - Implementation status tracker (manually maintained)
+- **`API-ENDPOINTS-TODO.md`** - [API endpoint implementation tracker](https://github.com/BidnessForB/postman-sdk/blob/main/docs/API-ENDPOINTS-TODO.md) (manually maintained)
 
 ## Generating Documentation
 
@@ -28,13 +28,6 @@ npm run docs:build
 
 This creates `docs/api/index.html` - an interactive HTML documentation website.
 
-### Serve Documentation Locally
-
-```bash
-npm run docs:serve
-```
-
-This starts a local development server with live-reloading at `http://localhost:4001`.
 
 ### Clean Generated Documentation
 
